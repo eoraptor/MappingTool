@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+<head>
+    <title>Mapping Tool</title>
+</head>
+<body>
+    <h1>This is the main page</h1><br />
+    <strong>{{ boldmessage }}</strong><br />
+    <a href='/mappingapp/search'>Search</a><br />
+    <a href='/mappingapp/results'>Results</a><br />
+
+    <img src="{% static "lion.jpg" %}" alt="Pic of lion" width="70%" />
+
+</body>
+</html>
