@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4d9e04cc-167f-4a45-a9ca-72690af8f052" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/models.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mapping_app_project/settings.py" afterPath="$PROJECT_DIR$/mapping_app_project/mapping_app_project/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MappingTool.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,7 +37,7 @@
       <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="127" column="5" selection-start="3437" selection-end="3437" vertical-scroll-proportion="0.8366142" vertical-offset="1734" max-vertical-offset="3094">
+            <state line="168" column="28" selection-start="4551" selection-end="4551" vertical-scroll-proportion="5.6" vertical-offset="0" max-vertical-offset="2958">
               <folding />
             </state>
           </provider>
@@ -137,9 +135,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="701" />
+    <option name="x" value="680" />
     <option name="width" value="683" />
-    <option name="height" value="738" />
+    <option name="height" value="740" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -297,13 +295,13 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="preferences.general" />
+    <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Rango" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -399,7 +397,27 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MappingTool" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
@@ -425,27 +443,7 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="MappingTool" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -525,8 +523,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="701" y="0" width="683" height="738" extended-state="0" />
-    <editor active="false" />
+    <frame x="680" y="0" width="683" height="740" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -667,7 +665,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="5" selection-start="3437" selection-end="3437" vertical-scroll-proportion="0.8366142" vertical-offset="1734" max-vertical-offset="3094">
+        <state line="168" column="28" selection-start="4551" selection-end="4551" vertical-scroll-proportion="5.6" vertical-offset="0" max-vertical-offset="2958">
           <folding />
         </state>
       </provider>
