@@ -1,0 +1,30 @@
+{% extends 'mappingapp/base.html' %}
+{% load static %}
+
+{% block title %}Upload Files{% endblock %}
+
+{% block body_block %}
+    {#% if user.is_authenticated %#}
+
+    <h1>Upload Files</h1>
+
+    <form id="UploadFileForm" method="post" action="/mappingapp/upload/">
+
+    {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+
+            <input type="submit" name="submit" value="Upload" />
+    </form>
+    {#% else %#}
+        <p>Only Authorised Users may upload files</p>
+        <a href="/mappingapp/">Home</a>
+    {#% endif %#}
+{% endblock %}

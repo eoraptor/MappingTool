@@ -1,13 +1,12 @@
 {% extends 'mappingapp/base.html' %}
-{% load static %}
 
-{% block title %}Advanced Search{% endblock %}
+{% block title %}Edit Records{% endblock %}
 
 {% block body_block %}
     {#% if user.is_authenticated %#}
 
     {#% else %#}
-        <p>Only Authorised Users may perform Advanced Searches</p>
+        <p>Only Authorised Users may edit files</p>
         <a href="/mappingapp/">Home</a>
     {#% endif %#}
 {% endblock %}

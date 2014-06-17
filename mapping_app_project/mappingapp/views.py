@@ -1,22 +1,48 @@
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from .forms import UploadFileForm
 
 def index(request):
     context = RequestContext(request)
 
-    context_dict = {'boldmessage': "Bold"}
+    context_dict = {}
 
     return render_to_response('mappingapp/index.html', context_dict, context)
 
 
-def search(response):
-    return HttpResponse("Search Page<br>"
-                        "<a href='/mappingapp/'>Home</a><br>"
-                        "<a href='/mappingapp/results'>Results</a>")
+
+def search(request):
+    context = RequestContext(request)
+
+    context_dict = {}
+
+    return render_to_response('mappingapp/search.html', context_dict, context)
 
 
-def results(response):
-    return HttpResponse("Results table<br>"
-                        "<a href='/mappingapp/search'>Search</a><br>"
-                        "<a href='/mappingapp/'>Home</a>")
+
+def results(request):
+    context = RequestContext(request)
+
+    context_dict = {}
+
+    return render_to_response('mappingapp/results.html', context_dict, context)
+
+
+
+def upload(request):
+    context = RequestContext(request)
+
+    form = UploadFileForm()
+
+    return render_to_response('mappingapp/upload.html',  {'form':form}, context)
+
+
+
+def edit(request):
+    context = RequestContext(request)
+
+    context_dict = {}
+
+    return render_to_response('mappingapp/edit.html', context_dict, context)
+
