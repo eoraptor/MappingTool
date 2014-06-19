@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from .forms import UploadFileForm
+#from multiuploader.forms import MultiUploadForm
 
 def index(request):
     context = RequestContext(request)
@@ -31,11 +31,9 @@ def results(request):
 
 
 def upload(request):
-    context = RequestContext(request)
+    context = {'uploadForm': MultiUploadForm()}
 
-    form = UploadFileForm()
-
-    return render_to_response('mappingapp/upload.html',  {'form':form}, context)
+    return render_to_response('mappingapp/upload.html', context=context)
 
 
 

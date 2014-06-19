@@ -50,6 +50,16 @@ function HomeControl(controlDiv, map) {
   homeControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.BOTTOM].push(homeControlDiv);
 
-
-    }
+  var center;
+  function calculateCenter() {
+  center = map.getCenter();
+}
+    google.maps.event.addDomListener(map, 'idle', function() {
+        calculateCenter();
+    });
+    google.maps.event.addDomListener(window, 'resize', function() {
+        map.setCenter(center);
+    });
+  }
 })();
+

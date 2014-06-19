@@ -1,6 +1,7 @@
 from django import forms
+#from multiuploader.forms import MultiuploaderField
 
 class UploadFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
-    file = forms.FileField()
+    title = forms.CharField(label=u'Question', widget=forms.Textarea)
+    #uploadedFiles = MultiuploaderField(required=False)
 
