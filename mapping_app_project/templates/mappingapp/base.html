@@ -45,6 +45,7 @@
                 <li><a href="/mappingapp/upload/">Upload Files</a></li>
                 <li class="divider"></li>
                 <li><a href="/mappingapp/edit">Edit Records</a></li>
+
              </ul>
             {%  endif %}
           </ul>
@@ -62,7 +63,10 @@
                             <button type="submit" class="btn btn-success">Sign in</button>
                     </form>
             {% else %}
-                {{ user.username }}
+                <div class="navbar-header navbar-right">
+                <p class="navbar-text"> Welcome {{ user.username }} </p>
+                <a href="/mappingapp/logout/"><button type="submit" class="btn btn-success navbar-btn">Logout</button></a>
+                </div>
             {% endif %}
                 </div>
         </div><!--/.nav-collapse -->
