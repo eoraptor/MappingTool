@@ -13,8 +13,9 @@ def index(request):
     return render_to_response('mappingapp/index.html', context_dict, context)
 
 
-
+@login_required
 def search(request):
+
     context = RequestContext(request)
 
     context_dict = {}
@@ -31,7 +32,9 @@ def results(request):
     return render_to_response('mappingapp/results.html', context_dict, context)
 
 
+@login_required
 def upload(request):
+
     context = RequestContext(request)
 
     context_dict = {}
@@ -39,6 +42,7 @@ def upload(request):
     return render_to_response('mappingapp/upload.html', context_dict, context)
 
 
+@login_required
 def edit(request):
     context = RequestContext(request)
 
