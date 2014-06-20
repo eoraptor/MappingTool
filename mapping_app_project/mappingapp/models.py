@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Core_Details(models.Model):
@@ -167,3 +168,14 @@ class Sample_Bearing_Inclination(models.Model):
 
     def __unicode__(self):
         return self.bear_inc
+
+
+class UserProfile(models.Model):
+    # link UserProfile to a User model
+    user = models.OneToOneField(User)
+
+    # additional custom attributes
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+
+    def __unicode__(self):
+        return self.user.username
