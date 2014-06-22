@@ -1,34 +1,43 @@
 {% extends 'mappingapp/base.html' %}
 {% load static %}
 
-
 {% block title %}Upload Files{% endblock %}
+
 {% block age %}{% endblock age %}
+{% block upload %}{% endblock upload %}
+
+{% block activeupload %}
+    <li class="active"><a href="/mappingapp/upload">Upload Records</a></li>
+{% endblock activeupload %}
+
 {% block login %}{% endblock login %}
 
 {% block body_block %}
-    <div class="jumbotron">
-    <div class="container">
-    <div class="row">
-    <div class="col-md-4 col-md-offset-5">
-    <form id="category_form" method="post" action="/mappingapp/upload/">
+<div class="jumbotron">
+    <div class="form-group">
+    <!-- List of uploaded documents -->
+        {% if documents %}
+            <ul>
+                {% for document in documents %}
+                <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No documents.</p>
+        {% endif %}
 
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="{% url "upload" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-
-            {% for field in form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
-            {% endfor %}
-
-            <button type="submit" class="btn btn-success navbar-btn">Upload</button>
+            <p>{{ form.non_field_errors }}</p>
+            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+            <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+            </p>
+            <p><button type="submit" class="btn btn-success navbar-btn">Upload</button></p>
         </form>
     </div>
-    </div>
-    </div>
-    </div>
+</div>
 
 {% endblock %}

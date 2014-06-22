@@ -3,8 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 
-from mappingapp.forms import UploadFileForm
+from mappingapp.forms import DocumentForm
+from mappingapp.models import Document
 
 def index(request):
     context = RequestContext(request)
@@ -35,30 +37,28 @@ def results(request):
 
 @login_required
 def upload(request):
-
-    context = RequestContext(request)
-
+    # Handle file upload
     if request.method == 'POST':
-        form = UploadFileForm(request.POST)
-
-        # Have we been provided with a valid form?
+        form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            # Save the new category to the database.
-            form.save(commit=True)
+            newdoc = Document(docfile = request.FILES['docfile'])
+            newdoc.save()
 
-            # Now call the index() view.
-            # The user will be shown the homepage.
-            return index(request)
-        else:
-            # The supplied form contained errors - just print them to the terminal.
-            print form.errors
+            # Redirect to the document list after POST
+            return HttpResponseRedirect('/mappingapp/upload')
+
     else:
-        # If the request was not a POST, display the form to enter details.
-        form = UploadFileForm()
+        form = DocumentForm() # A empty, unbound form
 
-    # Bad form (or form details), no form supplied...
-    # Render the form with error messages (if any).
-    return render_to_response('mappingapp/upload.html', {'form': form}, context)
+    # Load documents for the list page
+    documents = Document.objects.all()
+
+    # Render list page with the documents and the form
+    return render_to_response(
+        'mappingapp/upload.html',
+        {'documents': documents, 'form': form},
+        context_instance=RequestContext(request)
+    )
 
 
 @login_required

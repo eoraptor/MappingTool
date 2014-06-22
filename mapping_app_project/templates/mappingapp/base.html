@@ -18,58 +18,70 @@
     <title>Mapping App - {% block title %}Home{% endblock %}</title>
 </head>
 
- <body role="document">
+<body role="document">
 
         <!-- Fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/mappingapp/">BRITICE CHRONO</a>
-        </div>
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/mappingapp/">BRITICE CHRONO</a>
+            </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-          {% block age %}
-            <li><a href="/mappingapp/">Age Filter</a></li>
-          {% endblock age %}
-            {% if user.is_authenticated %}
+            <ul class="nav navbar-nav">
+                {% block age %}
+                    <li><a href="/mappingapp/">Age Filter</a></li>
+                {% endblock age %}
 
-            <li><a href="/mappingapp/search/">Advanced Search</a></li>
-            <li><a href="/mappingapp/upload/">Upload Files</a></li>
-            <li><a href="/mappingapp/edit">Edit Records</a></li>
+                {% if user.is_authenticated %}
 
-            {%  endif %}
-          </ul>
+                    {% block search %}
+                        <li><a href="/mappingapp/search/">Advanced Search</a></li>
+                    {% endblock search %}
+                    {% block activesearch %}{% endblock activesearch %}
+
+                    {% block upload %}
+                    <li><a href="/mappingapp/upload/">Upload Files</a></li>
+                    {% endblock upload %}
+                    {% block activeupload %}{% endblock activeupload %}
+
+                    {% block edit %}
+                    <li><a href="/mappingapp/edit">Edit Records</a></li>
+                    {% endblock edit %}
+                    {% block activeedit %}{% endblock activeedit %}
+
+                {%  endif %}
+            </ul>
 
             {% if not user.is_authenticated %}
 
                 <div id="login">
-                {% block login %}
-                    <form class="navbar-form navbar-right" id="login_form" method="post" action="{% url 'userlogin' %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <input type="text" placeholder="Username" class="form-control" name="username">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" placeholder="Password" class="form-control" name="password">
-                        </div>
-                            <button type="submit" class="btn btn-success">Sign in</button>
-                    </form>
-                {% endblock login %}
+                    {% block login %}
+                        <form class="navbar-form navbar-right" id="login_form" method="post" action="{% url 'userlogin' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" placeholder="Username" class="form-control" name="username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" placeholder="Password" class="form-control" name="password">
+                            </div>
+                                <button type="submit" class="btn btn-success">Sign in</button>
+                        </form>
+                    {% endblock login %}
             {% else %}
                 <div class="navbar-header navbar-right">
-                <a href="/mappingapp/logout/"><button type="submit" class="btn btn-success navbar-btn">Logout</button></a>
+                    <a href="/mappingapp/logout/"><button type="submit" class="btn btn-success navbar-btn">Logout</button></a>
                 </div>
             {% endif %}
                 </div>
         </div><!--/.nav-collapse -->
-      </div>
     </div>
+</div>
 
     {%  block body_block %}{% endblock %}
 
