@@ -9,10 +9,77 @@
 {% block login %}{% endblock login %}
 
 {% block body_block %}
-    {#% if user.is_authenticated %#}
+    <div class="jumbotron">
+     <form id="edit_form" method="post" action="/mappingapp/edit/">
 
-    {#% else %#}
-        <p>Only Authorised Users may edit files</p>
-        <a href="/mappingapp/">Home</a>
-    {#% endif %#}
+            {% csrf_token %}
+           <div class="row">
+            {% for hidden in coreform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in coreform.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+           </div><br/>
+            <div class="row">
+            {% for hidden in photoform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in photoform.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+            </div><br/>
+     <div class="row">
+            {% for hidden in coordform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in coordform.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+           </div><br/>
+     <div class="row">
+            {% for hidden in tranform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in tranform.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+            </div><br/>
+     <div class="row">
+            {% for hidden in retrform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in retrform.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+            </div><br/>
+     <div class="row">
+            {% for hidden in sampform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in sampform.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+            </div><br/>
+            <button type="submit" class="btn btn-success btn-lg">Save</button>
+     </form>
+    </div>
 {% endblock %}

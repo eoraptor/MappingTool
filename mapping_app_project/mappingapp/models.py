@@ -27,7 +27,6 @@ class Coordinates(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     elevation = models.CharField(max_length=50)
-    site_id = models.IntegerField()
 
     def __unicode__(self):
         return self.coordinate_id
