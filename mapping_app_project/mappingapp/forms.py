@@ -65,3 +65,24 @@ class SampleForm(forms.ModelForm):
     class Meta:
         model = Sample
 
+
+class RadiocarbonForm(forms.ModelForm):
+    depth_below_SL = forms.IntegerField(help_text='Depth Below Sea Level')
+    material = forms.CharField(max_length=45, help_text='Material')
+    geological_setting = forms.CharField(max_length=45, help_text='Geological Setting')
+    stratigraphic_position_depth = forms.IntegerField(help_text='Stratigraphic Position Depth')
+    sample_weight = forms.IntegerField(help_text='Sample Weight')
+    pot_contamination = forms.CharField(max_length=100, help_text='Potential Contamination')
+    calibration_curve = forms.CharField(max_length=20, help_text='Calibration Curve')
+    core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput())
+    sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput())
+
+    class Meta:
+        model = Radiocarbon_Sample
+
+
+
+class SampleSiteForm(forms.ModelForm):
+    name = forms.CharField(max_length=100, help_text='Site Name')
+    number
+

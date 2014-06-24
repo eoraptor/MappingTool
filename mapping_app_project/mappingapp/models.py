@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 
 
 class Core_Details(models.Model):
-    exposure_core = models.IntegerField()
-    core_number = models.IntegerField()
+    exposure_core = models.IntegerField(null=True, blank=True)
+    core_number = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):
         return self.core_number
@@ -12,8 +12,8 @@ class Core_Details(models.Model):
 
 
 class Photograph(models.Model):
-    photo_time_stamp = models.DateTimeField()
-    photo_label = models.CharField(max_length=128)
+    photo_time_stamp = models.DateTimeField(null=True, blank=True)
+    photo_label = models.CharField(max_length=128, null=True, blank=True)
 
     def __unicode__(self):
         return self.photo_label
@@ -21,12 +21,12 @@ class Photograph(models.Model):
 
 
 class Coordinates(models.Model):
-    grid_reference = models.CharField(max_length=12)
-    easting = models.IntegerField()
-    northing = models.IntegerField()
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    elevation = models.CharField(max_length=50)
+    grid_reference = models.CharField(max_length=12, null=True, blank=True)
+    easting = models.IntegerField(null=True, blank=True)
+    northing = models.IntegerField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    elevation = models.CharField(max_length=50, null=True, blank=True)
 
     def __unicode__(self):
         return self.coordinate_id
@@ -34,7 +34,7 @@ class Coordinates(models.Model):
 
 
 class Transect(models.Model):
-    transect_number = models.CharField(max_length=3)
+    transect_number = models.CharField(max_length=3, null=True, blank=True)
 
     def __unicode__(self):
         return self.transect_number
@@ -42,7 +42,7 @@ class Transect(models.Model):
 
 
 class Retreat_Zone(models.Model):
-    zone_number = models.IntegerField()
+    zone_number = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):
         return self.zone_number
@@ -50,17 +50,17 @@ class Retreat_Zone(models.Model):
 
 
 class Sample(models.Model):
-    code = models.CharField(max_length=20)
-    collection_date = models.DateField()
-    collector = models.CharField(max_length=20)
-    notes = models.CharField(max_length=200)
-    age = models.IntegerField()
-    age_error = models.IntegerField()
-    calendar_age = models.IntegerField()
-    calendar_error = models.IntegerField()
-    lab_code = models.CharField(max_length=50)
-    location = models.ForeignKey(Coordinates)
-    site = models.ForeignKey('Sample_Site')
+    code = models.CharField(max_length=20, null=True, blank=True)
+    collection_date = models.DateField(null=True, blank=True)
+    collector = models.CharField(max_length=20, null=True, blank=True)
+    notes = models.CharField(max_length=200, null=True, blank=True)
+    age = models.IntegerField(null=True, blank=True)
+    age_error = models.IntegerField(null=True, blank=True)
+    calendar_age = models.IntegerField(null=True, blank=True)
+    calendar_error = models.IntegerField(null=True, blank=True)
+    lab_code = models.CharField(max_length=50, null=True, blank=True)
+    location = models.ForeignKey(Coordinates, null=True, blank=True)
+    site = models.ForeignKey('Sample_Site', null=True, blank=True)
 
     def __unicode__(self):
         return self.code
@@ -68,8 +68,8 @@ class Sample(models.Model):
 
 
 class Photo_Of(models.Model):
-    sample = models.ForeignKey(Sample)
-    photo = models.ForeignKey(Photograph)
+    sample = models.ForeignKey(Sample, null=True, blank=True)
+    photo = models.ForeignKey(Photograph, null=True, blank=True)
 
     def __unicode__(self):
         return self.sample
@@ -77,15 +77,15 @@ class Photo_Of(models.Model):
 
 
 class Radiocarbon_Sample(models.Model):
-    depth_below_SL = models.IntegerField()
-    material = models.CharField(max_length=45)
-    geological_setting = models.CharField(max_length=45)
-    stratigraphic_position_depth = models.IntegerField()
-    sample_weight = models.IntegerField()
-    pot_contamination = models.CharField(max_length=100)
-    calibration_curve = models.CharField(max_length=20)
-    core = models.ForeignKey(Core_Details)
-    sample = models.ForeignKey(Sample)
+    depth_below_SL = models.IntegerField(null=True, blank=True)
+    material = models.CharField(max_length=45, null=True, blank=True)
+    geological_setting = models.CharField(max_length=45, null=True, blank=True)
+    stratigraphic_position_depth = models.IntegerField(null=True, blank=True)
+    sample_weight = models.IntegerField(null=True, blank=True)
+    pot_contamination = models.CharField(max_length=100, null=True, blank=True)
+    calibration_curve = models.CharField(max_length=20, null=True, blank=True)
+    core = models.ForeignKey(Core_Details, null=True, blank=True)
+    sample = models.ForeignKey(Sample, null=True, blank=True)
 
     def __unicode__(self):
         return self.sample
@@ -93,17 +93,16 @@ class Radiocarbon_Sample(models.Model):
 
 
 class Sample_Site(models.Model):
-    name = models.CharField(max_length=100)
-    number = models.IntegerField()
-    location = models.CharField(max_length=50)
-    county = models.CharField(max_length=50)
-    geomorph_setting = models.CharField(max_length=50)
-    type = models.CharField(max_length=50)
-    photograph = models.NullBooleanField()
-    notes = models.CharField(max_length=300)
-    transect = models.ForeignKey(Transect)
-    retreat = models.ForeignKey(Retreat_Zone)
-    coordinates = models.ForeignKey(Coordinates)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
+    county = models.CharField(max_length=50, null=True, blank=True)
+    geomorph_setting = models.CharField(max_length=50, null=True, blank=True)
+    type = models.CharField(max_length=50, null=True, blank=True)
+    photograph = models.NullBooleanField(null=True, blank=True)
+    notes = models.CharField(max_length=300, null=True, blank=True)
+    transect = models.ForeignKey(Transect, null=True, blank=True)
+    retreat = models.ForeignKey(Retreat_Zone, null=True, blank=True)
+    coordinates = models.ForeignKey(Coordinates, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -111,8 +110,8 @@ class Sample_Site(models.Model):
 
 
 class Location_Photo(models.Model):
-    location_number = models.ForeignKey(Sample_Site)
-    photo = models.ForeignKey(Photograph)
+    location_number = models.ForeignKey(Sample_Site, null=True, blank=True)
+    photo = models.ForeignKey(Photograph, null=True, blank=True)
 
     def __unicode__(self):
         return self.photo
@@ -121,14 +120,14 @@ class Location_Photo(models.Model):
 
 
 class OSL_Sample(models.Model):
-    stratigraphic_position = models.CharField(max_length=20)
-    lithofacies = models.CharField(max_length=50)
-    burial_depth_history = models.CharField(max_length=50)
-    pot_perturb_water_table = models.CharField(max_length=50)
-    pot_perturb_burial_depth = models.CharField(max_length=50)
-    gamma_dose = models.CharField(max_length=50)
-    sample = models.ForeignKey(Sample)
-    core = models.ForeignKey(Core_Details)
+    stratigraphic_position = models.CharField(max_length=20, null=True, blank=True)
+    lithofacies = models.CharField(max_length=50, null=True, blank=True)
+    burial_depth_history = models.CharField(max_length=50, null=True, blank=True)
+    pot_perturb_water_table = models.CharField(max_length=50, null=True, blank=True)
+    pot_perturb_burial_depth = models.CharField(max_length=50, null=True, blank=True)
+    gamma_dose = models.CharField(max_length=50, null=True, blank=True)
+    sample = models.ForeignKey(Sample, null=True, blank=True)
+    core = models.ForeignKey(Core_Details, null=True, blank=True)
 
     def __unicode__(self):
         return self.sample_id
@@ -137,15 +136,15 @@ class OSL_Sample(models.Model):
 
 
 class TCN_Sample(models.Model):
-    quartz_content = models.CharField(max_length=20)
-    sample_setting = models.CharField(max_length=50)
-    sampled_material = models.CharField(max_length=50)
-    boulder_dimensions = models.CharField(max_length=50)
-    sample_surface_strike_dip = models.CharField(max_length=50)
-    sample_thickness = models.CharField(max_length=50)
-    grain_size = models.IntegerField()
-    lithology = models.CharField(max_length=50)
-    sample = models.ForeignKey(Sample)
+    quartz_content = models.CharField(max_length=20, null=True, blank=True)
+    sample_setting = models.CharField(max_length=50, null=True, blank=True)
+    sampled_material = models.CharField(max_length=50, null=True, blank=True)
+    boulder_dimensions = models.CharField(max_length=50, null=True, blank=True)
+    sample_surface_strike_dip = models.CharField(max_length=50, null=True, blank=True)
+    sample_thickness = models.CharField(max_length=50, null=True, blank=True)
+    grain_size = models.IntegerField(null=True, blank=True)
+    lithology = models.CharField(max_length=50, null=True, blank=True)
+    sample = models.ForeignKey(Sample, null=True, blank=True)
 
     def __unicode__(self):
         return self.sample
@@ -153,8 +152,8 @@ class TCN_Sample(models.Model):
 
 
 class Bearing_Inclination(models.Model):
-    bearing = models.IntegerField()
-    inclination = models.IntegerField()
+    bearing = models.IntegerField(null=True, blank=True)
+    inclination = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):
         return self.bearing
@@ -162,8 +161,8 @@ class Bearing_Inclination(models.Model):
 
 
 class Sample_Bearing_Inclination(models.Model):
-    sample = models.ForeignKey(TCN_Sample)
-    bear_inc = models.ForeignKey(Bearing_Inclination)
+    sample = models.ForeignKey(TCN_Sample, null=True, blank=True)
+    bear_inc = models.ForeignKey(Bearing_Inclination, null=True, blank=True)
 
     def __unicode__(self):
         return self.bear_inc
