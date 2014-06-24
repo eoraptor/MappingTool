@@ -68,37 +68,46 @@ def edit(request):
 
     # A HTTP POST?
     if request.method == 'POST':
-        sampForm = SampleForm(request.POST)
         tranForm = TransectForm(request.POST)
         retForm = RetreatForm(request.POST)
+        coordForm = CoordinatesForm(request.POST)
         siteForm = SampleSiteForm(request.POST)
+        sampForm = SampleForm(request.POST)
         tcnForm = TCNForm(request.POST)
+        bearincForm = BearingInclinationForm(request.POST)
+        sampleBIForm = Sample_BI_Form(request.POST)
+
 
         # Have we been provided with a valid form?
-        if tranForm.is_valid() and retForm.is_valid() and sampForm.is_valid():
+        if tranForm.is_valid() and retForm.is_valid() and coordForm.is_valid() and siteForm.is_valid():
             tranForm.save(commit=True)
             retForm.save(commit=True)
+            coordForm.save(commit=True)
             siteForm.save(commit=True)
-            sampForm.save(commit=True)
-            tcnForm.save(commit=True)
-
+            #sampForm.save(commit=True)
+            #tcnForm.save(commit=True)
+            #bearincForm.save(commit=True)
+            #sampleBIForm.save(commit=True)
 
             # Now call the index() view.
             # The user will be shown the homepage.
             return index(request)
         else:
             # The supplied form contained errors - just print them to the terminal.
-            print tranForm.errors, retForm.errors, sampForm.errors, siteForm.errors, tcnForm.errors
+            print tranForm.errors, retForm.errors, sampForm.errors, siteForm.errors, tcnForm.errors, coordForm.errors, bearincForm.errors, sampleBIForm.errors
     else:
         tranForm = TransectForm()
         retForm = RetreatForm()
         sampForm = SampleForm()
         siteForm = SampleSiteForm()
         tcnForm = TCNForm()
+        coordForm = CoordinatesForm()
+        bearincForm = BearingInclinationForm()
+        sampleBIForm = Sample_BI_Form()
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edit.html', {'tcnform':tcnForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm, 'sampform':sampForm}, context)
+    return render_to_response('mappingapp/edit.html', {'sampleBIform': sampleBIForm, 'bearincform': bearincForm, 'coordform': coordForm, 'tcnform':tcnForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm, 'sampform':sampForm}, context)
 
 
 

@@ -4,6 +4,7 @@
     <list default="true" id="4d9e04cc-167f-4a45-a9ca-72690af8f052" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html" afterPath="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/models.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -27,63 +28,48 @@
     <favorites_list name="MappingTool" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="98" column="77" selection-start="3401" selection-end="3401" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="3196">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="47" column="0" selection-start="1744" selection-end="1744" vertical-scroll-proportion="0.0" vertical-offset="561" max-vertical-offset="2822">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/views.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="100" column="74" selection-start="3222" selection-end="3222" vertical-scroll-proportion="0.0" vertical-offset="1194" max-vertical-offset="2686">
-                  <folding>
-                    <element signature="e#0#58#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="edit.html" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="157" column="36" selection-start="5998" selection-end="5998" vertical-scroll-proportion="0.90625" vertical-offset="2176" max-vertical-offset="2941">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="119" column="20" selection-start="6165" selection-end="6174" vertical-scroll-proportion="0.5798923" vertical-offset="1683" max-vertical-offset="2822">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="90" column="26" selection-start="3183" selection-end="3183" vertical-scroll-proportion="2.6842105" vertical-offset="0" max-vertical-offset="3213">
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="53" column="4" selection-start="2040" selection-end="2040" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="2822">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="85" column="12" selection-start="2666" selection-end="2666" vertical-scroll-proportion="0.0" vertical-offset="1109" max-vertical-offset="2839">
+              <folding>
+                <element signature="e#0#58#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="edit.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="113" column="35" selection-start="4072" selection-end="4072" vertical-scroll-proportion="-7.1923075" vertical-offset="1734" max-vertical-offset="3910">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -113,10 +99,10 @@
         <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/search.html" />
         <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/base.html" />
         <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/upload.html" />
-        <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/models.py" />
         <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" />
         <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" />
         <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html" />
+        <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/models.py" />
       </list>
     </option>
   </component>
@@ -533,33 +519,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="77" selection-start="3401" selection-end="3401" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="3196">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="74" selection-start="3222" selection-end="3222" vertical-scroll-proportion="0.0" vertical-offset="1194" max-vertical-offset="2686">
+        <state line="85" column="12" selection-start="2666" selection-end="2666" vertical-scroll-proportion="0.0" vertical-offset="1109" max-vertical-offset="2839">
           <folding>
             <element signature="e#0#58#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
+    <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="0" selection-start="1744" selection-end="1744" vertical-scroll-proportion="0.0" vertical-offset="561" max-vertical-offset="2822">
+        <state line="113" column="35" selection-start="4072" selection-end="4072" vertical-scroll-proportion="-7.1923075" vertical-offset="1734" max-vertical-offset="3910">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html">
+    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="157" column="36" selection-start="5998" selection-end="5998" vertical-scroll-proportion="0.90625" vertical-offset="2176" max-vertical-offset="2941">
+        <state line="53" column="4" selection-start="2040" selection-end="2040" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="2822">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="90" column="26" selection-start="3183" selection-end="3183" vertical-scroll-proportion="2.6842105" vertical-offset="0" max-vertical-offset="3213">
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

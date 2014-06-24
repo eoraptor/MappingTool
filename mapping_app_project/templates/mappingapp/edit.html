@@ -30,6 +30,15 @@
             {% for hidden in tcnform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
+            {% for hidden in coordform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for hidden in bearincform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for hidden in sampleBIform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
 
 
             <div class="col-md-2">
@@ -113,6 +122,11 @@
                 {{ siteform.geomorph_setting }}
             </div>
              <div class="col-md-2">
+                {{ siteform.photograph.errors }}
+                {{ siteform.photograph.help_text }}<br/>
+                {{ siteform.photograph }}
+            </div>
+             <div class="col-md-2">
                 {{ siteform.notes.errors }}
                 {{ siteform.notes.help_text }}<br/>
                 {{ siteform.notes }}
@@ -157,6 +171,49 @@
                 {{ tcnform.lithology.help_text }}<br/>
                 {{ tcnform.lithology }}
             </div>
+            <div class="col-md-2">
+                {{ coordform.grid_reference.errors }}
+                {{ coordform.grid_reference.help_text }}<br/>
+                {{ coordform.grid_reference }}
+            </div>
+            <div class="col-md-2">
+                {{ coordform.easting.errors }}
+                {{ coordform.easting.help_text }}<br/>
+                {{ coordform.easting }}
+            </div>
+            <div class="col-md-2">
+                {{ coordform.northing.errors }}
+                {{ coordform.northing.help_text }}<br/>
+                {{ coordform.northing }}
+            </div>
+            <div class="col-md-2">
+                {{ coordform.latitude.errors }}
+                {{ coordform.latitude.help_text }}<br/>
+                {{ coordform.latitude }}
+            </div>
+            <div class="col-md-2">
+                {{ coordform.longitude.errors }}
+                {{ coordform.longitude.help_text }}<br/>
+                {{ coordform.longitude }}
+            </div>
+            <div class="col-md-2">
+                {{ coordform.elevation.errors }}
+                {{ coordform.elevation.help_text }}<br/>
+                {{ coordform.elevation }}
+            </div>
+            <div class="col-md-2">
+                {{ bearincform.bearing.errors }}
+                {{ bearincform.bearing.help_text }}<br/>
+                {{ bearincform.bearing }}
+            </div>
+            <div class="col-md-2">
+                {{ bearincform.inclination.errors }}
+                {{ bearincform.inclination.help_text }}<br/>
+                {{ bearincform.inclination }}
+            </div>
+
+
+
 
 
             </div><br/>
