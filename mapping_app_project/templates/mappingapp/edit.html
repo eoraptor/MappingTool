@@ -13,73 +13,156 @@
      <form id="edit_form" method="post" action="/mappingapp/edit/">
 
             {% csrf_token %}
-           <div class="row">
-            {% for hidden in coreform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-
-            {% for field in coreform.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
-            {% endfor %}
-           </div><br/>
-            <div class="row">
-            {% for hidden in photoform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-
-            {% for field in photoform.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
-            {% endfor %}
-            </div><br/>
-     <div class="row">
-            {% for hidden in coordform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-
-            {% for field in coordform.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
-            {% endfor %}
-           </div><br/>
-     <div class="row">
-            {% for hidden in tranform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-
-            {% for field in tranform.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
-            {% endfor %}
-            </div><br/>
-     <div class="row">
-            {% for hidden in retrform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-
-            {% for field in retrform.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
-            {% endfor %}
-            </div><br/>
-     <div class="row">
+        <div class="container-fluid">
+        <div class="row">
             {% for hidden in sampform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
-
-            {% for field in sampform.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
+            {% for hidden in tranform.hidden_fields %}
+                {{ hidden }}
             {% endfor %}
+            {% for hidden in retform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for hidden in siteform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for hidden in tcnform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+
+            <div class="col-md-2">
+                {{ sampform.code.errors }}
+                {{ sampform.code.help_text }}<br/>
+                {{ sampform.code }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.collection_date.errors }}
+                {{ sampform.collection_date.help_text }}<br/>
+                {{ sampform.collection_date }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.collector.errors }}
+                {{ sampform.collector.help_text }}<br/>
+                {{ sampform.collector }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.notes.errors }}
+                {{ sampform.notes.help_text }}<br/>
+                {{ sampform.notes }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.age.errors }}
+                {{ sampform.age.help_text }}<br/>
+                {{ sampform.age }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.age_error.errors }}
+                {{ sampform.age_error.help_text }}<br/>
+                {{ sampform.age_error }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.calendar_age.errors }}
+                {{ sampform.calendar_age.help_text }}<br/>
+                {{ sampform.calendar_age }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.calendar_error.errors }}
+                {{ sampform.calendar_error.help_text }}<br/>
+                {{ sampform.calendar_error }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.lab_code.errors }}
+                {{ sampform.lab_code.help_text }}<br/>
+                {{ sampform.lab_code }}
+            </div>
+        </div><br/>
+
+     <div class="row">
+
+            <div class="col-md-2">
+                {{ tranform.transect_number.errors }}
+                {{ tranform.transect_number.help_text }}<br/>
+                {{ tranform.transect_number }}
+            </div>
+
+            <div class="col-md-2">
+                {{ retform.zone_number.errors }}
+                {{ retform.zone_number.help_text }}<br/>
+                {{ retform.zone_number }}
+            </div>
+            <div class="col-md-2">
+                {{ siteform.name.errors }}
+                {{ siteform.name.help_text }}<br/>
+                {{ siteform.name }}
+            </div>
+             <div class="col-md-2">
+                {{ siteform.location.errors }}
+                {{ siteform.location.help_text }}<br/>
+                {{ siteform.location }}
+            </div>
+             <div class="col-md-2">
+                {{ siteform.county.errors }}
+                {{ siteform.county.help_text }}<br/>
+                {{ siteform.county }}
+            </div>
+             <div class="col-md-2">
+                {{ siteform.geomorph_setting.errors }}
+                {{ siteform.geomorph_setting.help_text }}<br/>
+                {{ siteform.geomorph_setting }}
+            </div>
+             <div class="col-md-2">
+                {{ siteform.notes.errors }}
+                {{ siteform.notes.help_text }}<br/>
+                {{ siteform.notes }}
+            </div>
+             <div class="col-md-2">
+                {{ tcnform.quartz_content.errors }}
+                {{ tcnform.quartz_content.help_text }}<br/>
+                {{ tcnform.quartz_content }}
+            </div>
+            <div class="col-md-2">
+                {{ tcnform.sample_setting.errors }}
+                {{ tcnform.sample_setting.help_text }}<br/>
+                {{ tcnform.sample_setting }}
+            </div>
+            <div class="col-md-2">
+                {{ tcnform.sampled_material.errors }}
+                {{ tcnform.sampled_material.help_text }}<br/>
+                {{ tcnform.sampled_material }}
+            </div>
+            <div class="col-md-2">
+                {{ tcnform.boulder_dimensions.errors }}
+                {{ tcnform.boulder_dimensions.help_text }}<br/>
+                {{ tcnform.boulder_dimensions }}
+            </div>
+            <div class="col-md-2">
+                {{ tcnform.sample_surface_strike_dip.errors }}
+                {{ tcnform.sample_surface_strike_dip.help_text }}<br/>
+                {{ tcnform.sample_surface_strike_dip }}
+            </div>
+            <div class="col-md-2">
+                {{ tcnform.sample_thickness.errors }}
+                {{ tcnform.sample_thickness.help_text }}<br/>
+                {{ tcnform.sample_thickness }}
+            </div>
+            <div class="col-md-2">
+                {{ tcnform.grain_size.errors }}
+                {{ tcnform.grain_size.help_text }}<br/>
+                {{ tcnform.grain_size }}
+            </div>
+            <div class="col-md-2">
+                {{ tcnform.lithology.errors }}
+                {{ tcnform.lithology.help_text }}<br/>
+                {{ tcnform.lithology }}
+            </div>
+
+
             </div><br/>
+
             <button type="submit" class="btn btn-success btn-lg">Save</button>
+        </div>
      </form>
     </div>
 {% endblock %}

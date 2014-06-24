@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
-from mappingapp.forms import DocumentForm, CoreDetailsForm, PhotographForm, CoordinatesForm, TransectForm, RetreatForm, SampleForm
+from mappingapp.forms import DocumentForm, CoreDetailsForm, PhotographForm, CoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm,SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, Location_PhotoForm, PhotoOfForm
 from mappingapp.models import Document
 
 def index(request):
@@ -68,44 +68,39 @@ def edit(request):
 
     # A HTTP POST?
     if request.method == 'POST':
-        CoreForm = CoreDetailsForm(data = request.POST)
-        PhotoForm = PhotographForm(data = request.POST)
-        CoordForm = CoordinatesForm(data = request.POST)
-        TranForm = TransectForm(data = request.POST)
-        RetrForm = RetreatForm(data = request.POST)
-        SampForm = SampleForm(data = request.POST)
-
+        sampForm = SampleForm(request.POST)
+        tranForm = TransectForm(request.POST)
+        retForm = RetreatForm(request.POST)
+        siteForm = SampleSiteForm(request.POST)
+        tcnForm = TCNForm(request.POST)
 
         # Have we been provided with a valid form?
-        if CoreForm.is_valid() and PhotoForm.is_valid() and CoordForm.is_valid() and TranForm.is_valid() and RetrForm.is_valid() and SampForm.is_valid():
-            # Save the new category to the database.
-            CoreForm.save(commit=True)
-            PhotoForm.save(commit=True)
-            CoordForm.save(commit=True)
-            TranForm.save(commit=True)
-            RetrForm.save(commit=True)
-            SampForm.save(commit=True)
+        if tranForm.is_valid() and retForm.is_valid() and sampForm.is_valid():
+            tranForm.save(commit=True)
+            retForm.save(commit=True)
+            siteForm.save(commit=True)
+            sampForm.save(commit=True)
+            tcnForm.save(commit=True)
 
 
             # Now call the index() view.
             # The user will be shown the homepage.
-            return edit(request)
+            return index(request)
         else:
             # The supplied form contained errors - just print them to the terminal.
-            print CoreForm.errors, PhotoForm.errors, CoordForm.errors, TranForm.errors, RetrForm.errors, SampForm.errors
+            print tranForm.errors, retForm.errors, sampForm.errors, siteForm.errors, tcnForm.errors
     else:
-        # If the request was not a POST, display the form to enter details.
-        CoreForm = CoreDetailsForm()
-        PhotoForm = PhotographForm()
-        CoordForm = CoordinatesForm()
-        TranForm = TransectForm()
-        RetrForm = RetreatForm()
-        SampForm = SampleForm()
+        tranForm = TransectForm()
+        retForm = RetreatForm()
+        sampForm = SampleForm()
+        siteForm = SampleSiteForm()
+        tcnForm = TCNForm()
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edit.html', {'coreform': CoreForm, 'photoform': PhotoForm,
-                            'coordform': CoordForm, 'tranform': TranForm, 'retrform': RetrForm, 'sampform': SampForm}, context)
+    return render_to_response('mappingapp/edit.html', {'tcnform':tcnForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm, 'sampform':sampForm}, context)
+
+
 
 
 def userlogin(request):
