@@ -21,6 +21,7 @@ class Photograph(models.Model):
 
 
 class Coordinates(models.Model):
+    bng_ing = models.CharField(max_length=30, null=True, blank=True)
     grid_reference = models.CharField(max_length=12, null=True, blank=True)
     easting = models.IntegerField(null=True, blank=True)
     northing = models.IntegerField(null=True, blank=True)
@@ -29,7 +30,7 @@ class Coordinates(models.Model):
     elevation = models.CharField(max_length=50, null=True, blank=True)
 
     def __unicode__(self):
-        return self.coordinate_id
+        return self.grid_reference
 
 
 
@@ -64,7 +65,7 @@ class Sample(models.Model):
     samp_site = models.ForeignKey('Sample_Site', null=True, blank=True)
 
     def __unicode__(self):
-        return self.code
+        return self.sample_code
 
 
 
@@ -73,7 +74,7 @@ class Photo_Of(models.Model):
     photo_idno = models.ForeignKey(Photograph, null=True, blank=True)
 
     def __unicode__(self):
-        return self.sample
+        return self.sample_pictured
 
 
 
@@ -105,7 +106,7 @@ class Sample_Site(models.Model):
     site_coordinates = models.ForeignKey(Coordinates, null=True, blank=True)
 
     def __unicode__(self):
-        return self.name
+        return self.site_name
 
 
 
@@ -114,7 +115,7 @@ class Location_Photo(models.Model):
     photo_ident = models.ForeignKey(Photograph, null=True, blank=True)
 
     def __unicode__(self):
-        return self.photo
+        return self.photo_ident
 
 
 
@@ -145,6 +146,7 @@ class TCN_Sample(models.Model):
     grain_size = models.IntegerField(null=True, blank=True)
     lithology = models.CharField(max_length=50, null=True, blank=True)
     tcn_sample = models.ForeignKey(Sample, null=True, blank=True)
+    sample_bearings = models.ForeignKey('Sample_Bearing_Inclination', null=True, blank=True)
 
     def __unicode__(self):
         return Sample.sample_code

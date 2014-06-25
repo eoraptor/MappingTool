@@ -5,8 +5,8 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
-from mappingapp.forms import DocumentForm, CoreDetailsForm, PhotographForm, CoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm,SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, Location_PhotoForm, PhotoOfForm
-from mappingapp.models import Document
+from mappingapp.forms import DocumentForm, CoreDetailsForm, PhotographForm, SiteCoordinatesForm, SampleCoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm,SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, Location_PhotoForm, PhotoOfForm
+from mappingapp.models import Document, Transect, Coordinates
 
 def index(request):
     context = RequestContext(request)
@@ -70,7 +70,8 @@ def edit(request):
     if request.method == 'POST':
         tranForm = TransectForm(request.POST)
         retForm = RetreatForm(request.POST)
-        coordForm = CoordinatesForm(request.POST)
+        samplecoordForm = SampleCoordinatesForm(request.POST, prefix='sample')
+        sitecoordForm = SampleCoordinatesForm(request.POST, prefix='site')
         siteForm = SampleSiteForm(request.POST)
         sampForm = SampleForm(request.POST)
         tcnForm = TCNForm(request.POST)
@@ -78,36 +79,62 @@ def edit(request):
         sampleBIForm = Sample_BI_Form(request.POST)
 
 
-        # Have we been provided with a valid form?
-        if tranForm.is_valid() and retForm.is_valid() and coordForm.is_valid() and siteForm.is_valid():
-            tranForm.save(commit=True)
-            retForm.save(commit=True)
-            coordForm.save(commit=True)
-            siteForm.save(commit=True)
-            #sampForm.save(commit=True)
-            #tcnForm.save(commit=True)
-            #bearincForm.save(commit=True)
-            #sampleBIForm.save(commit=True)
+        # Have we been provided with a complete set of valid forms?
+        if tranForm.is_valid() and retForm.is_valid()and sitecoordForm.is_valid() and siteForm.is_valid()\
+            and samplecoordForm.is_valid() and sampForm.is_valid()\
+            and bearincForm.is_valid() and sampleBIForm.is_valid()\
+            and tcnForm.is_valid():
+
+            transect = tranForm.save()
+            retForm.save()
+            sitecoords = sitecoordForm.save()
+            samplecoords = samplecoordForm.save()
+            bearinc = bearincForm.save()
+
+            site = siteForm.save(commit=False)
+            site.site_transect = transect
+            site.site_coordinates = sitecoords
+
+
+            sample = sampForm.save(commit=False)
+            sample.sample_location = samplecoords
+            sample.sample_site = site
+
+
+
+            tcnsample = tcnForm.save(commit=False)
+            tcnsample.tcn_sample = sample
+
+            sampleBI = sampleBIForm.save(commit=False)
+            sampleBI.sample_with_bearing = tcnsample
+            sampleBI.bear_inc = bearinc
+
+            site.save()
+            sample.save()
+
+            tcnsample.save()
+            sampleBI.save()
 
             # Now call the index() view.
             # The user will be shown the homepage.
             return index(request)
         else:
             # The supplied form contained errors - just print them to the terminal.
-            print tranForm.errors, retForm.errors, sampForm.errors, siteForm.errors, tcnForm.errors, coordForm.errors, bearincForm.errors, sampleBIForm.errors
+            print 'Error'
     else:
         tranForm = TransectForm()
         retForm = RetreatForm()
+        samplecoordForm = SampleCoordinatesForm(prefix='sample')
+        sitecoordForm = SiteCoordinatesForm(prefix='site')
         sampForm = SampleForm()
         siteForm = SampleSiteForm()
         tcnForm = TCNForm()
-        coordForm = CoordinatesForm()
         bearincForm = BearingInclinationForm()
         sampleBIForm = Sample_BI_Form()
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edit.html', {'sampleBIform': sampleBIForm, 'bearincform': bearincForm, 'coordform': coordForm, 'tcnform':tcnForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm, 'sampform':sampForm}, context)
+    return render_to_response('mappingapp/edit.html', {'tcnform':tcnForm, 'bearincform':bearincForm, 'sampleBIform':sampleBIForm, 'sampform':sampForm, 'samplecoordform':samplecoordForm, 'sitecoordform':sitecoordForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm}, context)
 
 
 

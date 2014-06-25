@@ -30,7 +30,10 @@
             {% for hidden in tcnform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
-            {% for hidden in coordform.hidden_fields %}
+            {% for hidden in samplecoordform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+             {% for hidden in sitecoordform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
             {% for hidden in bearincform.hidden_fields %}
@@ -42,9 +45,9 @@
 
 
             <div class="col-md-2">
-                {{ sampform.code.errors }}
-                {{ sampform.code.help_text }}<br/>
-                {{ sampform.code }}
+                {{ sampform.sample_code.errors }}
+                {{ sampform.sample_code.help_text }}<br/>
+                {{ sampform.sample_code }}
             </div>
             <div class="col-md-2">
                 {{ sampform.collection_date.errors }}
@@ -57,9 +60,14 @@
                 {{ sampform.collector }}
             </div>
             <div class="col-md-2">
-                {{ sampform.notes.errors }}
-                {{ sampform.notes.help_text }}<br/>
-                {{ sampform.notes }}
+                {{ sampform.sample_notes.errors }}
+                {{ sampform.sample_notes.help_text }}<br/>
+                {{ sampform.sample_notes }}
+            </div>
+            <div class="col-md-2">
+                {{ sampform.dating_priority.errors }}
+                {{ sampform.dating_priority.help_text }}<br/>
+                {{ sampform.dating_priority }}
             </div>
             <div class="col-md-2">
                 {{ sampform.age.errors }}
@@ -89,27 +97,28 @@
         </div><br/>
 
      <div class="row">
-
             <div class="col-md-2">
                 {{ tranform.transect_number.errors }}
                 {{ tranform.transect_number.help_text }}<br/>
                 {{ tranform.transect_number }}
             </div>
-
             <div class="col-md-2">
                 {{ retform.zone_number.errors }}
                 {{ retform.zone_number.help_text }}<br/>
                 {{ retform.zone_number }}
             </div>
+     </div><br/>
+
+     <div class="row">
             <div class="col-md-2">
-                {{ siteform.name.errors }}
-                {{ siteform.name.help_text }}<br/>
-                {{ siteform.name }}
+                {{ siteform.site_name.errors }}
+                {{ siteform.site_name.help_text }}<br/>
+                {{ siteform.site_name }}
             </div>
              <div class="col-md-2">
-                {{ siteform.location.errors }}
-                {{ siteform.location.help_text }}<br/>
-                {{ siteform.location }}
+                {{ siteform.site_location.errors }}
+                {{ siteform.site_location.help_text }}<br/>
+                {{ siteform.site_location }}
             </div>
              <div class="col-md-2">
                 {{ siteform.county.errors }}
@@ -121,16 +130,24 @@
                 {{ siteform.geomorph_setting.help_text }}<br/>
                 {{ siteform.geomorph_setting }}
             </div>
-             <div class="col-md-2">
-                {{ siteform.photograph.errors }}
-                {{ siteform.photograph.help_text }}<br/>
-                {{ siteform.photograph }}
+            <div class="col-md-2">
+                {{ siteform.sample_type_collected.errors }}
+                {{ siteform.sample_type_collected.help_text }}<br/>
+                {{ siteform.sample_type_collected }}
             </div>
              <div class="col-md-2">
-                {{ siteform.notes.errors }}
-                {{ siteform.notes.help_text }}<br/>
-                {{ siteform.notes }}
+                {{ siteform.photographs_taken.errors }}
+                {{ siteform.photographs_taken.help_text }}<br/>
+                {{ siteform.photographs_taken }}
             </div>
+             <div class="col-md-2">
+                {{ siteform.site_notes.errors }}
+                {{ siteform.site_notes.help_text }}<br/>
+                {{ siteform.site_notes }}
+            </div>
+         </div><br />
+
+         <div class="row">
              <div class="col-md-2">
                 {{ tcnform.quartz_content.errors }}
                 {{ tcnform.quartz_content.help_text }}<br/>
@@ -171,36 +188,85 @@
                 {{ tcnform.lithology.help_text }}<br/>
                 {{ tcnform.lithology }}
             </div>
+         </div><br/>
+
+        <div class="row">
             <div class="col-md-2">
-                {{ coordform.grid_reference.errors }}
-                {{ coordform.grid_reference.help_text }}<br/>
-                {{ coordform.grid_reference }}
+                {{ samplecoordform.bng_ing.errors }}
+                {{ samplecoordform.bng_ing.help_text }}<br/>
+                {{ samplecoordform.bng_ing }}
             </div>
             <div class="col-md-2">
-                {{ coordform.easting.errors }}
-                {{ coordform.easting.help_text }}<br/>
-                {{ coordform.easting }}
+                {{ samplecoordform.grid_reference.errors }}
+                {{ samplecoordform.grid_reference.help_text }}<br/>
+                {{ samplecoordform.grid_reference }}
             </div>
             <div class="col-md-2">
-                {{ coordform.northing.errors }}
-                {{ coordform.northing.help_text }}<br/>
-                {{ coordform.northing }}
+                {{ samplecoordform.easting.errors }}
+                {{ samplecoordform.easting.help_text }}<br/>
+                {{ samplecoordform.easting }}
             </div>
             <div class="col-md-2">
-                {{ coordform.latitude.errors }}
-                {{ coordform.latitude.help_text }}<br/>
-                {{ coordform.latitude }}
+                {{ samplecoordform.northing.errors }}
+                {{ samplecoordform.northing.help_text }}<br/>
+                {{ samplecoordform.northing }}
             </div>
             <div class="col-md-2">
-                {{ coordform.longitude.errors }}
-                {{ coordform.longitude.help_text }}<br/>
-                {{ coordform.longitude }}
+                {{ samplecoordform.latitude.errors }}
+                {{ samplecoordform.latitude.help_text }}<br/>
+                {{ samplecoordform.latitude }}
             </div>
             <div class="col-md-2">
-                {{ coordform.elevation.errors }}
-                {{ coordform.elevation.help_text }}<br/>
-                {{ coordform.elevation }}
+                {{ samplecoordform.longitude.errors }}
+                {{ samplecoordform.longitude.help_text }}<br/>
+                {{ samplecoordform.longitude }}
             </div>
+            <div class="col-md-2">
+                {{ samplecoordform.elevation.errors }}
+                {{ samplecoordform.elevation.help_text }}<br/>
+                {{ samplecoordform.elevation }}
+            </div>
+        </div><br />
+
+               <div class="row">
+            <div class="col-md-2">
+                {{ sitecoordform.bng_ing.errors }}
+                {{ sitecoordform.bng_ing.help_text }}<br/>
+                {{ sitecoordform.bng_ing }}
+            </div>
+            <div class="col-md-2">
+                {{ sitecoordform.grid_reference.errors }}
+                {{ sitecoordform.grid_reference.help_text }}<br/>
+                {{ sitecoordform.grid_reference }}
+            </div>
+            <div class="col-md-2">
+                {{ sitecoordform.easting.errors }}
+                {{ sitecoordform.easting.help_text }}<br/>
+                {{ sitecoordform.easting }}
+            </div>
+            <div class="col-md-2">
+                {{ sitecoordform.northing.errors }}
+                {{ sitecoordform.northing.help_text }}<br/>
+                {{ sitecoordform.northing }}
+            </div>
+            <div class="col-md-2">
+                {{ sitecoordform.latitude.errors }}
+                {{ sitecoordform.latitude.help_text }}<br/>
+                {{ sitecoordform.latitude }}
+            </div>
+            <div class="col-md-2">
+                {{ sitecoordform.longitude.errors }}
+                {{ sitecoordform.longitude.help_text }}<br/>
+                {{ sitecoordform.longitude }}
+            </div>
+            <div class="col-md-2">
+                {{ sitecoordform.elevation.errors }}
+                {{ sitecoordform.elevation.help_text }}<br/>
+                {{ sitecoordform.elevation }}
+            </div>
+        </div><br />
+
+        <div class="row">
             <div class="col-md-2">
                 {{ bearincform.bearing.errors }}
                 {{ bearincform.bearing.help_text }}<br/>
@@ -211,12 +277,7 @@
                 {{ bearincform.inclination.help_text }}<br/>
                 {{ bearincform.inclination }}
             </div>
-
-
-
-
-
-            </div><br/>
+        </div><br/>
 
             <button type="submit" class="btn btn-success btn-lg">Save</button>
         </div>

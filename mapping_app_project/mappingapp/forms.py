@@ -21,13 +21,27 @@ class PhotographForm(forms.ModelForm):
         model = Photograph
 
 
-class CoordinatesForm(forms.ModelForm):
-    grid_reference = forms.CharField(max_length=12, help_text='Grid Reference', required=False)
-    easting = forms.IntegerField(help_text='Easting', required=False)
-    northing = forms.IntegerField(help_text='Northing', required=False)
-    latitude = forms.FloatField(help_text='Latitude', required=False)
-    longitude = forms.FloatField(help_text='Longitude', required=False)
-    elevation = forms.CharField(max_length=50, help_text='Elevation', required=False)
+class SampleCoordinatesForm(forms.ModelForm):
+    bng_ing = forms.CharField(max_length=30, help_text='Sample BNG/ING?', required=False)
+    grid_reference = forms.CharField(max_length=12, help_text='Sample Grid Reference', required=False)
+    easting = forms.IntegerField(help_text='Sample Easting', required=False)
+    northing = forms.IntegerField(help_text='Sample Northing', required=False)
+    latitude = forms.FloatField(help_text='Sample Latitude', required=False)
+    longitude = forms.FloatField(help_text='Sample Longitude', required=False)
+    elevation = forms.CharField(max_length=50, help_text='Sample Elevation', required=False)
+
+    class Meta:
+        model = Coordinates
+
+
+class SiteCoordinatesForm(forms.ModelForm):
+    bng_ing = forms.CharField(max_length=30, help_text='Site BNG/ING?', required=False)
+    grid_reference = forms.CharField(max_length=12, help_text='Site Grid Reference', required=False)
+    easting = forms.IntegerField(help_text='Site Easting', required=False)
+    northing = forms.IntegerField(help_text='Site Northing', required=False)
+    latitude = forms.FloatField(help_text='Site Latitude', required=False)
+    longitude = forms.FloatField(help_text='Site Longitude', required=False)
+    elevation = forms.CharField(max_length=50, help_text='Site Elevation', required=False)
 
     class Meta:
         model = Coordinates
@@ -48,19 +62,20 @@ class RetreatForm(forms.ModelForm):
 
 
 class SampleForm(forms.ModelForm):
-    code = forms.CharField(max_length=20, help_text='Sample Code', required=False)
+    sample_code = forms.CharField(max_length=20, help_text='Sample Code', required=False)
     collection_date = forms.DateField(help_text='Collection Date', required=False)
     collector = forms.CharField(max_length=20, help_text='Collector(s)', required=False)
-    notes = forms.CharField(max_length=200, help_text='Notes', required=False)
+    sample_notes = forms.CharField(max_length=200, help_text='Notes', required=False)
+    dating_priority = forms.CharField(max_length=10, help_text='Dating Priority', required=False)
     age = forms.IntegerField(help_text='Sample Age', required=False)
     age_error = forms.IntegerField(help_text='Age Error', required=False)
     calendar_age = forms.IntegerField(help_text='Calendar Age', required=False)
     calendar_error = forms.IntegerField(help_text='Calendar Error', required=False)
     lab_code = forms.CharField(max_length=50, help_text='Lab Code', required=False)
-    location = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
-                                      widget=forms.HiddenInput())
-    site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(),
-                                         widget=forms.HiddenInput())
+    sample_location = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
+                                      widget=forms.HiddenInput(), required=False)
+    sample_site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(),
+                                         widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Sample
@@ -74,8 +89,8 @@ class RadiocarbonForm(forms.ModelForm):
     sample_weight = forms.IntegerField(help_text='Sample Weight', required=False)
     pot_contamination = forms.CharField(max_length=100, help_text='Potential Contamination', required=False)
     calibration_curve = forms.CharField(max_length=20, help_text='Calibration Curve', required=False)
-    core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput())
-    sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput())
+    c14_core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput(), required=False)
+    c14_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Radiocarbon_Sample
@@ -83,15 +98,15 @@ class RadiocarbonForm(forms.ModelForm):
 
 
 class SampleSiteForm(forms.ModelForm):
-    name = forms.CharField(max_length=100, help_text='Site Name', required=False)
-    location = forms.CharField(max_length=50, help_text='Location', required=False)
+    site_name = forms.CharField(max_length=100, help_text='Site Name', required=False)
+    site_location = forms.CharField(max_length=50, help_text='Location', required=False)
     county = forms.CharField(max_length=50, help_text='County', required=False)
     geomorph_setting = forms.CharField(max_length=50, help_text='Geomorph Setting', required=False)
-    type = forms.CharField(max_length=50, help_text='Type', required=False)
-    photograph = forms.NullBooleanField(help_text='Photographs Taken?', required=False)
-    notes = forms.CharField(max_length=300, help_text='Site Notes', required=False)
-    transect = forms.ModelChoiceField(queryset=Transect.objects.all(), widget=forms.HiddenInput())
-    coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput())
+    sample_type_collected = forms.CharField(max_length=50, help_text='Type', required=False)
+    photographs_taken = forms.NullBooleanField(help_text='Photographs Taken?', required=False)
+    site_notes = forms.CharField(max_length=300, help_text='Site Notes', required=False)
+    site_transect = forms.ModelChoiceField(queryset=Transect.objects.all(), widget=forms.HiddenInput(), required=False)
+    site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Sample_Site
@@ -104,8 +119,8 @@ class OSLSampleForm(forms.ModelForm):
     pot_perturb_water_table = forms.CharField(max_length=50, help_text='Potential Perturb of Water Table', required=False)
     pot_perturb_burial_depth = forms.CharField(max_length=50, help_text='Potential Perturb of Burial Depth', required=False)
     gamma_dose = forms.CharField(max_length=50, help_text='Gamma Dose', required=False)
-    sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput())
-    core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput())
+    osl_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
+    osl_core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = OSL_Sample
@@ -120,7 +135,8 @@ class TCNForm(forms.ModelForm):
     sample_thickness = forms.CharField(max_length=50, help_text='Sample Thickness', required=False)
     grain_size = forms.IntegerField(help_text='Grain Size', required=False)
     lithology = forms.CharField(max_length=50, help_text='Lithology', required=False)
-    sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput())
+    tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
+    sample_bearings = forms.ModelChoiceField(queryset=Sample_Bearing_Inclination.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = TCN_Sample
@@ -135,23 +151,23 @@ class BearingInclinationForm(forms.ModelForm):
 
 
 class Sample_BI_Form(forms.ModelForm):
-    sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput())
-    bear_inc = forms.ModelChoiceField(queryset=Bearing_Inclination.objects.all(), widget=forms.HiddenInput())
+    sample_with_bearing = forms.ModelChoiceField(queryset=TCN_Sample.objects.all(), widget=forms.HiddenInput(), required=False)
+    bear_inc = forms.ModelChoiceField(queryset=Bearing_Inclination.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Sample_Bearing_Inclination
 
 
 class Location_PhotoForm(forms.ModelForm):
-    location_number = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput())
-    photo = forms.ModelChoiceField(queryset=Photograph.objects.all(), widget=forms.HiddenInput())
+    location_number = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput(), required=False)
+    photo_ident = forms.ModelChoiceField(queryset=Photograph.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Location_Photo
 
 class PhotoOfForm(forms.ModelForm):
-    sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput())
-    photo = forms.ModelChoiceField(queryset=Photograph.objects.all(), widget=forms.HiddenInput())
+    sample_pictured = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
+    photo_idno = forms.ModelChoiceField(queryset=Photograph.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Photo_Of
