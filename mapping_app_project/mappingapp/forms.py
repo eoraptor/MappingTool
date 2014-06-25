@@ -72,10 +72,8 @@ class SampleForm(forms.ModelForm):
     calendar_age = forms.IntegerField(help_text='Calendar Age', required=False)
     calendar_error = forms.IntegerField(help_text='Calendar Error', required=False)
     lab_code = forms.CharField(max_length=50, help_text='Lab Code', required=False)
-    sample_location = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
-                                      widget=forms.HiddenInput(), required=False)
-    sample_site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(),
-                                         widget=forms.HiddenInput(), required=False)
+    sample_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
+    samp_site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Sample

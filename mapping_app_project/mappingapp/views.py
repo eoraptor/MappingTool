@@ -88,32 +88,30 @@ def edit(request):
             transect = tranForm.save()
             retForm.save()
             sitecoords = sitecoordForm.save()
-            samplecoords = samplecoordForm.save()
+            sampcoords = samplecoordForm.save()
             bearinc = bearincForm.save()
 
             site = siteForm.save(commit=False)
             site.site_transect = transect
             site.site_coordinates = sitecoords
+            site.save()
 
-
-            sample = sampForm.save(commit=False)
-            sample.sample_location = samplecoords
-            sample.sample_site = site
-
-
+            samp = sampForm.save(commit=False)
+            samp.sample_coordinates = sampcoords
+            samp.samp_site = site
+            samp.save()
 
             tcnsample = tcnForm.save(commit=False)
-            tcnsample.tcn_sample = sample
+            tcnsample.tcn_sample = samp
+            tcnsample.save()
 
             sampleBI = sampleBIForm.save(commit=False)
             sampleBI.sample_with_bearing = tcnsample
             sampleBI.bear_inc = bearinc
-
-            site.save()
-            sample.save()
-
-            tcnsample.save()
             sampleBI.save()
+
+            tcnsample.sample_bearings = sampleBI
+            tcnsample.save()
 
             # Now call the index() view.
             # The user will be shown the homepage.

@@ -15,9 +15,6 @@
             {% csrf_token %}
         <div class="container-fluid">
         <div class="row">
-            {% for hidden in sampform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
             {% for hidden in tranform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
@@ -34,6 +31,9 @@
                 {{ hidden }}
             {% endfor %}
              {% for hidden in sitecoordform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for hidden in sampform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
             {% for hidden in bearincform.hidden_fields %}
