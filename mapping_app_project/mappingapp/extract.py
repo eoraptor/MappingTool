@@ -113,3 +113,35 @@ def get_site_cell_positions(wb):
     for k,v in positions.items():
         print k,v
 
+
+def get_tcn_cell_positions(ws):
+    columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+           'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+    positions = {'Date: ': '', 'Location:': '', 'Latitude (if different from site info)': '',
+                 'Unique Sample Identifier': '', 'BNG or ING': '', 'Northing': '', 'Easting': '',
+                 'Elevation': '', 'Longtitude': '', 'Lithology': '', 'Boulder dimensions [cm] (LxWxH)': '',
+                 'Transect:': '', 'Est Quartz content': '', 'Sample setting': '', 'Sample surface strike/dip ': '',
+                 'Sampled material (eg:boulder)': '', 'sample thickness': '', 'Grain Size:': '',
+                 'Collector: ': '', 'Notes (inc.weathering and erosion rate est)': '', 'Bearing': '',
+                 'Inclination': ''}
+
+    for row in ws.iter_rows():
+        for cell in row:
+            val = cell.value
+            if val is not None and isinstance(val, basestring):
+                val = val.replace('\n', '')
+
+                if val in positions:
+                    if val == 'Notes (inc.weathering and erosion rate est)' or val == 'Bearing' or val == 'Inclination':
+                        positions[val] = cell.column + str(cell.row+1)
+                    else:
+                        col = columns.index(cell.column)
+                        val_col = columns[col+1]
+                        positions[val] = val_col + str(cell.row)
+
+    for k,v in positions.items():
+        print k,v
+
+#ws = wb['T1FOU02']
+#get_tcn_cell_positions(ws)
