@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d9e04cc-167f-4a45-a9ca-72690af8f052" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/extract.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html" afterPath="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/models.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/extract.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/extract.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MappingTool.iws" />
@@ -35,7 +31,7 @@
           <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="102" column="70" selection-start="5207" selection-end="5207" vertical-scroll-proportion="0.0" vertical-offset="1462" max-vertical-offset="3111">
+                <state line="102" column="70" selection-start="5207" selection-end="5207" vertical-scroll-proportion="0.0" vertical-offset="1734" max-vertical-offset="3128">
                   <folding />
                 </state>
               </provider>
@@ -44,7 +40,7 @@
           <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="161" column="98" selection-start="6321" selection-end="6321" vertical-scroll-proportion="0.0" vertical-offset="2561" max-vertical-offset="5304">
+                <state line="161" column="98" selection-start="6321" selection-end="6321" vertical-scroll-proportion="0.0" vertical-offset="2737" max-vertical-offset="5321">
                   <folding />
                 </state>
               </provider>
@@ -53,7 +49,7 @@
           <file leaf-file-name="edit.html" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="135" column="37" selection-start="5085" selection-end="5085" vertical-scroll-proportion="-11.115385" vertical-offset="2006" max-vertical-offset="5117">
+                <state line="135" column="37" selection-start="5085" selection-end="5085" vertical-scroll-proportion="0.0" vertical-offset="2006" max-vertical-offset="5117">
                   <folding />
                 </state>
               </provider>
@@ -63,9 +59,7 @@
             <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/views.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state line="31" column="19" selection-start="1452" selection-end="1600" vertical-scroll-proportion="0.0" vertical-offset="251" max-vertical-offset="3842">
-                  <folding>
-                    <element signature="e#0#58#0" expanded="true" />
-                  </folding>
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -73,10 +67,8 @@
           <file leaf-file-name="extract.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/extract.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="75" column="0" selection-start="2570" selection-end="2570" vertical-scroll-proportion="0.5576208" vertical-offset="975" max-vertical-offset="1581">
-                  <folding>
-                    <element signature="e#0#34#0" expanded="true" />
-                  </folding>
+                <state line="89" column="0" selection-start="2828" selection-end="2828" vertical-scroll-proportion="-0.0111524165" vertical-offset="1502" max-vertical-offset="2040">
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -124,7 +116,7 @@
           <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="171" column="4" selection-start="6819" selection-end="6870" vertical-scroll-proportion="0.608229" vertical-offset="2550" max-vertical-offset="5304">
+                <state line="171" column="4" selection-start="6819" selection-end="6870" vertical-scroll-proportion="-0.030411448" vertical-offset="2907" max-vertical-offset="5304">
                   <folding />
                 </state>
               </provider>
@@ -208,7 +200,7 @@
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -219,83 +211,7 @@
       <autoscrollFromSource />
       <sortByType />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mapping_app_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mapping_app_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mappingapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mapping_app_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mappingapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
@@ -650,9 +566,7 @@
     <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="31" column="19" selection-start="1452" selection-end="1600" vertical-scroll-proportion="0.0" vertical-offset="251" max-vertical-offset="3842">
-          <folding>
-            <element signature="e#0#58#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -665,24 +579,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="161" column="98" selection-start="6321" selection-end="6321" vertical-scroll-proportion="0.0" vertical-offset="2561" max-vertical-offset="5304">
+        <state line="161" column="98" selection-start="6321" selection-end="6321" vertical-scroll-proportion="0.0" vertical-offset="2737" max-vertical-offset="5321">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="135" column="37" selection-start="5085" selection-end="5085" vertical-scroll-proportion="-11.115385" vertical-offset="2006" max-vertical-offset="5117">
+        <state line="135" column="37" selection-start="5085" selection-end="5085" vertical-scroll-proportion="0.0" vertical-offset="2006" max-vertical-offset="5117">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/extract.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="0" selection-start="2570" selection-end="2570" vertical-scroll-proportion="0.5576208" vertical-offset="975" max-vertical-offset="1581">
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
+        <state line="89" column="0" selection-start="2828" selection-end="2828" vertical-scroll-proportion="-0.0111524165" vertical-offset="1502" max-vertical-offset="2040">
+          <folding />
         </state>
       </provider>
     </entry>

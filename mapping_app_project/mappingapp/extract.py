@@ -85,3 +85,31 @@ def process_file(file_name):
 
         else:
             get_tcn_sample_info(wb, sheet)
+
+
+
+def get_site_cell_positions(wb):
+    ws = wb['Site Info']
+    columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+           'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+    positions = {'Site Name: ': '', 'Location (inc. Transect no.)': '', 'Latitude(decimal deg)': '',
+                 'Longtitude(decimal deg)(West is -ve)': '', 'BNG/ING?': '', 'Northing:': '', 'Easting:': '',
+                 'Elevation             (m ASL)': '', 'Date Sampled:': '', 'Geomorph Setting:': '',
+                 'Type of Samples collected (TCN/14C/OSL)': '', 'Collected by:': '', 'Photographs Taken (Y/N):': '',
+                 'Photo labels/Time stamps:': '', 'Notes': ''}
+
+    for row in ws.iter_rows():
+        for cell in row:
+            val = cell.value
+            if val is not None and isinstance(val, basestring):
+                val = val.replace('\n', '')
+
+                if val in positions:
+                    col = columns.index(cell.column)
+                    val_col = columns[col+1]
+                    positions[val] = val_col + str(cell.row)
+
+    for k,v in positions.items():
+        print k,v
+
