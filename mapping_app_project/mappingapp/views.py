@@ -86,12 +86,13 @@ def edit(request):
             and tcnForm.is_valid():
 
             transect = tranForm.save()
-            retForm.save()
+            retreat = retForm.save()
             sitecoords = sitecoordForm.save()
             sampcoords = samplecoordForm.save()
             bearinc = bearincForm.save()
 
             site = siteForm.save(commit=False)
+            site.site_retreat = retreat
             site.site_transect = transect
             site.site_coordinates = sitecoords
             site.save()

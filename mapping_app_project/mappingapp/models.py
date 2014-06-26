@@ -2,23 +2,42 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class CoreDetailsManager(models.Manager):
+    def create_core_details(self, exposure, number):
+        core_details = self.create(exposure_core=exposure, core_number=number)
+        return core_details
+
 class Core_Details(models.Model):
     exposure_core = models.IntegerField(null=True, blank=True)
     core_number = models.IntegerField(null=True, blank=True)
+
+    objects = CoreDetailsManager()
 
     def __unicode__(self):
         return self.core_number
 
 
+class PhotographManager(models.Manager):
+    def create_photograph(self, time, label):
+        photo = self.create(photo_time_stamp=time,photo_label=label)
+        return photo
 
 class Photograph(models.Model):
     photo_time_stamp = models.DateTimeField(null=True, blank=True)
     photo_label = models.CharField(max_length=128, null=True, blank=True)
 
+    objects = PhotographManager()
+
     def __unicode__(self):
         return self.photo_label
 
 
+
+class CoordinatesManager(models.Manager):
+    def create_coordinates(self, bng_ing, grid_ref, east, north, lat, long, ele):
+        coordinates = self.create(bng_ing=bng_ing, grid_reference=grid_ref, easting=east,
+                                  northing=north, latitude=lat, longitude=long, elevation=ele)
+        return coordinates
 
 class Coordinates(models.Model):
     bng_ing = models.CharField(max_length=30, null=True, blank=True)
@@ -29,26 +48,49 @@ class Coordinates(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     elevation = models.CharField(max_length=50, null=True, blank=True)
 
+    objects = CoordinatesManager()
+
     def __unicode__(self):
         return self.grid_reference
 
 
+class TransectManager(models.Manager):
+    def create_transect(self, transect_number):
+        transect = self.create(transect_number=transect_number)
+        return transect
 
 class Transect(models.Model):
     transect_number = models.CharField(max_length=3, null=True, blank=True)
+
+    objects = TransectManager()
 
     def __unicode__(self):
         return self.transect_number
 
 
 
+class RetreatZoneManager(models.Manager):
+    def create_retreat_zone(self, zone_number):
+        retreat = self.create(zone_number=zone_number)
+        return retreat
+
 class Retreat_Zone(models.Model):
     zone_number = models.IntegerField(null=True, blank=True)
+
+    objects = RetreatZoneManager()
 
     def __unicode__(self):
         return self.zone_number
 
 
+class SampleManager(models.Manager):
+    def create_sample(self, code, date, collector, notes, priority, age, age_error,
+                      cal_age, cal_error, lab_code, coords, site):
+        sample = self.create(sample_code=code, collection_date=date, collector=collector,
+                             sample_notes=notes, dating_priority=priority, age=age, age_error=age_error,
+                             calendar_age=cal_age, calendar_error=cal_error, lab_code=lab_code,
+                             sample_coordinates=coords, samp_site=site)
+        return sample
 
 class Sample(models.Model):
     sample_code = models.CharField(max_length=20, null=True, blank=True)
@@ -64,18 +106,36 @@ class Sample(models.Model):
     sample_coordinates = models.ForeignKey(Coordinates, null=True, blank=True)
     samp_site = models.ForeignKey('Sample_Site', null=True, blank=True)
 
+    objects = SampleManager()
+
     def __unicode__(self):
         return self.sample_code
 
+
+class PhotoOfManager(models.Manager):
+    def create_photo_of(self, sample, id):
+        photo_of = self.create(sample_pictured=sample, photo_idno=id)
+        return photo_of
 
 
 class Photo_Of(models.Model):
     sample_pictured = models.ForeignKey(Sample, null=True, blank=True)
     photo_idno = models.ForeignKey(Photograph, null=True, blank=True)
 
+    objects = PhotoOfManager()
+
     def __unicode__(self):
         return self.sample_pictured
 
+
+class RadiocarbonManager(models.Manager):
+    def create_radiocarbon(self, depth, material, setting, position, weight, contam,
+                           cal_curve, core, sample):
+        radiocarbon = self.create(depth_below_SL=depth, material=material, geological_setting=setting,
+                                  stratigraphic_position_depth=position, sample_weight=weight,
+                                  pot_contamination=contam, calibration_curve=cal_curve, c14_core=core,
+                                  c14_sample=sample)
+        return radiocarbon
 
 
 class Radiocarbon_Sample(models.Model):
@@ -89,9 +149,19 @@ class Radiocarbon_Sample(models.Model):
     c14_core = models.ForeignKey(Core_Details, null=True, blank=True)
     c14_sample = models.ForeignKey(Sample, null=True, blank=True)
 
+    objects = RadiocarbonManager()
+
     def __unicode__(self):
         return Sample.sample_code
 
+
+
+class SiteManager(models.Manager):
+    def create_site(self, name, location, county, setting, type, photos, notes, transect, coords):
+        site = self.create(site_name=name, site_location=location, county=county, geomorph_setting=setting,
+                           sample_type_collected=type, photographs_taken=photos, site_notes=notes,
+                           site_transect=transect, site_coodinates=coords)
+        return site
 
 
 class Sample_Site(models.Model):
@@ -103,21 +173,41 @@ class Sample_Site(models.Model):
     photographs_taken = models.NullBooleanField(null=True, blank=True)
     site_notes = models.CharField(max_length=300, null=True, blank=True)
     site_transect = models.ForeignKey(Transect, null=True, blank=True)
+    site_retreat = models.ForeignKey(Retreat_Zone, null=True, blank=True)
     site_coordinates = models.ForeignKey(Coordinates, null=True, blank=True)
+
+    objects = SiteManager()
 
     def __unicode__(self):
         return self.site_name
 
 
 
+
+class LocationPhotoManager(models.Manager):
+    def create_location_manager(self, site, id):
+        loc_photo = self.create(photo_site=site, photo_ident=id)
+
+        return loc_photo
+
 class Location_Photo(models.Model):
-    location_number = models.ForeignKey(Sample_Site, null=True, blank=True)
+    photo_site = models.ForeignKey(Sample_Site, null=True, blank=True)
     photo_ident = models.ForeignKey(Photograph, null=True, blank=True)
+
+    objects = LocationPhotoManager()
 
     def __unicode__(self):
         return self.photo_ident
 
 
+
+class OSLManager(models.Manager):
+    def create_osl(self, position, litho, depth_history, water_table, burial_depth,
+                   gamma, sample, core):
+        osl = self.create(stratigraphic_postion=position, lithofacies=litho, burial_depth_history=depth_history,
+                          pot_perturb_water_table=water_table, pot_perturb_burial_depth=burial_depth,
+                          gamma_dose=gamma, osl_sample=sample, osl_core=core)
+        return osl
 
 
 class OSL_Sample(models.Model):
@@ -130,11 +220,21 @@ class OSL_Sample(models.Model):
     osl_sample = models.ForeignKey(Sample, null=True, blank=True)
     osl_core = models.ForeignKey(Core_Details, null=True, blank=True)
 
+    objects = OSLManager()
+
     def __unicode__(self):
         return Sample.sample_code
 
 
 
+class TCNManager(models.Manager):
+    def create_tcn(self, quartz, setting, material, boulder, strike, thickness, grain,
+                   litho, sample, bearings):
+        tcn = self.create(quartz_content=quartz, sample_setting=setting, sampled_material=material,
+                          boulder_dimensions=boulder, sample_surface_strike_dip=strike,
+                          sample_thickness=thickness, grain_size=grain, lithology=litho,
+                          tcn_sample=sample, sample_bearings=bearings)
+        return tcn
 
 class TCN_Sample(models.Model):
     quartz_content = models.CharField(max_length=20, null=True, blank=True)
@@ -148,26 +248,46 @@ class TCN_Sample(models.Model):
     tcn_sample = models.ForeignKey(Sample, null=True, blank=True)
     sample_bearings = models.ForeignKey('Sample_Bearing_Inclination', null=True, blank=True)
 
+    objects = TCNManager()
+
     def __unicode__(self):
         return Sample.sample_code
 
+
+
+class BIManager(models.Manager):
+    def create_bearing_inclination(self, bearing, inc):
+        bi = self.create(bearing=bearing, inclination=inc)
+        return bi
 
 
 class Bearing_Inclination(models.Model):
     bearing = models.IntegerField(null=True, blank=True)
     inclination = models.IntegerField(null=True, blank=True)
 
+    objects = BIManager()
+
     def __unicode__(self):
         return self.bearing
 
 
 
+class SampleBIManager(models.Manager):
+    def create_sampleBI(self, sample, bearing):
+        samplebi = self.create(sample_with_bearing=sample, bear_inc=bearing)
+
+        return samplebi
+
 class Sample_Bearing_Inclination(models.Model):
     sample_with_bearing = models.ForeignKey(TCN_Sample, null=True, blank=True)
     bear_inc = models.ForeignKey(Bearing_Inclination, null=True, blank=True)
 
+    objects = SampleBIManager()
+
     def __unicode__(self):
         return self.bear_inc
+
+
 
 
 class UserProfile(models.Model):

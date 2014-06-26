@@ -104,6 +104,7 @@ class SampleSiteForm(forms.ModelForm):
     photographs_taken = forms.NullBooleanField(help_text='Photographs Taken?', required=False)
     site_notes = forms.CharField(max_length=300, help_text='Site Notes', required=False)
     site_transect = forms.ModelChoiceField(queryset=Transect.objects.all(), widget=forms.HiddenInput(), required=False)
+    site_retreat = forms.ModelChoiceField(queryset=Retreat_Zone.objects.all(), widget=forms.HiddenInput(), required=False)
     site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
@@ -157,7 +158,7 @@ class Sample_BI_Form(forms.ModelForm):
 
 
 class Location_PhotoForm(forms.ModelForm):
-    location_number = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput(), required=False)
+    photo_site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput(), required=False)
     photo_ident = forms.ModelChoiceField(queryset=Photograph.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
