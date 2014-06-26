@@ -63,6 +63,7 @@ class RetreatForm(forms.ModelForm):
 
 class SampleForm(forms.ModelForm):
     sample_code = forms.CharField(max_length=20, help_text='Sample Code', required=False)
+    sample_location_name = forms.CharField(max_length=100, help_text='Sample Location Name', required=False)
     collection_date = forms.DateField(help_text='Collection Date', required=False)
     collector = forms.CharField(max_length=20, help_text='Collector(s)', required=False)
     sample_notes = forms.CharField(max_length=200, help_text='Notes', required=False)
@@ -99,6 +100,7 @@ class SampleSiteForm(forms.ModelForm):
     site_name = forms.CharField(max_length=100, help_text='Site Name', required=False)
     site_location = forms.CharField(max_length=50, help_text='Location', required=False)
     county = forms.CharField(max_length=50, help_text='County', required=False)
+    site_date = forms.DateField(help_text='Site Date', required=False)
     geomorph_setting = forms.CharField(max_length=50, help_text='Geomorph Setting', required=False)
     sample_type_collected = forms.CharField(max_length=50, help_text='Type', required=False)
     photographs_taken = forms.NullBooleanField(help_text='Photographs Taken?', required=False)
@@ -132,7 +134,7 @@ class TCNForm(forms.ModelForm):
     boulder_dimensions = forms.CharField(max_length=50, help_text='Boulder Dimensions', required=False)
     sample_surface_strike_dip = forms.CharField(max_length=50, help_text='Sample Surface Strike Dip', required=False)
     sample_thickness = forms.CharField(max_length=50, help_text='Sample Thickness', required=False)
-    grain_size = forms.IntegerField(help_text='Grain Size', required=False)
+    grain_size = forms.CharField(max_length=50, help_text='Grain Size', required=False)
     lithology = forms.CharField(max_length=50, help_text='Lithology', required=False)
     tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
     sample_bearings = forms.ModelChoiceField(queryset=Sample_Bearing_Inclination.objects.all(), widget=forms.HiddenInput(), required=False)

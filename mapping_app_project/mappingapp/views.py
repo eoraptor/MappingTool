@@ -41,9 +41,8 @@ def create(request):
         TCN_Sample.objects.filter(pk=tcnsample.pk).update(sample_bearings=samplebi)
         return HttpResponseRedirect('/mappingapp/')
 
-
-
     return render_to_response('mappingapp/create.html', {}, context_instance=RequestContext(request))
+
 
 
 @login_required
@@ -75,7 +74,9 @@ def upload(request):
         form = DocumentForm(request.POST, request.FILES)
 
         if form.is_valid():
-            newdoc = Document(docfile = request.FILES['docfile'])
+            newdoc = Document(docfile=request.FILES['docfile'])
+
+
             newdoc.save()
 
             # Redirect to the document list after POST

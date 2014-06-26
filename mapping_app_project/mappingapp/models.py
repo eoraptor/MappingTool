@@ -84,9 +84,9 @@ class Retreat_Zone(models.Model):
 
 
 class SampleManager(models.Manager):
-    def create_sample(self, code, date, collector, notes, priority, age, age_error,
+    def create_sample(self, code, location, date, collector, notes, priority, age, age_error,
                       cal_age, cal_error, lab_code, coords, site):
-        sample = self.create(sample_code=code, collection_date=date, collector=collector,
+        sample = self.create(sample_code=code, sample_location=location, collection_date=date, collector=collector,
                              sample_notes=notes, dating_priority=priority, age=age, age_error=age_error,
                              calendar_age=cal_age, calendar_error=cal_error, lab_code=lab_code,
                              sample_coordinates=coords, samp_site=site)
@@ -94,6 +94,7 @@ class SampleManager(models.Manager):
 
 class Sample(models.Model):
     sample_code = models.CharField(max_length=20, null=True, blank=True)
+    sample_location_name = models.CharField(max_length=100, null=True, blank=True)
     collection_date = models.DateField(null=True, blank=True)
     collector = models.CharField(max_length=20, null=True, blank=True)
     sample_notes = models.CharField(max_length=200, null=True, blank=True)
@@ -157,8 +158,8 @@ class Radiocarbon_Sample(models.Model):
 
 
 class SiteManager(models.Manager):
-    def create_site(self, name, location, county, setting, type, photos, notes, transect, retreat, coords):
-        site = self.create(site_name=name, site_location=location, county=county, geomorph_setting=setting,
+    def create_site(self, name, location, county, date, setting, type, photos, notes, transect, retreat, coords):
+        site = self.create(site_name=name, site_location=location, county=county, site_date=date, geomorph_setting=setting,
                            sample_type_collected=type, photographs_taken=photos, site_notes=notes,
                            site_transect=transect, site_retreat=retreat, site_coordinates=coords)
         return site
@@ -168,6 +169,7 @@ class Sample_Site(models.Model):
     site_name = models.CharField(max_length=100, null=True, blank=True)
     site_location = models.CharField(max_length=100, null=True, blank=True)
     county = models.CharField(max_length=50, null=True, blank=True)
+    site_date = models.DateField(null=True, blank=True)
     geomorph_setting = models.CharField(max_length=50, null=True, blank=True)
     sample_type_collected = models.CharField(max_length=50, null=True, blank=True)
     photographs_taken = models.NullBooleanField(null=True, blank=True)
@@ -243,7 +245,7 @@ class TCN_Sample(models.Model):
     boulder_dimensions = models.CharField(max_length=50, null=True, blank=True)
     sample_surface_strike_dip = models.CharField(max_length=50, null=True, blank=True)
     sample_thickness = models.CharField(max_length=50, null=True, blank=True)
-    grain_size = models.IntegerField(null=True, blank=True)
+    grain_size = models.CharField(max_length=50, null=True, blank=True)
     lithology = models.CharField(max_length=50, null=True, blank=True)
     tcn_sample = models.ForeignKey(Sample, null=True, blank=True)
     sample_bearings = models.ForeignKey('Sample_Bearing_Inclination', null=True, blank=True)

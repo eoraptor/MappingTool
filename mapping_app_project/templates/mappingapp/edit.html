@@ -50,6 +50,11 @@
                 {{ sampform.sample_code }}
             </div>
             <div class="col-md-2">
+                {{ sampform.sample_location_name.errors }}
+                {{ sampform.sample_location_name.help_text }}<br/>
+                {{ sampform.sample_location_name }}
+            </div>
+            <div class="col-md-2">
                 {{ sampform.collection_date.errors }}
                 {{ sampform.collection_date.help_text }}<br/>
                 {{ sampform.collection_date }}
@@ -124,6 +129,11 @@
                 {{ siteform.county.errors }}
                 {{ siteform.county.help_text }}<br/>
                 {{ siteform.county }}
+            </div>
+            <div class="col-md-2">
+                {{ siteform.site_date.errors }}
+                {{ siteform.site_date.help_text }}<br/>
+                {{ siteform.site_date }}
             </div>
              <div class="col-md-2">
                 {{ siteform.geomorph_setting.errors }}
