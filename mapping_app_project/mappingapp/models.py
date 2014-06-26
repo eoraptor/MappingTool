@@ -157,10 +157,10 @@ class Radiocarbon_Sample(models.Model):
 
 
 class SiteManager(models.Manager):
-    def create_site(self, name, location, county, setting, type, photos, notes, transect, coords):
+    def create_site(self, name, location, county, setting, type, photos, notes, transect, retreat, coords):
         site = self.create(site_name=name, site_location=location, county=county, geomorph_setting=setting,
                            sample_type_collected=type, photographs_taken=photos, site_notes=notes,
-                           site_transect=transect, site_coodinates=coords)
+                           site_transect=transect, site_retreat=retreat, site_coordinates=coords)
         return site
 
 

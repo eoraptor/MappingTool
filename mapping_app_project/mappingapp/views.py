@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from mappingapp.forms import DocumentForm, CoreDetailsForm, PhotographForm, SiteCoordinatesForm, SampleCoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm,SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, Location_PhotoForm, PhotoOfForm
-from mappingapp.models import Document, Transect, Coordinates
+from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination
 
 def index(request):
     context = RequestContext(request)
@@ -14,6 +14,36 @@ def index(request):
     context_dict = {}
 
     return render_to_response('mappingapp/index.html', context_dict, context)
+
+
+def create(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        transect = Transect.objects.create_transect('t10')
+        transect.save()
+        retreat = Retreat_Zone.objects.create_retreat_zone(10)
+        retreat.save()
+        sitecoords = Coordinates.objects.create_coordinates('BNG', 'xxxx', 500, 500, 500, 500, '50m')
+        sitecoords.save()
+        samplecoords = Coordinates.objects.create_coordinates('ING', 'xxxx', 300, 300, 300, 300, '30m')
+        samplecoords.save()
+        site = Sample_Site.objects.create_site('glasgow', 'scotland', 'ccc', 'ccc', 'ccc', False, 'xxxx', transect, retreat, sitecoords)
+        site.save()
+        sample = Sample.objects.create_sample('x100', '2014-03-14', 'cc', 'cccc', 'high', 1000, 100, 1000, 100, 'c45', samplecoords, site)
+        sample.save()
+        bi = Bearing_Inclination.objects.create_bearing_inclination(100, 100)
+        bi.save()
+        tcnsample = TCN_Sample.objects.create_tcn('bbb', 'bbb', 'bbb', 'bbb', 'bbb', 'bbb', 10, 'bbb', sample, None)
+        tcnsample.save()
+        samplebi = Sample_Bearing_Inclination.objects.create_sampleBI(tcnsample, bi)
+        samplebi.save()
+        TCN_Sample.objects.filter(pk=tcnsample.pk).update(sample_bearings=samplebi)
+        return HttpResponseRedirect('/mappingapp/')
+
+
+
+    return render_to_response('mappingapp/create.html', {}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -28,11 +58,11 @@ def search(request):
 
 
 def results(request):
-    context = RequestContext(request)
+   context = RequestContext(request)
 
-    context_dict = {}
+   context_dict = {}
 
-    return render_to_response('mappingapp/results.html', context_dict, context)
+   return render_to_response('mappingapp/results.html', context_dict, context)
 
 
 @login_required
@@ -80,6 +110,8 @@ def edit(request):
 
 
         # Have we been provided with a complete set of valid forms?
+        # if yes save forms sequentially in order to supply foreign key values
+        # where required
         if tranForm.is_valid() and retForm.is_valid()and sitecoordForm.is_valid() and siteForm.is_valid()\
             and samplecoordForm.is_valid() and sampForm.is_valid()\
             and bearincForm.is_valid() and sampleBIForm.is_valid()\
