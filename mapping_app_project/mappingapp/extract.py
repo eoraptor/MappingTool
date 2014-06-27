@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from openpyxl import load_workbook
 from mappingapp.models import Sample_Site, Coordinates, Sample, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination, Transect
+
 
 # iterate over the site sheet to determine which cells to extract data from
 def get_site_cell_positions(ws):
@@ -54,6 +56,11 @@ def get_site_info(wb):
             photographs = True
         else:
             photographs = False
+
+    if sample_date is not None:
+        date = str(sample_date)
+        if '.' in date:
+            sample_date = convert_date(date)
 
     if all(ele is None for ele in [site_name, site_location, site_latitude, site_longitude, bng_ing, site_northing,
                                    site_easting, site_elevation, sample_date, geomorph, type, collector, photographs,
@@ -127,6 +134,11 @@ def get_tcn_sample_info(sample_sheet, site):
 
     notes = notes.replace('\n', ' ')
 
+    if sample_date is not None:
+        date = str(sample_date)
+        if '.' in date:
+            sample_date = convert_date(date)
+
     coords = Coordinates.objects.create_coordinates(bng_ing, None, sample_easting, sample_northing, latitude,
                                     longitude, elevation)
     coords.save()
@@ -145,13 +157,9 @@ def get_tcn_sample_info(sample_sheet, site):
         sample_with_bi = Sample_Bearing_Inclination.objects.create_sampleBI(tcn_data, bi)
         sample_with_bi.save()
 
-    tran = Transect.objects.create_transect(transect)
-    tran.save()
-    return tran
-
-    
-
-
+    trans = Transect.objects.create_transect(transect)
+    trans.save()
+    return trans
 
 
 # extract all bearing and inclination data from tcn sheets
@@ -164,9 +172,9 @@ def get_bearing(sample_sheet, start_cell):
         bearing = sample_sheet['A' + start_str].value
         inclination = sample_sheet['B' + start_str].value
 
-        if bearing is not None or inclination is not None:
-            data.append((int(bearing), int(inclination)))
-            start += 1
+        if (bearing is not None or inclination is not None) and bearing != 'Please complete one sample sheet for each sample':
+                data.append((int(bearing), int(inclination)))
+                start += 1
         else:
             return data
 
@@ -187,10 +195,26 @@ def process_file(filename):
             else:
                 get_tcn_sample_info(ws, site)
 
-    if transect is not None:
+    if transect is not None and site is not None:
         Sample_Site.objects.filter(pk=site.pk).update(site_transect=transect)
 
 
+# take incorrect date format and replace
+def convert_date(date):
+    first_point = date.find('.')
+    last_point = date.rfind('.')
 
+    day = date[:first_point].strip(' ')
+    month = date[first_point+1:last_point].strip(' ')
+    year = date[last_point+1:].strip(' ')
 
+    if len(day) == 1:
+        day = '0' + day
 
+    if len(month) == 1:
+        month = '0' + month
+
+    if len(year) == 2:
+        year = '20' + year
+
+    return year + '-' + month + '-' + day
