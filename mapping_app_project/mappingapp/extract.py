@@ -1,10 +1,11 @@
 from openpyxl import load_workbook
+from mappingapp.models import Sample_Site, Coordinates, Sample, TCN_Sample
 
 # iterate over the site sheet to determine which cells to extract data from
 def get_site_cell_positions(ws):
 
     columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-           'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
     positions = {'Site Name: ': '', 'Location (inc. Transect no.)': '', 'Latitude(decimal deg)': '',
                  'Longtitude(decimal deg)(West is -ve)': '', 'BNG/ING?': '', 'Northing:': '', 'Easting:': '',
@@ -25,7 +26,8 @@ def get_site_cell_positions(ws):
 
     return positions
 
-# extract the data
+
+# extract the data from the site sheet
 def get_site_info(wb):
     site_sheet = wb["Site Info"]
     positions = get_site_cell_positions(site_sheet)
@@ -46,16 +48,23 @@ def get_site_info(wb):
     photo_labels = site_sheet[positions['Photo labels/Time stamps:']].value
     site_notes = site_sheet[positions['Notes']].value
 
-    photographs = photographs.lower()
-    if photographs.startswith('y'):
-        photographs = True
-    else:
-        photographs = False
+    if photographs is not None:
+        photographs = photographs.lower()
+        if photographs.startswith('y'):
+            photographs = True
+        else:
+            photographs = False
 
-    print site_name, '\n', site_location, '\n', site_latitude, '\n', site_longitude, '\n', bng_ing, '\n', site_northing
-    print site_easting, '\n', site_elevation, '\n', sample_date, '\n', geomorph, type, '\n', collector
-    print photographs, '\n', photo_labels, '\n', site_notes
+    coords = Coordinates.objects.create_coordinates(bng_ing, None, site_easting, site_northing, site_latitude, site_longitude,
+                                        site_elevation)
+    coords.save()
+    site = Sample_Site.objects.create_site(site_name, site_location, None, sample_date, geomorph, type,
+                                      photographs, site_notes, None, None, coords)
+    site.save()
 
+    #print site_name, '\n', site_location, '\n', site_latitude, '\n', site_longitude, '\n', bng_ing, '\n', site_northing
+    #print site_easting, '\n', site_elevation, '\n', sample_date, '\n', geomorph, type, '\n', collector
+    #print photographs, '\n', photo_labels, '\n', site_notes
 
 
 # iterate over the tcn sheet to determine which cells to extract data from
@@ -123,7 +132,6 @@ def get_tcn_sample_info(sample_sheet):
     print '\n'
 
 
-
 # extract all bearing and inclination data from tcn sheets
 def get_bearing(sample_sheet, start_cell):
     data = []
@@ -145,13 +153,14 @@ def get_bearing(sample_sheet, start_cell):
 def process_file(filename):
     # need error handling
     wb = load_workbook(filename, use_iterators=True)
+    get_site_info(wb)
+    return
 
-    sheet_names = wb.get_sheet_names()
-
-    for sheet in sheet_names:
-        if sheet != 'Site Info':
-            ws = wb[sheet]
-            get_tcn_sample_info(ws)
+    #sheet_names = wb.get_sheet_names()
+    #for sheet in sheet_names:
+    #    if sheet != 'Site Info':
+    #        ws = wb[sheet]
+    #        get_tcn_sample_info(ws)
 
 
 

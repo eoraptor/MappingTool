@@ -15,26 +15,16 @@
 {% block body_block %}
 <div class="jumbotron">
     <div class="form-group">
-    <!-- List of uploaded documents -->
-        {% if documents %}
-            <ul>
-                {% for document in documents %}
-                <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No documents.</p>
-        {% endif %}
+        <form action="/mappingapp/upload/" method="post" enctype="multipart/form-data">
 
-        <!-- Upload form. Note enctype attribute! -->
-        <form action="{% url "upload" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p>{{ form.non_field_errors }}</p>
-            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
-            <p>
-                {{ form.docfile.errors }}
-                {{ form.docfile }}
-            </p>
+
+            <div class="col-md-2">
+                {{ form.file.errors }}
+                {{ form.file.help_text }}<br/>
+                {{ form.file }}
+            </div><br />
+
             <p><button type="submit" class="btn btn-success btn-lg">Upload</button></p>
         </form>
     </div>

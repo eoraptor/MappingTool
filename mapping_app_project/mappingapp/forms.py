@@ -2,8 +2,8 @@ from django import forms
 from mappingapp.models import Core_Details, Photograph, Coordinates, Transect, Retreat_Zone, Sample, Photo_Of, Radiocarbon_Sample, Sample_Site, Location_Photo, OSL_Sample, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination
 
 
-class DocumentForm(forms.Form):
-    docfile = forms.FileField(label='Select a file:')
+class UploadFileForm(forms.Form):
+    file = forms.FileField()
 
 
 class CoreDetailsForm(forms.ModelForm):
@@ -22,26 +22,26 @@ class PhotographForm(forms.ModelForm):
 
 
 class SampleCoordinatesForm(forms.ModelForm):
-    bng_ing = forms.CharField(max_length=30, help_text='Sample BNG/ING?', required=False)
+    bng_ing = forms.CharField(max_length=255, help_text='Sample BNG/ING?', required=False)
     grid_reference = forms.CharField(max_length=12, help_text='Sample Grid Reference', required=False)
     easting = forms.IntegerField(help_text='Sample Easting', required=False)
     northing = forms.IntegerField(help_text='Sample Northing', required=False)
     latitude = forms.FloatField(help_text='Sample Latitude', required=False)
     longitude = forms.FloatField(help_text='Sample Longitude', required=False)
-    elevation = forms.CharField(max_length=50, help_text='Sample Elevation', required=False)
+    elevation = forms.CharField(max_length=255, help_text='Sample Elevation', required=False)
 
     class Meta:
         model = Coordinates
 
 
 class SiteCoordinatesForm(forms.ModelForm):
-    bng_ing = forms.CharField(max_length=30, help_text='Site BNG/ING?', required=False)
+    bng_ing = forms.CharField(max_length=255, help_text='Site BNG/ING?', required=False)
     grid_reference = forms.CharField(max_length=12, help_text='Site Grid Reference', required=False)
     easting = forms.IntegerField(help_text='Site Easting', required=False)
     northing = forms.IntegerField(help_text='Site Northing', required=False)
     latitude = forms.FloatField(help_text='Site Latitude', required=False)
     longitude = forms.FloatField(help_text='Site Longitude', required=False)
-    elevation = forms.CharField(max_length=50, help_text='Site Elevation', required=False)
+    elevation = forms.CharField(max_length=255, help_text='Site Elevation', required=False)
 
     class Meta:
         model = Coordinates
@@ -63,16 +63,16 @@ class RetreatForm(forms.ModelForm):
 
 class SampleForm(forms.ModelForm):
     sample_code = forms.CharField(max_length=20, help_text='Sample Code', required=False)
-    sample_location_name = forms.CharField(max_length=100, help_text='Sample Location Name', required=False)
+    sample_location_name = forms.CharField(max_length=255, help_text='Sample Location Name', required=False)
     collection_date = forms.DateField(help_text='Collection Date', required=False)
-    collector = forms.CharField(max_length=20, help_text='Collector(s)', required=False)
-    sample_notes = forms.CharField(max_length=200, help_text='Notes', required=False)
-    dating_priority = forms.CharField(max_length=10, help_text='Dating Priority', required=False)
+    collector = forms.CharField(max_length=255, help_text='Collector(s)', required=False)
+    sample_notes = forms.Textarea()
+    dating_priority = forms.CharField(max_length=255, help_text='Dating Priority', required=False)
     age = forms.IntegerField(help_text='Sample Age', required=False)
     age_error = forms.IntegerField(help_text='Age Error', required=False)
     calendar_age = forms.IntegerField(help_text='Calendar Age', required=False)
     calendar_error = forms.IntegerField(help_text='Calendar Error', required=False)
-    lab_code = forms.CharField(max_length=50, help_text='Lab Code', required=False)
+    lab_code = forms.CharField(max_length=255, help_text='Lab Code', required=False)
     sample_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
     samp_site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput(), required=False)
 
@@ -97,14 +97,14 @@ class RadiocarbonForm(forms.ModelForm):
 
 
 class SampleSiteForm(forms.ModelForm):
-    site_name = forms.CharField(max_length=100, help_text='Site Name', required=False)
-    site_location = forms.CharField(max_length=50, help_text='Location', required=False)
-    county = forms.CharField(max_length=50, help_text='County', required=False)
+    site_name = forms.CharField(max_length=255, help_text='Site Name', required=False)
+    site_location = forms.CharField(max_length=255, help_text='Location', required=False)
+    county = forms.CharField(max_length=255, help_text='County', required=False)
     site_date = forms.DateField(help_text='Site Date', required=False)
-    geomorph_setting = forms.CharField(max_length=50, help_text='Geomorph Setting', required=False)
+    geomorph_setting = forms.CharField(max_length=255, help_text='Geomorph Setting', required=False)
     sample_type_collected = forms.CharField(max_length=50, help_text='Type', required=False)
     photographs_taken = forms.NullBooleanField(help_text='Photographs Taken?', required=False)
-    site_notes = forms.CharField(max_length=300, help_text='Site Notes', required=False)
+    site_notes = forms.Textarea()
     site_transect = forms.ModelChoiceField(queryset=Transect.objects.all(), widget=forms.HiddenInput(), required=False)
     site_retreat = forms.ModelChoiceField(queryset=Retreat_Zone.objects.all(), widget=forms.HiddenInput(), required=False)
     site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
@@ -128,14 +128,14 @@ class OSLSampleForm(forms.ModelForm):
 
 
 class TCNForm(forms.ModelForm):
-    quartz_content = forms.CharField(max_length=20, help_text='Quartz Content', required=False)
-    sample_setting = forms.CharField(max_length=50, help_text='Sample Setting', required=False)
-    sampled_material = forms.CharField(max_length=50, help_text='Sampled Material', required=False)
-    boulder_dimensions = forms.CharField(max_length=50, help_text='Boulder Dimensions', required=False)
-    sample_surface_strike_dip = forms.CharField(max_length=50, help_text='Sample Surface Strike Dip', required=False)
-    sample_thickness = forms.CharField(max_length=50, help_text='Sample Thickness', required=False)
-    grain_size = forms.CharField(max_length=50, help_text='Grain Size', required=False)
-    lithology = forms.CharField(max_length=50, help_text='Lithology', required=False)
+    quartz_content = forms.CharField(max_length=255, help_text='Quartz Content', required=False)
+    sample_setting = forms.CharField(max_length=255, help_text='Sample Setting', required=False)
+    sampled_material = forms.CharField(max_length=255, help_text='Sampled Material', required=False)
+    boulder_dimensions = forms.CharField(max_length=255, help_text='Boulder Dimensions', required=False)
+    sample_surface_strike_dip = forms.CharField(max_length=255, help_text='Sample Surface Strike Dip', required=False)
+    sample_thickness = forms.CharField(max_length=255, help_text='Sample Thickness', required=False)
+    grain_size = forms.CharField(max_length=255, help_text='Grain Size', required=False)
+    lithology = forms.CharField(max_length=255, help_text='Lithology', required=False)
     tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
     sample_bearings = forms.ModelChoiceField(queryset=Sample_Bearing_Inclination.objects.all(), widget=forms.HiddenInput(), required=False)
 

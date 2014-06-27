@@ -5,8 +5,9 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
-from mappingapp.forms import DocumentForm, CoreDetailsForm, PhotographForm, SiteCoordinatesForm, SampleCoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm,SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, Location_PhotoForm, PhotoOfForm
+from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, SiteCoordinatesForm, SampleCoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm,SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, Location_PhotoForm, PhotoOfForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination
+from mappingapp.extract import process_file
 
 def index(request):
     context = RequestContext(request)
@@ -71,25 +72,19 @@ def upload(request):
 
     # Handle file upload
     if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
+        form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            newdoc = Document(docfile=request.FILES['docfile'])
 
-
-            newdoc.save()
-
+            process_file(request.FILES['file'])
             # Redirect to the document list after POST
-            return HttpResponseRedirect('/mappingapp/upload')
+            return index(request)
 
     else:
-        form = DocumentForm() # A empty, unbound form
-
-        # Load documents for the list page
-        documents = Document.objects.all()
+        form = UploadFileForm() # A empty, unbound form
 
     # Render list page with the documents and the form
-    return render_to_response('mappingapp/upload.html', {'documents': documents, 'form': form}, context)
+    return render_to_response('mappingapp/upload.html', {'form': form}, context)
 
 
 

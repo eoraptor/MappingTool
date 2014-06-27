@@ -40,13 +40,13 @@ class CoordinatesManager(models.Manager):
         return coordinates
 
 class Coordinates(models.Model):
-    bng_ing = models.CharField(max_length=30, null=True, blank=True)
+    bng_ing = models.CharField(max_length=255, null=True, blank=True)
     grid_reference = models.CharField(max_length=12, null=True, blank=True)
     easting = models.IntegerField(null=True, blank=True)
     northing = models.IntegerField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    elevation = models.CharField(max_length=50, null=True, blank=True)
+    elevation = models.CharField(max_length=255, null=True, blank=True)
 
     objects = CoordinatesManager()
 
@@ -94,16 +94,16 @@ class SampleManager(models.Manager):
 
 class Sample(models.Model):
     sample_code = models.CharField(max_length=20, null=True, blank=True)
-    sample_location_name = models.CharField(max_length=100, null=True, blank=True)
+    sample_location_name = models.CharField(max_length=255, null=True, blank=True)
     collection_date = models.DateField(null=True, blank=True)
-    collector = models.CharField(max_length=20, null=True, blank=True)
-    sample_notes = models.CharField(max_length=200, null=True, blank=True)
-    dating_priority = models.CharField(max_length=10, null=True, blank=True)
+    collector = models.CharField(max_length=255, null=True, blank=True)
+    sample_notes = models.TextField(null=True, blank=True)
+    dating_priority = models.CharField(max_length=255, null=True, blank=True)
     age = models.IntegerField(null=True, blank=True)
     age_error = models.IntegerField(null=True, blank=True)
     calendar_age = models.IntegerField(null=True, blank=True)
     calendar_error = models.IntegerField(null=True, blank=True)
-    lab_code = models.CharField(max_length=50, null=True, blank=True)
+    lab_code = models.CharField(max_length=255, null=True, blank=True)
     sample_coordinates = models.ForeignKey(Coordinates, null=True, blank=True)
     samp_site = models.ForeignKey('Sample_Site', null=True, blank=True)
 
@@ -166,14 +166,14 @@ class SiteManager(models.Manager):
 
 
 class Sample_Site(models.Model):
-    site_name = models.CharField(max_length=100, null=True, blank=True)
-    site_location = models.CharField(max_length=100, null=True, blank=True)
-    county = models.CharField(max_length=50, null=True, blank=True)
+    site_name = models.CharField(max_length=255, null=True, blank=True)
+    site_location = models.CharField(max_length=255, null=True, blank=True)
+    county = models.CharField(max_length=255, null=True, blank=True)
     site_date = models.DateField(null=True, blank=True)
-    geomorph_setting = models.CharField(max_length=50, null=True, blank=True)
-    sample_type_collected = models.CharField(max_length=50, null=True, blank=True)
+    geomorph_setting = models.CharField(max_length=255, null=True, blank=True)
+    sample_type_collected = models.CharField(max_length=255, null=True, blank=True)
     photographs_taken = models.NullBooleanField(null=True, blank=True)
-    site_notes = models.CharField(max_length=300, null=True, blank=True)
+    site_notes = models.TextField(null=True, blank=True)
     site_transect = models.ForeignKey(Transect, null=True, blank=True)
     site_retreat = models.ForeignKey(Retreat_Zone, null=True, blank=True)
     site_coordinates = models.ForeignKey(Coordinates, null=True, blank=True)
@@ -239,14 +239,14 @@ class TCNManager(models.Manager):
         return tcn
 
 class TCN_Sample(models.Model):
-    quartz_content = models.CharField(max_length=20, null=True, blank=True)
-    sample_setting = models.CharField(max_length=50, null=True, blank=True)
-    sampled_material = models.CharField(max_length=50, null=True, blank=True)
-    boulder_dimensions = models.CharField(max_length=50, null=True, blank=True)
-    sample_surface_strike_dip = models.CharField(max_length=50, null=True, blank=True)
-    sample_thickness = models.CharField(max_length=50, null=True, blank=True)
-    grain_size = models.CharField(max_length=50, null=True, blank=True)
-    lithology = models.CharField(max_length=50, null=True, blank=True)
+    quartz_content = models.CharField(max_length=255, null=True, blank=True)
+    sample_setting = models.CharField(max_length=255, null=True, blank=True)
+    sampled_material = models.CharField(max_length=255, null=True, blank=True)
+    boulder_dimensions = models.CharField(max_length=255, null=True, blank=True)
+    sample_surface_strike_dip = models.CharField(max_length=255, null=True, blank=True)
+    sample_thickness = models.CharField(max_length=255, null=True, blank=True)
+    grain_size = models.CharField(max_length=255, null=True, blank=True)
+    lithology = models.CharField(max_length=255, null=True, blank=True)
     tcn_sample = models.ForeignKey(Sample, null=True, blank=True)
     sample_bearings = models.ForeignKey('Sample_Bearing_Inclination', null=True, blank=True)
 
