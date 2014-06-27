@@ -1,5 +1,5 @@
 from openpyxl import load_workbook
-from mappingapp.models import Sample_Site, Coordinates, Sample, TCN_Sample
+from mappingapp.models import Sample_Site, Coordinates, Sample, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination, Transect
 
 # iterate over the site sheet to determine which cells to extract data from
 def get_site_cell_positions(ws):
@@ -55,16 +55,18 @@ def get_site_info(wb):
         else:
             photographs = False
 
-    coords = Coordinates.objects.create_coordinates(bng_ing, None, site_easting, site_northing, site_latitude, site_longitude,
-                                        site_elevation)
-    coords.save()
-    site = Sample_Site.objects.create_site(site_name, site_location, None, sample_date, geomorph, type,
-                                      photographs, site_notes, None, None, coords)
-    site.save()
-
-    #print site_name, '\n', site_location, '\n', site_latitude, '\n', site_longitude, '\n', bng_ing, '\n', site_northing
-    #print site_easting, '\n', site_elevation, '\n', sample_date, '\n', geomorph, type, '\n', collector
-    #print photographs, '\n', photo_labels, '\n', site_notes
+    if all(ele is None for ele in [site_name, site_location, site_latitude, site_longitude, bng_ing, site_northing,
+                                   site_easting, site_elevation, sample_date, geomorph, type, collector, photographs,
+                                   photo_labels, site_notes]):
+        return None
+    else:
+        coords = Coordinates.objects.create_coordinates(bng_ing, None, site_easting, site_northing, site_latitude,
+                                    site_longitude, site_elevation)
+        coords.save()
+        site = Sample_Site.objects.create_site(site_name, site_location, None, sample_date, geomorph, type,
+                                          photographs, site_notes, None, None, coords)
+        site.save()
+        return site
 
 
 # iterate over the tcn sheet to determine which cells to extract data from
@@ -98,11 +100,11 @@ def get_tcn_cell_positions(ws):
 
 
 # extract the data from a tcn sample sheet
-def get_tcn_sample_info(sample_sheet):
+def get_tcn_sample_info(sample_sheet, site):
     positions = get_tcn_cell_positions(sample_sheet)
 
     sample_date = sample_sheet[positions['Date: ']].value
-    sample_location = sample_sheet[positions['Location:']].value
+    sample_location_name = sample_sheet[positions['Location:']].value
     sample_code = sample_sheet[positions['Unique Sample Identifier']].value
     bng_ing = sample_sheet[positions['BNG or ING']].value
     sample_northing = sample_sheet[positions['Northing']].value
@@ -125,11 +127,31 @@ def get_tcn_sample_info(sample_sheet):
 
     notes = notes.replace('\n', ' ')
 
-    print sample_date, '\n', sample_location, '\n', sample_code, '\n', bng_ing, '\n', sample_northing, '\n', sample_easting, '\n', transect, '\n', latitude
-    print longitude, '\n', elevation, '\n', lithology, '\n', quartz, '\n', setting, '\n', material, boulder_dim, '\n', surface_strike, '\n', notes, '\n', thickness, '\n', grain_size, '\n', collector
+    coords = Coordinates.objects.create_coordinates(bng_ing, None, sample_easting, sample_northing, latitude,
+                                    longitude, elevation)
+    coords.save()
+
+    sample = Sample.objects.create_sample(sample_code, sample_location_name, sample_date, collector, notes,
+                                          None, None, None, None, None, None, coords, site)
+    sample.save()
+
+    tcn_data = TCN_Sample.objects.create_tcn(quartz, setting, material, boulder_dim, surface_strike,
+                                             thickness, grain_size, lithology, sample, None)
+    tcn_data.save()
+
     for b in bearing:
-            print b[0],b[1]
-    print '\n'
+        bi = Bearing_Inclination.objects.create_bearing_inclination(b[0], b[1])
+        bi.save()
+        sample_with_bi = Sample_Bearing_Inclination.objects.create_sampleBI(tcn_data, bi)
+        sample_with_bi.save()
+
+    tran = Transect.objects.create_transect(transect)
+    tran.save()
+    return tran
+
+    
+
+
 
 
 # extract all bearing and inclination data from tcn sheets
@@ -153,16 +175,22 @@ def get_bearing(sample_sheet, start_cell):
 def process_file(filename):
     # need error handling
     wb = load_workbook(filename, use_iterators=True)
-    get_site_info(wb)
-    return
+    site = get_site_info(wb)
+    transect = None
 
-    #sheet_names = wb.get_sheet_names()
-    #for sheet in sheet_names:
-    #    if sheet != 'Site Info':
-    #        ws = wb[sheet]
-    #        get_tcn_sample_info(ws)
+    sheet_names = wb.get_sheet_names()
+    for sheet in sheet_names:
+        if sheet != 'Site Info':
+            ws = wb[sheet]
+            if transect is None:
+                transect = get_tcn_sample_info(ws, site)
+            else:
+                get_tcn_sample_info(ws, site)
+
+    if transect is not None:
+        Sample_Site.objects.filter(pk=site.pk).update(site_transect=transect)
 
 
 
 
-#process_file("C:\\Users\\fstev_000\\Documents\\T1 sample info.xlsx")
+

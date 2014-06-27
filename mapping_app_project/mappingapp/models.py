@@ -86,7 +86,7 @@ class Retreat_Zone(models.Model):
 class SampleManager(models.Manager):
     def create_sample(self, code, location, date, collector, notes, priority, age, age_error,
                       cal_age, cal_error, lab_code, coords, site):
-        sample = self.create(sample_code=code, sample_location=location, collection_date=date, collector=collector,
+        sample = self.create(sample_code=code, sample_location_name=location, collection_date=date, collector=collector,
                              sample_notes=notes, dating_priority=priority, age=age, age_error=age_error,
                              calendar_age=cal_age, calendar_error=cal_error, lab_code=lab_code,
                              sample_coordinates=coords, samp_site=site)
