@@ -3,3 +3,48 @@
     height: 590px;
     border: 1px solid #000;
 }
+
+/* remove resize option on selected text areas */
+.noresize {
+    resize: none;
+    height: 26px;
+}
+
+
+.formlabel {
+	display: block;						/* Force label onto its own line. */
+	font-weight: normal;
+}
+
+.formspan {
+    display:inline-block;
+    margin:0 10px 10px 0
+}
+
+fieldset.standard {
+    padding-top:20px;
+    padding-left:10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border:1px solid #999;
+    border-radius:8px;
+    box-shadow:0 0 10px #999;
+    width:560px;
+    float: left;
+    margin-bottom: 10px;
+}
+
+legend.fieldsets {
+    float:left;
+    margin-top:-20px;
+}
+legend.fieldsets + * {
+    clear:both;
+}
+
+button.btn-xl {
+    padding: 18px 28px;
+    font-size: 22px;
+    border-radius: 8px;
+}
+
