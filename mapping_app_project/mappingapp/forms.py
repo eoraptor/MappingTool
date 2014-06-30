@@ -2,6 +2,10 @@ from django import forms
 from mappingapp.models import Core_Details, Photograph, Coordinates, Transect, Retreat_Zone, Sample, Photo_Of, Radiocarbon_Sample, Sample_Site, Location_Photo, OSL_Sample, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination
 
 
+class SelectSampleForm(forms.Form):
+    sample_code = forms.CharField(help_text='Enter sample code:', required=True)
+
+
 class UploadFileForm(forms.Form):
     file = forms.FileField()
 
@@ -66,7 +70,7 @@ class SampleForm(forms.ModelForm):
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 30}))
     collection_date = forms.DateField(help_text='Collection Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     collector = forms.CharField(help_text='Collector(s)', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
-    sample_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 7, 'cols': 35}))
+    sample_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 69}))
     dating_priority = forms.CharField(help_text='Dating Priority', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     age = forms.IntegerField(help_text='Sample Age', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     age_error = forms.IntegerField(help_text='Age Error', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
@@ -102,11 +106,11 @@ class SampleSiteForm(forms.ModelForm):
     county = forms.CharField(help_text='County', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     site_date = forms.DateField(help_text='Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     operator = forms.CharField(help_text='Operator', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
-    geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 35}))
+    geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 30}))
     sample_type_collected = forms.ChoiceField(help_text='Sample Type', required=False, choices=(('1', 'Select'), ('2', 'C14'), ('3', 'OSL'), ('4', 'TCN')))
     photos_taken = forms.NullBooleanField(help_text='Photos Taken', required=False)
-    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 35}))
-    site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 35}))
+    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 30}))
+    site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 69}))
     site_transect = forms.ModelChoiceField(queryset=Transect.objects.all(), widget=forms.HiddenInput(), required=False)
     site_retreat = forms.ModelChoiceField(queryset=Retreat_Zone.objects.all(), widget=forms.HiddenInput(), required=False)
     site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
@@ -131,13 +135,13 @@ class OSLSampleForm(forms.ModelForm):
 
 class TCNForm(forms.ModelForm):
     quartz_content = forms.CharField(help_text='Quartz Content', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    sample_setting = forms.CharField(help_text='Sample Setting', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':35}))
-    sampled_material = forms.CharField(help_text='Sampled Material', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows':1, 'cols':40}))
+    sample_setting = forms.CharField(help_text='Sample Setting', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':30}))
+    sampled_material = forms.CharField(help_text='Sampled Material', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows':2, 'cols':30}))
     boulder_dimensions = forms.CharField(help_text='Boulder Dimensions', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_surface_strike_dip = forms.CharField(help_text='Surface Strike/Dip', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_thickness = forms.CharField(help_text='Thickness', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     grain_size = forms.CharField(help_text='Grain Size', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    lithology = forms.CharField(help_text='Lithology', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':35}))
+    lithology = forms.CharField(help_text='Lithology', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':30}))
     tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:

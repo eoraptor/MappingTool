@@ -5,9 +5,14 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
-from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, SiteCoordinatesForm, SampleCoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm,SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, Location_PhotoForm, PhotoOfForm
-from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination
+from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, SiteCoordinatesForm
+from mappingapp.forms import SampleCoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm
+from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form
+from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm
+from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
+from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 from mappingapp.extract import process_file
+
 
 def index(request):
     context = RequestContext(request)
@@ -15,35 +20,6 @@ def index(request):
     context_dict = {}
 
     return render_to_response('mappingapp/index.html', context_dict, context)
-
-
-def create(request):
-    context = RequestContext(request)
-
-    if request.method == 'POST':
-        transect = Transect.objects.create_transect('t10')
-        transect.save()
-        retreat = Retreat_Zone.objects.create_retreat_zone(10)
-        retreat.save()
-        sitecoords = Coordinates.objects.create_coordinates('BNG', 'xxxx', 500, 500, 500, 500, '50m')
-        sitecoords.save()
-        samplecoords = Coordinates.objects.create_coordinates('ING', 'xxxx', 300, 300, 300, 300, '30m')
-        samplecoords.save()
-        site = Sample_Site.objects.create_site('glasgow', 'scotland', 'ccc', 'ccc', 'ccc', False, 'xxxx', transect, retreat, sitecoords)
-        site.save()
-        sample = Sample.objects.create_sample('x100', '2014-03-14', 'cc', 'cccc', 'high', 1000, 100, 1000, 100, 'c45', samplecoords, site)
-        sample.save()
-        bi = Bearing_Inclination.objects.create_bearing_inclination(100, 100)
-        bi.save()
-        tcnsample = TCN_Sample.objects.create_tcn('bbb', 'bbb', 'bbb', 'bbb', 'bbb', 'bbb', 10, 'bbb', sample, None)
-        tcnsample.save()
-        samplebi = Sample_Bearing_Inclination.objects.create_sampleBI(tcnsample, bi)
-        samplebi.save()
-        TCN_Sample.objects.filter(pk=tcnsample.pk).update(sample_bearings=samplebi)
-        return HttpResponseRedirect('/mappingapp/')
-
-    return render_to_response('mappingapp/create.html', {}, context_instance=RequestContext(request))
-
 
 
 @login_required
@@ -87,9 +63,32 @@ def upload(request):
     return render_to_response('mappingapp/upload.html', {'form': form}, context)
 
 
-
 @login_required
 def edit(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        sample_code = request.POST['sample_code']
+
+        if sample_code is not None:
+
+
+            sample = Sample.objects.get(sample_code=sample_code)
+
+            return edittcn(request, sample)
+
+        else:
+            print 'Error'
+
+    else:
+       selectsampleform = SelectSampleForm()
+
+    return render_to_response('mappingapp/edit.html', {'selectsampleform':selectsampleform}, context)
+
+
+
+@login_required
+def edittcn(request, sample):
     context = RequestContext(request)
 
     # A HTTP POST?
@@ -161,7 +160,7 @@ def edit(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edit.html', {'tcnform':tcnForm, 'bearincform':bearincForm, 'sampleBIform':sampleBIForm, 'sampform':sampForm, 'samplecoordform':samplecoordForm, 'sitecoordform':sitecoordForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm}, context)
+    return render_to_response('mappingapp/edittcn.html', {'tcnform':tcnForm, 'bearincform':bearincForm, 'sampleBIform':sampleBIForm, 'sampform':sampForm, 'samplecoordform':samplecoordForm, 'sitecoordform':sitecoordForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm}, context)
 
 
 
