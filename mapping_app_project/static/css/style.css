@@ -48,3 +48,12 @@ button.btn-xl {
     border-radius: 8px;
 }
 
+
+.logo-nav {
+    vertical-align: middle;
+    padding-left: 15px;
+}
+
+img#logo {
+    height: 50px;
+}

@@ -172,7 +172,7 @@ class Sample_Site(models.Model):
     county = models.CharField(max_length=255, null=True, blank=True)
     site_date = models.DateField(null=True, blank=True)
     operator = models.CharField(max_length=255, null=True, blank=True)
-    geomorph_setting = models.CharField(max_length=255, null=True, blank=True)
+    geomorph_setting = models.TextField(null=True, blank=True)
     sample_type_collected = models.CharField(max_length=255, null=True, blank=True)
     photos_taken = models.NullBooleanField(null=True, blank=True)
     photographs = models.CharField(max_length=255, null=True, blank=True)
