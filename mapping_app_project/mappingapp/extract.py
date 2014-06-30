@@ -62,6 +62,12 @@ def get_site_info(wb):
         if '.' in date:
             sample_date = convert_date(date)
 
+    if site_latitude is not None:
+        site_latitude = convert_lat_long(site_latitude)
+
+    if site_longitude is not None:
+        site_longitude = convert_lat_long(site_longitude)
+
     if all(ele is None for ele in [site_name, site_location, site_latitude, site_longitude, bng_ing, site_northing,
                                    site_easting, site_elevation, sample_date, geomorph, type, collector, photographs,
                                    photo_labels, site_notes]):
@@ -70,8 +76,8 @@ def get_site_info(wb):
         coords = Coordinates.objects.create_coordinates(bng_ing, None, site_easting, site_northing, site_latitude,
                                     site_longitude, site_elevation)
         coords.save()
-        site = Sample_Site.objects.create_site(site_name, site_location, None, sample_date, geomorph, type,
-                                          photographs, site_notes, None, None, coords)
+        site = Sample_Site.objects.create_site(site_name, site_location, None, None, sample_date, None, geomorph, type,
+                                          photographs, photo_labels, site_notes, None, None, coords)
         site.save()
         return site
 
@@ -139,6 +145,12 @@ def get_tcn_sample_info(sample_sheet, site):
         if '.' in date:
             sample_date = convert_date(date)
 
+    if latitude is not None:
+        latitude = convert_lat_long(latitude)
+
+    if longitude is not None:
+        longitude = convert_lat_long(longitude)
+
     coords = Coordinates.objects.create_coordinates(bng_ing, None, sample_easting, sample_northing, latitude,
                                     longitude, elevation)
     coords.save()
@@ -148,7 +160,7 @@ def get_tcn_sample_info(sample_sheet, site):
     sample.save()
 
     tcn_data = TCN_Sample.objects.create_tcn(quartz, setting, material, boulder_dim, surface_strike,
-                                             thickness, grain_size, lithology, sample, None)
+                                             thickness, grain_size, lithology, sample)
     tcn_data.save()
 
     for b in bearing:
@@ -190,10 +202,12 @@ def process_file(filename):
     for sheet in sheet_names:
         if sheet != 'Site Info':
             ws = wb[sheet]
-            if transect is None:
-                transect = get_tcn_sample_info(ws, site)
-            else:
-                get_tcn_sample_info(ws, site)
+            type = get_sample_type(ws)
+            if type == 'TCN':
+                if transect is None:
+                    transect = get_tcn_sample_info(ws, site)
+                else:
+                    get_tcn_sample_info(ws, site)
 
     if transect is not None and site is not None:
         Sample_Site.objects.filter(pk=site.pk).update(site_transect=transect)
@@ -218,3 +232,32 @@ def convert_date(date):
         year = '20' + year
 
     return year + '-' + month + '-' + day
+
+
+# determine what type of sample, if any, is on a worksheet
+def get_sample_type(ws):
+    if ws['A1'].value == 'TCN Sample Sheet' and ws['B3'].value is not None:
+        return 'TCN'
+
+    elif ws['A1'].value == '14C Sample Sheet' and ws['B3'].value is not None:
+        return '14C'
+
+    elif ws['A1'].value == 'OSL Sample Sheet' and ws['B3'].value is not None:
+        return 'OSL'
+
+    else:
+        return None
+
+
+# convert lat/long in degrees, minutes to decimal format
+def convert_lat_long(coord):
+    if type(coord) is float:
+        return coord
+    else:
+        result = "".join(i for i in coord if ord(i)<128)
+
+        degrees = float(result[:result.index(' ')])
+        minutes = float(result[result.rindex(' ')+1:])
+        return degrees + (minutes/60)
+
+

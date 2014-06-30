@@ -158,21 +158,24 @@ class Radiocarbon_Sample(models.Model):
 
 
 class SiteManager(models.Manager):
-    def create_site(self, name, location, county, date, setting, type, photos, notes, transect, retreat, coords):
-        site = self.create(site_name=name, site_location=location, county=county, site_date=date, geomorph_setting=setting,
-                           sample_type_collected=type, photographs_taken=photos, site_notes=notes,
+    def create_site(self, name, location, number, county, date, operator, setting, type, photos_taken, photographs, notes, transect, retreat, coords):
+        site = self.create(site_name=name, site_location=location, site_number=number, county=county, site_date=date, operator=operator, geomorph_setting=setting,
+                           sample_type_collected=type, photos_taken=photos_taken, photographs=photographs, site_notes=notes,
                            site_transect=transect, site_retreat=retreat, site_coordinates=coords)
         return site
 
 
 class Sample_Site(models.Model):
     site_name = models.CharField(max_length=255, null=True, blank=True)
+    site_number = models.IntegerField(null=True, blank=True)
     site_location = models.CharField(max_length=255, null=True, blank=True)
     county = models.CharField(max_length=255, null=True, blank=True)
     site_date = models.DateField(null=True, blank=True)
+    operator = models.CharField(max_length=255, null=True, blank=True)
     geomorph_setting = models.CharField(max_length=255, null=True, blank=True)
     sample_type_collected = models.CharField(max_length=255, null=True, blank=True)
-    photographs_taken = models.NullBooleanField(null=True, blank=True)
+    photos_taken = models.NullBooleanField(null=True, blank=True)
+    photographs = models.CharField(max_length=255, null=True, blank=True)
     site_notes = models.TextField(null=True, blank=True)
     site_transect = models.ForeignKey(Transect, null=True, blank=True)
     site_retreat = models.ForeignKey(Retreat_Zone, null=True, blank=True)
@@ -231,11 +234,11 @@ class OSL_Sample(models.Model):
 
 class TCNManager(models.Manager):
     def create_tcn(self, quartz, setting, material, boulder, strike, thickness, grain,
-                   litho, sample, bearings):
+                   litho, sample):
         tcn = self.create(quartz_content=quartz, sample_setting=setting, sampled_material=material,
                           boulder_dimensions=boulder, sample_surface_strike_dip=strike,
                           sample_thickness=thickness, grain_size=grain, lithology=litho,
-                          tcn_sample=sample, sample_bearings=bearings)
+                          tcn_sample=sample)
         return tcn
 
 class TCN_Sample(models.Model):
@@ -248,7 +251,6 @@ class TCN_Sample(models.Model):
     grain_size = models.CharField(max_length=255, null=True, blank=True)
     lithology = models.CharField(max_length=255, null=True, blank=True)
     tcn_sample = models.ForeignKey(Sample, null=True, blank=True)
-    sample_bearings = models.ForeignKey('Sample_Bearing_Inclination', null=True, blank=True)
 
     objects = TCNManager()
 

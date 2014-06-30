@@ -98,11 +98,14 @@ class RadiocarbonForm(forms.ModelForm):
 class SampleSiteForm(forms.ModelForm):
     site_name = forms.CharField(help_text='Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     site_location = forms.CharField(help_text='Location', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    site_number = forms.CharField(help_text='Site Number', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2, 'resize':'none'}))
     county = forms.CharField(help_text='County', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     site_date = forms.DateField(help_text='Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    operator = forms.CharField(help_text='Operator', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 35}))
     sample_type_collected = forms.ChoiceField(help_text='Sample Type', required=False, choices=(('1', 'Select'), ('2', 'C14'), ('3', 'OSL'), ('4', 'TCN')))
-    photographs_taken = forms.NullBooleanField(help_text='Photographs Taken?', required=False)
+    photos_taken = forms.NullBooleanField(help_text='Photos Taken', required=False)
+    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 3, 'cols': 35}))
     site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 35}))
     site_transect = forms.ModelChoiceField(queryset=Transect.objects.all(), widget=forms.HiddenInput(), required=False)
     site_retreat = forms.ModelChoiceField(queryset=Retreat_Zone.objects.all(), widget=forms.HiddenInput(), required=False)
@@ -136,7 +139,6 @@ class TCNForm(forms.ModelForm):
     grain_size = forms.CharField(help_text='Grain Size', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     lithology = forms.CharField(help_text='Lithology', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':35}))
     tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
-    sample_bearings = forms.ModelChoiceField(queryset=Sample_Bearing_Inclination.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = TCN_Sample
