@@ -210,9 +210,19 @@
                     {{ siteform.site_location }}
                 </div>
                 <div class="formspan">
+                    {{ siteform.site_number.errors }}
+                    <label class="formlabel">{{ siteform.site_number.help_text }}</label>
+                    {{ siteform.site_number }}
+                </div>
+                <div class="formspan">
                     {{ siteform.county.errors }}
                     <label class="formlabel">{{ siteform.county.help_text }}</label>
                     {{ siteform.county }}
+                </div>
+                <div class="formspan">
+                    {{ siteform.operator.errors }}
+                    <label class="formlabel">{{ siteform.operator.help_text }}</label>
+                    {{ siteform.operator }}
                 </div>
                 <div class="formspan">
                      {{ siteform.site_date.errors }}
@@ -225,10 +235,15 @@
                     {{ siteform.sample_type_collected }}
                 </div>
                 <div class="formspan">
-                    {{ siteform.photographs_taken.errors }}
-                    <label class="formlabel">{{ siteform.photographs_taken.help_text }}</label>
-                    {{ siteform.photographs_taken }}
+                    {{ siteform.photos_taken.errors }}
+                    <label class="formlabel">{{ siteform.photos_taken.help_text }}</label>
+                    {{ siteform.photos_taken }}
                 </div><br />
+                <div class="formspan">
+                    {{ siteform.photographs.errors }}
+                    <label class="formlabel">{{ siteform.photographs.help_text }}</label>
+                    {{ siteform.photographs }}
+                </div>
                 <div class="formspan">
                     {{ siteform.geomorph_setting.errors }}
                     <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>

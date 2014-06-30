@@ -109,6 +109,7 @@ def get_tcn_cell_positions(ws):
                         val_col = columns[col+1]
                         positions[val] = val_col + str(cell.row)
 
+
     return positions
 
 
@@ -138,13 +139,16 @@ def get_tcn_sample_info(sample_sheet, site):
     collector = sample_sheet[positions['Collector: ']].value
     bearing = get_bearing(sample_sheet, positions['Bearing'])
 
+    # remove newlines from notes
     notes = notes.replace('\n', ' ')
 
+    # convert date if format incorrect
     if sample_date is not None:
         date = str(sample_date)
         if '.' in date:
             sample_date = convert_date(date)
 
+    # convert latitude and longitude if format incorrect
     if latitude is not None:
         latitude = convert_lat_long(latitude)
 
@@ -200,7 +204,7 @@ def process_file(filename):
 
     sheet_names = wb.get_sheet_names()
     for sheet in sheet_names:
-        if sheet != 'Site Info':
+        if sheet != 'Site Info' and sheet != 'Sheet1':
             ws = wb[sheet]
             type = get_sample_type(ws)
             if type == 'TCN':
@@ -244,7 +248,6 @@ def get_sample_type(ws):
 
     elif ws['A1'].value == 'OSL Sample Sheet' and ws['B3'].value is not None:
         return 'OSL'
-
     else:
         return None
 
