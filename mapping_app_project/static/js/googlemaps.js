@@ -21,15 +21,15 @@ var markers = [];
     var iconBase = 'http://labs.google.com/ridefinder/images/';
         var icons = {
           parking: {
-            name: 'OSL',
+            name: 'OSL  ',
             icon: iconBase + 'mm_20_red.png'
           },
           library: {
-            name: 'TCN',
+            name: '  TCN  ',
             icon: iconBase + 'mm_20_green.png'
           },
           info: {
-            name: 'C14',
+            name: '  C14  ',
             icon: iconBase + 'mm_20_yellow.png'
           }
         };
@@ -40,11 +40,11 @@ var markers = [];
           var type = icons[key];
           var name = type.name;
           var icon = type.icon;
-          var div = document.createElement("div");
-          div.innerHTML = '<img src="' + icon + '"> ' + name;
+          var div = document.createElement("row");
+          div.innerHTML = name + '<img src="' + icon + '">';
           legend.appendChild(div);
         }
-   map.controls[google.maps.ControlPosition.TOP_RIGHT].push(legend);
+   map.controls[google.maps.ControlPosition.BOTTOM].push(legend);
 
   var center;
   function calculateCenter() {

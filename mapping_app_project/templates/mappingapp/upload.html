@@ -19,13 +19,14 @@
 
             {% csrf_token %}
 
-            <div class="col-md-2">
+            <div class="span-2">
                 {{ form.file.errors }}
                 {{ form.file.help_text }}<br/>
                 {{ form.file }}
             </div><br />
-
+            <div class="span-2">
             <p><button type="submit" class="btn btn-success btn-lg">Upload</button></p>
+        </div>
         </form>
     </div>
 </div>
