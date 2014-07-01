@@ -72,10 +72,7 @@ def edit(request):
 
         if sample_code is not None:
 
-
-            sample = Sample.objects.get(sample_code=sample_code)
-
-            return edittcn(request, sample)
+            return edittcn(request, sample_code)
 
         else:
             print 'Error'
@@ -88,7 +85,8 @@ def edit(request):
 
 
 @login_required
-def edittcn(request, sample):
+def edittcn(request):
+
     context = RequestContext(request)
 
     # A HTTP POST?
@@ -107,10 +105,9 @@ def edittcn(request, sample):
         # Have we been provided with a complete set of valid forms?
         # if yes save forms sequentially in order to supply foreign key values
         # where required
-        if tranForm.is_valid() and retForm.is_valid()and sitecoordForm.is_valid() and siteForm.is_valid()\
-            and samplecoordForm.is_valid() and sampForm.is_valid()\
-            and bearincForm.is_valid() and sampleBIForm.is_valid()\
-            and tcnForm.is_valid():
+        if sampForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and sitecoordForm.is_valid() and\
+            siteForm.is_valid() and samplecoordForm.is_valid() and sampForm.is_valid() and tcnForm.is_valid()\
+            and bearincForm.is_valid() and sampleBIForm.is_valid():
 
             transect = tranForm.save()
             retreat = retForm.save()
@@ -160,7 +157,7 @@ def edittcn(request, sample):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html', {'tcnform':tcnForm, 'bearincform':bearincForm, 'sampleBIform':sampleBIForm, 'sampform':sampForm, 'samplecoordform':samplecoordForm, 'sitecoordform':sitecoordForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm}, context)
+    return render_to_response('mappingapp/edittcn.html', {'sampform':sampForm, 'bearincform':bearincForm, 'sampleBIform':sampleBIForm, 'tcnform':tcnForm, 'samplecoordform':samplecoordForm, 'sitecoordform':sitecoordForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm}, context)
 
 
 

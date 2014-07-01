@@ -1,29 +1,4 @@
-function HomeControl(controlDiv, map) {
-
-  // Set CSS styles for the DIV containing the control
-  // Setting padding to 5 px will offset the control
-  // from the edge of the map.
-  controlDiv.style.padding = '5px';
-
-  // Set CSS for the control border.
-  var controlUI = document.createElement('div');
-  controlUI.style.backgroundColor = 'white';
-  controlUI.style.borderStyle = 'solid';
-  controlUI.style.borderWidth = '1px';
-  controlUI.style.textAlign = 'center';
-  controlUI.title = 'Sample Type';
-  controlDiv.appendChild(controlUI);
-
-  // Set CSS for the control interior.
-  var controlText = document.createElement('div');
-  controlText.style.fontFamily = 'Arial,sans-serif';
-  controlText.style.fontSize = '12px';
-  controlText.style.paddingLeft = '4px';
-  controlText.style.paddingRight = '4px';
-  controlText.innerHTML = '<strong>Sample Type:  TCN  OSL  C14</strong>';
-  controlUI.appendChild(controlText);
-}
-
+var markers = [];
 
 (function() {
     window.onload = function() {
@@ -42,13 +17,34 @@ function HomeControl(controlDiv, map) {
                 }};
 
         var map = new google.maps.Map(mapDiv, map_options);
-        var chicago = new google.maps.LatLng(41.850033, -87.6500523);
 
-        var homeControlDiv = document.createElement('div');
-        var homeControl = new HomeControl(homeControlDiv, map);
+    var iconBase = 'http://labs.google.com/ridefinder/images/';
+        var icons = {
+          parking: {
+            name: 'OSL',
+            icon: iconBase + 'mm_20_red.png'
+          },
+          library: {
+            name: 'TCN',
+            icon: iconBase + 'mm_20_green.png'
+          },
+          info: {
+            name: 'C14',
+            icon: iconBase + 'mm_20_yellow.png'
+          }
+        };
 
-  homeControlDiv.index = 1;
-  map.controls[google.maps.ControlPosition.BOTTOM].push(homeControlDiv);
+   var legend = document.getElementById('map-legend');
+
+        for (var key in icons) {
+          var type = icons[key];
+          var name = type.name;
+          var icon = type.icon;
+          var div = document.createElement("div");
+          div.innerHTML = '<img src="' + icon + '"> ' + name;
+          legend.appendChild(div);
+        }
+   map.controls[google.maps.ControlPosition.TOP_RIGHT].push(legend);
 
   var center;
   function calculateCenter() {

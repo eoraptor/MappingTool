@@ -58,3 +58,12 @@ button.btn-xl {
 img#logo {
     height: 50px;
 }
+
+#map-legend {
+    font-family: Arial, sans-serif, 5px;
+    background: #ddd;
+    padding: 2px;
+    margin: 10px;
+    border: 1px solid #444;
+
+}
