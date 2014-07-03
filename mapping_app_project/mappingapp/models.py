@@ -59,6 +59,7 @@ class TransectManager(models.Manager):
         transect = self.create(transect_number=transect_number)
         return transect
 
+
 class Transect(models.Model):
     transect_number = models.CharField(max_length=3, null=True, blank=True)
 
@@ -75,7 +76,7 @@ class RetreatZoneManager(models.Manager):
         return retreat
 
 class Retreat_Zone(models.Model):
-    zone_number = models.IntegerField(null=True, blank=True)
+    zone_number = models.CharField(max_length=3, null=True, blank=True)
 
     objects = RetreatZoneManager()
 
@@ -158,8 +159,9 @@ class Radiocarbon_Sample(models.Model):
 
 
 class SiteManager(models.Manager):
-    def create_site(self, name, location, number, county, date, operator, setting, type, photos_taken, photographs, notes, transect, retreat, coords):
-        site = self.create(site_name=name, site_location=location, site_number=number, county=county, site_date=date, operator=operator, geomorph_setting=setting,
+    def create_site(self, name, location, county, date, operator, setting, type, photos_taken, photographs, notes,
+                    transect, retreat, coords):
+        site = self.create(site_name=name, site_location=location, county=county, site_date=date, operator=operator, geomorph_setting=setting,
                            sample_type_collected=type, photos_taken=photos_taken, photographs=photographs, site_notes=notes,
                            site_transect=transect, site_retreat=retreat, site_coordinates=coords)
         return site
@@ -167,7 +169,6 @@ class SiteManager(models.Manager):
 
 class Sample_Site(models.Model):
     site_name = models.CharField(max_length=255, null=True, blank=True)
-    site_number = models.IntegerField(null=True, blank=True)
     site_location = models.CharField(max_length=255, null=True, blank=True)
     county = models.CharField(max_length=255, null=True, blank=True)
     site_date = models.DateField(null=True, blank=True)
@@ -233,8 +234,7 @@ class OSL_Sample(models.Model):
 
 
 class TCNManager(models.Manager):
-    def create_tcn(self, quartz, setting, material, boulder, strike, thickness, grain,
-                   litho, sample):
+    def create_tcn(self, quartz, setting, material, boulder, strike, thickness, grain, litho, sample):
         tcn = self.create(quartz_content=quartz, sample_setting=setting, sampled_material=material,
                           boulder_dimensions=boulder, sample_surface_strike_dip=strike,
                           sample_thickness=thickness, grain_size=grain, lithology=litho,

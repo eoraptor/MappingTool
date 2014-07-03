@@ -17,6 +17,7 @@ class CoreDetailsForm(forms.ModelForm):
     class Meta:
         model = Core_Details
 
+
 class PhotographForm(forms.ModelForm):
     photo_time_stamp = forms.DateTimeField(help_text='Photo Time Stamp', required=False)
     photo_label = forms.CharField(max_length=128, help_text='Photo Label', required=False)
@@ -25,7 +26,7 @@ class PhotographForm(forms.ModelForm):
         model = Photograph
 
 
-class SampleCoordinatesForm(forms.ModelForm):
+class CoordinatesForm(forms.ModelForm):
     bng_ing = forms.CharField(help_text='BNG/ING', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     grid_reference = forms.CharField(help_text='Grid Reference', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     easting = forms.IntegerField(help_text='Easting', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
@@ -36,6 +37,17 @@ class SampleCoordinatesForm(forms.ModelForm):
 
     class Meta:
         model = Coordinates
+
+    def save(self, commit=True):
+        coords = super(CoordinatesForm, self).save(commit=False)
+        if coords.bng_ing == '' and coords.grid_reference == '' and\
+            coords.easting is None and coords.northing is None and\
+            coords.latitude is None and coords.longitude is None and coords.elevation == '':
+            return None
+        else:
+            return Coordinates.objects.create_coordinates(coords.bng_ing, coords.grid_reference, coords.easting,
+                                    coords.northing, coords.latitude, coords.longitude, coords.elevation)
+
 
 
 class SiteCoordinatesForm(forms.ModelForm):
@@ -50,12 +62,25 @@ class SiteCoordinatesForm(forms.ModelForm):
     class Meta:
         model = Coordinates
 
+    def save(self, commit=True):
+        site_coords = super(SiteCoordinatesForm, self).save(commit=False)
+        if site_coords.bng_ing != '':
+            site_coords.save()
+        else:
+            return None
+
 
 class TransectForm(forms.ModelForm):
     transect_number = forms.CharField(help_text='Transect', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2, 'resize':'none'}))
 
     class Meta:
         model = Transect
+
+    def save(self, commit=True):
+        transect = super(TransectForm, self).save(commit=False)
+        if transect.transect_number != '':
+            transect.save()
+
 
 
 class RetreatForm(forms.ModelForm):
@@ -64,9 +89,14 @@ class RetreatForm(forms.ModelForm):
     class Meta:
         model = Retreat_Zone
 
+    def save(self, commit=True):
+        retreat = super(RetreatForm, self).save(commit=False)
+        if retreat.zone_number != '':
+            retreat.save()
+
 
 class SampleForm(forms.ModelForm):
-    sample_code = forms.CharField(help_text='Sample Code', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    sample_code = forms.CharField(help_text='Sample Code', required=True, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 30}))
     collection_date = forms.DateField(help_text='Collection Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     collector = forms.CharField(help_text='Collector(s)', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
@@ -102,7 +132,6 @@ class RadiocarbonForm(forms.ModelForm):
 class SampleSiteForm(forms.ModelForm):
     site_name = forms.CharField(help_text='Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     site_location = forms.CharField(help_text='Location', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
-    site_number = forms.CharField(help_text='Site Number', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2, 'resize':'none'}))
     county = forms.CharField(help_text='County', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     site_date = forms.DateField(help_text='Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     operator = forms.CharField(help_text='Operator', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
@@ -147,6 +176,16 @@ class TCNForm(forms.ModelForm):
     class Meta:
         model = TCN_Sample
 
+    def save(self, commit=True):
+        tcn = super(TCNForm, self).save(commit=False)
+        if tcn.quartz_content == '' and tcn.sample_setting == '' and tcn.sampled_material == '' and\
+            tcn.boulder_dimensions == '' and tcn.sample_surface_strike_dip == '' and tcn.sample_thickness == '' and\
+            tcn.grain_size == '' and tcn.lithology == '' and tcn.tcn_sample is None:
+                return None
+        else:
+            tcn.save()
+
+
 
 class BearingInclinationForm(forms.ModelForm):
     bearing = forms.IntegerField(help_text='Bearing', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2, 'resize':'none'}))
@@ -154,6 +193,13 @@ class BearingInclinationForm(forms.ModelForm):
 
     class Meta:
         model = Bearing_Inclination
+
+    def save(self, commit=True):
+        bearinc = super(BearingInclinationForm, self).save(commit=False)
+        if bearinc.bearing is None and bearinc.inclination is None:
+            return None
+        else:
+            bearinc.save()
 
 
 class Sample_BI_Form(forms.ModelForm):

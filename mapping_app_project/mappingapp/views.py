@@ -1,12 +1,12 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
-from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, SiteCoordinatesForm
-from mappingapp.forms import SampleCoordinatesForm, TransectForm, RetreatForm, SampleForm, RadiocarbonForm
+from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm
+from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form
 from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
@@ -52,9 +52,9 @@ def upload(request):
 
         if form.is_valid():
 
-            process_file(request.FILES['file'])
+            site = process_file(request.FILES['file'])
             # Redirect to the document list after POST
-            return index(request)
+            return redirect(edittcn)
 
     else:
         form = UploadFileForm() # A empty, unbound form
@@ -89,46 +89,84 @@ def edittcn(request):
 
     context = RequestContext(request)
 
+
     # A HTTP POST?
     if request.method == 'POST':
         tranForm = TransectForm(request.POST)
         retForm = RetreatForm(request.POST)
-        samplecoordForm = SampleCoordinatesForm(request.POST, prefix='sample')
-        sitecoordForm = SampleCoordinatesForm(request.POST, prefix='site')
+        samplecoordForm = CoordinatesForm(request.POST, prefix='sample')
+        sitecoordForm = CoordinatesForm(request.POST, prefix='site')
         siteForm = SampleSiteForm(request.POST)
         sampForm = SampleForm(request.POST)
         tcnForm = TCNForm(request.POST)
         bearincForm = BearingInclinationForm(request.POST)
         sampleBIForm = Sample_BI_Form(request.POST)
 
-
         # Have we been provided with a complete set of valid forms?
         # if yes save forms sequentially in order to supply foreign key values
         # where required
-        if sampForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and sitecoordForm.is_valid() and\
-            siteForm.is_valid() and samplecoordForm.is_valid() and sampForm.is_valid() and tcnForm.is_valid()\
-            and bearincForm.is_valid() and sampleBIForm.is_valid():
+        if sampForm.is_valid() and tcnForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
+            samplecoordForm.is_valid() and sitecoordForm.is_valid() and siteForm.is_valid() and\
+            bearincForm.is_valid():
 
-            transect = tranForm.save()
-            retreat = retForm.save()
-            sitecoords = sitecoordForm.save()
-            sampcoords = samplecoordForm.save()
-            bearinc = bearincForm.save()
+            transect = None
+            if tranForm.is_valid():
+                transect = tranForm.save()
 
-            site = siteForm.save(commit=False)
-            site.site_retreat = retreat
-            site.site_transect = transect
-            site.site_coordinates = sitecoords
+            retreat = None
+            if retForm.is_valid():
+                retreat = retForm.save()
+
+            site_coords = None
+            if sitecoordForm.is_valid():
+                site_coords = sitecoordForm.save()
+
+            sampcoords = None
+            if samplecoordForm.is_valid():
+                 sampcoords = samplecoordForm.save()
+
+            sampcoords.latitude = 333
+            sampcoords.save()
+
+            bearinc = None
+            if bearincForm.is_valid():
+                 bearinc = bearincForm.save()
+
+            site = None
+            if siteForm.is_valid():
+                 site = siteForm.save(commit=False)
+
+            if site is not None:
+                 site.site_retreat = retreat
+                 site.site_transect = transect
+                 site.site_coordinates = site_coords
+
             site.save()
 
-            samp = sampForm.save(commit=False)
-            samp.sample_coordinates = sampcoords
-            samp.samp_site = site
-            samp.save()
+            # fix sample type!!!!!!
+            if site is None and (retreat is not None or transect is not None or site_coords is not None):
+                site = Sample_Site.objects.create_site(None, None, None, None, None, None, None, None, None, None,
+                                                        transect, retreat, sampcoords)
+                site.save()
 
-            tcnsample = tcnForm.save(commit=False)
-            tcnsample.tcn_sample = samp
-            tcnsample.save()
+            samp = None
+            if sampForm.is_valid():
+                samp = sampForm.save(commit=False)
+                samp.sample_coordinates = sampcoords
+                samp.samp_site = site
+                samp.save()
+
+            tcnsample = None
+            if tcnForm.is_valid():
+                tcnsample = tcnForm.save()
+
+                if tcnsample is not None:
+                    tcnsample.tcn_sample = samp
+                    tcnsample.save()
+
+            if tcnsample is None and samp is not None:
+                tcnsample = TCN_Sample.objects.create_tcn(None, None, None, None, None, None, None, None, samp)
+                tcnsample.save()
 
             sampleBI = sampleBIForm.save(commit=False)
             sampleBI.sample_with_bearing = tcnsample
@@ -138,19 +176,20 @@ def edittcn(request):
             tcnsample.sample_bearings = sampleBI
             tcnsample.save()
 
+
             # Now call the index() view.
             # The user will be shown the homepage.
             return index(request)
         else:
             # The supplied form contained errors - just print them to the terminal.
-            print 'Error'
+            print sampForm.errors
     else:
         tranForm = TransectForm()
         retForm = RetreatForm()
-        samplecoordForm = SampleCoordinatesForm(prefix='sample')
-        sitecoordForm = SiteCoordinatesForm(prefix='site')
+        samplecoordForm = CoordinatesForm(prefix='sample')
+        sitecoordForm = CoordinatesForm(prefix='site')
         sampForm = SampleForm()
-        siteForm = SampleSiteForm()
+        siteForm = SampleSiteForm({'site_name':'hello'})
         tcnForm = TCNForm()
         bearincForm = BearingInclinationForm()
         sampleBIForm = Sample_BI_Form()

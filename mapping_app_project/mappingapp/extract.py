@@ -76,7 +76,7 @@ def get_site_info(wb):
         coords = Coordinates.objects.create_coordinates(bng_ing, None, site_easting, site_northing, site_latitude,
                                     site_longitude, site_elevation)
         coords.save()
-        site = Sample_Site.objects.create_site(site_name, site_location, None, None, sample_date, None, geomorph, type,
+        site = Sample_Site.objects.create_site(site_name, site_location, None, sample_date, None, geomorph, type,
                                           photographs, photo_labels, site_notes, None, None, coords)
         site.save()
         return site
@@ -215,6 +215,7 @@ def process_file(filename):
 
     if transect is not None and site is not None:
         Sample_Site.objects.filter(pk=site.pk).update(site_transect=transect)
+    return site
 
 
 # take incorrect date format and replace
