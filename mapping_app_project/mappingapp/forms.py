@@ -131,15 +131,15 @@ class RadiocarbonForm(forms.ModelForm):
 
 class SampleSiteForm(forms.ModelForm):
     site_name = forms.CharField(help_text='Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
-    site_location = forms.CharField(help_text='Location', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+    site_location = forms.CharField(help_text='Location', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 26}))
     county = forms.CharField(help_text='County', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     site_date = forms.DateField(help_text='Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     operator = forms.CharField(help_text='Operator', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
-    geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 30}))
+    geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 38}))
     sample_type_collected = forms.ChoiceField(help_text='Sample Type', required=False, choices=(('1', 'Select'), ('2', 'C14'), ('3', 'OSL'), ('4', 'TCN')))
     photos_taken = forms.NullBooleanField(help_text='Photos Taken', required=False)
-    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 30}))
-    site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 69}))
+    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 38}))
+    site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 87}))
     site_transect = forms.ModelChoiceField(queryset=Transect.objects.all(), widget=forms.HiddenInput(), required=False)
     site_retreat = forms.ModelChoiceField(queryset=Retreat_Zone.objects.all(), widget=forms.HiddenInput(), required=False)
     site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
@@ -188,8 +188,8 @@ class TCNForm(forms.ModelForm):
 
 
 class BearingInclinationForm(forms.ModelForm):
-    bearing = forms.IntegerField(help_text='Bearing', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2, 'resize':'none'}))
-    inclination = forms.IntegerField(help_text='Inclination', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2, 'resize':'none'}))
+    bearing = forms.IntegerField(help_text='Bearing', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 1, 'resize':'none'}))
+    inclination = forms.IntegerField(help_text='Inclination', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 1, 'resize':'none'}))
 
     class Meta:
         model = Bearing_Inclination

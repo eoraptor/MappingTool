@@ -11,7 +11,7 @@
 
 {% block body_block %}
 
-<div class="jumbotron">
+<div class="jumbotron" id="editjumbo">
 
      <form id="edittcn_form" method="post" action="/mappingapp/edittcn/">
 
@@ -37,11 +37,13 @@
     <div class="bs-example bs-example-tabs">
         <ul id="tcntab" class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>
-            <li><a href="#site-tabb" role="tab" data-toggle="tab">Site Details</a></li>
+            <li><a href="#site-tab" role="tab" data-toggle="tab">Site Details</a></li>
+            <li><a href="#photo-tab" role="tab" data-toggle="tab">Photographs</a></li>
         </ul>
-        <div id="myTabContent" class="tab-content">
+        <div id="tcntabContent" class="tab-content">
             <div class="tab-pane fade in active" id="samp-tab"><br />
                 <div class="container-fluid">
+                    <div class="col-md-6" id="leftcol">
                     <fieldset class="standard">
                         <legend class="fieldsets">TCN Sample Details</legend>
                         <div class="formspan">
@@ -93,7 +95,7 @@
                             {{ tcnform.sample_surface_strike_dip.errors }}
                             <label class="formlabel">{{ tcnform.sample_surface_strike_dip.help_text }}</label>
                             {{ tcnform.sample_surface_strike_dip }}
-                        </div>
+                        </div><br />
                         <div class="formspan">
                             {{ tcnform.boulder_dimensions.errors }}
                             <label class="formlabel">{{ tcnform.boulder_dimensions.help_text }}</label>
@@ -108,7 +110,7 @@
                             {{ tcnform.grain_size.errors }}
                             <label class="formlabel">{{ tcnform.grain_size.help_text }}</label>
                             {{ tcnform.grain_size }}
-                        </div>
+                        </div><br />
                         <div class="formspan">
                             {{ tcnform.lithology.errors }}
                             <label class="formlabel">{{ tcnform.lithology.help_text }}</label>
@@ -135,8 +137,9 @@
                             {{ bearincform.inclination }}
                         </div>
                     </fieldset>
-
-                <fieldset class="standard">
+                    </div>
+                    <div class="col-md-6">
+                <fieldset class="standard" id="coordinates">
                     <legend class="fieldsets">Sample Coordinates</legend>
                     <div class="formspan">
                         {{ samplecoordform.latitude.errors }}
@@ -175,7 +178,7 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="standard">
+                <fieldset class="standard" id="age">
                     <legend class="fieldsets">Sample Age</legend>
                     <div class="formspan">
                         {{ sampform.age.errors }}
@@ -203,6 +206,7 @@
                         {{ sampform.lab_code }}
                     </div>
                 </fieldset>
+                        </div>
 
                 <div class="span2 text-center">
                     <button type="submit" class="btn btn-success btn-xl">Save</button>
@@ -211,9 +215,10 @@
         </div>
 
 
-        <div class="tab-pane fade" id="site-tabb"><br />
+        <div class="tab-pane fade" id="site-tab"><br />
             <div class="container-fluid">
-                <fieldset class="standard" name="site">
+                <div class="col-md-6" id="site-col">
+                <fieldset class="standard" id="site">
                     <legend class="fieldsets">Site Details</legend>
                     <div class="formspan">
                         {{ siteform.site_name.errors }}
@@ -271,8 +276,9 @@
                         {{ siteform.site_notes }}
                     </div>
                 </fieldset>
-
-                <fieldset class="standard">
+                </div>
+                <div class="col-md-6" id="site2-col">
+                <fieldset class="standard" id="coordinates">
                     <legend class="fieldsets">Site Coordinates</legend>
                     <div class="formspan">
                         {{ sitecoordform.latitude.errors }}
@@ -311,9 +317,16 @@
                     </div>
                 </fieldset>
                 </div>
+                </div>
+            </div>
+        <div class="tab-pane fade" id="photo-tab"><br />
+            <div class="jumbotron">
+                photos go here....
+                </div>
             </div>
         </div>
     </div>
 </form>
+
 </div>
 {% endblock %}
