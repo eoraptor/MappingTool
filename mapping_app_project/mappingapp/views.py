@@ -52,9 +52,13 @@ def upload(request):
 
         if form.is_valid():
 
-            site = process_file(request.FILES['file'])
+            samples = process_file(request.FILES['file'])
+
+            request.session['samples'] = samples
+            request.session['source'] = 'file'
+
             # Redirect to the document list after POST
-            return redirect(edittcn)
+            return HttpResponseRedirect(reverse('edittcn'))
 
     else:
         form = UploadFileForm() # A empty, unbound form
@@ -72,7 +76,9 @@ def edit(request):
 
         if sample_code is not None:
 
-            return edittcn(request, sample_code)
+            request.session['sample'] = sample_code
+            request.session['source'] = 'code'
+            return HttpResponseRedirect(reverse('edittcn'))
 
         else:
             print 'Error'
@@ -124,9 +130,6 @@ def edittcn(request):
             sampcoords = None
             if samplecoordForm.is_valid():
                  sampcoords = samplecoordForm.save()
-
-            sampcoords.latitude = 333
-            sampcoords.save()
 
             bearinc = None
             if bearincForm.is_valid():
@@ -184,11 +187,18 @@ def edittcn(request):
             # The supplied form contained errors - just print them to the terminal.
             print sampForm.errors
     else:
+        if request.session['source'] == 'code':
+            sample_code = request.session['sample']
+            sample = Sample.objects.get(sample_code=sample_code)
+
+        elif request.session['source'] == 'file':
+            sample = Sample.objects.get(pk=1)
+
         tranForm = TransectForm()
         retForm = RetreatForm()
-        samplecoordForm = CoordinatesForm(prefix='sample')
+        samplecoordForm = CoordinatesForm(prefix='sample', instance=sample.sample_coordinates)
         sitecoordForm = CoordinatesForm(prefix='site')
-        sampForm = SampleForm()
+        sampForm = SampleForm(instance=sample)
         siteForm = SampleSiteForm({'site_name':'hello'})
         tcnForm = TCNForm()
         bearincForm = BearingInclinationForm()

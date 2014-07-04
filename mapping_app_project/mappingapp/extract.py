@@ -109,7 +109,6 @@ def get_tcn_cell_positions(ws):
                         val_col = columns[col+1]
                         positions[val] = val_col + str(cell.row)
 
-
     return positions
 
 
@@ -175,7 +174,7 @@ def get_tcn_sample_info(sample_sheet, site):
 
     trans = Transect.objects.create_transect(transect)
     trans.save()
-    return trans
+    return [sample_code, transect]
 
 
 # extract all bearing and inclination data from tcn sheets
@@ -198,6 +197,9 @@ def get_bearing(sample_sheet, start_cell):
 # process a complete file
 def process_file(filename):
     # need error handling
+
+    samples = []
+
     wb = load_workbook(filename, use_iterators=True)
     site = get_site_info(wb)
     transect = None
@@ -208,14 +210,15 @@ def process_file(filename):
             ws = wb[sheet]
             type = get_sample_type(ws)
             if type == 'TCN':
+                results = get_tcn_sample_info(ws, site)
+                sample_code = results[0]
+                samples.append(sample_code)
                 if transect is None:
-                    transect = get_tcn_sample_info(ws, site)
-                else:
-                    get_tcn_sample_info(ws, site)
+                    transect = results[1]
 
     if transect is not None and site is not None:
         Sample_Site.objects.filter(pk=site.pk).update(site_transect=transect)
-    return site
+    return samples
 
 
 # take incorrect date format and replace
