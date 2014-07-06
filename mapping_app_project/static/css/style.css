@@ -7,9 +7,9 @@
 /* remove resize option on selected text areas */
 .noresize {
     resize: none;
-    height: 26px;
+    height: 24px;
+    vertical-align: middle;
 }
-
 
 .formlabel {
 	display: block;						/* Force label onto its own line. */
@@ -19,7 +19,7 @@
 
 .formspan {
     display:inline-block;
-    margin:2px 2px 2px 3px
+    margin:2px 2px 2px 3px;
 }
 
 fieldset.standard {
@@ -31,25 +31,26 @@ fieldset.standard {
     border-radius:1px;
     box-shadow:0 0 10px #999;
     width:560px;
-    float: left;
     margin-bottom: 15px;
     font-size: 12px;
-    background: #ddd;
+    background: #ebf0e6;
+    margin-left: auto;
+    margin-right: auto;
+
 }
 
 fieldset#site {
     width:500px;
-    float: right;
 }
 
 fieldset#coordinates {
     width:470px;
-    float: left;
+    align-self: center;
 }
 
 fieldset#age {
     width:470px;
-    float: left;
+    align-self: center;
 }
 
 legend.fieldsets {
@@ -84,15 +85,26 @@ img#logo {
     padding: 2px;
     margin: 10px;
     border: 1px solid #444;
-
 }
+
 
 #editjumbo {
-    margin-top: -22px;
+    margin-top: -30px;
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    float: none;
+    box-shadow:0 0 10px #999;
 }
 
-col-md-6#leftcol {
-    margin-right: 0px;
+#agecol {
+    margin-left: auto;
+    margin-right: auto;
 }
 
-
+#tcntabContent {
+    background: #f9f9f9;
+}

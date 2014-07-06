@@ -192,15 +192,21 @@ def edittcn(request):
             sample = Sample.objects.get(sample_code=sample_code)
 
         elif request.session['source'] == 'file':
-            sample = Sample.objects.get(pk=1)
+            sample_codes = request.session['samples']
+            sample = Sample.objects.get(sample_code=sample_codes[0])
 
-        tranForm = TransectForm()
+        site = sample.samp_site
+        transect = None
+        if site is not None:
+            transect = site.site_transect
+
+        tranForm = TransectForm(instance=transect)
         retForm = RetreatForm()
         samplecoordForm = CoordinatesForm(prefix='sample', instance=sample.sample_coordinates)
         sitecoordForm = CoordinatesForm(prefix='site')
         sampForm = SampleForm(instance=sample)
-        siteForm = SampleSiteForm({'site_name':'hello'})
-        tcnForm = TCNForm()
+        siteForm = SampleSiteForm(instance=site)
+        tcnForm = TCNForm(instance=TCN_Sample.objects.get(tcn_sample=sample))
         bearincForm = BearingInclinationForm()
         sampleBIForm = Sample_BI_Form()
 

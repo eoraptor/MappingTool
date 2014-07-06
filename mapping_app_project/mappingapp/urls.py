@@ -8,7 +8,6 @@ urlpatterns = patterns('',
         url(r'^upload/', views.upload, name='upload'),
         url(r'^edit/', views.edit, name='edit'),
         url(r'^edittcn/', views.edittcn, name='edittcn'),
-        url(r'^edittcn/(?P<sample_code>\w+)$', views.edittcn, name='edittcn'),
         url(r'^login/$', views.userlogin, name='userlogin'),
         url(r'^logout/$', views.user_logout, name='logout'),
         )

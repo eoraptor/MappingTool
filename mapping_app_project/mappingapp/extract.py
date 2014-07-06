@@ -214,10 +214,17 @@ def process_file(filename):
                 sample_code = results[0]
                 samples.append(sample_code)
                 if transect is None:
-                    transect = results[1]
+                    transect = Transect.objects.create_transect(results[1])
 
     if transect is not None and site is not None:
         Sample_Site.objects.filter(pk=site.pk).update(site_transect=transect)
+    elif transect is not None:
+        site = Sample_Site.objects.create_site(None, None, None, None, None, None, None, None, None, None, transect,
+                                               None, None)
+        site.save()
+
+        for sample in samples:
+            Sample.objects.filter(sample_code=sample).update(samp_site=site)
     return samples
 
 

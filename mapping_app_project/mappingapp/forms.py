@@ -27,7 +27,7 @@ class PhotographForm(forms.ModelForm):
 
 
 class CoordinatesForm(forms.ModelForm):
-    bng_ing = forms.CharField(help_text='BNG/ING', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    bng_ing = forms.CharField(help_text='BNG/ING', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     grid_reference = forms.CharField(help_text='Grid Reference', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     easting = forms.IntegerField(help_text='Easting', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     northing = forms.IntegerField(help_text='Northing', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
@@ -48,26 +48,6 @@ class CoordinatesForm(forms.ModelForm):
             return Coordinates.objects.create_coordinates(coords.bng_ing, coords.grid_reference, coords.easting,
                                     coords.northing, coords.latitude, coords.longitude, coords.elevation)
 
-
-
-class SiteCoordinatesForm(forms.ModelForm):
-    bng_ing = forms.CharField(help_text='BNG/ING', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    grid_reference = forms.CharField(help_text='Grid Reference', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    easting = forms.IntegerField(help_text='Easting', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    northing = forms.IntegerField(help_text='Northing', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    latitude = forms.FloatField(help_text='Latitude', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    longitude = forms.FloatField(help_text='Longitude', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    elevation = forms.CharField(help_text='Elevation', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 4}))
-
-    class Meta:
-        model = Coordinates
-
-    def save(self, commit=True):
-        site_coords = super(SiteCoordinatesForm, self).save(commit=False)
-        if site_coords.bng_ing != '':
-            site_coords.save()
-        else:
-            return None
 
 
 class TransectForm(forms.ModelForm):
@@ -164,13 +144,13 @@ class OSLSampleForm(forms.ModelForm):
 
 class TCNForm(forms.ModelForm):
     quartz_content = forms.CharField(help_text='Quartz Content', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    sample_setting = forms.CharField(help_text='Sample Setting', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':30}))
-    sampled_material = forms.CharField(help_text='Sampled Material', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows':2, 'cols':30}))
-    boulder_dimensions = forms.CharField(help_text='Boulder Dimensions', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    sample_setting = forms.CharField(help_text='Sample Setting', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+    sampled_material = forms.CharField(help_text='Sampled Material', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+    boulder_dimensions = forms.CharField(help_text='Boulder Dimensions', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 14}))
     sample_surface_strike_dip = forms.CharField(help_text='Surface Strike/Dip', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_thickness = forms.CharField(help_text='Thickness', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    grain_size = forms.CharField(help_text='Grain Size', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    lithology = forms.CharField(help_text='Lithology', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':30}))
+    grain_size = forms.CharField(help_text='Grain Size', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
+    lithology = forms.CharField(help_text='Lithology', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
     tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
