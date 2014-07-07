@@ -7,7 +7,7 @@
 /* remove resize option on selected text areas */
 .noresize {
     resize: none;
-    height: 24px;
+    height: 23px;
     vertical-align: middle;
 }
 
@@ -40,7 +40,7 @@ fieldset.standard {
 }
 
 fieldset#site {
-    width:500px;
+    width:560px;
 }
 
 fieldset#coordinates {
@@ -108,3 +108,4 @@ img#logo {
 #tcntabContent {
     background: #f9f9f9;
 }
+

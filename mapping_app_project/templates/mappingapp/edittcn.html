@@ -85,7 +85,7 @@
                             {{ tcnform.sampled_material.errors }}
                             <label class="formlabel">{{ tcnform.sampled_material.help_text }}</label>
                             {{ tcnform.sampled_material }}
-                        </div>
+                        </div><br/>
                         <div class="formspan">
                             {{ tcnform.quartz_content.errors }}
                             <label class="formlabel">{{ tcnform.quartz_content.help_text }}</label>
@@ -95,7 +95,7 @@
                             {{ tcnform.sample_surface_strike_dip.errors }}
                             <label class="formlabel">{{ tcnform.sample_surface_strike_dip.help_text }}</label>
                             {{ tcnform.sample_surface_strike_dip }}
-                        </div><br />
+                        </div>
                         <div class="formspan">
                             {{ tcnform.boulder_dimensions.errors }}
                             <label class="formlabel">{{ tcnform.boulder_dimensions.help_text }}</label>
@@ -226,30 +226,26 @@
                         {{ siteform.site_name }}
                     </div>
                     <div class="formspan">
-                        {{ siteform.site_location.errors }}
-                        <label class="formlabel">{{ siteform.site_location.help_text }}</label>
-                        {{ siteform.site_location }}
-                    </div>
-                    <div class="formspan">
-                        {{ siteform.site_number.errors }}
-                        <label class="formlabel">{{ siteform.site_number.help_text }}</label>
-                        {{ siteform.site_number }}
-                    </div>
-                    <div class="formspan">
                         {{ siteform.county.errors }}
                         <label class="formlabel">{{ siteform.county.help_text }}</label>
                         {{ siteform.county }}
                     </div>
                     <div class="formspan">
+                         {{ siteform.site_date.errors }}
+                        <label class="formlabel">{{ siteform.site_date.help_text }}</label>
+                        {{ siteform.site_date }}
+                    </div>
+                    <div class="formspan">
+                        {{ siteform.site_location.errors }}
+                        <label class="formlabel">{{ siteform.site_location.help_text }}</label>
+                        {{ siteform.site_location }}
+                    </div><br />
+                    <div class="formspan">
                         {{ siteform.operator.errors }}
                         <label class="formlabel">{{ siteform.operator.help_text }}</label>
                         {{ siteform.operator }}
                     </div>
-                    <div class="formspan">
-                         {{ siteform.site_date.errors }}
-                        <label class="formlabel">{{ siteform.site_date.help_text }}</label>
-                        {{ siteform.site_date }}
-                    </div><br />
+
                     <div class="formspan">
                         {{ siteform.sample_type_collected.errors }}
                         <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
@@ -321,6 +317,7 @@
             </div>
         <div class="tab-pane fade" id="photo-tab"><br />
             <div class="container-fluid">
+
                 photos go here....
                 <br />
                 <br />

@@ -93,7 +93,7 @@ def get_tcn_cell_positions(ws):
                  'Transect:': '', 'Est Quartz content': '', 'Sample setting': '', 'Sample surface strike/dip ': '',
                  'Sampled material (eg:boulder)': '', 'sample thickness': '', 'Grain Size:': '',
                  'Collector: ': '', 'Notes (inc.weathering and erosion rate est)': '', 'Bearing': '',
-                 'Inclination': ''}
+                 'Inclination': '', 'Sample Thickness :':'', 'Boulder dimensions [cm] (LxBxH)':''}
 
     for row in ws.iter_rows():
         for cell in row:
@@ -109,6 +109,42 @@ def get_tcn_cell_positions(ws):
                         val_col = columns[col+1]
                         positions[val] = val_col + str(cell.row)
 
+    # fix cell locations for alternate spreadsheet format
+    if positions['sample thickness'] == '':
+        positions['sample thickness'] = positions['Sample Thickness :']
+
+    if positions['Boulder dimensions [cm] (LxWxH)'] == '':
+        cellA = positions['Boulder dimensions [cm] (LxBxH)']
+        row = cellA[1:]
+        col = columns.index(cellA[0])
+        cellB = columns[col+1] + row
+        cellC = columns[col+2] + row
+        positions['Boulder dimensions [cm] (LxWxH)'] = [cellA, cellB, cellC]
+
+    surface_strike_cell = positions['Sample surface strike/dip ']
+    row = surface_strike_cell[1:]
+    col = columns.index(surface_strike_cell[0])
+    cellB = columns[col+1] + row
+    positions['Sample surface strike/dip '] = [surface_strike_cell, cellB]
+
+    longitude_cell = positions['Longtitude']
+    row = longitude_cell[1:]
+    col = columns.index(longitude_cell[0])
+    cellB = columns[col+1] + row
+    positions['Longtitude'] = [longitude_cell, cellB]
+
+    easting_cell = positions['Easting']
+    row = easting_cell[1:]
+    col = columns.index(easting_cell[0])
+    cellB = columns[col+1] + row
+    positions['Easting'] = [easting_cell, cellB]
+
+    bng_cell = positions['BNG or ING']
+    row = bng_cell[1:]
+    col = columns.index(bng_cell[0])
+    cellB = columns[col+1] + row
+    positions['BNG or ING'] = [bng_cell, cellB]
+
     return positions
 
 
@@ -118,25 +154,61 @@ def get_tcn_sample_info(sample_sheet, site):
 
     sample_date = sample_sheet[positions['Date: ']].value
     sample_location_name = sample_sheet[positions['Location:']].value
-    sample_code = sample_sheet[positions['Unique Sample Identifier']].value
-    bng_ing = sample_sheet[positions['BNG or ING']].value
+    sample_code = str(sample_sheet[positions['Unique Sample Identifier']].value)
     sample_northing = sample_sheet[positions['Northing']].value
-    sample_easting = sample_sheet[positions['Easting']].value
     transect = sample_sheet[positions['Transect:']].value
     latitude = sample_sheet[positions['Latitude (if different from site info)']].value
-    longitude = sample_sheet[positions['Longtitude']].value
     elevation = sample_sheet[positions['Elevation']].value
     lithology = sample_sheet[positions['Lithology']].value
     quartz = sample_sheet[positions['Est Quartz content']].value
     setting = sample_sheet[positions['Sample setting']].value
     material = sample_sheet[positions['Sampled material (eg:boulder)']].value
-    boulder_dim = sample_sheet[positions['Boulder dimensions [cm] (LxWxH)']].value
-    surface_strike = sample_sheet[positions['Sample surface strike/dip ']].value
     notes = sample_sheet[positions['Notes (inc.weathering and erosion rate est)']].value
     thickness = sample_sheet[positions['sample thickness']].value
     grain_size = sample_sheet[positions['Grain Size:']].value
     collector = sample_sheet[positions['Collector: ']].value
     bearing = get_bearing(sample_sheet, positions['Bearing'])
+
+    # check boulder dimension value - use three columns where appropriate
+    if isinstance(positions['Boulder dimensions [cm] (LxWxH)'], list):
+        boulder_dim = str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][0]].value)) + ' x ' +\
+            str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][1]].value)) + ' x ' +\
+            str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][2]].value))
+    else:
+        boulder_dim = sample_sheet[positions['Boulder dimensions [cm] (LxWxH)']].value
+
+    # check to see if sample surface strike dip cell has been split
+    if sample_sheet[positions['Sample surface strike/dip '][1]] is not None:
+        surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value + ' / ' +\
+            sample_sheet[positions['Sample surface strike/dip '][1]].value
+    else:
+        surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value
+
+    # check longitude in correct cell
+    if sample_sheet[positions['Longtitude'][0]].value is not None:
+        longitude = sample_sheet[positions['Longtitude'][0]].value
+    elif sample_sheet[positions['Longtitude'][1]].value is not None and\
+        sample_sheet[positions['Longtitude'][1]].value != 'Elevation':
+            longitude = sample_sheet[positions['Longtitude'][1]].value
+    else:
+        longitude = None
+
+    # check easting in correct cell
+    if sample_sheet[positions['Easting'][0]].value is not None:
+        sample_easting = int(sample_sheet[positions['Easting'][0]].value)
+    elif sample_sheet[positions['Easting'][1]].value is not None and\
+        sample_sheet[positions['Easting'][1]].value != 'Transect:':
+            sample_easting = int(sample_sheet[positions['Easting'][1]].value)
+    else:
+        sample_easting = None
+
+    # check bng in correct cell
+    if sample_sheet[positions['BNG or ING'][0]].value is not None:
+        bng_ing = sample_sheet[positions['BNG or ING'][0]].value
+    elif sample_sheet[positions['BNG or ING'][1]].value is not None:
+            bng_ing = sample_sheet[positions['BNG or ING'][1]].value
+    else:
+        bng_ing = None
 
     # remove newlines from notes
     notes = notes.replace('\n', ' ')
@@ -180,18 +252,24 @@ def get_tcn_sample_info(sample_sheet, site):
 # extract all bearing and inclination data from tcn sheets
 def get_bearing(sample_sheet, start_cell):
     data = []
-    done = False
     start = int(start_cell[1:])
-    while not done:
+
+    bearing = ''
+
+    while bearing != 'Please complete one sample sheet for each sample':
+
         start_str = str(start)
         bearing = sample_sheet['A' + start_str].value
         inclination = sample_sheet['B' + start_str].value
 
-        if (bearing is not None or inclination is not None) and bearing != 'Please complete one sample sheet for each sample':
-                data.append((int(bearing), int(inclination)))
-                start += 1
-        else:
-            return data
+        if bearing is not None or inclination is not None:
+            if (type(bearing) is str and type(inclination) is str and bearing.isdigit() and inclination.isdigit())\
+                or (type(bearing) is float and type(inclination) is float):
+                    data.append((int(bearing), int(inclination)))
+
+        start += 1
+
+    return data
 
 
 # process a complete file
