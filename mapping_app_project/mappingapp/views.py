@@ -116,8 +116,7 @@ def edittcn(request):
             bearincForm.is_valid():
 
             transect = None
-            if tranForm.is_valid():
-                transect = tranForm.save()
+            transect = tranForm.save()
 
             retreat = None
             if retForm.is_valid():

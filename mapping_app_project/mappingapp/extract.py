@@ -42,7 +42,7 @@ def get_site_info(wb):
     site_northing = site_sheet[positions['Northing:']].value
     site_easting = site_sheet[positions['Easting:']].value
     site_elevation = site_sheet[positions['Elevation             (m ASL)']].value
-    sample_date = site_sheet[positions['Date Sampled:']].value
+    site_date = site_sheet[positions['Date Sampled:']].value
     geomorph = site_sheet[positions['Geomorph Setting:']].value
     type = site_sheet[positions['Type of Samples collected (TCN/14C/OSL)']].value
     collector = site_sheet[positions['Collected by:']].value
@@ -57,10 +57,10 @@ def get_site_info(wb):
         else:
             photographs = False
 
-    if sample_date is not None:
-        date = str(sample_date)
+    if site_date is not None:
+        date = str(site_date)
         if '.' in date:
-            sample_date = convert_date(date)
+            site_date = convert_date(date)
 
     if site_latitude is not None:
         site_latitude = convert_lat_long(site_latitude)
@@ -69,17 +69,21 @@ def get_site_info(wb):
         site_longitude = convert_lat_long(site_longitude)
 
     if all(ele is None for ele in [site_name, site_location, site_latitude, site_longitude, bng_ing, site_northing,
-                                   site_easting, site_elevation, sample_date, geomorph, type, collector, photographs,
+                                   site_easting, site_elevation, site_date, geomorph, type, collector, photographs,
                                    photo_labels, site_notes]):
         return None
+
     else:
-        coords = Coordinates.objects.create_coordinates(bng_ing, None, site_easting, site_northing, site_latitude,
-                                    site_longitude, site_elevation)
-        coords.save()
-        site = Sample_Site.objects.create_site(site_name, site_location, None, sample_date, None, geomorph, type,
-                                          photographs, photo_labels, site_notes, None, None, coords)
-        site.save()
-        return site
+        coords = Coordinates.objects.get_or_create(bng_ing=bng_ing, grid_reference=None, easting=site_easting,
+                                                   northing=site_northing, latitude=site_latitude,
+                                                   longitude=site_longitude, elevation=site_elevation)[0]
+
+        site = Sample_Site.objects.get_or_create(site_name=site_name, site_location=site_location, county=None,
+                                                 site_date=site_date, operator=None, geomorph_setting=geomorph,
+                                                 sample_type_collected=type, photos_taken=photographs,
+                                                 photographs=photo_labels, site_notes=site_notes, site_transect=None,
+                                                 site_retreat=None, site_coordinates=coords)[0]
+    return site
 
 
 # iterate over the tcn sheet to determine which cells to extract data from
@@ -154,7 +158,7 @@ def get_tcn_sample_info(sample_sheet, site):
 
     sample_date = sample_sheet[positions['Date: ']].value
     sample_location_name = sample_sheet[positions['Location:']].value
-    sample_code = str(sample_sheet[positions['Unique Sample Identifier']].value)
+    sample_code = sample_sheet[positions['Unique Sample Identifier']].value
     sample_northing = sample_sheet[positions['Northing']].value
     transect = sample_sheet[positions['Transect:']].value
     latitude = sample_sheet[positions['Latitude (if different from site info)']].value
@@ -226,26 +230,25 @@ def get_tcn_sample_info(sample_sheet, site):
     if longitude is not None:
         longitude = convert_lat_long(longitude)
 
-    coords = Coordinates.objects.create_coordinates(bng_ing, None, sample_easting, sample_northing, latitude,
-                                    longitude, elevation)
-    coords.save()
+    coords = Coordinates.objects.get_or_create(bng_ing=bng_ing, grid_reference=None, easting=sample_easting,
+                                               northing=sample_northing, latitude=latitude, longitude=longitude,
+                                               elevation=elevation)[0]
 
-    sample = Sample.objects.create_sample(sample_code, sample_location_name, sample_date, collector, notes,
-                                          None, None, None, None, None, None, coords, site)
-    sample.save()
+    sample = Sample.objects.get_or_create(sample_code=sample_code, sample_location_name=sample_location_name,
+                                          collection_date=sample_date, collector=collector, sample_notes=notes,
+                                          dating_priority=None, age=None, age_error=None, calendar_age=None,
+                                          calendar_error=None, lab_code=None, sample_coordinates=coords,
+                                          samp_site=site)[0]
 
-    tcn_data = TCN_Sample.objects.create_tcn(quartz, setting, material, boulder_dim, surface_strike,
-                                             thickness, grain_size, lithology, sample)
-    tcn_data.save()
+    tcn_data = TCN_Sample.objects.get_or_create(quartz_content=quartz, sample_setting=setting, sampled_material=material,
+                                                boulder_dimensions=boulder_dim, sample_surface_strike_dip=surface_strike,
+                                                sample_thickness=thickness, grain_size=grain_size, lithology=lithology,
+                                                tcn_sample=sample)[0]
 
     for b in bearing:
-        bi = Bearing_Inclination.objects.create_bearing_inclination(b[0], b[1])
-        bi.save()
-        sample_with_bi = Sample_Bearing_Inclination.objects.create_sampleBI(tcn_data, bi)
-        sample_with_bi.save()
+        bi = Bearing_Inclination.objects.get_or_create(bearing=b[0], inclination=b[1])[0]
+        sample_with_bi = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn_data, bear_inc=bi)[0]
 
-    trans = Transect.objects.create_transect(transect)
-    trans.save()
     return [sample_code, transect]
 
 
@@ -287,12 +290,13 @@ def process_file(filename):
         if sheet != 'Site Info' and sheet != 'Sheet1':
             ws = wb[sheet]
             type = get_sample_type(ws)
+
             if type == 'TCN':
                 results = get_tcn_sample_info(ws, site)
                 sample_code = results[0]
                 samples.append(sample_code)
                 if transect is None:
-                    transect = Transect.objects.create_transect(results[1])
+                    transect = Transect.objects.get_or_create(transect_number=results[1])[0]
 
     if transect is not None and site is not None:
         Sample_Site.objects.filter(pk=site.pk).update(site_transect=transect)

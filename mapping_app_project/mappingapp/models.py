@@ -68,6 +68,23 @@ class Transect(models.Model):
     def __unicode__(self):
         return self.transect_number
 
+    __original_transect = None
+
+    def __init__(self, *args, **kwargs):
+        super(Transect, self).__init__(*args, **kwargs)
+        self.__original_transect = self.transect_number
+
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        if self.transect_number != self.__original_transect:
+            try:
+                return Transect.objects.get(transect_number=self.transect_number)
+            except:
+                pass
+
+        super(Transect, self).save(force_insert, force_update, *args, **kwargs)
+        self.__original_transect = self.transect_number
+        return self
+
 
 
 class RetreatZoneManager(models.Manager):
