@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
 
 
 class CoreDetailsManager(models.Manager):
@@ -54,6 +55,9 @@ class Coordinates(models.Model):
         return self.grid_reference
 
 
+
+
+
 class TransectManager(models.Manager):
     def create_transect(self, transect_number):
         transect = self.create(transect_number=transect_number)
@@ -100,6 +104,23 @@ class Retreat_Zone(models.Model):
     def __unicode__(self):
         return self.zone_number
 
+    __original_zone = None
+
+    def __init__(self, *args, **kwargs):
+        super(Retreat_Zone, self).__init__(*args, **kwargs)
+        self.__original_zone = self.zone_number
+
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        if self.zone_number != self.__original_zone:
+            try:
+                return Retreat_Zone.objects.get(zone_number=self.zone_number)
+            except:
+                pass
+
+        super(Retreat_Zone, self).save(force_insert, force_update, *args, **kwargs)
+        self.__original_zone = self.zone_number
+        return self
+
 
 class SampleManager(models.Manager):
     def create_sample(self, code, location, date, collector, notes, priority, age, age_error,
@@ -129,6 +150,8 @@ class Sample(models.Model):
 
     def __unicode__(self):
         return self.sample_code
+
+
 
 
 class PhotoOfManager(models.Manager):
@@ -203,8 +226,6 @@ class Sample_Site(models.Model):
 
     def __unicode__(self):
         return self.site_name
-
-
 
 
 class LocationPhotoManager(models.Manager):

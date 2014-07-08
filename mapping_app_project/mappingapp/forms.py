@@ -45,13 +45,13 @@ class CoordinatesForm(forms.ModelForm):
             coords.latitude is None and coords.longitude is None and coords.elevation == '':
             return None
         else:
-            return Coordinates.objects.create_coordinates(coords.bng_ing, coords.grid_reference, coords.easting,
-                                    coords.northing, coords.latitude, coords.longitude, coords.elevation)
-
+            return coords.save()
 
 
 class TransectForm(forms.ModelForm):
-    transect_number = forms.CharField(help_text='Transect', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2, 'resize':'none'}))
+    transect_number = forms.CharField(help_text='Transect', required=False,
+                                      widget=forms.Textarea(attrs={'class': 'noresize', 'rows': 1, 'cols': 2,
+                                                                   'resize': 'none'}))
 
     class Meta:
         model = Transect
@@ -59,12 +59,13 @@ class TransectForm(forms.ModelForm):
     def save(self, commit=True):
         transect = super(TransectForm, self).save(commit=False)
         if transect.transect_number != '':
-            transect.save()
-
+            return transect.save()
 
 
 class RetreatForm(forms.ModelForm):
-    zone_number = forms.CharField(help_text='Retreat Zone', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2, 'resize':'none'}))
+    zone_number = forms.CharField(help_text='Retreat Zone', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'noresize', 'rows': 1, 'cols': 2,
+                                                               'resize': 'none'}))
 
     class Meta:
         model = Retreat_Zone
@@ -72,7 +73,7 @@ class RetreatForm(forms.ModelForm):
     def save(self, commit=True):
         retreat = super(RetreatForm, self).save(commit=False)
         if retreat.zone_number != '':
-            retreat.save()
+            return retreat.save()
 
 
 class SampleForm(forms.ModelForm):
@@ -126,6 +127,8 @@ class SampleSiteForm(forms.ModelForm):
 
     class Meta:
         model = Sample_Site
+
+
 
 
 class OSLSampleForm(forms.ModelForm):
