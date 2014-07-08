@@ -95,6 +95,9 @@ def edittcn(request):
 
     context = RequestContext(request)
 
+    # retrieve objects to populate form fields
+    sample = None
+
     if request.session['source'] == 'code':
         sample_code = request.session['sample']
         sample = Sample.objects.get(sample_code=sample_code)
@@ -104,22 +107,30 @@ def edittcn(request):
         sample = Sample.objects.get(sample_code=sample_codes[0])
 
     site = sample.samp_site
-    #tcn = TCN_Sample.objects.get(tcn_sample=sample.pk)
 
+    tcn = TCN_Sample.objects.get(tcn_sample=sample.pk)
+
+    transect = None
+    if site.site_transect is not None:
+        transect = site.site_transect
+
+    retreat = None
+    if site.site_retreat is not None:
+        retreat = site.site_retreat
 
     # A HTTP POST?
     if request.method == 'POST':
 
         sampForm = SampleForm(request.POST, instance=sample)
-        #samplecoordForm = CoordinatesForm(request.POST, prefix='sample', instance=sample.sample_coords)
+        samplecoordForm = CoordinatesForm(request.POST, prefix='sample', instance=sample.sample_coordinates)
         siteForm = SampleSiteForm(request.POST, instance=site)
-        #sitecoordForm = CoordinatesForm(request.POST, prefix='site', instance=Coordinates.objects.get(pk=site.site_coordinates))
-        #tranForm = TransectForm(request.POST, instance=Transect.objects.getsample.samp_site.site_transect)
-        #retForm = RetreatForm(request.POST, instance=sample.samp_site.site_retreat)
-        #tcnForm = TCNForm(request.POST, instance=tcn)
+        sitecoordForm = CoordinatesForm(request.POST, prefix='site', instance=site.site_coordinates)
+        tranForm = TransectForm(request.POST, instance=transect)
+        retForm = RetreatForm(request.POST, instance=retreat)
+        tcnForm = TCNForm(request.POST, instance=tcn)
 
-        #bearincForm = BearingInclinationForm(request.POST)
-        #sampleBIForm = Sample_BI_Form(request.POST)
+        bearincForm = BearingInclinationForm(request.POST)
+        sampleBIForm = Sample_BI_Form(request.POST)
 
         # Have we been provided with a complete set of valid forms?
         # if yes save forms sequentially in order to supply foreign key values
@@ -187,22 +198,23 @@ def edittcn(request):
             print sample.errors
     else:
         sampForm = SampleForm(instance=sample)
-        #samplecoordForm = CoordinatesForm(prefix='sample', instance=Coordinates.objects.get(pk=sample.sample_coords))
+        samplecoordForm = CoordinatesForm(prefix='sample', instance=sample.sample_coordinates)
         siteForm = SampleSiteForm(instance=site)
-        #sitecoordForm = CoordinatesForm(prefix='site', instance=Coordinates.objects.get(pk=site.site_coordinates))
-        #tranForm = TransectForm(instance=Transect.objects.get(pk=site.site_transect))
-        #retForm = RetreatForm(instance=Retreat_Zone.objects.get(pk=site.site_retreat))
-        #tcnForm = TCNForm(instance=tcn)
+        sitecoordForm = CoordinatesForm(prefix='site', instance=site.site_coordinates)
+        tranForm = TransectForm(instance=transect)
+        retForm = RetreatForm(instance=retreat)
+        tcnForm = TCNForm(instance=tcn)
 
-        #bearincForm = BearingInclinationForm()
-        #sampleBIForm = Sample_BI_Form()
+        bearincForm = BearingInclinationForm()
+        sampleBIForm = Sample_BI_Form()
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html', {'sampform':sampForm}, context)
-    #, 'bearincform':bearincForm, 'sampleBIform':sampleBIForm, 'tcnform':tcnForm, 'samplecoordform':samplecoordForm, 'sitecoordform':sitecoordForm, 'siteform': siteForm, 'tranform': tranForm, 'retform': retForm
-
-
+    return render_to_response('mappingapp/edittcn.html',
+                              {'tcnform':tcnForm, 'retform': retForm, 'tranform': tranForm,
+                               'sitecoordform':sitecoordForm, 'sampform':sampForm, 'siteform': siteForm,
+                               'samplecoordform':samplecoordForm, 'bearincform':bearincForm,
+                               'sampleBIform':sampleBIForm}, context)
 
 
 def userlogin(request):
