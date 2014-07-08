@@ -54,8 +54,8 @@ class Coordinates(models.Model):
     def __unicode__(self):
         return self.grid_reference
 
-
-
+    def as_json(self):
+        return dict(input_lat=self.latitude, input_long=self.longitude)
 
 
 class TransectManager(models.Manager):
@@ -72,23 +72,6 @@ class Transect(models.Model):
     def __unicode__(self):
         return self.transect_number
 
-    __original_transect = None
-
-    def __init__(self, *args, **kwargs):
-        super(Transect, self).__init__(*args, **kwargs)
-        self.__original_transect = self.transect_number
-
-    def save(self, force_insert=False, force_update=False, *args, **kwargs):
-        if self.transect_number != self.__original_transect:
-            try:
-                return Transect.objects.get(transect_number=self.transect_number)
-            except:
-                pass
-
-        super(Transect, self).save(force_insert, force_update, *args, **kwargs)
-        self.__original_transect = self.transect_number
-        return self
-
 
 
 class RetreatZoneManager(models.Manager):
@@ -104,22 +87,6 @@ class Retreat_Zone(models.Model):
     def __unicode__(self):
         return self.zone_number
 
-    __original_zone = None
-
-    def __init__(self, *args, **kwargs):
-        super(Retreat_Zone, self).__init__(*args, **kwargs)
-        self.__original_zone = self.zone_number
-
-    def save(self, force_insert=False, force_update=False, *args, **kwargs):
-        if self.zone_number != self.__original_zone:
-            try:
-                return Retreat_Zone.objects.get(zone_number=self.zone_number)
-            except:
-                pass
-
-        super(Retreat_Zone, self).save(force_insert, force_update, *args, **kwargs)
-        self.__original_zone = self.zone_number
-        return self
 
 
 class SampleManager(models.Manager):
@@ -150,6 +117,7 @@ class Sample(models.Model):
 
     def __unicode__(self):
         return self.sample_code
+
 
 
 

@@ -4,6 +4,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+import json
+from django.core import serializers
 
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm
@@ -15,11 +17,17 @@ from mappingapp.extract import process_file
 
 
 def index(request):
+
     context = RequestContext(request)
 
-    context_dict = {}
+    coordinates = {'coords': []}
+    samples = Sample.objects.all()
+    for sample in samples:
+        coordinates['coords'] = list = coordinates['coords']
+        list.append({'lat': sample.sample_coordinates.latitude, 'lng':sample.sample_coordinates.longitude})
 
-    return render_to_response('mappingapp/index.html', context_dict, context)
+
+    return render_to_response('mappingapp/index.html', {"results": coordinates}, context)
 
 
 @login_required
@@ -108,6 +116,10 @@ def edittcn(request):
 
     site = sample.samp_site
 
+    site_coords = site.site_coordinates
+
+    sample_coords = sample.sample_coordinates
+
     tcn = TCN_Sample.objects.get(tcn_sample=sample.pk)
 
     transect = None
@@ -122,9 +134,9 @@ def edittcn(request):
     if request.method == 'POST':
 
         sampForm = SampleForm(request.POST, instance=sample)
-        samplecoordForm = CoordinatesForm(request.POST, prefix='sample', instance=sample.sample_coordinates)
+        samplecoordForm = CoordinatesForm(request.POST, prefix='sample', instance=sample_coords)
         siteForm = SampleSiteForm(request.POST, instance=site)
-        sitecoordForm = CoordinatesForm(request.POST, prefix='site', instance=site.site_coordinates)
+        sitecoordForm = CoordinatesForm(request.POST, prefix='site', instance=site_coords)
         tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat)
         tcnForm = TCNForm(request.POST, instance=tcn)
@@ -135,52 +147,42 @@ def edittcn(request):
         # Have we been provided with a complete set of valid forms?
         # if yes save forms sequentially in order to supply foreign key values
         # where required
-        if sampForm.is_valid():
-            # and tcnForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
-            # samplecoordForm.is_valid() and sitecoordForm.is_valid() and siteForm.is_valid() and\
-            # bearincForm.is_valid():
+        if sampForm.is_valid() and tcnForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
+            samplecoordForm.is_valid() and sitecoordForm.is_valid() and siteForm.is_valid() and\
+            bearincForm.is_valid():
 
+            if samplecoordForm.has_changed():
+                sample_coords = samplecoordForm.save()
 
-            #samplecoordForm.save()
+            if tranForm.has_changed():
+                transect = tranForm.save()
 
-            # transect = tranForm.save()
-            #
-            # retreat = retForm.save()
+            if retForm.has_changed():
+                retreat = retForm.save()
 
-            #site_coords = None
-            #sitecoordForm.save()
-
-
-
-            # bearinc = bearincForm.save()
-            #
-            # site = siteForm.save()
+            if sitecoordForm.has_changed():
+                site_coords = sitecoordForm.save()
 
             # fix sample type!!!!!!
-            #if site is None and (retreat is not None or transect is not None or site_coords is not None):
-            #    site = Sample_Site.objects.create_site(None, None, None, None, None, None, None, None, None, None,
-            #                                            transect, retreat, sampcoords)
-                #site.save()
+            if site is None and (retreat is not None or transect is not None or site_coords is not None):
+                site = Sample_Site.objects.get_or_create(None, None, None, None, None, None, None, None, None, None,
+                                                        transect, retreat, site_coords)
 
-            #samp = None
-            #if sampForm.is_valid():
-            samp = sampForm.save(commit=False)
-                # samp.sample_coordinates = sampcoords
-                # samp.samp_site = site
-            samp.save()
+            else:
+                site.site_coordinates = site_coords
+                site.site_transect = transect
+                site.site_retreat = retreat
 
-            # tcnsample = None
-            # if tcnForm.is_valid():
-            #     tcnsample = tcnForm.save()
-            #
-            #     if tcnsample is not None:
-            #         tcnsample.tcn_sample = samp
-            #         tcnsample.save()
-            #
-            # if tcnsample is None and samp is not None:
-            #     tcnsample = TCN_Sample.objects.create_tcn(None, None, None, None, None, None, None, None, samp)
-            #     tcnsample.save()
-            #
+            site.save()
+
+            sample = sampForm.save(commit=False)
+            sample.sample_coordinates = sample_coords
+            sample.samp_site = site
+            sample.save()
+
+            if tcnForm.has_changed():
+                tcnForm.save()
+
             # sampleBI = sampleBIForm.save(commit=False)
             # sampleBI.sample_with_bearing = tcnsample
             # sampleBI.bear_inc = bearinc
@@ -188,6 +190,7 @@ def edittcn(request):
             #
             # tcnsample.sample_bearings = sampleBI
             # tcnsample.save()
+            bearincForm.save()
 
 
             # Now call the index() view.
@@ -198,9 +201,9 @@ def edittcn(request):
             print sample.errors
     else:
         sampForm = SampleForm(instance=sample)
-        samplecoordForm = CoordinatesForm(prefix='sample', instance=sample.sample_coordinates)
+        samplecoordForm = CoordinatesForm(prefix='sample', instance=sample_coords)
         siteForm = SampleSiteForm(instance=site)
-        sitecoordForm = CoordinatesForm(prefix='site', instance=site.site_coordinates)
+        sitecoordForm = CoordinatesForm(prefix='site', instance=site_coords)
         tranForm = TransectForm(instance=transect)
         retForm = RetreatForm(instance=retreat)
         tcnForm = TCNForm(instance=tcn)

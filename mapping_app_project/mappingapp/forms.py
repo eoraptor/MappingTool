@@ -45,7 +45,11 @@ class CoordinatesForm(forms.ModelForm):
             coords.latitude is None and coords.longitude is None and coords.elevation == '':
             return None
         else:
-            return coords.save()
+            return Coordinates.objects.get_or_create(bng_ing=coords.bng_ing, grid_reference=coords.grid_reference,
+                                                     easting=coords.easting, northing=coords.northing,
+                                                     latitude=coords.latitude, longitude=coords.longitude,
+                                                     elevation=coords.elevation)[0]
+
 
 
 class TransectForm(forms.ModelForm):
@@ -59,7 +63,7 @@ class TransectForm(forms.ModelForm):
     def save(self, commit=True):
         transect = super(TransectForm, self).save(commit=False)
         if transect.transect_number != '':
-            return transect.save()
+            return Transect.objects.get_or_create(transect_number=transect.transect_number)[0]
 
 
 class RetreatForm(forms.ModelForm):
@@ -73,7 +77,7 @@ class RetreatForm(forms.ModelForm):
     def save(self, commit=True):
         retreat = super(RetreatForm, self).save(commit=False)
         if retreat.zone_number != '':
-            return retreat.save()
+            return Retreat_Zone.objects.get_or_create(zone_number=retreat.zone_number)[0]
 
 
 class SampleForm(forms.ModelForm):
@@ -93,6 +97,8 @@ class SampleForm(forms.ModelForm):
 
     class Meta:
         model = Sample
+
+
 
 
 class RadiocarbonForm(forms.ModelForm):

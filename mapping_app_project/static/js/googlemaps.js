@@ -1,6 +1,17 @@
-var markers = [];
+var map;
 
 (function() {
+    var mapicons = [];
+    mapicons['tcn'] = new google.maps.MarkerImage(
+    '/static/imgs/ylw-circle.png',
+    null,
+    null,
+    null,
+    new google.maps.Size(28, 28)
+    );
+
+
+
     window.onload = function() {
         var mapDiv = document.getElementById('map-canvas');
 
@@ -16,21 +27,30 @@ var markers = [];
                         style: google.maps.ZoomControlStyle.SMALL
                 }};
 
-        var map = new google.maps.Map(mapDiv, map_options);
+        map = new google.maps.Map(mapDiv, map_options);
 
-    var iconBase = 'http://labs.google.com/ridefinder/images/';
-        var icons = {
-          parking: {
+    for (var i = 0; i < coordinates.coords.length; i++) {
+        var coord = coordinates.coords[i];
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(coord.lat, coord.lng),
+            map: map,
+            icon: mapicons['tcn']
+        });}
+
+
+    var iconBase = "/static/imgs/"
+    var icons = {
+            osl: {
             name: 'OSL  ',
-            icon: iconBase + 'mm_20_red.png'
+            icon: iconBase + 'grn-circle.png'
           },
-          library: {
+            tcn: {
             name: '  TCN  ',
-            icon: iconBase + 'mm_20_green.png'
+            icon: iconBase + 'ylw-circle.png'
           },
-          info: {
+            c14: {
             name: '  C14  ',
-            icon: iconBase + 'mm_20_yellow.png'
+            icon: iconBase + 'purple-circle.png'
           }
         };
 
@@ -41,7 +61,7 @@ var markers = [];
           var name = type.name;
           var icon = type.icon;
           var div = document.createElement("row");
-          div.innerHTML = name + '<img src="' + icon + '">';
+          div.innerHTML = name + '<img src="' + icon + '" height="15px">';
           legend.appendChild(div);
         }
    map.controls[google.maps.ControlPosition.BOTTOM].push(legend);
@@ -58,4 +78,5 @@ var markers = [];
     });
   }
 })();
+
 

@@ -80,11 +80,12 @@ img#logo {
 }
 
 #map-legend {
-    font-family: Arial, sans-serif, 5px;
-    background: #ddd;
+    font-family: "Century Schoolbook", sans-serif, 5px;
+    background: #eee;
     padding: 2px;
     margin: 10px;
     border: 1px solid #444;
+    box-shadow:0 0 5px #555;
 }
 
 
