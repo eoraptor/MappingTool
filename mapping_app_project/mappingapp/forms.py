@@ -244,7 +244,8 @@ class PhotoOfForm(forms.ModelForm):
 
 class ExistingSitesForm(forms.Form):
 
-    sites = forms.ModelChoiceField(help_text="Select from existing sites", queryset=Sample_Site.objects.all())
+    sites = forms.ModelChoiceField(help_text="Select from existing sites:",
+                                   queryset=Sample_Site.objects.values_list('site_name', flat=True))
 
 
 

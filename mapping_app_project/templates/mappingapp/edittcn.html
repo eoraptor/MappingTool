@@ -208,15 +208,40 @@
                 </fieldset>
                         </div><br />
 
-                    <div class="span2 text-center">
-                        <h4>Sample Site</h4>
+                    <fieldset class="standard" id="coordinates">
+                        <legend class="fieldsets">Sample Site</legend>
                         {{ sitechoices.sites.errors }}
                         <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
                         {{ sitechoices.sites }}
-                    </div><br />
 
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutt">
+                View Site Details
+                </button><br />
+                        <div id="hello"></div>
+                        </fieldset><br />
+
+                    <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Site Details</h4>
+      </div>
+      <div class="modal-body" id="mod-bod">
+          <div class="row">
+          <h5>Site Name:</h5><div id="site-name"></div></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
                 <div class="span2 text-center">
-                    <button type="submit" class="btn btn-success btn-xl">Save</button>
+                    <button type="submit" class="btn btn-success btn-xl" name="save-button">Save</button>
+
                 </div>
             </div>
         </div>

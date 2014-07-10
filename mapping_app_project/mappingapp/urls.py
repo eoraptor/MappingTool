@@ -10,6 +10,6 @@ urlpatterns = patterns('',
         url(r'^edittcn/', views.edittcn, name='edittcn'),
         url(r'^login/$', views.userlogin, name='userlogin'),
         url(r'^logout/$', views.user_logout, name='logout'),
-        )
+        url(r'^sites/$', views.sites, name='sites'),)
 
 

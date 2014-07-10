@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 import json
 from django.core import serializers
 
+
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form
@@ -14,6 +15,22 @@ from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, 
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 from mappingapp.extract import process_file
+
+
+def sites(request):
+    context = RequestContext(request)
+
+    site_name = None
+
+    if request.method == 'GET':
+        site_name = request.GET['site_name']
+
+
+    site = Sample_Site.objects.get(site_name=site_name)
+
+    site_details = json.dumps([{'name':site.site_name}])
+
+    return HttpResponse(site_details, mimetype='application/json')
 
 
 def index(request):
