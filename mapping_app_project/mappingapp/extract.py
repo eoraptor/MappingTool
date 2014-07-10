@@ -81,8 +81,8 @@ def get_site_info(wb):
         site = Sample_Site.objects.get_or_create(site_name=site_name, site_location=site_location, county=None,
                                                  site_date=site_date, operator=None, geomorph_setting=geomorph,
                                                  sample_type_collected=type, photos_taken=photographs,
-                                                 photographs=photo_labels, site_notes=site_notes, site_transect=None,
-                                                 site_retreat=None, site_coordinates=coords)[0]
+                                                 photographs=photo_labels, site_notes=site_notes,
+                                                 site_coordinates=coords)[0]
     return site
 
 
@@ -230,6 +230,8 @@ def get_tcn_sample_info(sample_sheet, site):
     if longitude is not None:
         longitude = convert_lat_long(longitude)
 
+    transect = Transect.objects.get_or_create(transect_number=transect)[0]
+
     coords = Coordinates.objects.get_or_create(bng_ing=bng_ing, grid_reference=None, easting=sample_easting,
                                                northing=sample_northing, latitude=latitude, longitude=longitude,
                                                elevation=elevation)[0]
@@ -238,7 +240,7 @@ def get_tcn_sample_info(sample_sheet, site):
                                           collection_date=sample_date, collector=collector, sample_notes=notes,
                                           dating_priority=None, age=None, age_error=None, calendar_age=None,
                                           calendar_error=None, lab_code=None, sample_coordinates=coords,
-                                          samp_site=site)[0]
+                                          sample_site=site, transect=transect, retreat=None)[0]
 
     tcn_data = TCN_Sample.objects.get_or_create(quartz_content=quartz, sample_setting=setting, sampled_material=material,
                                                 boulder_dimensions=boulder_dim, sample_surface_strike_dip=surface_strike,
@@ -283,7 +285,6 @@ def process_file(filename):
 
     wb = load_workbook(filename, use_iterators=True)
     site = get_site_info(wb)
-    transect = None
 
     sheet_names = wb.get_sheet_names()
     for sheet in sheet_names:
@@ -295,18 +296,10 @@ def process_file(filename):
                 results = get_tcn_sample_info(ws, site)
                 sample_code = results[0]
                 samples.append(sample_code)
-                if transect is None:
-                    transect = Transect.objects.get_or_create(transect_number=results[1])[0]
 
-    if transect is not None and site is not None:
-        Sample_Site.objects.filter(pk=site.pk).update(site_transect=transect)
-    elif transect is not None:
-        site = Sample_Site.objects.create_site(None, None, None, None, None, None, None, None, None, None, transect,
-                                               None, None)
-        site.save()
+    for sample in samples:
+        Sample.objects.filter(sample_code=sample).update(sample_site=site)
 
-        for sample in samples:
-            Sample.objects.filter(sample_code=sample).update(samp_site=site)
     return samples
 
 

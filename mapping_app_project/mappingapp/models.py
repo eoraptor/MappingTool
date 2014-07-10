@@ -65,7 +65,12 @@ class TransectManager(models.Manager):
 
 
 class Transect(models.Model):
-    transect_number = models.CharField(max_length=3, null=True, blank=True)
+
+    TRANSECT_CHOICES = (('T1', 'T1'), ('T2', 'T2'), ('T3', 'T3'), ('T4', 'T4'), ('T5', 'T5'), ('T6', 'T6'),
+                        ('T7', 'T7'), ('T8', 'T8'))
+
+    transect_number = models.CharField(max_length=2, choices=TRANSECT_CHOICES,
+                                       null=True, blank=True)
 
     objects = TransectManager()
 
@@ -91,11 +96,11 @@ class Retreat_Zone(models.Model):
 
 class SampleManager(models.Manager):
     def create_sample(self, code, location, date, collector, notes, priority, age, age_error,
-                      cal_age, cal_error, lab_code, coords, site):
+                      cal_age, cal_error, lab_code, coords, site, transect, retreat):
         sample = self.create(sample_code=code, sample_location_name=location, collection_date=date, collector=collector,
                              sample_notes=notes, dating_priority=priority, age=age, age_error=age_error,
                              calendar_age=cal_age, calendar_error=cal_error, lab_code=lab_code,
-                             sample_coordinates=coords, samp_site=site)
+                             sample_coordinates=coords, sample_site=site, transect=transect, retreat=retreat)
         return sample
 
 class Sample(models.Model):
@@ -111,7 +116,10 @@ class Sample(models.Model):
     calendar_error = models.IntegerField(null=True, blank=True)
     lab_code = models.CharField(max_length=255, null=True, blank=True)
     sample_coordinates = models.ForeignKey(Coordinates, null=True, blank=True)
-    samp_site = models.ForeignKey('Sample_Site', null=True, blank=True)
+    sample_site = models.ForeignKey('Sample_Site', null=True, blank=True)
+    transect = models.ForeignKey(Transect, null=True, blank=True)
+    retreat = models.ForeignKey(Retreat_Zone, null=True, blank=True)
+
 
     objects = SampleManager()
 
@@ -168,10 +176,10 @@ class Radiocarbon_Sample(models.Model):
 
 class SiteManager(models.Manager):
     def create_site(self, name, location, county, date, operator, setting, type, photos_taken, photographs, notes,
-                    transect, retreat, coords):
-        site = self.create(site_name=name, site_location=location, county=county, site_date=date, operator=operator, geomorph_setting=setting,
-                           sample_type_collected=type, photos_taken=photos_taken, photographs=photographs, site_notes=notes,
-                           site_transect=transect, site_retreat=retreat, site_coordinates=coords)
+                    coords):
+        site = self.create(site_name=name, site_location=location, county=county, site_date=date, operator=operator,
+                           geomorph_setting=setting, sample_type_collected=type, photos_taken=photos_taken,
+                           photographs=photographs, site_notes=notes, site_coordinates=coords)
         return site
 
 
@@ -186,8 +194,6 @@ class Sample_Site(models.Model):
     photos_taken = models.NullBooleanField(null=True, blank=True)
     photographs = models.CharField(max_length=255, null=True, blank=True)
     site_notes = models.TextField(null=True, blank=True)
-    site_transect = models.ForeignKey(Transect, null=True, blank=True)
-    site_retreat = models.ForeignKey(Retreat_Zone, null=True, blank=True)
     site_coordinates = models.ForeignKey(Coordinates, null=True, blank=True)
 
     objects = SiteManager()

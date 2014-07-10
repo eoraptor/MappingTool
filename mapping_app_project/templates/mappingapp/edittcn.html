@@ -206,7 +206,14 @@
                         {{ sampform.lab_code }}
                     </div>
                 </fieldset>
-                        </div>
+                        </div><br />
+
+                    <div class="span2 text-center">
+                        <h4>Sample Site</h4>
+                        {{ sitechoices.sites.errors }}
+                        <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
+                        {{ sitechoices.sites }}
+                    </div><br />
 
                 <div class="span2 text-center">
                     <button type="submit" class="btn btn-success btn-xl">Save</button>

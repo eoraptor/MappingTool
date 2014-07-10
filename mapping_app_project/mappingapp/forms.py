@@ -27,13 +27,20 @@ class PhotographForm(forms.ModelForm):
 
 
 class CoordinatesForm(forms.ModelForm):
-    bng_ing = forms.CharField(help_text='BNG/ING', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
-    grid_reference = forms.CharField(help_text='Grid Reference', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    easting = forms.IntegerField(help_text='Easting', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    northing = forms.IntegerField(help_text='Northing', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    latitude = forms.FloatField(help_text='Latitude', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    longitude = forms.FloatField(help_text='Longitude', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    elevation = forms.CharField(help_text='Elevation', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 4}))
+    bng_ing = forms.CharField(help_text='BNG/ING', required=False,
+                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+    grid_reference = forms.CharField(help_text='Grid Reference', required=False,
+                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    easting = forms.IntegerField(help_text='Easting', required=False,
+                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    northing = forms.IntegerField(help_text='Northing', required=False,
+                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    latitude = forms.FloatField(help_text='Latitude', required=False,
+                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    longitude = forms.FloatField(help_text='Longitude', required=False,
+                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    elevation = forms.CharField(help_text='Elevation', required=False,
+                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 4}))
 
     class Meta:
         model = Coordinates
@@ -53,9 +60,10 @@ class CoordinatesForm(forms.ModelForm):
 
 
 class TransectForm(forms.ModelForm):
-    transect_number = forms.CharField(help_text='Transect', required=False,
-                                      widget=forms.Textarea(attrs={'class': 'noresize', 'rows': 1, 'cols': 2,
-                                                                   'resize': 'none'}))
+
+    TRANSECT_CHOICES = (('T1', 'T1'), ('T2', 'T2'), ('T3', 'T3'), ('T4', 'T4'), ('T5', 'T5'), ('T6', 'T6'),
+                        ('T7', 'T7'), ('T8', 'T8'))
+    transect_number = forms.ChoiceField(help_text='Transect', required=False, choices=TRANSECT_CHOICES)
 
     class Meta:
         model = Transect
@@ -81,18 +89,30 @@ class RetreatForm(forms.ModelForm):
 
 
 class SampleForm(forms.ModelForm):
-    sample_code = forms.CharField(help_text='Sample Code', required=True, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    sample_location_name = forms.CharField(help_text='Sample Location Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 45}))
-    collection_date = forms.DateField(help_text='Collection Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    collector = forms.CharField(help_text='Collector(s)', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
-    sample_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 69}))
-    dating_priority = forms.CharField(help_text='Dating Priority', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    age = forms.IntegerField(help_text='Sample Age', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    age_error = forms.IntegerField(help_text='Age Error', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    calendar_age = forms.IntegerField(help_text='Calendar Age', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    calendar_error = forms.IntegerField(help_text='Calendar Error', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    lab_code = forms.CharField(help_text='Lab Code', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    sample_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
+    sample_code = forms.CharField(help_text='Sample Code', required=True,
+                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    sample_location_name = forms.CharField(help_text='Sample Location Name', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 45}))
+    collection_date = forms.DateField(help_text='Collection Date', required=False,
+                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    collector = forms.CharField(help_text='Collector(s)', required=False,
+                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
+    sample_notes = forms.CharField(help_text='Notes', required=False,
+                                   widget=forms.Textarea(attrs={'rows': 4, 'cols': 69}))
+    dating_priority = forms.CharField(help_text='Dating Priority', required=False,
+                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    age = forms.IntegerField(help_text='Sample Age', required=False,
+                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    age_error = forms.IntegerField(help_text='Age Error', required=False,
+                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    calendar_age = forms.IntegerField(help_text='Calendar Age', required=False,
+                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    calendar_error = forms.IntegerField(help_text='Calendar Error', required=False,
+                                        widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    lab_code = forms.CharField(help_text='Lab Code', required=False,
+                               widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    sample_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
+                                                widget=forms.HiddenInput(), required=False)
     samp_site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
@@ -123,7 +143,7 @@ class SampleSiteForm(forms.ModelForm):
     site_date = forms.DateField(help_text='Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     operator = forms.CharField(help_text='Operator', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 44}))
-    sample_type_collected = forms.ChoiceField(help_text='Sample Type', required=False, choices=(('1', 'Select'), ('2', 'C14'), ('3', 'OSL'), ('4', 'TCN')))
+    sample_type_collected = forms.CharField(help_text='Sample Type', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     photos_taken = forms.NullBooleanField(help_text='Photos Taken', required=False)
     photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 4, 'cols': 44}))
     site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 6, 'cols': 95}))
@@ -152,14 +172,22 @@ class OSLSampleForm(forms.ModelForm):
 
 
 class TCNForm(forms.ModelForm):
-    quartz_content = forms.CharField(help_text='Quartz Content', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    sample_setting = forms.CharField(help_text='Sample Setting', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
-    sampled_material = forms.CharField(help_text='Sampled Material', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
-    boulder_dimensions = forms.CharField(help_text='Boulder Dimensions', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 14}))
-    sample_surface_strike_dip = forms.CharField(help_text='Surface Strike/Dip', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    sample_thickness = forms.CharField(help_text='Thickness', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    grain_size = forms.CharField(help_text='Grain Size', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
-    lithology = forms.CharField(help_text='Lithology', required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+    quartz_content = forms.CharField(help_text='Quartz Content', required=False,
+                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    sample_setting = forms.CharField(help_text='Sample Setting', required=False,
+                                     widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+    sampled_material = forms.CharField(help_text='Sampled Material', required=False,
+                                       widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+    boulder_dimensions = forms.CharField(help_text='Boulder Dimensions', required=False,
+                                         widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 14}))
+    sample_surface_strike_dip = forms.CharField(help_text='Surface Strike/Dip', required=False,
+                                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    sample_thickness = forms.CharField(help_text='Thickness', required=False,
+                                       widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    grain_size = forms.CharField(help_text='Grain Size', required=False,
+                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
+    lithology = forms.CharField(help_text='Lithology', required=False,
+                                widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
     tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
@@ -212,6 +240,11 @@ class PhotoOfForm(forms.ModelForm):
 
     class Meta:
         model = Photo_Of
+
+
+class ExistingSitesForm(forms.Form):
+
+    sites = forms.ModelChoiceField(help_text="Select from existing sites", queryset=Sample_Site.objects.all())
 
 
 
