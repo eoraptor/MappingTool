@@ -111,21 +111,37 @@ img#logo {
     background: #f9f9f9;
 }
 
-#mod-content {
-    background: #F6F6DD;
-}
 
 #mod-foot {
-    background: #F6ECAE;
+    background: #D4E2A4;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-top: 0px;
 }
 
 #mod-header {
-    background: #F6ECAE;
+    background: #D4E2A4;
+    padding-top: 4px;
+    padding-bottom: 4px;
+
 }
 
 
 #mod-bod {
     font-size: 12px;
     vertical-align: middle;
+    padding-bottom: 5px;
+    margin-bottom: 0px;
+    background: #EDEBAC;
+}
+
+#modo {
+    width: 630px;
+    /* must be half of the width, minus scrollbar on the left (30px) */
+    margin-left: 280px;
+}
+
+.panel-body {
+    background: #FFFEDC;
 }
 

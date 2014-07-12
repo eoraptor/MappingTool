@@ -222,8 +222,8 @@
             </fieldset><br />
 
                     <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade myModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" id="modo">
     <div class="modal-content" id="mod-content">
       <div class="modal-header" id="mod-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -231,7 +231,18 @@
       </div>
       <div class="modal-body" id="mod-bod">
 
-                        <div class="formspan">
+          <div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          Site Information
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in">
+      <div class="panel-body">
+                                <div class="formspan">
                         {{ siteform.site_name.errors }}
                         <label class="formlabel">{{ siteform.site_name.help_text }}</label>
                         {{ siteform.site_name }}
@@ -271,8 +282,6 @@
                         <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
                         {{ siteform.sample_type_collected }}
                         </div>
-
-
                     <div class="formspan">
                         {{ siteform.geomorph_setting.errors }}
                         <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>
@@ -283,6 +292,26 @@
                         <label class="formlabel">{{ siteform.site_notes.help_text }}</label>
                         {{ siteform.site_notes }}
                     </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+          Site Coordinates
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      </div>
+    </div>
+  </div>
+</div>
+
 
     </div>
       <div class="modal-footer" id="mod-foot">
