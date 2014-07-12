@@ -1,0 +1,13 @@
+<div>
+<form id="edittcn_form" method="post" action="/mappingapp/edittcn/">
+
+            {% csrf_token %}
+             {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+
+     </form>
+
+</div>

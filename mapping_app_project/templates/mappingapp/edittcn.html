@@ -206,35 +206,87 @@
                         {{ sampform.lab_code }}
                     </div>
                 </fieldset>
-                        </div><br />
+            </div><br />
 
-                    <fieldset class="standard" id="coordinates">
-                        <legend class="fieldsets">Sample Site</legend>
-                        {{ sitechoices.sites.errors }}
-                        <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
-                        {{ sitechoices.sites }}
+            <fieldset class="standard" id="coordinates">
+                <legend class="fieldsets">Sample Site</legend>
+                {{ sitechoices.sites.errors }}
+                <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
+                {{ sitechoices.sites }}
 
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutt">
-                View Site Details
-                </button><br />
-                        <div id="hello"></div>
-                        </fieldset><br />
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton">
+            View Site Details</button>
+            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutt">
+            Add New Site</button><br />
+            </fieldset><br />
 
                     <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content" id="mod-content">
+      <div class="modal-header" id="mod-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel">Site Details</h4>
       </div>
       <div class="modal-body" id="mod-bod">
-          <div class="row">
-          <h5>Site Name:</h5><div id="site-name"></div></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        <div class="formspan">
+                        {{ siteform.site_name.errors }}
+                        <label class="formlabel">{{ siteform.site_name.help_text }}</label>
+                        {{ siteform.site_name }}
+                        </div>
+                         <div class="formspan">
+                        {{ siteform.county.errors }}
+                        <label class="formlabel">{{ siteform.county.help_text }}</label>
+                        {{ siteform.county }}
+                        </div>
+                        <div class="formspan">
+                         {{ siteform.site_date.errors }}
+                        <label class="formlabel">{{ siteform.site_date.help_text }}</label>
+                        {{ siteform.site_date }}
+                        </div>
+                        <div class="formspan">
+                        {{ siteform.photos_taken.errors }}
+                        <label class="formlabel">{{ siteform.photos_taken.help_text }}</label>
+                        {{ siteform.photos_taken }}
+                        </div><br />
+                        <div class="formspan">
+                        {{ siteform.site_location.errors }}
+                        <label class="formlabel">{{ siteform.site_location.help_text }}</label>
+                        {{ siteform.site_location }}
+                        </div>
+                         <div class="formspan">
+                        {{ siteform.photographs.errors }}
+                        <label class="formlabel">{{ siteform.photographs.help_text }}</label>
+                        {{ siteform.photographs }}
+                        </div><br />
+                        <div class="formspan">
+                        {{ siteform.operator.errors }}
+                        <label class="formlabel">{{ siteform.operator.help_text }}</label>
+                        {{ siteform.operator }}
+                        </div>
+                        <div class="formspan">
+                        {{ siteform.sample_type_collected.errors }}
+                        <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
+                        {{ siteform.sample_type_collected }}
+                        </div>
+
+
+                    <div class="formspan">
+                        {{ siteform.geomorph_setting.errors }}
+                        <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>
+                        {{ siteform.geomorph_setting }}
+                    </div>
+                    <div class="formspan">
+                        {{ siteform.site_notes.errors }}
+                        <label class="formlabel">{{ siteform.site_notes.help_text }}</label>
+                        {{ siteform.site_notes }}
+                    </div>
+
+    </div>
+      <div class="modal-footer" id="mod-foot">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

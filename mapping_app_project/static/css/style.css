@@ -67,6 +67,7 @@ button.btn-xl {
     padding: 18px 38px;
     font-size: 22px;
     border-radius: 8px;
+
 }
 
 
@@ -108,5 +109,23 @@ img#logo {
 
 #tcntabContent {
     background: #f9f9f9;
+}
+
+#mod-content {
+    background: #F6F6DD;
+}
+
+#mod-foot {
+    background: #F6ECAE;
+}
+
+#mod-header {
+    background: #F6ECAE;
+}
+
+
+#mod-bod {
+    font-size: 12px;
+    vertical-align: middle;
 }
 

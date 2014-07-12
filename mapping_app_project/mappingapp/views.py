@@ -25,10 +25,14 @@ def sites(request):
     if request.method == 'GET':
         site_name = request.GET['site_name']
 
-
     site = Sample_Site.objects.get(site_name=site_name)
 
-    site_details = json.dumps([{'name':site.site_name}])
+    date = site.site_date.strftime('%d/%m/%Y')
+
+    site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
+                                'operator':site.operator, 'type':site.sample_type_collected,
+                                'geomorph':site.geomorph_setting, 'photographs':site.photographs,
+                                'notes':site.site_notes, 'photos_taken':site.photos_taken, 'date':date}])
 
     return HttpResponse(site_details, mimetype='application/json')
 
@@ -55,7 +59,6 @@ def search(request):
     context_dict = {}
 
     return render_to_response('mappingapp/search.html', context_dict, context)
-
 
 
 def results(request):
