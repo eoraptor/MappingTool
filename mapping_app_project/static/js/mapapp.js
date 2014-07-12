@@ -18,16 +18,19 @@
          $('#id_photographs').text(val.photographs, true);
          $('#id_site_notes').text(val.notes, true);
          $('#id_geomorph_setting').text(val.geomorph, true);
-
          $('#id_sample_type_collected').text(val.type, true);
-         if (val.photos_taken == True) {
-             val.photos_taken = 'Yes'
-         }else if (val.photos_taken == False) {
-             val.photos_taken = 'No'
-         }else {
-             val.photos_taken = 'Unknown'
-         }
-         $('#id_photos_taken').text(val.photos_taken, true);
+         $("#id_photos_taken").val(val.photos_taken);
            });
      });
+});
+
+
+
+
+
+
+$(function() {
+$( "#accordion" ).accordion({
+collapsible: true
+});
 });
