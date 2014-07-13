@@ -29,13 +29,15 @@ var map;
 
         map = new google.maps.Map(mapDiv, map_options);
 
-    for (var i = 0; i < coordinates.coords.length; i++) {
-        var coord = coordinates.coords[i];
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(coord.lat, coord.lng),
+    $.getJSON('/mappingapp/markers/', function(data){
+        $.each(data, function( key, val) {
+            var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(val.latitude, val.longitude),
             map: map,
             icon: mapicons['tcn']
-        });}
+            })
+        })
+    })
 
 
     var iconBase = "/static/imgs/"

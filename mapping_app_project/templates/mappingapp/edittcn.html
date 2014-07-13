@@ -13,370 +13,364 @@
 {% block body_block %}
 
 <div class="jumbotron" id="editjumbo">
+    <form id="edittcn_form" method="post" action="/mappingapp/edittcn/">
 
-     <form id="edittcn_form" method="post" action="/mappingapp/edittcn/">
+        {% csrf_token %}
 
-            {% csrf_token %}
+        {% for hidden in siteform.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% for hidden in tcnform.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% for hidden in sampform.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% for hidden in bearincform.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% for hidden in sampleBIform.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
 
-            {% for hidden in siteform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for hidden in tcnform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for hidden in sampform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for hidden in bearincform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for hidden in sampleBIform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-
-
-    <div class="bs-example bs-example-tabs">
-        <ul id="tcntab" class="nav nav-tabs" role="tablist">
-            <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>
-            <li><a href="#photo-tab" role="tab" data-toggle="tab">Photographs</a></li>
-        </ul>
-        <div id="tcntabContent" class="tab-content">
-            <div class="tab-pane fade in active" id="samp-tab"><br />
-                <div class="container-fluid">
-                    <div class="col-md-6" id="leftcol">
-                    <fieldset class="standard">
-                        <legend class="fieldsets">TCN Sample Details</legend>
+        <div class="bs-example bs-example-tabs">
+            <ul id="tcntab" class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>
+                <li><a href="#photo-tab" role="tab" data-toggle="tab">Photographs</a></li>
+            </ul>
+            <div id="tcntabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="samp-tab"><br />
+                    <div class="container-fluid">
+                        <div class="col-md-6" id="leftcol">
+                        <fieldset class="standard">
+                            <legend class="fieldsets">TCN Sample Details</legend>
+                            <div class="formspan">
+                                {{ sampform.sample_code.errors }}
+                                <label class="formlabel">{{ sampform.sample_code.help_text }}</label>
+                                {{ sampform.sample_code }}
+                            </div>
+                            <div class="formspan">
+                                {{ tranform.transect_number.errors }}
+                                <label class="formlabel">{{ tranform.transect_number.help_text }}</label>
+                                {{ tranform.transect_number }}
+                            </div>
+                            <div class="formspan">
+                                {{ retform.zone_number.errors }}
+                                <label class="formlabel">{{ retform.zone_number.help_text }}</label>
+                                {{ retform.zone_number }}
+                            </div>
+                            <div class="formspan">
+                                {{ sampform.dating_priority.errors }}
+                                 <label class="formlabel">{{ sampform.dating_priority.help_text }}</label>
+                                {{ sampform.dating_priority }}
+                            </div>
+                            <div class="formspan">
+                                {{ sampform.collection_date.errors }}
+                                <label class="formlabel">{{ sampform.collection_date.help_text }}</label>
+                                {{ sampform.collection_date }}
+                            </div>
+                            <div class="formspan">
+                                {{ sampform.collector.errors }}
+                                <label class="formlabel">{{ sampform.collector.help_text }}</label>
+                                {{ sampform.collector }}
+                            </div>
+                            <div class="formspan">
+                                {{ sampform.sample_location_name.errors }}
+                                <label class="formlabel">{{ sampform.sample_location_name.help_text }}</label>
+                                {{ sampform.sample_location_name }}
+                            </div>
+                            <div class="formspan">
+                                {{ tcnform.sampled_material.errors }}
+                                <label class="formlabel">{{ tcnform.sampled_material.help_text }}</label>
+                                {{ tcnform.sampled_material }}
+                            </div><br/>
+                            <div class="formspan">
+                                {{ tcnform.quartz_content.errors }}
+                                <label class="formlabel">{{ tcnform.quartz_content.help_text }}</label>
+                                {{ tcnform.quartz_content }}
+                            </div>
+                            <div class="formspan">
+                                {{ tcnform.sample_surface_strike_dip.errors }}
+                                <label class="formlabel">{{ tcnform.sample_surface_strike_dip.help_text }}</label>
+                                {{ tcnform.sample_surface_strike_dip }}
+                            </div>
+                            <div class="formspan">
+                                {{ tcnform.boulder_dimensions.errors }}
+                                <label class="formlabel">{{ tcnform.boulder_dimensions.help_text }}</label>
+                                {{ tcnform.boulder_dimensions }}
+                            </div>
+                            <div class="formspan">
+                                {{ tcnform.sample_thickness.errors }}
+                                <label class="formlabel">{{ tcnform.sample_thickness.help_text }}</label>
+                                {{ tcnform.sample_thickness }}
+                            </div>
+                            <div class="formspan">
+                                {{ tcnform.grain_size.errors }}
+                                <label class="formlabel">{{ tcnform.grain_size.help_text }}</label>
+                                {{ tcnform.grain_size }}
+                            </div><br />
+                            <div class="formspan">
+                                {{ tcnform.lithology.errors }}
+                                <label class="formlabel">{{ tcnform.lithology.help_text }}</label>
+                                {{ tcnform.lithology }}
+                            </div>
+                            <div class="formspan">
+                                {{ tcnform.sample_setting.errors }}
+                                <label class="formlabel">{{ tcnform.sample_setting.help_text }}</label>
+                                {{ tcnform.sample_setting }}
+                            </div>
+                            <div class="formspan">
+                                {{ sampform.sample_notes.errors }}
+                                <label class="formlabel">{{ sampform.sample_notes.help_text }}</label>
+                                {{ sampform.sample_notes }}
+                            </div>
+                            <div class="formspan">
+                                {{ bearincform.bearing.errors }}
+                                <label class="formlabel">{{ bearincform.bearing.help_text }}</label>
+                                {{ bearincform.bearing }}
+                            </div>
+                            <div class="formspan">
+                                {{ bearincform.inclination.errors }}
+                                <label class="formlabel">{{ bearincform.inclination.help_text }}</label>
+                                {{ bearincform.inclination }}
+                            </div>
+                        </fieldset>
+                        </div>
+                        <div class="col-md-6" id="agecol">
+                    <fieldset class="standard" id="coordinates">
+                        <legend class="fieldsets">Sample Coordinates</legend>
                         <div class="formspan">
-                            {{ sampform.sample_code.errors }}
-                            <label class="formlabel">{{ sampform.sample_code.help_text }}</label>
-                            {{ sampform.sample_code }}
+                            {{ samplecoordform.latitude.errors }}
+                            <label class="formlabel">{{ samplecoordform.latitude.help_text }}</label>
+                            {{ samplecoordform.latitude }}
                         </div>
                         <div class="formspan">
-                            {{ tranform.transect_number.errors }}
-                            <label class="formlabel">{{ tranform.transect_number.help_text }}</label>
-                            {{ tranform.transect_number }}
+                            {{ samplecoordform.longitude.errors }}
+                            <label class="formlabel">{{ samplecoordform.longitude.help_text }}</label>
+                            {{ samplecoordform.longitude }}
                         </div>
                         <div class="formspan">
-                            {{ retform.zone_number.errors }}
-                            <label class="formlabel">{{ retform.zone_number.help_text }}</label>
-                            {{ retform.zone_number }}
+                            {{ samplecoordform.easting.errors }}
+                            <label class="formlabel">{{ samplecoordform.easting.help_text }}</label>
+                            {{ samplecoordform.easting }}
                         </div>
                         <div class="formspan">
-                            {{ sampform.dating_priority.errors }}
-                             <label class="formlabel">{{ sampform.dating_priority.help_text }}</label>
-                            {{ sampform.dating_priority }}
+                             {{ samplecoordform.northing.errors }}
+                            <label class="formlabel">{{ samplecoordform.northing.help_text }}</label>
+                            {{ samplecoordform.northing }}
                         </div>
                         <div class="formspan">
-                            {{ sampform.collection_date.errors }}
-                            <label class="formlabel">{{ sampform.collection_date.help_text }}</label>
-                            {{ sampform.collection_date }}
+                            {{ samplecoordform.grid_reference.errors }}
+                            <label class="formlabel">{{ samplecoordform.grid_reference.help_text }}</label>
+                            {{ samplecoordform.grid_reference }}
                         </div>
                         <div class="formspan">
-                            {{ sampform.collector.errors }}
-                            <label class="formlabel">{{ sampform.collector.help_text }}</label>
-                            {{ sampform.collector }}
+                            {{ samplecoordform.elevation.errors }}
+                            <label class="formlabel">{{ samplecoordform.elevation.help_text }}</label>
+                            {{ samplecoordform.elevation }}
                         </div>
                         <div class="formspan">
-                            {{ sampform.sample_location_name.errors }}
-                            <label class="formlabel">{{ sampform.sample_location_name.help_text }}</label>
-                            {{ sampform.sample_location_name }}
-                        </div>
-                        <div class="formspan">
-                            {{ tcnform.sampled_material.errors }}
-                            <label class="formlabel">{{ tcnform.sampled_material.help_text }}</label>
-                            {{ tcnform.sampled_material }}
-                        </div><br/>
-                        <div class="formspan">
-                            {{ tcnform.quartz_content.errors }}
-                            <label class="formlabel">{{ tcnform.quartz_content.help_text }}</label>
-                            {{ tcnform.quartz_content }}
-                        </div>
-                        <div class="formspan">
-                            {{ tcnform.sample_surface_strike_dip.errors }}
-                            <label class="formlabel">{{ tcnform.sample_surface_strike_dip.help_text }}</label>
-                            {{ tcnform.sample_surface_strike_dip }}
-                        </div>
-                        <div class="formspan">
-                            {{ tcnform.boulder_dimensions.errors }}
-                            <label class="formlabel">{{ tcnform.boulder_dimensions.help_text }}</label>
-                            {{ tcnform.boulder_dimensions }}
-                        </div>
-                        <div class="formspan">
-                            {{ tcnform.sample_thickness.errors }}
-                            <label class="formlabel">{{ tcnform.sample_thickness.help_text }}</label>
-                            {{ tcnform.sample_thickness }}
-                        </div>
-                        <div class="formspan">
-                            {{ tcnform.grain_size.errors }}
-                            <label class="formlabel">{{ tcnform.grain_size.help_text }}</label>
-                            {{ tcnform.grain_size }}
-                        </div><br />
-                        <div class="formspan">
-                            {{ tcnform.lithology.errors }}
-                            <label class="formlabel">{{ tcnform.lithology.help_text }}</label>
-                            {{ tcnform.lithology }}
-                        </div>
-                        <div class="formspan">
-                            {{ tcnform.sample_setting.errors }}
-                            <label class="formlabel">{{ tcnform.sample_setting.help_text }}</label>
-                            {{ tcnform.sample_setting }}
-                        </div>
-                        <div class="formspan">
-                            {{ sampform.sample_notes.errors }}
-                            <label class="formlabel">{{ sampform.sample_notes.help_text }}</label>
-                            {{ sampform.sample_notes }}
-                        </div>
-                        <div class="formspan">
-                            {{ bearincform.bearing.errors }}
-                            <label class="formlabel">{{ bearincform.bearing.help_text }}</label>
-                            {{ bearincform.bearing }}
-                        </div>
-                        <div class="formspan">
-                            {{ bearincform.inclination.errors }}
-                            <label class="formlabel">{{ bearincform.inclination.help_text }}</label>
-                            {{ bearincform.inclination }}
+                            {{ samplecoordform.bng_ing.errors }}
+                            <label class="formlabel">{{ samplecoordform.bng_ing.help_text }}</label>
+                            {{ samplecoordform.bng_ing }}
                         </div>
                     </fieldset>
-                    </div>
-                    <div class="col-md-6" id="agecol">
+
+                    <fieldset class="standard" id="age">
+                        <legend class="fieldsets">Sample Age</legend>
+                        <div class="formspan">
+                            {{ sampform.age.errors }}
+                            <label class="formlabel">{{ sampform.age.help_text }}</label>
+                            {{ sampform.age }}
+                        </div>
+                        <div class="formspan">
+                            {{ sampform.age_error.errors }}
+                            <label class="formlabel">{{ sampform.age_error.help_text }}</label>
+                            {{ sampform.age_error }}
+                        </div>
+                        <div class="formspan">
+                            {{ sampform.calendar_age.errors }}
+                            <label class="formlabel">{{ sampform.calendar_age.help_text }}</label>
+                            {{ sampform.calendar_age }}
+                        </div>
+                        <div class="formspan">
+                                {{ sampform.calendar_error.errors }}
+                                <label class="formlabel">{{ sampform.calendar_error.help_text }}</label>
+                                {{ sampform.calendar_error }}
+                        </div>
+                        <div class="formspan">
+                            {{ sampform.lab_code.errors }}
+                            <label class="formlabel">{{ sampform.lab_code.help_text }}</label>
+                            {{ sampform.lab_code }}
+                        </div>
+                    </fieldset>
+                </div><br />
+
                 <fieldset class="standard" id="coordinates">
-                    <legend class="fieldsets">Sample Coordinates</legend>
-                    <div class="formspan">
-                        {{ samplecoordform.latitude.errors }}
-                        <label class="formlabel">{{ samplecoordform.latitude.help_text }}</label>
-                        {{ samplecoordform.latitude }}
-                    </div>
-                    <div class="formspan">
-                        {{ samplecoordform.longitude.errors }}
-                        <label class="formlabel">{{ samplecoordform.longitude.help_text }}</label>
-                        {{ samplecoordform.longitude }}
-                    </div>
-                    <div class="formspan">
-                        {{ samplecoordform.easting.errors }}
-                        <label class="formlabel">{{ samplecoordform.easting.help_text }}</label>
-                        {{ samplecoordform.easting }}
-                    </div>
-                    <div class="formspan">
-                         {{ samplecoordform.northing.errors }}
-                        <label class="formlabel">{{ samplecoordform.northing.help_text }}</label>
-                        {{ samplecoordform.northing }}
-                    </div>
-                    <div class="formspan">
-                        {{ samplecoordform.grid_reference.errors }}
-                        <label class="formlabel">{{ samplecoordform.grid_reference.help_text }}</label>
-                        {{ samplecoordform.grid_reference }}
-                    </div>
-                    <div class="formspan">
-                        {{ samplecoordform.elevation.errors }}
-                        <label class="formlabel">{{ samplecoordform.elevation.help_text }}</label>
-                        {{ samplecoordform.elevation }}
-                    </div>
-                    <div class="formspan">
-                        {{ samplecoordform.bng_ing.errors }}
-                        <label class="formlabel">{{ samplecoordform.bng_ing.help_text }}</label>
-                        {{ samplecoordform.bng_ing }}
-                    </div>
-                </fieldset>
+                    <legend class="fieldsets">Sample Site</legend>
+                    {{ sitechoices.sites.errors }}
+                    <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
+                    {{ sitechoices.sites }}
 
-                <fieldset class="standard" id="age">
-                    <legend class="fieldsets">Sample Age</legend>
-                    <div class="formspan">
-                        {{ sampform.age.errors }}
-                        <label class="formlabel">{{ sampform.age.help_text }}</label>
-                        {{ sampform.age }}
-                    </div>
-                    <div class="formspan">
-                        {{ sampform.age_error.errors }}
-                        <label class="formlabel">{{ sampform.age_error.help_text }}</label>
-                        {{ sampform.age_error }}
-                    </div>
-                    <div class="formspan">
-                        {{ sampform.calendar_age.errors }}
-                        <label class="formlabel">{{ sampform.calendar_age.help_text }}</label>
-                        {{ sampform.calendar_age }}
-                    </div>
-                    <div class="formspan">
-                            {{ sampform.calendar_error.errors }}
-                            <label class="formlabel">{{ sampform.calendar_error.help_text }}</label>
-                            {{ sampform.calendar_error }}
-                    </div>
-                    <div class="formspan">
-                        {{ sampform.lab_code.errors }}
-                        <label class="formlabel">{{ sampform.lab_code.help_text }}</label>
-                        {{ sampform.lab_code }}
-                    </div>
-                </fieldset>
-            </div><br />
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
+                    View Site Details</button>
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
+                    Add New Site</button><br />
+                </fieldset><br />
 
-            <fieldset class="standard" id="coordinates">
-                <legend class="fieldsets">Sample Site</legend>
-                {{ sitechoices.sites.errors }}
-                <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
-                {{ sitechoices.sites }}
+                        <!-- Modal -->
+                <div class="modal fade myModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" id="modo">
+                        <div class="modal-content" id="mod-content">
+                            <div class="modal-header" id="mod-header">
+                                <button type="button"  id="modaltop" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Site Details</h4>
+                            </div>
+                            <div class="modal-body" id="mod-bod">
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
-            View Site Details</button>
-            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
-            Add New Site</button><br />
-            </fieldset><br />
+                                <div class="panel-group" id="accordion">
+                                    <div class="panel panel-default" id="paneltop">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                Site Information
+                                                </a>
+                                            </h4>
+                                         </div>
+                                        <div id="collapseOne" class="panel-collapse collapse in">
+                                            <div class="panel-body">
+                                                <div class="formspan">
+                                                    {{ siteform.site_name.errors }}
+                                                    <label class="formlabel">{{ siteform.site_name.help_text }}</label>
+                                                    {{ siteform.site_name }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ siteform.county.errors }}
+                                                    <label class="formlabel">{{ siteform.county.help_text }}</label>
+                                                    {{ siteform.county }}
+                                                </div>
+                                                <div class="formspan">
+                                                     {{ siteform.site_date.errors }}
+                                                    <label class="formlabel">{{ siteform.site_date.help_text }}</label>
+                                                    {{ siteform.site_date }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ siteform.photos_taken.errors }}
+                                                    <label class="formlabel">{{ siteform.photos_taken.help_text }}</label>
+                                                    {{ siteform.photos_taken }}
+                                                </div><br />
+                                                <div class="formspan">
+                                                    {{ siteform.site_location.errors }}
+                                                    <label class="formlabel">{{ siteform.site_location.help_text }}</label>
+                                                    {{ siteform.site_location }}
+                                                </div>
+                                                 <div class="formspan">
+                                                    {{ siteform.photographs.errors }}
+                                                    <label class="formlabel">{{ siteform.photographs.help_text }}</label>
+                                                    {{ siteform.photographs }}
+                                                </div><br />
+                                                <div class="formspan">
+                                                    {{ siteform.operator.errors }}
+                                                    <label class="formlabel">{{ siteform.operator.help_text }}</label>
+                                                    {{ siteform.operator }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ siteform.sample_type_collected.errors }}
+                                                    <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
+                                                    {{ siteform.sample_type_collected }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ siteform.geomorph_setting.errors }}
+                                                    <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>
+                                                    {{ siteform.geomorph_setting }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ siteform.site_notes.errors }}
+                                                    <label class="formlabel">{{ siteform.site_notes.help_text }}</label>
+                                                    {{ siteform.site_notes }}
+                                                </div>
 
-                    <!-- Modal -->
-<div class="modal fade myModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" id="modo">
-    <div class="modal-content" id="mod-content">
-      <div class="modal-header" id="mod-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Site Details</h4>
-      </div>
-      <div class="modal-body" id="mod-bod">
-
-          <div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-          Site Information
-        </a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
-      <div class="panel-body">
-                                <div class="formspan">
-                        {{ siteform.site_name.errors }}
-                        <label class="formlabel">{{ siteform.site_name.help_text }}</label>
-                        {{ siteform.site_name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                                    Site Coordinates
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseTwo" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <div class="formspan">
+                                                    {{ sitecoordform.latitude.errors }}
+                                                    <label class="formlabel">{{ sitecoordform.latitude.help_text }}</label>
+                                                    {{ sitecoordform.latitude }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ sitecoordform.longitude.errors }}
+                                                    <label class="formlabel">{{ sitecoordform.longitude.help_text }}</label>
+                                                    {{ sitecoordform.longitude }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ sitecoordform.easting.errors }}
+                                                    <label class="formlabel">{{ sitecoordform.easting.help_text }}</label>
+                                                    {{ sitecoordform.easting }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ sitecoordform.northing.errors }}
+                                                    <label class="formlabel">{{ sitecoordform.northing.help_text }}</label>
+                                                    {{ sitecoordform.northing }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ sitecoordform.grid_reference.errors }}
+                                                    <label class="formlabel">{{ sitecoordform.grid_reference.help_text }}</label>
+                                                    {{ sitecoordform.grid_reference }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ sitecoordform.elevation.errors }}
+                                                    <label class="formlabel">{{ sitecoordform.elevation.help_text }}</label>
+                                                    {{ sitecoordform.elevation }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ sitecoordform.bng_ing.errors }}
+                                                    <label class="formlabel">{{ sitecoordform.bng_ing.help_text }}</label>
+                                                    {{ sitecoordform.bng_ing }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" id="mod-foot">
+                                <button type="button" id="savebutton" class="btn btn-danger">Save</button>
+                                <button type="button" class="btn btn-primary" id="close" data-dismiss="modal">Close</button>
+                            </div>
                         </div>
-                         <div class="formspan">
-                        {{ siteform.county.errors }}
-                        <label class="formlabel">{{ siteform.county.help_text }}</label>
-                        {{ siteform.county }}
-                        </div>
-                        <div class="formspan">
-                         {{ siteform.site_date.errors }}
-                        <label class="formlabel">{{ siteform.site_date.help_text }}</label>
-                        {{ siteform.site_date }}
-                        </div>
-                        <div class="formspan">
-                        {{ siteform.photos_taken.errors }}
-                        <label class="formlabel">{{ siteform.photos_taken.help_text }}</label>
-                        {{ siteform.photos_taken }}
-                        </div><br />
-                        <div class="formspan">
-                        {{ siteform.site_location.errors }}
-                        <label class="formlabel">{{ siteform.site_location.help_text }}</label>
-                        {{ siteform.site_location }}
-                        </div>
-                         <div class="formspan">
-                        {{ siteform.photographs.errors }}
-                        <label class="formlabel">{{ siteform.photographs.help_text }}</label>
-                        {{ siteform.photographs }}
-                        </div><br />
-                        <div class="formspan">
-                        {{ siteform.operator.errors }}
-                        <label class="formlabel">{{ siteform.operator.help_text }}</label>
-                        {{ siteform.operator }}
-                        </div>
-                        <div class="formspan">
-                        {{ siteform.sample_type_collected.errors }}
-                        <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
-                        {{ siteform.sample_type_collected }}
-                        </div>
-                    <div class="formspan">
-                        {{ siteform.geomorph_setting.errors }}
-                        <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>
-                        {{ siteform.geomorph_setting }}
                     </div>
-                    <div class="formspan">
-                        {{ siteform.site_notes.errors }}
-                        <label class="formlabel">{{ siteform.site_notes.help_text }}</label>
-                        {{ siteform.site_notes }}
-                    </div>
-
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-          Site Coordinates
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
-      <div class="panel-body">
-        <div class="formspan">
-                        {{ sitecoordform.latitude.errors }}
-                        <label class="formlabel">{{ sitecoordform.latitude.help_text }}</label>
-                        {{ sitecoordform.latitude }}
-                    </div>
-                    <div class="formspan">
-                        {{ sitecoordform.longitude.errors }}
-                        <label class="formlabel">{{ sitecoordform.longitude.help_text }}</label>
-                        {{ sitecoordform.longitude }}
-                    </div>
-                    <div class="formspan">
-                        {{ sitecoordform.easting.errors }}
-                        <label class="formlabel">{{ sitecoordform.easting.help_text }}</label>
-                        {{ sitecoordform.easting }}
-                    </div>
-                    <div class="formspan">
-                        {{ sitecoordform.northing.errors }}
-                        <label class="formlabel">{{ sitecoordform.northing.help_text }}</label>
-                        {{ sitecoordform.northing }}
-                    </div>
-                    <div class="formspan">
-                        {{ sitecoordform.grid_reference.errors }}
-                        <label class="formlabel">{{ sitecoordform.grid_reference.help_text }}</label>
-                        {{ sitecoordform.grid_reference }}
-                    </div>
-                    <div class="formspan">
-                        {{ sitecoordform.elevation.errors }}
-                        <label class="formlabel">{{ sitecoordform.elevation.help_text }}</label>
-                        {{ sitecoordform.elevation }}
-                    </div>
-                    <div class="formspan">
-                        {{ sitecoordform.bng_ing.errors }}
-                        <label class="formlabel">{{ sitecoordform.bng_ing.help_text }}</label>
-                        {{ sitecoordform.bng_ing }}
-                    </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-    </div>
-      <div class="modal-footer" id="mod-foot">
-{#        <button type="button" id="savebutton" class="btn btn-danger">Save</button>#}
-        <button type="button" class="btn btn-primary" id="close" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+                </div>
                 <div class="span2 text-center">
                     <button type="submit" class="btn btn-success btn-xl" name="save-button">Save</button>
-
                 </div>
             </div>
         </div>
-
-
         <div class="tab-pane fade" id="photo-tab"><br />
             <div class="container-fluid">
-
                 photos go here....
                 <br />
                 <br />
                 <br />
                 <br />
                 <br />
-                </div>
             </div>
         </div>
     </div>
-</form>
-
+    </div>
+    </form>
 </div>
 {% endblock %}

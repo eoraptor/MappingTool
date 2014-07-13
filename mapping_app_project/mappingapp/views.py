@@ -17,6 +17,25 @@ from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 from mappingapp.extract import process_file
 
 
+def markers(request):
+    context = RequestContext(request)
+
+    sample_details = None
+
+    if request.method == 'GET':
+        samples = Sample.objects.all()
+        if samples is not None:
+
+            sample_details = json.dumps( [{'latitude': sample.sample_coordinates.latitude,
+                                       'longitude': sample.sample_coordinates.longitude,
+                                       'code': sample.sample_code} for sample in samples])
+
+    return HttpResponse(sample_details, mimetype='application/json')
+
+
+
+
+
 def sites(request):
     context = RequestContext(request)
 
@@ -50,14 +69,7 @@ def index(request):
 
     context = RequestContext(request)
 
-    coordinates = {'coords': []}
-    samples = Sample.objects.all()
-    for sample in samples:
-        coordinates['coords'] = list = coordinates['coords']
-        list.append({'lat': sample.sample_coordinates.latitude, 'lng':sample.sample_coordinates.longitude})
-
-
-    return render_to_response('mappingapp/index.html', {"results": coordinates}, context)
+    return render_to_response('mappingapp/index.html', {}, context)
 
 
 @login_required
