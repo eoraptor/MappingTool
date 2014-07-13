@@ -26,6 +26,7 @@ def sites(request):
         site_name = request.GET['site_name']
 
     site = Sample_Site.objects.get(site_name=site_name)
+    coords = site.site_coordinates
 
     date = site.site_date.strftime('%d/%m/%Y')
     photos_taken = 1
@@ -37,7 +38,10 @@ def sites(request):
     site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
                                 'operator':site.operator, 'type':site.sample_type_collected,
                                 'geomorph':site.geomorph_setting, 'photographs':site.photographs,
-                                'notes':site.site_notes, 'photos_taken':photos_taken, 'date':date}])
+                                'notes':site.site_notes, 'photos_taken':photos_taken, 'date':date, 'bng':coords.bng_ing,
+                                'grid':coords.grid_reference, 'easting':coords.easting, 'northing':coords.northing,
+                                'latitude':coords.latitude, 'longitude':coords.longitude,
+                                'elevation':coords.elevation}])
 
     return HttpResponse(site_details, mimetype='application/json')
 

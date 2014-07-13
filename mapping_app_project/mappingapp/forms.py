@@ -137,16 +137,16 @@ class RadiocarbonForm(forms.ModelForm):
 
 
 class SampleSiteForm(forms.ModelForm):
-    site_name = forms.CharField(help_text='Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 35, 'readonly':'readonly'}))
-    site_location = forms.CharField(help_text='Location', required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 44, 'readonly':'readonly'}))
-    county = forms.CharField(help_text='County', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20, 'readonly':'readonly'}))
-    site_date = forms.DateField(help_text='Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8, 'readonly':'readonly'}))
-    operator = forms.CharField(help_text='Operator', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20, 'readonly':'readonly'}))
-    geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 3, 'cols': 100, 'readonly':'readonly'}))
-    sample_type_collected = forms.CharField(help_text='Sample Type', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 30, 'readonly':'readonly'}))
+    site_name = forms.CharField(help_text='Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 35}))
+    site_location = forms.CharField(help_text='Location', required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
+    county = forms.CharField(help_text='County', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+    site_date = forms.DateField(help_text='Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    operator = forms.CharField(help_text='Operator', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+    geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
+    sample_type_collected = forms.CharField(help_text='Sample Type', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 30}))
     photos_taken = forms.NullBooleanField(help_text='Photos Taken', required=False)
-    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 44, 'readonly':'readonly'}))
-    site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 3, 'cols': 100, 'readonly':'readonly'}))
+    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
+    site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
     site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:

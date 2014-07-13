@@ -5,7 +5,8 @@
 {% block edit %}{% endblock edit %}
 {% block activeedit %}
     <li class="active" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
-        xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"><a href="/mappingapp/edit">Edit Records</a></li>
+        xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+        xmlns="http://www.w3.org/1999/html"><a href="/mappingapp/edit">Edit Records</a></li>
 {% endblock activeedit %}
 {% block login %}{% endblock login %}
 
@@ -37,7 +38,6 @@
     <div class="bs-example bs-example-tabs">
         <ul id="tcntab" class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>
-            <li><a href="#site-tab" role="tab" data-toggle="tab">Site Details</a></li>
             <li><a href="#photo-tab" role="tab" data-toggle="tab">Photographs</a></li>
         </ul>
         <div id="tcntabContent" class="tab-content">
@@ -215,9 +215,9 @@
                 {{ sitechoices.sites }}
 
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
             View Site Details</button>
-            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutt">
+            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
             Add New Site</button><br />
             </fieldset><br />
 
@@ -299,97 +299,14 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
           Site Coordinates
         </a>
       </h4>
     </div>
-    <div id="collapseThree" class="panel-collapse collapse">
+    <div id="collapseTwo" class="panel-collapse collapse">
       <div class="panel-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-</div>
-
-
-    </div>
-      <div class="modal-footer" id="mod-foot">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-                <div class="span2 text-center">
-                    <button type="submit" class="btn btn-success btn-xl" name="save-button">Save</button>
-
-                </div>
-            </div>
-        </div>
-
-
-        <div class="tab-pane fade" id="site-tab"><br />
-            <div class="container-fluid">
-                <div class="col-md-6" id="site-col">
-                <fieldset class="standard" id="site">
-                    <legend class="fieldsets">Site Details</legend>
-                    <div class="formspan">
-                        {{ siteform.site_name.errors }}
-                        <label class="formlabel">{{ siteform.site_name.help_text }}</label>
-                        {{ siteform.site_name }}
-                    </div>
-                    <div class="formspan">
-                        {{ siteform.county.errors }}
-                        <label class="formlabel">{{ siteform.county.help_text }}</label>
-                        {{ siteform.county }}
-                    </div>
-                    <div class="formspan">
-                         {{ siteform.site_date.errors }}
-                        <label class="formlabel">{{ siteform.site_date.help_text }}</label>
-                        {{ siteform.site_date }}
-                    </div>
-                    <div class="formspan">
-                        {{ siteform.site_location.errors }}
-                        <label class="formlabel">{{ siteform.site_location.help_text }}</label>
-                        {{ siteform.site_location }}
-                    </div><br />
-                    <div class="formspan">
-                        {{ siteform.operator.errors }}
-                        <label class="formlabel">{{ siteform.operator.help_text }}</label>
-                        {{ siteform.operator }}
-                    </div>
-
-                    <div class="formspan">
-                        {{ siteform.sample_type_collected.errors }}
-                        <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
-                        {{ siteform.sample_type_collected }}
-                    </div>
-                    <div class="formspan">
-                        {{ siteform.photos_taken.errors }}
-                        <label class="formlabel">{{ siteform.photos_taken.help_text }}</label>
-                        {{ siteform.photos_taken }}
-                    </div><br />
-                    <div class="formspan">
-                        {{ siteform.photographs.errors }}
-                        <label class="formlabel">{{ siteform.photographs.help_text }}</label>
-                        {{ siteform.photographs }}
-                    </div>
-                    <div class="formspan">
-                        {{ siteform.geomorph_setting.errors }}
-                        <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>
-                        {{ siteform.geomorph_setting }}
-                    </div>
-                    <div class="formspan">
-                        {{ siteform.site_notes.errors }}
-                        <label class="formlabel">{{ siteform.site_notes.help_text }}</label>
-                        {{ siteform.site_notes }}
-                    </div>
-                </fieldset>
-                </div>
-                <div class="col-md-6" id="site2-col">
-                <fieldset class="standard" id="coordinates">
-                    <legend class="fieldsets">Site Coordinates</legend>
-                    <div class="formspan">
+        <div class="formspan">
                         {{ sitecoordform.latitude.errors }}
                         <label class="formlabel">{{ sitecoordform.latitude.help_text }}</label>
                         {{ sitecoordform.latitude }}
@@ -424,10 +341,28 @@
                         <label class="formlabel">{{ sitecoordform.bng_ing.help_text }}</label>
                         {{ sitecoordform.bng_ing }}
                     </div>
-                </fieldset>
-                </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    </div>
+      <div class="modal-footer" id="mod-foot">
+{#        <button type="button" id="savebutton" class="btn btn-danger">Save</button>#}
+        <button type="button" class="btn btn-primary" id="close" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+                <div class="span2 text-center">
+                    <button type="submit" class="btn btn-success btn-xl" name="save-button">Save</button>
+
                 </div>
             </div>
+        </div>
+
+
         <div class="tab-pane fade" id="photo-tab"><br />
             <div class="container-fluid">
 

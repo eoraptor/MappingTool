@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d9e04cc-167f-4a45-a9ca-72690af8f052" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/base.html" afterPath="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/base.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edittcn.html" afterPath="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edittcn.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/static/js/mapapp.js" afterPath="$PROJECT_DIR$/mapping_app_project/static/js/mapapp.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/static/css/style.css" afterPath="$PROJECT_DIR$/mapping_app_project/static/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" afterPath="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" />
     </list>
     <ignored path="MappingTool.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,16 +37,16 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="44" selection-start="1147" selection-end="1147" vertical-scroll-proportion="0.0" vertical-offset="425" max-vertical-offset="5117">
+            <state line="43" column="32" selection-start="2084" selection-end="2084" vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="4913">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="style.css" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="style.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mapping_app_project/static/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="115" column="23" selection-start="1787" selection-end="1787" vertical-scroll-proportion="0.13610587" vertical-offset="1883" max-vertical-offset="2601">
+            <state line="139" column="0" selection-start="2114" selection-end="2114" vertical-scroll-proportion="0.0" vertical-offset="1744" max-vertical-offset="2584">
               <folding />
             </state>
           </provider>
@@ -55,7 +55,7 @@
       <file leaf-file-name="edittcn.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edittcn.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="312" column="1" selection-start="16712" selection-end="16712" vertical-scroll-proportion="0.0" vertical-offset="5009" max-vertical-offset="7684">
+            <state line="355" column="8" selection-start="18267" selection-end="18267" vertical-scroll-proportion="-98.11539" vertical-offset="3484" max-vertical-offset="6579">
               <folding />
             </state>
           </provider>
@@ -64,7 +64,7 @@
       <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="140" column="124" selection-start="7965" selection-end="7965" vertical-scroll-proportion="0.0" vertical-offset="2380" max-vertical-offset="4352">
+            <state line="139" column="136" selection-start="7814" selection-end="7814" vertical-scroll-proportion="0.0" vertical-offset="2312" max-vertical-offset="4335">
               <folding />
             </state>
           </provider>
@@ -73,16 +73,16 @@
       <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="39" selection-start="2529" selection-end="2529" vertical-scroll-proportion="0.0" vertical-offset="1224" max-vertical-offset="5559">
+            <state line="72" column="39" selection-start="2529" selection-end="2529" vertical-scroll-proportion="0.0" vertical-offset="2911" max-vertical-offset="5525">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mapapp.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="mapapp.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mapping_app_project/static/js/mapapp.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="0" selection-start="964" selection-end="964" vertical-scroll-proportion="0.0" vertical-offset="57" max-vertical-offset="629">
+            <state line="63" column="0" selection-start="2489" selection-end="2489" vertical-scroll-proportion="0.9403509" vertical-offset="535" max-vertical-offset="1173">
               <folding />
             </state>
           </provider>
@@ -116,18 +116,20 @@
         <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/siteform.html" />
         <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/test.html" />
         <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/urls.py" />
-        <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" />
-        <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" />
         <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/base.html" />
-        <option value="$PROJECT_DIR$/mapping_app_project/static/js/mapapp.js" />
-        <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edittcn.html" />
+        <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/views.py" />
         <option value="$PROJECT_DIR$/mapping_app_project/static/css/style.css" />
+        <option value="$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py" />
+        <option value="$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edittcn.html" />
+        <option value="$PROJECT_DIR$/mapping_app_project/static/js/mapapp.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="683" />
-    <option name="height" value="738" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="754" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -162,7 +164,7 @@
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -173,76 +175,18 @@
       <autoscrollFromSource />
       <sortByType />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mapping_app_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MappingTool" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mapping_app_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mappingapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="preferences.general" />
+    <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../University Documents/Internet Technology/CiderSeeker/trunk/project/populate_ciderseeker.py" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -339,7 +283,27 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MappingTool" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
@@ -365,27 +329,7 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="MappingTool" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -487,8 +431,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="683" height="738" extended-state="0" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32931036" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -567,49 +511,49 @@
         <state line="75" column="9" selection-start="3377" selection-end="3377" vertical-scroll-proportion="0.97979796" vertical-offset="773" max-vertical-offset="6069" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="39" selection-start="2529" selection-end="2529" vertical-scroll-proportion="0.0" vertical-offset="2958" max-vertical-offset="5525">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="44" selection-start="1147" selection-end="1147" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4845">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/base.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="22" column="0" selection-start="774" selection-end="774" vertical-scroll-proportion="36.615383" vertical-offset="1326" max-vertical-offset="1819" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
+    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="140" column="124" selection-start="7965" selection-end="7965" vertical-scroll-proportion="0.0" vertical-offset="2227" max-vertical-offset="4335">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mapping_app_project/static/js/mapapp.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="964" selection-end="964" vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="629">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edittcn.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="312" column="1" selection-start="16712" selection-end="16712" vertical-scroll-proportion="0.0" vertical-offset="5009" max-vertical-offset="7684">
+        <state line="72" column="39" selection-start="2529" selection-end="2529" vertical-scroll-proportion="0.0" vertical-offset="2911" max-vertical-offset="5525">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mapping_app_project/static/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="23" selection-start="1787" selection-end="1787" vertical-scroll-proportion="0.13610587" vertical-offset="1883" max-vertical-offset="2601">
+        <state line="139" column="0" selection-start="2114" selection-end="2114" vertical-scroll-proportion="0.0" vertical-offset="2014" max-vertical-offset="2584">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="139" column="136" selection-start="7814" selection-end="7814" vertical-scroll-proportion="0.0" vertical-offset="2312" max-vertical-offset="4335">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mapping_app_project/mappingapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="32" selection-start="2084" selection-end="2084" vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="4913">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mapping_app_project/templates/mappingapp/edittcn.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="355" column="8" selection-start="18267" selection-end="18267" vertical-scroll-proportion="-98.11539" vertical-offset="3484" max-vertical-offset="6579">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mapping_app_project/static/js/mapapp.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="63" column="0" selection-start="2489" selection-end="2489" vertical-scroll-proportion="0.9403509" vertical-offset="535" max-vertical-offset="1173">
           <folding />
         </state>
       </provider>
