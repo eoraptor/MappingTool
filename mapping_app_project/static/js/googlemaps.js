@@ -34,8 +34,18 @@ var map;
             var marker = new google.maps.Marker({
             position: new google.maps.LatLng(val.latitude, val.longitude),
             map: map,
-            icon: mapicons['tcn']
+            icon: mapicons['tcn'],
+            title: val.code
             })
+
+            var infowindow = new google.maps.InfoWindow({
+                maxWidth: 70
+            });
+            infowindow.setContent('<div id="window_content">' + '<div id="infoText">' + String(val.code) + '</div>' + '</div>')
+            google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, this);
+            });
+
         })
     })
 

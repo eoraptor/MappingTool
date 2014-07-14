@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import json
+import pickle
 from django.core import serializers
 
 
@@ -101,9 +102,10 @@ def upload(request):
 
         if form.is_valid():
 
-            samples = process_file(request.FILES['file'])
+            sample_data = process_file(request.FILES['file'])
+            for k, v in sample_data.iteritems():
+                request.session[k] = v
 
-            request.session['samples'] = samples
             request.session['source'] = 'file'
 
             # Redirect to the document list after POST
@@ -147,31 +149,58 @@ def edittcn(request):
     # retrieve objects to populate form fields
     sample = None
 
+    request.session['counter'] = 1
+
     if request.session['source'] == 'code':
         sample_code = request.session['sample']
         sample = Sample.objects.get(sample_code=sample_code)
 
     elif request.session['source'] == 'file':
-        sample_codes = request.session['samples']
-        sample = Sample.objects.get(sample_code=sample_codes[0])
 
-    site = sample.sample_site
 
-    site_coords = None
-    if site is not None:
-        site_coords = site.site_coordinates
+        site = Sample_Site(site_name=request.session['site_name'], site_location=request.session['site_location'],
+                        county=request.session['county'], site_date=request.session['site_date'],
+                        operator=request.session['operator'], geomorph_setting=request.session['geomorph_setting'],
+                        sample_type_collected=request.session['sample_type_collected'],
+                        photos_taken=request.session['photos_taken'], photographs=request.session['photographs'],
+                        site_notes=request.session['site_notes'], site_coordinates=None)
 
-    sample_coords = sample.sample_coordinates
 
-    tcn = TCN_Sample.objects.get(tcn_sample=sample.pk)
+        site_coords = Coordinates(bng_ing=request.session['site_bng_ing'],
+                                  grid_reference=request.session['site_grid_reference'],
+                                  easting=request.session['site_easting'], northing=request.session['site_northing'],
+                                  latitude=request.session['site_latitude'], longitude=request.session['site_longitude'],
+                                  elevation=request.session['site_elevation'])
 
-    transect = None
-    if sample.transect is not None:
-        transect = sample.transect
+        counter = str(request.session['counter'])
+        sample_coords = Coordinates(bng_ing=request.session['sample_bng_ing'+counter],
+                                    grid_reference=request.session['sample_grid_reference'+counter],
+                                    easting=request.session['sample_easting'+counter],
+                                    northing=request.session['sample_northing'+counter],
+                                    latitude=request.session['sample_latitude'+counter],
+                                    longitude=request.session['sample_longitude'+counter],
+                                    elevation=request.session['sample_elevation'+counter])
 
-    retreat = None
-    if sample.retreat is not None:
-        retreat = sample.retreat
+        sample = Sample(sample_code=request.session['sample_code'+counter],
+                        sample_location_name=request.session['sample_location_name'+counter],
+                        collection_date=request.session['sample_date'+counter],
+                        collector=request.session['collector'+counter],
+                        sample_notes=request.session['sample_notes'+counter],
+                        dating_priority=None, age=None, age_error=None, calendar_age=None, calendar_error=None,
+                        lab_code=None, sample_coordinates=None, sample_site=None, transect=None, retreat=None)
+
+        tcn = TCN_Sample(quartz_content=request.session['quartz_content'+counter],
+                         sample_setting=request.session['sample_setting'+counter],
+                         sampled_material=request.session['sampled_material'+counter],
+                         boulder_dimensions=request.session['boulder_dimensions'+counter],
+                         sample_surface_strike_dip=request.session['sample_surface_strike_dip'+counter],
+                         sample_thickness=request.session['sample_thickness'+counter],
+                         grain_size=request.session['grain_size'+counter],
+                         lithology=request.session['lithology'+counter], tcn_sample=None)
+
+        transect = Transect(transect_number=request.session['transect'+counter])
+
+        retreat = None
 
     # A HTTP POST?
     if request.method == 'POST':
@@ -179,50 +208,52 @@ def edittcn(request):
         sampForm = SampleForm(request.POST, instance=sample)
         samplecoordForm = CoordinatesForm(request.POST, prefix='sample', instance=sample_coords)
         siteForm = SampleSiteForm(request.POST, instance=site)
+        hiddensiteform = SampleSiteForm(request.POST, instance=site, prefix='hidden')
         sitecoordForm = CoordinatesForm(request.POST, prefix='site', instance=site_coords)
         tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat)
         tcnForm = TCNForm(request.POST, instance=tcn)
         sitechoicesForm = ExistingSitesForm(request.POST)
-
-        bearincForm = BearingInclinationForm(request.POST)
-        sampleBIForm = Sample_BI_Form(request.POST)
+        #
+        # bearincForm = BearingInclinationForm(request.POST)
+        # sampleBIForm = Sample_BI_Form(request.POST)
 
         # Have we been provided with a complete set of valid forms?
         # if yes save forms sequentially in order to supply foreign key values
         # where required
-        if sampForm.is_valid() and tcnForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
-            samplecoordForm.is_valid() and sitecoordForm.is_valid() and siteForm.is_valid() and\
-            bearincForm.is_valid():
+        if siteForm.is_valid():
+        # if sampForm.is_valid() and tcnForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
+        #     samplecoordForm.is_valid() and sitecoordForm.is_valid() and siteForm.is_valid() and\
+        #     bearincForm.is_valid():
 
-            if samplecoordForm.has_changed():
-                sample_coords = samplecoordForm.save()
-
-            if tranForm.has_changed():
-                transect = tranForm.save()
-
-            if retForm.has_changed():
-                retreat = retForm.save()
-
-            if sitecoordForm.has_changed():
-                site_coords = sitecoordForm.save()
-
-            site = None
-            if siteForm.has_changed():
-                site = siteForm.save()
-
-            if site is not None and site_coords is not None:
-                site.site_coordinates = site_coords
-
-
-
-            sample = sampForm.save(commit=False)
-            sample.sample_coordinates = sample_coords
-            sample.sample_site = site
-            sample.save()
-
-            if tcnForm.has_changed():
-                tcnForm.save()
+            # if samplecoordForm.has_changed():
+            #     sample_coords = samplecoordForm.save()
+            #
+            # if tranForm.has_changed():
+            #     transect = tranForm.save()
+            #
+            # if retForm.has_changed():
+            #     retreat = retForm.save()
+            #
+            # if sitecoordForm.has_changed():
+            #     site_coords = sitecoordForm.save()
+            #
+            # site = None
+            # if siteForm.has_changed():
+            #     site = siteForm.save()
+            #
+            # if site is not None and site_coords is not None:
+            #     site.site_coordinates = site_coords
+            #
+            #
+            #
+            # sample = sampForm.save(commit=False)
+            # sample.sample_coordinates = sample_coords
+            # sample.sample_site = site
+            # sample.save()
+            #
+            # if tcnForm.has_changed():
+            #     tcnForm.save()
 
             # sampleBI = sampleBIForm.save(commit=False)
             # sampleBI.sample_with_bearing = tcnsample
@@ -231,7 +262,7 @@ def edittcn(request):
             #
             # tcnsample.sample_bearings = sampleBI
             # tcnsample.save()
-            bearincForm.save()
+            # bearincForm.save()
 
 
             # Now call the index() view.
@@ -248,18 +279,18 @@ def edittcn(request):
         tranForm = TransectForm(instance=transect)
         retForm = RetreatForm(instance=retreat)
         tcnForm = TCNForm(instance=tcn)
-
-        bearincForm = BearingInclinationForm()
-        sampleBIForm = Sample_BI_Form()
+        hiddensiteform = SampleSiteForm(instance=site, prefix='hidden')
+        # bearincForm = BearingInclinationForm()
+        # sampleBIForm = Sample_BI_Form()
         sitechoicesForm = ExistingSitesForm()
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html',
-                              {'tcnform':tcnForm, 'retform': retForm, 'tranform': tranForm,
-                               'sitecoordform':sitecoordForm, 'sampform':sampForm, 'siteform': siteForm,
-                               'samplecoordform':samplecoordForm, 'bearincform':bearincForm,
-                               'sampleBIform':sampleBIForm, 'sitechoices':sitechoicesForm}, context)
+    return render_to_response('mappingapp/edittcn.html', {'hidden':hiddensiteform, 'sitechoices':sitechoicesForm, 'retform': retForm,'tranform': tranForm, 'tcnform':tcnForm, 'samplecoordform':samplecoordForm, 'siteform': siteForm, 'sitecoordform':sitecoordForm, 'sampform':sampForm}, context)
+
+
+                              #  , 'bearincform':bearincForm,
+                              #  'sampleBIform':sampleBIForm, }
 
 
 def userlogin(request):

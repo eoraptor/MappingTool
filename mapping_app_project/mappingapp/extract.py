@@ -3,11 +3,12 @@ from openpyxl import load_workbook
 from mappingapp.models import Sample_Site, Coordinates, Sample, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination, Transect
 
 
+columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+
 # iterate over the site sheet to determine which cells to extract data from
 def get_site_cell_positions(ws):
-
-    columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
     positions = {'Site Name: ': '', 'Location (inc. Transect no.)': '', 'Latitude(decimal deg)': '',
                  'Longtitude(decimal deg)(West is -ve)': '', 'BNG/ING?': '', 'Northing:': '', 'Easting:': '',
@@ -74,22 +75,18 @@ def get_site_info(wb):
         return None
 
     else:
-        coords = Coordinates.objects.get_or_create(bng_ing=bng_ing, grid_reference=None, easting=site_easting,
-                                                   northing=site_northing, latitude=site_latitude,
-                                                   longitude=site_longitude, elevation=site_elevation)[0]
+        site_details = {'site_bng_ing':bng_ing, 'site_grid_reference':None, 'site_easting':site_easting,
+                        'site_northing':site_northing, 'site_latitude':site_latitude, 'site_longitude':site_longitude,
+                        'site_elevation':site_elevation, 'site_name':site_name, 'site_location':site_location,
+                        'county':None, 'site_date':None, 'operator':None, 'geomorph_setting':geomorph,
+                        'sample_type_collected':type, 'photos_taken':photographs, 'photographs':photo_labels,
+                        'site_notes':site_notes, 'site_coordinates':None}
 
-        site = Sample_Site.objects.get_or_create(site_name=site_name, site_location=site_location, county=None,
-                                                 site_date=site_date, operator=None, geomorph_setting=geomorph,
-                                                 sample_type_collected=type, photos_taken=photographs,
-                                                 photographs=photo_labels, site_notes=site_notes,
-                                                 site_coordinates=coords)[0]
-    return site
+        return site_details
 
 
 # iterate over the tcn sheet to determine which cells to extract data from
 def get_tcn_cell_positions(ws):
-    columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-           'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
     positions = {'Date: ': '', 'Location:': '', 'Latitude (if different from site info)': '',
                  'Unique Sample Identifier': '', 'BNG or ING': '', 'Northing': '', 'Easting': '',
@@ -153,7 +150,7 @@ def get_tcn_cell_positions(ws):
 
 
 # extract the data from a tcn sample sheet
-def get_tcn_sample_info(sample_sheet, site):
+def get_tcn_sample_info(sample_sheet, sample_count):
     positions = get_tcn_cell_positions(sample_sheet)
 
     sample_date = sample_sheet[positions['Date: ']].value
@@ -230,28 +227,24 @@ def get_tcn_sample_info(sample_sheet, site):
     if longitude is not None:
         longitude = convert_lat_long(longitude)
 
-    transect = Transect.objects.get_or_create(transect_number=transect)[0]
+    counter = str(sample_count)
 
-    coords = Coordinates.objects.get_or_create(bng_ing=bng_ing, grid_reference=None, easting=sample_easting,
-                                               northing=sample_northing, latitude=latitude, longitude=longitude,
-                                               elevation=elevation)[0]
+    sample_details = {'sample_bng_ing'+counter:bng_ing, 'sample_grid_reference'+counter:None,
+                      'sample_easting'+counter:sample_easting, 'sample_northing'+counter:sample_northing,
+                      'sample_latitude'+counter:latitude, 'sample_longitude'+counter:longitude,
+                      'sample_elevation'+counter:elevation, 'sample_code'+counter:sample_code,
+                      'sample_location_name'+counter:sample_location_name, 'sample_date'+counter:None,
+                      'collector'+counter:collector, 'sample_notes'+counter:notes, 'transect'+counter:transect,
+                      'quartz_content'+counter:quartz, 'sample_setting'+counter:setting,
+                      'sampled_material'+counter:material, 'boulder_dimensions'+counter:boulder_dim,
+                      'sample_surface_strike_dip'+counter:surface_strike, 'sample_thickness'+counter:thickness,
+                      'grain_size'+counter:grain_size, 'lithology'+counter:lithology}
 
-    sample = Sample.objects.get_or_create(sample_code=sample_code, sample_location_name=sample_location_name,
-                                          collection_date=sample_date, collector=collector, sample_notes=notes,
-                                          dating_priority=None, age=None, age_error=None, calendar_age=None,
-                                          calendar_error=None, lab_code=None, sample_coordinates=coords,
-                                          sample_site=site, transect=transect, retreat=None)[0]
+    # for b in bearing:
+    #     bi = Bearing_Inclination.objects.get_or_create(bearing=b[0], inclination=b[1])[0]
+    #     sample_with_bi = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn_data, bear_inc=bi)[0]
 
-    tcn_data = TCN_Sample.objects.get_or_create(quartz_content=quartz, sample_setting=setting, sampled_material=material,
-                                                boulder_dimensions=boulder_dim, sample_surface_strike_dip=surface_strike,
-                                                sample_thickness=thickness, grain_size=grain_size, lithology=lithology,
-                                                tcn_sample=sample)[0]
-
-    for b in bearing:
-        bi = Bearing_Inclination.objects.get_or_create(bearing=b[0], inclination=b[1])[0]
-        sample_with_bi = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn_data, bear_inc=bi)[0]
-
-    return [sample_code, transect]
+    return sample_details
 
 
 # extract all bearing and inclination data from tcn sheets
@@ -281,25 +274,30 @@ def get_bearing(sample_sheet, start_cell):
 def process_file(filename):
     # need error handling
 
-    samples = []
+    samples = {}
 
     wb = load_workbook(filename, use_iterators=True)
-    site = get_site_info(wb)
+
+    site_details = get_site_info(wb)
+    for k, v in site_details.iteritems():
+        samples[k] = v
+
+    counter = 1
 
     sheet_names = wb.get_sheet_names()
+
     for sheet in sheet_names:
         if sheet != 'Site Info' and sheet != 'Sheet1':
             ws = wb[sheet]
             type = get_sample_type(ws)
 
             if type == 'TCN':
-                results = get_tcn_sample_info(ws, site)
-                sample_code = results[0]
-                samples.append(sample_code)
+                results = get_tcn_sample_info(ws, counter)
+                for k, v in results.iteritems():
+                    samples[k] = v
+                counter += 1
 
-    for sample in samples:
-        Sample.objects.filter(sample_code=sample).update(sample_site=site)
-
+    samples['sample_count'] = counter-1
     return samples
 
 

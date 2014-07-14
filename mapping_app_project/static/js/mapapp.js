@@ -3,11 +3,16 @@ var fields = ['#id_site_name', '#id_county', '#id_site_date', '#id_site_location
 "#id_site-easting", "#id_site-northing", "#id_site-elevation", "#id_site-grid_reference", "#id_site-bng_ing"]
 
 
+$(document).ready(function(){
+    $('#savebutton').hide();
+})
+
 $('#myModal').on('hidden.bs.modal', function (e) {
     for (var i = 0; i < fields.length ; i++) {
         $(fields[i]).val('');
     }
     $("#id_photos_taken").val(1);
+     $( "#savebutton" ).hide();
 });
 
 
@@ -43,7 +48,6 @@ $('#modalbutton1').click(function(){
         $("#id_site-grid_reference").val(val.grid).prop( "disabled", true );
         $("#id_site-bng_ing").val(val.bng).prop( "disabled", true );
 
-        $( "#savebutton" ).hide();
         });
     });
 });

@@ -33,6 +33,10 @@
             {{ hidden }}
         {% endfor %}
 
+        {% for field in hidden.visible_fields %}
+            <div class="hidden"> {{ field }} </div>
+        {% endfor %}
+
         <div class="bs-example bs-example-tabs">
             <ul id="tcntab" class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>
@@ -214,7 +218,7 @@
 
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
-                    View Site Details</button>
+                    View Details</button>
                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
                     Add New Site</button><br />
                 </fieldset><br />

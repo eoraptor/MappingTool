@@ -52,10 +52,7 @@ class CoordinatesForm(forms.ModelForm):
             coords.latitude is None and coords.longitude is None and coords.elevation == '':
             return None
         else:
-            return Coordinates.objects.get_or_create(bng_ing=coords.bng_ing, grid_reference=coords.grid_reference,
-                                                     easting=coords.easting, northing=coords.northing,
-                                                     latitude=coords.latitude, longitude=coords.longitude,
-                                                     elevation=coords.elevation)[0]
+            coords.save()
 
 
 
@@ -71,13 +68,12 @@ class TransectForm(forms.ModelForm):
     def save(self, commit=True):
         transect = super(TransectForm, self).save(commit=False)
         if transect.transect_number != '':
-            return Transect.objects.get_or_create(transect_number=transect.transect_number)[0]
+            return Transect.objects.get(transect_number=transect.transect_number)
 
 
 class RetreatForm(forms.ModelForm):
-    zone_number = forms.CharField(help_text='Retreat Zone', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'noresize', 'rows': 1, 'cols': 2,
-                                                               'resize': 'none'}))
+    ZONE_CHOICES = (('1', ''), ('2', '1'), ('3', '2'), ('4', '3'), ('5', '4'), ('6', '5'), ('7', '6'), ('8', '7'))
+    zone_number = forms.ChoiceField(help_text='Retreat Zone', required=False, choices=ZONE_CHOICES)
 
     class Meta:
         model = Retreat_Zone
@@ -85,7 +81,7 @@ class RetreatForm(forms.ModelForm):
     def save(self, commit=True):
         retreat = super(RetreatForm, self).save(commit=False)
         if retreat.zone_number != '':
-            return Retreat_Zone.objects.get_or_create(zone_number=retreat.zone_number)[0]
+            return Retreat_Zone.objects.get(zone_number=retreat.zone_number)
 
 
 class SampleForm(forms.ModelForm):
@@ -151,6 +147,16 @@ class SampleSiteForm(forms.ModelForm):
 
     class Meta:
         model = Sample_Site
+
+    def save(self, commit=True):
+        site = super(SampleSiteForm, self).save(commit=False)
+        if site.site_name == '' and site.site_location == '' and site.county == '' and\
+            site.site_date == '' and site.operator == '' and site.geomorph_setting == '' and\
+            site.sample_type_collected == '' and site.photos_taken == 1 and site.photographs == '' and\
+            site.site_notes == '' and site.site_coordinates is None:
+                return None
+        else:
+            site.save()
 
 
 
