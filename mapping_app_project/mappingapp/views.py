@@ -41,10 +41,26 @@ def create_site(request):
 
     if request.method == 'GET':
         site_name = request.GET['site_name']
+        site_county = request.GET['site_county']
+        site_location = request.GET['site_location']
+        # site_date = request.GET['date']
+        site_operator = request.GET['site_operator']
+        photographs = request.GET['photographs']
+        notes = request.GET['notes']
+        type = request.GET['type']
+        geomorph = request.GET['geomorph']
+        photos_taken = request.GET['photos_taken']
 
-    site = Sample_Site.objects.get_or_create(site_name=site_name)
 
-    return HttpResponse()
+        created = Sample_Site.objects.get_or_create(site_name=site_name, county=site_county,
+                                                    site_location=site_location, photographs=photographs,
+                                                    operator=site_operator, geomorph_setting=geomorph,
+                                                    photos_taken=photos_taken, sample_type_collected=type,
+                                                    site_notes=notes)[1]
+                                                # , site_date=site_date
+
+        reply = json.dumps([{'created':created}])
+        return HttpResponse(reply, mimetype='application/json')
 
 
 
@@ -60,17 +76,18 @@ def sites(request):
     #coords = site.site_coordinates
 
     # date = site.site_date.strftime('%d/%m/%Y')
-    # photos_taken = 1
-    # if site.photos_taken is True:
-    #     photos_taken = 2
-    # elif site.photos_taken is False:
-    #     photos_taken = 3
+    photos_taken = 1
+    if site.photos_taken is True:
+         photos_taken = 2
+    elif site.photos_taken is False:
+         photos_taken = 3
 
-    site_details = json.dumps([{'name':site.site_name}])
-    # 'loc':site.site_location, 'county':site.county,
-    #                             'operator':site.operator, 'type':site.sample_type_collected,
-    #                             'geomorph':site.geomorph_setting, 'photographs':site.photographs,
-    #                             'notes':site.site_notes, 'photos_taken':photos_taken, 'date':date, 'bng':coords.bng_ing,
+    site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
+                                'operator':site.operator, 'type':site.sample_type_collected,
+                                'geomorph':site.geomorph_setting, 'photographs':site.photographs,
+                                'notes':site.site_notes, 'photos_taken':photos_taken}])
+
+    #                             , 'date':date, 'bng':coords.bng_ing,
     #                             'grid':coords.grid_reference, 'easting':coords.easting, 'northing':coords.northing,
     #                             'latitude':coords.latitude, 'longitude':coords.longitude,
     #                             'elevation':coords.elevation}])

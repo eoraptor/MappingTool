@@ -64,7 +64,7 @@ $('#modalbutton2').click(function(){
     $('#id_site_notes').val($('#id_hidden-site_notes').text());
     $('#id_geomorph_setting').val($('#id_hidden-geomorph_setting').text());
     $('#id_sample_type_collected').val($('#id_hidden-sample_type_collected').text());
-    $("#id_photos_taken").val($('#id_hidden-photos_taken').text());
+    $("#id_photos_taken").val($('#id_hidden-photos_taken option:selected').val());
 
     $("#id_site-latitude").val($('#id_hidden_coords-latitude').text());
     $("#id_site-longitude").val($('#id_hidden_coords-longitude').text());
@@ -80,10 +80,34 @@ $('#modalbutton2').click(function(){
 
 $('#savebutton').click(function(){
     var site = $('#id_site_name').val();
-    $('#id_sites').append(new Option(site))
-    $.getJSON('/mappingapp/create_site/', {site_name: site}, function(data){
-    $('#myModal').hide()
+    var county = $('#id_county').val();
+//    var date = $('#id_site_date').val();
+    var location = $('#id_site_location').val();
+    var operator = $('#id_operator').val();
+    var photographs = $('#id_photographs').val();
+    var site_notes = $('#id_site_notes').val();
+    var sample_type = $('#id_sample_type_collected').val();
+    var geomorph = $('#id_geomorph_setting').val();
+    var photos_taken = $('#id_photos_taken option:selected').val();
+//      , date:date,
+//
+//
+
+    $.getJSON('/mappingapp/create_site/', {site_name: site, photographs:photographs, site_operator:operator,
+        site_county:county, site_location:location, notes:site_notes, type:sample_type, photos_taken:photos_taken,
+        geomorph:geomorph}, function(data){
+        $.each(data, function( key, val) {
+            if ((val.created) == true) {
+            $('#id_sites').append(new Option(site))
+            alert('Site Saved')
+            }else if ((val.created) == false) {
+                alert('Site Already Exists')
+            }
+        });
+    $("#id_sites").val(site);
   });
+
+    $('#myModal').hide()
 });
 
 
