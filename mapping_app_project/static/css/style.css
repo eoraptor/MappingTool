@@ -113,17 +113,20 @@ img#logo {
 
 
 #mod-foot {
-    background: #D4E2A4;
+    background: #424242;
     padding-top: 4px;
     padding-bottom: 4px;
     margin-top: 0px;
 }
 
 #mod-header {
-    background: #D4E2A4;
+    background: #424242;
     padding-top: 4px;
     padding-bottom: 4px;
+}
 
+#myModalLabel {
+    color: #ffffff;
 }
 
 
@@ -132,13 +135,16 @@ img#logo {
     vertical-align: middle;
     padding-bottom: 5px;
     margin-bottom: 0px;
-    background: #EDEBAC;
+    background: #C5BD99;
 }
 
 #modo {
     width: 630px;
 }
 
+#paneltop {
+    background: #ffffff;
+}
 .panel-body {
     background: #FFFEDC;
 }
@@ -148,3 +154,7 @@ img#logo {
     width: 80px;
 }
 
+.panel-heading
+{
+    background-color:#0CF;
+}
