@@ -34,6 +34,17 @@ def markers(request):
     return HttpResponse(sample_details, mimetype='application/json')
 
 
+def create_site(request):
+    context = RequestContext(request)
+
+    site_name = None
+
+    if request.method == 'GET':
+        site_name = request.GET['site_name']
+
+    site = Sample_Site.objects.get_or_create(site_name=site_name)
+
+    return HttpResponse()
 
 
 
@@ -46,22 +57,23 @@ def sites(request):
         site_name = request.GET['site_name']
 
     site = Sample_Site.objects.get(site_name=site_name)
-    coords = site.site_coordinates
+    #coords = site.site_coordinates
 
-    date = site.site_date.strftime('%d/%m/%Y')
-    photos_taken = 1
-    if site.photos_taken is True:
-        photos_taken = 2
-    elif site.photos_taken is False:
-        photos_taken = 3
+    # date = site.site_date.strftime('%d/%m/%Y')
+    # photos_taken = 1
+    # if site.photos_taken is True:
+    #     photos_taken = 2
+    # elif site.photos_taken is False:
+    #     photos_taken = 3
 
-    site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
-                                'operator':site.operator, 'type':site.sample_type_collected,
-                                'geomorph':site.geomorph_setting, 'photographs':site.photographs,
-                                'notes':site.site_notes, 'photos_taken':photos_taken, 'date':date, 'bng':coords.bng_ing,
-                                'grid':coords.grid_reference, 'easting':coords.easting, 'northing':coords.northing,
-                                'latitude':coords.latitude, 'longitude':coords.longitude,
-                                'elevation':coords.elevation}])
+    site_details = json.dumps([{'name':site.site_name}])
+    # 'loc':site.site_location, 'county':site.county,
+    #                             'operator':site.operator, 'type':site.sample_type_collected,
+    #                             'geomorph':site.geomorph_setting, 'photographs':site.photographs,
+    #                             'notes':site.site_notes, 'photos_taken':photos_taken, 'date':date, 'bng':coords.bng_ing,
+    #                             'grid':coords.grid_reference, 'easting':coords.easting, 'northing':coords.northing,
+    #                             'latitude':coords.latitude, 'longitude':coords.longitude,
+    #                             'elevation':coords.elevation}])
 
     return HttpResponse(site_details, mimetype='application/json')
 
@@ -207,9 +219,10 @@ def edittcn(request):
 
         sampForm = SampleForm(request.POST, instance=sample)
         samplecoordForm = CoordinatesForm(request.POST, prefix='sample', instance=sample_coords)
-        siteForm = SampleSiteForm(request.POST, instance=site)
+        siteForm = SampleSiteForm(request.POST)
         hiddensiteform = SampleSiteForm(request.POST, instance=site, prefix='hidden')
-        sitecoordForm = CoordinatesForm(request.POST, prefix='site', instance=site_coords)
+        sitecoordForm = CoordinatesForm(request.POST, prefix='site')
+        hiddensitecoordsForm = Coordinates(request.POST, instance=site_coords, prefix='hidden_coords')
         tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat)
         tcnForm = TCNForm(request.POST, instance=tcn)
@@ -274,8 +287,9 @@ def edittcn(request):
     else:
         sampForm = SampleForm(instance=sample)
         samplecoordForm = CoordinatesForm(prefix='sample', instance=sample_coords)
-        siteForm = SampleSiteForm(instance=site)
+        siteForm = SampleSiteForm()
         sitecoordForm = CoordinatesForm(prefix='site', instance=site_coords)
+        hiddensitecoordsForm = CoordinatesForm(prefix='hidden_coords', instance=site_coords)
         tranForm = TransectForm(instance=transect)
         retForm = RetreatForm(instance=retreat)
         tcnForm = TCNForm(instance=tcn)
@@ -286,7 +300,11 @@ def edittcn(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html', {'hidden':hiddensiteform, 'sitechoices':sitechoicesForm, 'retform': retForm,'tranform': tranForm, 'tcnform':tcnForm, 'samplecoordform':samplecoordForm, 'siteform': siteForm, 'sitecoordform':sitecoordForm, 'sampform':sampForm}, context)
+    return render_to_response('mappingapp/edittcn.html', {'hiddencoords':hiddensitecoordsForm,
+                                                          'hidden':hiddensiteform, 'sitechoices':sitechoicesForm,
+                                                          'retform': retForm,'tranform': tranForm, 'tcnform':tcnForm,
+                                                          'samplecoordform':samplecoordForm, 'siteform': siteForm,
+                                                          'sitecoordform':sitecoordForm, 'sampform':sampForm}, context)
 
 
                               #  , 'bearincform':bearincForm,

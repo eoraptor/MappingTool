@@ -37,6 +37,10 @@
             <div class="hidden"> {{ field }} </div>
         {% endfor %}
 
+        {% for field in hiddencoords.visible_fields %}
+            <div class="hidden"> {{ field }} </div>
+        {% endfor %}
+
         <div class="bs-example bs-example-tabs">
             <ul id="tcntab" class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>
@@ -218,9 +222,17 @@
 
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
-                    View Details</button>
-                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
-                    Add New Site</button><br />
+                    View Existing Details</button><br /><br />
+                    <div class="row">
+                    <div class="col-md-5">
+                    <label class="formlabel">Save Site from File Data</label>
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
+                    View Data from File </button>
+                    </div><div class="col-md-3">
+                    <label class="formlabel">Create New Site</label>
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton3">
+                    Enter New Site</button>
+                    </div></div>
                 </fieldset><br />
 
                         <!-- Modal -->
@@ -352,7 +364,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer" id="mod-foot">
-                                <button type="button" id="savebutton" class="btn btn-danger">Save</button>
+                                <button type="button" id="savebutton" class="btn btn-danger" data-dismiss="modal">Save</button>
                                 <button type="button" class="btn btn-primary" id="close" data-dismiss="modal">Close</button>
                             </div>
                         </div>

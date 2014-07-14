@@ -12,6 +12,7 @@ urlpatterns = patterns('',
         url(r'^logout/$', views.user_logout, name='logout'),
         url(r'^sites/$', views.sites, name='sites'),
         url(r'^markers/$', views.markers, name='markers'),
+        url(r'^create_site/$', views.create_site, name='create_site'),
         )
 
 
