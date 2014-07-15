@@ -215,7 +215,11 @@
                 </div><br />
 
                 <fieldset class="standard" id="coordinates">
-                    <legend class="fieldsets">Sample Site</legend>
+                    <legend class="fieldsets">Sample Site <a href="#" title="Sample Site details can be added by
+                     selecting from an existing site, using data from the uploaded file, or by entering new details
+                      manually.  They can also be left blank."><span class="glyphicon glyphicon-question-sign"
+                      style="display: inline-block;" id="helpicon"></span></a></legend>
+
                     {{ sitechoices.sites.errors }}
                     <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
                     {{ sitechoices.sites }}
@@ -223,17 +227,12 @@
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
                     View Existing Details</button><br /><br />
-                    <div class="row">
-                    <div class="col-md-5">
-                    <label class="formlabel">Save Site from File Data</label>
+
                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
                     View Data from File </button>
-                    </div><div class="col-md-3">
-                    <label class="formlabel">Create New Site</label>
                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton3">
                     Enter New Site</button>
-                    </div></div>
-                </fieldset><br />
+                </fieldset>
 
                         <!-- Modal -->
                 <div class="modal fade myModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -381,6 +380,7 @@
                 <br />
                 <br />
                 <br />
+
                 <br />
                 <br />
             </div>

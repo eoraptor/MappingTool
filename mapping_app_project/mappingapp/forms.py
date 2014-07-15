@@ -1,6 +1,8 @@
 from django import forms
-from mappingapp.models import Core_Details, Photograph, Coordinates, Transect, Retreat_Zone, Sample, Photo_Of, Radiocarbon_Sample, Sample_Site, Location_Photo, OSL_Sample, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination
-
+from django.utils.safestring import mark_safe
+from mappingapp.models import Core_Details, Photograph, Coordinates, Transect, Retreat_Zone, Sample, Photo_Of
+from mappingapp.models import Radiocarbon_Sample, Sample_Site, Location_Photo, OSL_Sample, TCN_Sample
+from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 
 class SelectSampleForm(forms.Form):
     sample_code = forms.CharField(help_text='Enter sample code:', required=True)
@@ -52,8 +54,11 @@ class CoordinatesForm(forms.ModelForm):
             coords.latitude is None and coords.longitude is None and coords.elevation == '':
             return None
         else:
-            coords.save()
 
+            return Coordinates.objects.create(bng_ing=coords.bng_ing, grid_reference=coords.grid_reference,
+                                              easting=coords.easting, northing=coords.northing,
+                                              latitude=coords.latitude, longitude=coords.longitude,
+                                              elevation=coords.elevation)
 
 
 class TransectForm(forms.ModelForm):
@@ -68,7 +73,7 @@ class TransectForm(forms.ModelForm):
     def save(self, commit=True):
         transect = super(TransectForm, self).save(commit=False)
         if transect.transect_number != '':
-            return Transect.objects.get(transect_number=transect.transect_number)
+            return Transect.objects.get_or_create(transect_number=transect.transect_number)[0]
 
 
 class RetreatForm(forms.ModelForm):
@@ -81,7 +86,7 @@ class RetreatForm(forms.ModelForm):
     def save(self, commit=True):
         retreat = super(RetreatForm, self).save(commit=False)
         if retreat.zone_number != '':
-            return Retreat_Zone.objects.get(zone_number=retreat.zone_number)
+            return Retreat_Zone.objects.get_or_create(zone_number=retreat.zone_number)[0]
 
 
 class SampleForm(forms.ModelForm):
@@ -246,10 +251,25 @@ class PhotoOfForm(forms.ModelForm):
         model = Photo_Of
 
 
+class HorizontalRadioRenderer(forms.RadioSelect.renderer):
+    """ this overrides widget method to put radio buttons horizontally
+        instead of vertically.
+    """
+    def render(self):
+            """Outputs radios"""
+            return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
+
+
+
 class ExistingSitesForm(forms.Form):
 
     sites = forms.ModelChoiceField(help_text="Select from existing sites:",
                                    queryset=Sample_Site.objects.values_list('site_name', flat=True))
+
+    source = forms.ChoiceField(required=False, help_text="Select site source",
+        widget=forms.RadioSelect(renderer=HorizontalRadioRenderer), choices=(('1', 'File'), ('2', 'New'),
+                                                                        ('3', 'Existing'), ('4', 'None')))
+
 
 
 

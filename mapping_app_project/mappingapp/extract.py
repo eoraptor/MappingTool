@@ -63,26 +63,28 @@ def get_site_info(wb):
         if '.' in date:
             site_date = convert_date(date)
 
+    if site_northing is not None:
+        site_northing = int(site_northing)
+
+    if site_easting is not None:
+        site_easting = int(site_easting)
+
     if site_latitude is not None:
         site_latitude = convert_lat_long(site_latitude)
 
     if site_longitude is not None:
         site_longitude = convert_lat_long(site_longitude)
 
-    if all(ele is None for ele in [site_name, site_location, site_latitude, site_longitude, bng_ing, site_northing,
-                                   site_easting, site_elevation, site_date, geomorph, type, collector, photographs,
-                                   photo_labels, site_notes]):
-        return None
 
-    else:
-        site_details = {'site_bng_ing':bng_ing, 'site_grid_reference':None, 'site_easting':site_easting,
-                        'site_northing':site_northing, 'site_latitude':site_latitude, 'site_longitude':site_longitude,
-                        'site_elevation':site_elevation, 'site_name':site_name, 'site_location':site_location,
-                        'county':None, 'site_date':None, 'operator':None, 'geomorph_setting':geomorph,
-                        'sample_type_collected':type, 'photos_taken':photographs, 'photographs':photo_labels,
-                        'site_notes':site_notes, 'site_coordinates':None}
 
-        return site_details
+    site_details = {'site_bng_ing':bng_ing, 'site_grid_reference':None, 'site_easting':site_easting,
+                    'site_northing':site_northing, 'site_latitude':site_latitude, 'site_longitude':site_longitude,
+                    'site_elevation':site_elevation, 'site_name':site_name, 'site_location':site_location,
+                    'county':None, 'site_date':None, 'operator':None, 'geomorph_setting':geomorph,
+                    'sample_type_collected':type, 'photos_taken':photographs, 'photographs':photo_labels,
+                    'site_notes':site_notes, 'site_coordinates':None}
+
+    return site_details
 
 
 # iterate over the tcn sheet to determine which cells to extract data from
@@ -195,13 +197,16 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         longitude = None
 
     # check easting in correct cell
+    sample_easting = None
     if sample_sheet[positions['Easting'][0]].value is not None:
         sample_easting = int(sample_sheet[positions['Easting'][0]].value)
     elif sample_sheet[positions['Easting'][1]].value is not None and\
         sample_sheet[positions['Easting'][1]].value != 'Transect:':
             sample_easting = int(sample_sheet[positions['Easting'][1]].value)
-    else:
-        sample_easting = None
+
+    # make northing of type int
+    if sample_northing is not None:
+        sample_northing = int(sample_northing)
 
     # check bng in correct cell
     if sample_sheet[positions['BNG or ING'][0]].value is not None:
@@ -212,7 +217,9 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         bng_ing = None
 
     # remove newlines from notes
-    notes = notes.replace('\n', ' ')
+    if notes is not None:
+        notes = notes.replace('\n', ' ')
+        notes = ' '.join(notes.split())
 
     # convert date if format incorrect
     if sample_date is not None:
@@ -279,10 +286,11 @@ def process_file(filename):
     wb = load_workbook(filename, use_iterators=True)
 
     site_details = get_site_info(wb)
+
     for k, v in site_details.iteritems():
         samples[k] = v
 
-    counter = 1
+    counter = 0
 
     sheet_names = wb.get_sheet_names()
 
@@ -292,10 +300,11 @@ def process_file(filename):
             type = get_sample_type(ws)
 
             if type == 'TCN':
+                counter += 1
                 results = get_tcn_sample_info(ws, counter)
                 for k, v in results.iteritems():
                     samples[k] = v
-                counter += 1
+
 
     samples['sample_count'] = counter-1
     return samples

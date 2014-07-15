@@ -51,15 +51,39 @@ def create_site(request):
         geomorph = request.GET['geomorph']
         photos_taken = request.GET['photos_taken']
 
+        latitude = request.GET['latitude']
+        longitude = request.GET['longitude']
+        easting = request.GET['easting']
+        northing = request.GET['northing']
+        elevation = request.GET['elevation']
+        grid = request.GET['grid']
+        bng = request.GET['bng']
 
-        created = Sample_Site.objects.get_or_create(site_name=site_name, county=site_county,
+
+
+        site = Sample_Site.objects.get_or_create(site_name=site_name, county=site_county,
                                                     site_location=site_location, photographs=photographs,
                                                     operator=site_operator, geomorph_setting=geomorph,
                                                     photos_taken=photos_taken, sample_type_collected=type,
-                                                    site_notes=notes)[1]
-                                                # , site_date=site_date
+                                                    site_notes=notes)
+                                            # , site_date=site_date
 
-        reply = json.dumps([{'created':created}])
+        #if site[1] is True:
+        if easting == '':
+            easting = None
+        if northing == '':
+            northing = None
+
+
+        coordinates = Coordinates.objects.create(latitude=latitude, longitude=longitude, easting=easting,
+                                                 elevation=elevation, northing=northing, bng_ing=bng,
+                                                 grid_reference=grid)
+
+        sample_site = site[0]
+        sample_site.site_coordinates = coordinates
+        sample_site.save()
+
+        reply = json.dumps([{'created':site[1]}])
         return HttpResponse(reply, mimetype='application/json')
 
 
@@ -67,13 +91,13 @@ def create_site(request):
 def sites(request):
     context = RequestContext(request)
 
-    site_name = None
+    site_details = None
 
     if request.method == 'GET':
         site_name = request.GET['site_name']
 
     site = Sample_Site.objects.get(site_name=site_name)
-    #coords = site.site_coordinates
+    coordinates = site.site_coordinates
 
     # date = site.site_date.strftime('%d/%m/%Y')
     photos_taken = 1
@@ -82,15 +106,21 @@ def sites(request):
     elif site.photos_taken is False:
          photos_taken = 3
 
-    site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
-                                'operator':site.operator, 'type':site.sample_type_collected,
-                                'geomorph':site.geomorph_setting, 'photographs':site.photographs,
-                                'notes':site.site_notes, 'photos_taken':photos_taken}])
+    if coordinates is not None:
+        site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
+                                    'operator':site.operator, 'type':site.sample_type_collected,
+                                    'geomorph':site.geomorph_setting, 'photographs':site.photographs,
+                                    'notes':site.site_notes, 'photos_taken':photos_taken, 'bng':coordinates.bng_ing,
+                                    'grid':coordinates.grid_reference, 'easting':coordinates.easting,
+                                    'northing':coordinates.northing, 'latitude':coordinates.latitude,
+                                    'longitude':coordinates.longitude,'elevation':coordinates.elevation}])
+    else:
+        site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
+                                    'operator':site.operator, 'type':site.sample_type_collected,
+                                    'geomorph':site.geomorph_setting, 'photographs':site.photographs,
+                                    'notes':site.site_notes, 'photos_taken':photos_taken}])
 
-    #                             , 'date':date, 'bng':coords.bng_ing,
-    #                             'grid':coords.grid_reference, 'easting':coords.easting, 'northing':coords.northing,
-    #                             'latitude':coords.latitude, 'longitude':coords.longitude,
-    #                             'elevation':coords.elevation}])
+                                # 'date':date,
 
     return HttpResponse(site_details, mimetype='application/json')
 
@@ -239,7 +269,7 @@ def edittcn(request):
         siteForm = SampleSiteForm(request.POST)
         hiddensiteform = SampleSiteForm(request.POST, instance=site, prefix='hidden')
         sitecoordForm = CoordinatesForm(request.POST, prefix='site')
-        hiddensitecoordsForm = Coordinates(request.POST, instance=site_coords, prefix='hidden_coords')
+        hiddensitecoordsForm = CoordinatesForm(request.POST, instance=site_coords, prefix='hidden_coords')
         tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat)
         tcnForm = TCNForm(request.POST, instance=tcn)
@@ -248,42 +278,39 @@ def edittcn(request):
         # bearincForm = BearingInclinationForm(request.POST)
         # sampleBIForm = Sample_BI_Form(request.POST)
 
-        # Have we been provided with a complete set of valid forms?
-        # if yes save forms sequentially in order to supply foreign key values
-        # where required
+        # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
+        # foreign key values where required
         if siteForm.is_valid():
         # if sampForm.is_valid() and tcnForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
         #     samplecoordForm.is_valid() and sitecoordForm.is_valid() and siteForm.is_valid() and\
         #     bearincForm.is_valid():
 
-            # if samplecoordForm.has_changed():
-            #     sample_coords = samplecoordForm.save()
-            #
-            # if tranForm.has_changed():
-            #     transect = tranForm.save()
-            #
-            # if retForm.has_changed():
-            #     retreat = retForm.save()
-            #
-            # if sitecoordForm.has_changed():
-            #     site_coords = sitecoordForm.save()
-            #
-            # site = None
-            # if siteForm.has_changed():
-            #     site = siteForm.save()
-            #
-            # if site is not None and site_coords is not None:
-            #     site.site_coordinates = site_coords
-            #
-            #
-            #
-            # sample = sampForm.save(commit=False)
-            # sample.sample_coordinates = sample_coords
-            # sample.sample_site = site
-            # sample.save()
-            #
-            # if tcnForm.has_changed():
-            #     tcnForm.save()
+            sample_coords = samplecoordForm.save()
+
+            transect = tranForm.save()
+
+            retreat = retForm.save()
+
+                # if sitecoordForm.has_changed():
+                #     site_coords = sitecoordForm.save()
+                #
+                # site = None
+                # if siteForm.has_changed():
+                #     site = siteForm.save()
+                #
+                # if site is not None and site_coords is not None:
+                #     site.site_coordinates = site_coords
+                #
+                #
+                #
+            sample = sampForm.save(commit=False)
+            sample.transect = transect
+            sample.retreat = retreat
+            sample.sample_coordinates = sample_coords
+                # sample.sample_site = site
+            sample.save()
+
+            tcnForm.save()
 
             # sampleBI = sampleBIForm.save(commit=False)
             # sampleBI.sample_with_bearing = tcnsample
@@ -295,8 +322,8 @@ def edittcn(request):
             # bearincForm.save()
 
 
-            # Now call the index() view.
-            # The user will be shown the homepage.
+
+            # The user will be returned to the homepage.
             return index(request)
         else:
             # The supplied form contained errors - just print them to the terminal.
