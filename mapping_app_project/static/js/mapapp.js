@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 $('#id_sites').change(function() {
     var selected = $('#id_sites option:selected').text();
-    $('#site_selected').text(selected);
+    $('#id_hidden-site_name').val(selected);
 });
 
 $('#myModal').on('hidden.bs.modal', function (e) {

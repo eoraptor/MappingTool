@@ -256,17 +256,27 @@ class PhotoOfForm(forms.ModelForm):
 class ExistingSitesForm(forms.Form):
 
     sites = forms.ModelChoiceField(help_text="Select from existing sites:",
-                                   queryset=Sample_Site.objects.values_list('site_name', flat=True))
+                                   queryset=Sample_Site.objects.values_list('site_name', flat=True), required=False)
 
 
 
-class SiteSelectedForm(forms.Form):
+class HiddenSiteForm(forms.ModelForm):
 
-    selected = forms.CharField(max_length=500, required=False)
+    site_name = forms.CharField(max_length=500, required=False, widget=forms.HiddenInput())
+
+    class Meta:
+        model = Sample_Site
+
 
     def save(self, commit=True):
-        sel = super(SiteSelectedForm, self).save(commit=False)
-        return sel.selected
+        site = super(HiddenSiteForm, self).save(commit=False)
+        if site.site_name is None:
+            return None
+        else:
+            site_choice = Sample_Site.objects.get(site_name=site.site_name)
+            return site_choice
+
+
 
 
 

@@ -10,7 +10,7 @@ from django.core import serializers
 
 
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm
-from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, SiteSelectedForm
+from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form
 from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
@@ -259,7 +259,8 @@ def edittcn(request):
         retForm = RetreatForm(request.POST, instance=retreat)
         tcnForm = TCNForm(request.POST, instance=tcn)
         sitechoicesForm = ExistingSitesForm(request.POST)
-        siteselectedForm = SiteSelectedForm(request.POST)
+        hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
+
         #
         # bearincForm = BearingInclinationForm(request.POST)
         # sampleBIForm = Sample_BI_Form(request.POST)
@@ -267,6 +268,7 @@ def edittcn(request):
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
         if siteForm.is_valid():
+
         # if sampForm.is_valid() and tcnForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
         #     samplecoordForm.is_valid() and sitecoordForm.is_valid() and siteForm.is_valid() and\
         #     bearincForm.is_valid():
@@ -277,20 +279,16 @@ def edittcn(request):
 
             retreat = retForm.save()
 
-            site_selected = siteselectedForm.save()
-
-            site = None
-            if site_selected is not None:
-                site = Sample_Site.objects.get(site_name=site_selected)
+            site_selected = hiddensiteForm.save()
 
             sample = sampForm.save(commit=False)
             sample.transect = transect
             sample.retreat = retreat
             sample.sample_coordinates = sample_coords
-            sample.sample_site = site
+            sample.sample_site = site_selected
             sample.save()
 
-            tcnForm.save()
+            # tcnForm.save()
 
             # sampleBI = sampleBIForm.save(commit=False)
             # sampleBI.sample_with_bearing = tcnsample
@@ -317,7 +315,8 @@ def edittcn(request):
         retForm = RetreatForm(instance=retreat)
         tcnForm = TCNForm(instance=tcn)
         sitechoicesForm = ExistingSitesForm()
-        siteselectedForm = SiteSelectedForm()
+        hiddensiteForm = HiddenSiteForm(prefix='hidden')
+
 
         # bearincForm = BearingInclinationForm()
         # sampleBIForm = Sample_BI_Form()
@@ -325,11 +324,10 @@ def edittcn(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html', {'site_name':site_name, 'sitechoices':sitechoicesForm,
+    return render_to_response('mappingapp/edittcn.html', {'hiddensiteform':hiddensiteForm, 'site_name':site_name, 'sitechoices':sitechoicesForm,
                                                           'retform': retForm,'tranform': tranForm, 'tcnform':tcnForm,
                                                           'samplecoordform':samplecoordForm, 'siteform': siteForm,
-                                                          'sitecoordform':sitecoordForm, 'sampform':sampForm,
-                                                          'siteselectedform':siteselectedForm}, context)
+                                                          'sitecoordform':sitecoordForm, 'sampform':sampForm}, context)
 
 
                               #  , 'bearincform':bearincForm,

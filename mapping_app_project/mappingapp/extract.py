@@ -84,7 +84,8 @@ def get_site_info(wb):
                                              site_date=None, operator=None, geomorph_setting=geomorph,
                                              sample_type_collected=type, photos_taken=photographs,
                                             photographs=photo_labels, site_notes=site_notes,
-                                            site_coordinates=site_coordinates, collector=collector)
+                                            site_coordinates=site_coordinates)
+    #, collector=collector
 
     site_details = {'site_name':site_name}
 
