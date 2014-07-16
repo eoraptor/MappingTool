@@ -5,7 +5,15 @@ var fields = ['#id_site_name', '#id_county', '#id_site_date', '#id_site_location
 
 $(document).ready(function(){
     $('#savebutton').hide();
-})
+    var site_name = $('#site_name').text();
+    $('#id_sites').val(site_name);
+    $('#site_selected').text(site_name);
+});
+
+$('#id_sites').change(function() {
+    var selected = $('#id_sites option:selected').text();
+    $('#site_selected').text(selected);
+});
 
 $('#myModal').on('hidden.bs.modal', function (e) {
     for (var i = 0; i < fields.length ; i++) {
@@ -50,31 +58,6 @@ $('#modalbutton1').click(function(){
 
         });
     });
-});
-
-
-$('#modalbutton2').click(function(){
-
-    $('#id_site_name').val($('#id_hidden-site_name').text());
-    $('#id_county').val($('#id_hidden-county').text());
-    $('#id_site_date').val($('#id_hidden-site_date').text());
-    $('#id_site_location').val($('#id_hidden-site_name').text());
-    $('#id_operator').val($('#id_hidden-operator').text());
-    $('#id_photographs').val($('#id_hidden-photographs').text());
-    $('#id_site_notes').val($('#id_hidden-site_notes').text());
-    $('#id_geomorph_setting').val($('#id_hidden-geomorph_setting').text());
-    $('#id_sample_type_collected').val($('#id_hidden-sample_type_collected').text());
-    $("#id_photos_taken").val($('#id_hidden-photos_taken option:selected').val());
-
-    $("#id_site-latitude").val($('#id_hidden_coords-latitude').text());
-    $("#id_site-longitude").val($('#id_hidden_coords-longitude').text());
-    $("#id_site-easting").val($('#id_hidden_coords-easting').text());
-    $("#id_site-northing").val($('#id_hidden_coords-northing').text());
-    $("#id_site-elevation").val($('#id_hidden_coords-elevation').text());
-    $("#id_site-grid_reference").val($('#id_hidden_coords-grid_reference').text());
-    $("#id_site-bng_ing").val($('#id_hidden_coords-bng_ing').text());
-
-    $( "#savebutton" ).show();
 });
 
 
@@ -131,14 +114,6 @@ $('#modalbutton2').click(function(){
  });
 
 
-$('#modalbutton3').click(function(){
-    for (var i = 0; i < fields.length ; i++) {
-        $(fields[i]).prop( "disabled", false );
-    }
-
-    $("#id_photos_taken").prop( "disabled", false );
-    $( "#savebutton" ).show();
- });
 
 
 // $(function() {

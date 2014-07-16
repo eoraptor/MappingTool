@@ -10,7 +10,7 @@ from django.core import serializers
 
 
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm
-from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm
+from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, SiteSelectedForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form
 from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
@@ -216,20 +216,7 @@ def edittcn(request):
 
     elif request.session['source'] == 'file':
 
-
-        site = Sample_Site(site_name=request.session['site_name'], site_location=request.session['site_location'],
-                        county=request.session['county'], site_date=request.session['site_date'],
-                        operator=request.session['operator'], geomorph_setting=request.session['geomorph_setting'],
-                        sample_type_collected=request.session['sample_type_collected'],
-                        photos_taken=request.session['photos_taken'], photographs=request.session['photographs'],
-                        site_notes=request.session['site_notes'], site_coordinates=None)
-
-
-        site_coords = Coordinates(bng_ing=request.session['site_bng_ing'],
-                                  grid_reference=request.session['site_grid_reference'],
-                                  easting=request.session['site_easting'], northing=request.session['site_northing'],
-                                  latitude=request.session['site_latitude'], longitude=request.session['site_longitude'],
-                                  elevation=request.session['site_elevation'])
+        site_name = request.session['site_name']
 
         counter = str(request.session['counter'])
         sample_coords = Coordinates(bng_ing=request.session['sample_bng_ing'+counter],
@@ -267,13 +254,12 @@ def edittcn(request):
         sampForm = SampleForm(request.POST, instance=sample)
         samplecoordForm = CoordinatesForm(request.POST, prefix='sample', instance=sample_coords)
         siteForm = SampleSiteForm(request.POST)
-        hiddensiteform = SampleSiteForm(request.POST, instance=site, prefix='hidden')
         sitecoordForm = CoordinatesForm(request.POST, prefix='site')
-        hiddensitecoordsForm = CoordinatesForm(request.POST, instance=site_coords, prefix='hidden_coords')
         tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat)
         tcnForm = TCNForm(request.POST, instance=tcn)
         sitechoicesForm = ExistingSitesForm(request.POST)
+        siteselectedForm = SiteSelectedForm(request.POST)
         #
         # bearincForm = BearingInclinationForm(request.POST)
         # sampleBIForm = Sample_BI_Form(request.POST)
@@ -291,23 +277,17 @@ def edittcn(request):
 
             retreat = retForm.save()
 
-                # if sitecoordForm.has_changed():
-                #     site_coords = sitecoordForm.save()
-                #
-                # site = None
-                # if siteForm.has_changed():
-                #     site = siteForm.save()
-                #
-                # if site is not None and site_coords is not None:
-                #     site.site_coordinates = site_coords
-                #
-                #
-                #
+            site_selected = siteselectedForm.save()
+
+            site = None
+            if site_selected is not None:
+                site = Sample_Site.objects.get(site_name=site_selected)
+
             sample = sampForm.save(commit=False)
             sample.transect = transect
             sample.retreat = retreat
             sample.sample_coordinates = sample_coords
-                # sample.sample_site = site
+            sample.sample_site = site
             sample.save()
 
             tcnForm.save()
@@ -332,23 +312,24 @@ def edittcn(request):
         sampForm = SampleForm(instance=sample)
         samplecoordForm = CoordinatesForm(prefix='sample', instance=sample_coords)
         siteForm = SampleSiteForm()
-        sitecoordForm = CoordinatesForm(prefix='site', instance=site_coords)
-        hiddensitecoordsForm = CoordinatesForm(prefix='hidden_coords', instance=site_coords)
+        sitecoordForm = CoordinatesForm(prefix='site')
         tranForm = TransectForm(instance=transect)
         retForm = RetreatForm(instance=retreat)
         tcnForm = TCNForm(instance=tcn)
-        hiddensiteform = SampleSiteForm(instance=site, prefix='hidden')
+        sitechoicesForm = ExistingSitesForm()
+        siteselectedForm = SiteSelectedForm()
+
         # bearincForm = BearingInclinationForm()
         # sampleBIForm = Sample_BI_Form()
-        sitechoicesForm = ExistingSitesForm()
+
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html', {'hiddencoords':hiddensitecoordsForm,
-                                                          'hidden':hiddensiteform, 'sitechoices':sitechoicesForm,
+    return render_to_response('mappingapp/edittcn.html', {'site_name':site_name, 'sitechoices':sitechoicesForm,
                                                           'retform': retForm,'tranform': tranForm, 'tcnform':tcnForm,
                                                           'samplecoordform':samplecoordForm, 'siteform': siteForm,
-                                                          'sitecoordform':sitecoordForm, 'sampform':sampForm}, context)
+                                                          'sitecoordform':sitecoordForm, 'sampform':sampForm,
+                                                          'siteselectedform':siteselectedForm}, context)
 
 
                               #  , 'bearincform':bearincForm,

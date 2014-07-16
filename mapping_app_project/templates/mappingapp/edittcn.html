@@ -33,13 +33,6 @@
             {{ hidden }}
         {% endfor %}
 
-        {% for field in hidden.visible_fields %}
-            <div class="hidden"> {{ field }} </div>
-        {% endfor %}
-
-        {% for field in hiddencoords.visible_fields %}
-            <div class="hidden"> {{ field }} </div>
-        {% endfor %}
 
         <div class="bs-example bs-example-tabs">
             <ul id="tcntab" class="nav nav-tabs" role="tablist">
@@ -215,22 +208,23 @@
                 </div><br />
 
                 <fieldset class="standard" id="coordinates">
-                    <legend class="fieldsets">Sample Site <a href="#" title="Sample Site details can be added by
-                     selecting from an existing site, using data from the uploaded file, or by entering new details
-                      manually.  They can also be left blank."><span class="glyphicon glyphicon-question-sign"
-                      style="display: inline-block;" id="helpicon"></span></a></legend>
+                    <legend class="fieldsets">Sample Site
+
+                      <a href="#"><span class="glyphicon glyphicon-question-sign"
+                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top" title="Sample Site details can be added by selecting from an existing site or by entering new details.  To leave the site blank select the empty option."></span></a></legend>
 
                     {{ sitechoices.sites.errors }}
                     <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
                     {{ sitechoices.sites }}
 
+                    <div class="hidden" id="site_name">{{ site_name }}</div>
+                    <div class="hidden" id="site_selected">{{ siteselectform.selected }}</div>
+
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
-                    View Existing Details</button><br /><br />
+                    View Details</button>
 
-                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
-                    View Data from File </button>
-                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton3">
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
                     Enter New Site</button>
                 </fieldset>
 

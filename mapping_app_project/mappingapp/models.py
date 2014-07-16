@@ -184,6 +184,7 @@ class SiteManager(models.Manager):
 
 
 class Sample_Site(models.Model):
+    # add collected by
     site_name = models.CharField(max_length=255, null=True, blank=True)
     site_location = models.CharField(max_length=255, null=True, blank=True)
     county = models.CharField(max_length=255, null=True, blank=True)

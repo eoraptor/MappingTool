@@ -76,13 +76,17 @@ def get_site_info(wb):
         site_longitude = convert_lat_long(site_longitude)
 
 
+    site_coordinates = Coordinates.objects.get_or_create(bng_ing=bng_ing, grid_reference=None, easting=site_easting,
+                                  northing=site_northing, latitude=site_latitude, longitude=site_longitude,
+                                  elevation=site_elevation)[0]
 
-    site_details = {'site_bng_ing':bng_ing, 'site_grid_reference':None, 'site_easting':site_easting,
-                    'site_northing':site_northing, 'site_latitude':site_latitude, 'site_longitude':site_longitude,
-                    'site_elevation':site_elevation, 'site_name':site_name, 'site_location':site_location,
-                    'county':None, 'site_date':None, 'operator':None, 'geomorph_setting':geomorph,
-                    'sample_type_collected':type, 'photos_taken':photographs, 'photographs':photo_labels,
-                    'site_notes':site_notes, 'site_coordinates':None}
+    site = Sample_Site.objects.get_or_create(site_name=site_name, site_location=site_location, county=None,
+                                             site_date=None, operator=None, geomorph_setting=geomorph,
+                                             sample_type_collected=type, photos_taken=photographs,
+                                            photographs=photo_labels, site_notes=site_notes,
+                                            site_coordinates=site_coordinates, collector=collector)
+
+    site_details = {'site_name':site_name}
 
     return site_details
 

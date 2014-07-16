@@ -251,14 +251,6 @@ class PhotoOfForm(forms.ModelForm):
         model = Photo_Of
 
 
-class HorizontalRadioRenderer(forms.RadioSelect.renderer):
-    """ this overrides widget method to put radio buttons horizontally
-        instead of vertically.
-    """
-    def render(self):
-            """Outputs radios"""
-            return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
-
 
 
 class ExistingSitesForm(forms.Form):
@@ -266,10 +258,15 @@ class ExistingSitesForm(forms.Form):
     sites = forms.ModelChoiceField(help_text="Select from existing sites:",
                                    queryset=Sample_Site.objects.values_list('site_name', flat=True))
 
-    source = forms.ChoiceField(required=False, help_text="Select site source",
-        widget=forms.RadioSelect(renderer=HorizontalRadioRenderer), choices=(('1', 'File'), ('2', 'New'),
-                                                                        ('3', 'Existing'), ('4', 'None')))
 
+
+class SiteSelectedForm(forms.Form):
+
+    selected = forms.CharField(max_length=500, required=False)
+
+    def save(self, commit=True):
+        sel = super(SiteSelectedForm, self).save(commit=False)
+        return sel.selected
 
 
 
