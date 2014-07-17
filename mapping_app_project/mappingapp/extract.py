@@ -259,11 +259,7 @@ def get_tcn_sample_info(sample_sheet, sample_count):
                       'quartz_content'+counter:quartz, 'sample_setting'+counter:setting,
                       'sampled_material'+counter:material, 'boulder_dimensions'+counter:boulder_dim,
                       'sample_surface_strike_dip'+counter:surface_strike, 'sample_thickness'+counter:thickness,
-                      'grain_size'+counter:grain_size, 'lithology'+counter:lithology}
-
-    # for b in bearing:
-    #     bi = Bearing_Inclination.objects.get_or_create(bearing=b[0], inclination=b[1])[0]
-    #     sample_with_bi = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn_data, bear_inc=bi)[0]
+                      'grain_size'+counter:grain_size, 'lithology'+counter:lithology, 'bearings'+counter:bearing}
 
     return sample_details
 

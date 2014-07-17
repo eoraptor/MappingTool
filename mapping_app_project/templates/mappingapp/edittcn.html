@@ -45,7 +45,7 @@
                         <div class="col-md-6" id="leftcol">
                         <fieldset class="standard">
                             <legend class="fieldsets">TCN Sample Details</legend>
-                            <div class="formspan">
+                            <div class="formspan left">
                                 {{ sampform.sample_code.errors }}
                                 <label class="formlabel">{{ sampform.sample_code.help_text }}</label>
                                 {{ sampform.sample_code }}
@@ -65,12 +65,17 @@
                                  <label class="formlabel">{{ sampform.dating_priority.help_text }}</label>
                                 {{ sampform.dating_priority }}
                             </div>
-                            <div class="formspan">
+                             <div class="formspan">
                                 {{ sampform.collection_date.errors }}
                                 <label class="formlabel">{{ sampform.collection_date.help_text }}</label>
                                 {{ sampform.collection_date }}
                             </div>
                             <div class="formspan">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#biModal" id="bearingmodalbutton">
+                            Bearing/Inclination</button>
+                            </div>
+
+                            <div class="formspan left">
                                 {{ sampform.collector.errors }}
                                 <label class="formlabel">{{ sampform.collector.help_text }}</label>
                                 {{ sampform.collector }}
@@ -80,12 +85,17 @@
                                 <label class="formlabel">{{ sampform.sample_location_name.help_text }}</label>
                                 {{ sampform.sample_location_name }}
                             </div>
-                            <div class="formspan">
+                            <div class="formspan left">
                                 {{ tcnform.sampled_material.errors }}
                                 <label class="formlabel">{{ tcnform.sampled_material.help_text }}</label>
                                 {{ tcnform.sampled_material }}
-                            </div><br/>
+                            </div>
                             <div class="formspan">
+                                {{ tcnform.lithology.errors }}
+                                <label class="formlabel">{{ tcnform.lithology.help_text }}</label>
+                                {{ tcnform.lithology }}
+                            </div>
+                            <div class="formspan left">
                                 {{ tcnform.quartz_content.errors }}
                                 <label class="formlabel">{{ tcnform.quartz_content.help_text }}</label>
                                 {{ tcnform.quartz_content }}
@@ -110,37 +120,157 @@
                                 <label class="formlabel">{{ tcnform.grain_size.help_text }}</label>
                                 {{ tcnform.grain_size }}
                             </div><br />
-                            <div class="formspan">
-                                {{ tcnform.lithology.errors }}
-                                <label class="formlabel">{{ tcnform.lithology.help_text }}</label>
-                                {{ tcnform.lithology }}
-                            </div>
-                            <div class="formspan">
+
+                            <div class="formspan left">
                                 {{ tcnform.sample_setting.errors }}
                                 <label class="formlabel">{{ tcnform.sample_setting.help_text }}</label>
                                 {{ tcnform.sample_setting }}
                             </div>
-                            <div class="formspan">
+                            <div class="formspan left">
                                 {{ sampform.sample_notes.errors }}
                                 <label class="formlabel">{{ sampform.sample_notes.help_text }}</label>
                                 {{ sampform.sample_notes }}
                             </div>
-                            <div class="formspan">
-                                {{ bearincform.bearing.errors }}
-                                <label class="formlabel">{{ bearincform.bearing.help_text }}</label>
-                                {{ bearincform.bearing }}
-                            </div>
-                            <div class="formspan">
-                                {{ bearincform.inclination.errors }}
-                                <label class="formlabel">{{ bearincform.inclination.help_text }}</label>
-                                {{ bearincform.inclination }}
-                            </div>
+
+
+
+                            <div class="modal fade myModal" id="biModal" tabindex="-1" role="dialog" aria-labelledby="biModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" id="modo">
+                                    <div class="modal-content" id="mod-content">
+                                        <div class="modal-header" id="mod-header">
+                                            <button type="button"  id="modaltop" class="close" data-dismiss="modal">
+                                                <span aria-hidden="true">&times;</span>
+                                                <span class="sr-only">Close</span>
+                                            </button>
+                                            <h4 class="modal-title" id="myModalLabel">Sample Bearing and Inclination</h4>
+                                        </div>
+                                        <div class="modal-body" id="biModBod">
+                                            <div class="panel-group" id="accordion1">
+                                                <div class="panel panel-success" id="paneltop">
+                                                    <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion1" href="#collapse">
+                                                        Data
+                                                        </a>
+                                                    </h4>
+                                                    </div>
+                                                    <div id="collapse" class="panel-collapse collapse in">
+                                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-3" id="bearcol">
+                                                    {{ bearingformset.management_form }}
+
+                                                    {% for form in bearingformset %}
+                                                        {% if forloop.counter == 1 %}
+                                                            <table class="bearing">
+                                                            <th class="centered">{{ form.bearing.help_text }}</th>
+                                                            <th class="centered">{{ form.inclination.help_text }}</th>
+                                                            <tr>
+                                                                <td>{{ form.bearing }}</td>
+                                                                <td>{{ form.inclination }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for form in bearingformset %}
+                                                        {% if forloop.counter > 1 and forloop.counter <= 10 %}
+                                                            <table class="bearing">
+                                                                <tr>
+                                                                <td>{{ form.bearing }}</td>
+                                                                <td>{{ form.inclination }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-md-3" id="bearcol">
+                                                    {% for form in bearingformset %}
+                                                        {% if forloop.counter == 11 %}
+                                                            <table class="bearing">
+                                                                <th class="centered">{{ form.bearing.help_text }}</th>
+                                                                <th class="centered">{{ form.inclination.help_text }}</th>
+                                                                <tr>
+                                                                    <td>{{ form.bearing }}</td>
+                                                                    <td>{{ form.inclination }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for form in bearingformset %}
+                                                        {% if forloop.counter > 11 and forloop.counter <= 20 %}
+                                                            <table class="bearing">
+                                                                <tr>
+                                                                    <td>{{ form.bearing }}</td>
+                                                                    <td>{{ form.inclination }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-md-3" id="bearcol">
+                                                    {% for form in bearingformset %}
+                                                        {% if forloop.counter == 21 %}
+                                                            <table class="bearing">
+                                                                <th class="centered">{{ form.bearing.help_text }}</th>
+                                                                <th class="centered">{{ form.inclination.help_text }}</th>
+                                                                <tr>
+                                                                    <td>{{ form.bearing }}</td>
+                                                                    <td>{{ form.inclination }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for form in bearingformset %}
+                                                        {% if forloop.counter > 21 and forloop.counter <= 30 %}
+                                                            <table class="bearing">
+                                                                <tr>
+                                                                    <td>{{ form.bearing }}</td>
+                                                                    <td>{{ form.inclination }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-md-3" id="bearcol">
+                                                    {% for form in bearingformset %}
+                                                        {% if forloop.counter == 31 %}
+                                                            <table class="bearing">
+                                                                <th class="centered">{{ form.bearing.help_text }}</th>
+                                                                <th class="centered">{{ form.inclination.help_text }}</th>
+                                                                <tr>
+                                                                    <td>{{ form.bearing }}</td>
+                                                                    <td>{{ form.inclination }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for form in bearingformset %}
+                                                        {% if forloop.counter > 31 and forloop.counter <= 40 %}
+                                                            <table class="bearing">
+                                                                <tr>
+                                                                    <td>{{ form.bearing }}</td>
+                                                                    <td>{{ form.inclination }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        {% endif %}
+                                                    {% endfor %}
+
+                                                </div></div></div></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" id="mod-foot">
+                                        <button type="button" class="btn btn-primary" id="close" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+</div>
                         </fieldset>
                         </div>
                         <div class="col-md-6" id="agecol">
                     <fieldset class="standard" id="coordinates">
                         <legend class="fieldsets">Sample Coordinates</legend>
-                        <div class="formspan">
+                        <div class="formspan left">
                             {{ samplecoordform.latitude.errors }}
                             <label class="formlabel">{{ samplecoordform.latitude.help_text }}</label>
                             {{ samplecoordform.latitude }}
@@ -165,7 +295,7 @@
                             <label class="formlabel">{{ samplecoordform.grid_reference.help_text }}</label>
                             {{ samplecoordform.grid_reference }}
                         </div>
-                        <div class="formspan">
+                        <div class="formspan left">
                             {{ samplecoordform.elevation.errors }}
                             <label class="formlabel">{{ samplecoordform.elevation.help_text }}</label>
                             {{ samplecoordform.elevation }}
@@ -179,7 +309,7 @@
 
                     <fieldset class="standard" id="age">
                         <legend class="fieldsets">Sample Age</legend>
-                        <div class="formspan">
+                        <div class="formspan left">
                             {{ sampform.age.errors }}
                             <label class="formlabel">{{ sampform.age.help_text }}</label>
                             {{ sampform.age }}
@@ -211,11 +341,14 @@
                     <legend class="fieldsets">Sample Site
 
                       <a href="#"><span class="glyphicon glyphicon-question-sign"
-                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top" title="Sample Site details can be added by selecting from an existing site or by entering new details.  To leave the site blank select the empty option."></span></a></legend>
-
+                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
+                      title="Sample Site details can be added by selecting from an existing site or by entering
+                       new details.  To leave the site blank select the empty option."></span></a></legend>
+                    <div class="formspan left">
                     {{ sitechoices.sites.errors }}
                     <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
                     {{ sitechoices.sites }}
+                        </div>
 
                     <div class="hidden" id="site_option">{{ site_name }}</div>
                     {{ hiddensiteform.site_name }}
@@ -375,12 +508,16 @@
                 <br />
                 <br />
 
+
+
+                    </div>
+
                 <br />
                 <br />
             </div>
         </div>
     </div>
-    </div>
+
     </form>
 </div>
 {% endblock %}

@@ -93,13 +93,13 @@ class SampleForm(forms.ModelForm):
     sample_code = forms.CharField(help_text='Sample Code', required=True,
                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 45}))
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 56}))
     collection_date = forms.DateField(help_text='Collection Date', required=False,
                                       widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     collector = forms.CharField(help_text='Collector(s)', required=False,
-                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
+                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 32}))
     sample_notes = forms.CharField(help_text='Notes', required=False,
-                                   widget=forms.Textarea(attrs={'rows': 4, 'cols': 69}))
+                                   widget=forms.Textarea(attrs={'rows': 4, 'cols': 98}))
     dating_priority = forms.CharField(help_text='Dating Priority', required=False,
                                       widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     age = forms.IntegerField(help_text='Sample Age', required=False,
@@ -184,9 +184,9 @@ class TCNForm(forms.ModelForm):
     quartz_content = forms.CharField(help_text='Quartz Content', required=False,
                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     sample_setting = forms.CharField(help_text='Sample Setting', required=False,
-                                     widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+                                     widget=forms.Textarea(attrs={'rows':3, 'cols':98}))
     sampled_material = forms.CharField(help_text='Sampled Material', required=False,
-                                       widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+                                       widget=forms.Textarea(attrs={'rows':3, 'cols':44}))
     boulder_dimensions = forms.CharField(help_text='Boulder Dimensions', required=False,
                                          widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 14}))
     sample_surface_strike_dip = forms.CharField(help_text='Surface Strike/Dip', required=False,
@@ -196,7 +196,7 @@ class TCNForm(forms.ModelForm):
     grain_size = forms.CharField(help_text='Grain Size', required=False,
                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
     lithology = forms.CharField(help_text='Lithology', required=False,
-                                widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+                                widget=forms.Textarea(attrs={'rows':3, 'cols':44}))
     tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:

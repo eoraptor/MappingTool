@@ -22,21 +22,34 @@
     margin:2px 2px 2px 3px;
 }
 
+.formspan.left {
+    padding-left: 6px;
+}
+
 fieldset.standard {
     padding-top:20px;
-    padding-left:5px;
-    padding-right: 5px;
+    padding-left:0px;
+    padding-right: 0px;
     padding-bottom: 5px;
     border:1px solid #999;
-    border-radius:1px;
+    border-radius:5px;
     box-shadow:0 0 10px #999;
     width:560px;
     margin-bottom: 15px;
     font-size: 12px;
-    background: #ebf0e6;
+    background: #d7e9c6;
     margin-left: auto;
     margin-right: auto;
 
+}
+
+#window_content {
+    width: 60px;
+    color: red;
+}
+
+#infoText {
+    max-width: 70px;
 }
 
 fieldset#site {
@@ -58,6 +71,9 @@ legend.fieldsets {
     margin-top:-20px;
     margin-bottom: 5px;
     font-size: 16px;
+    padding-left: 7px;
+    background: #424242;
+    color: #ffffff;
 }
 legend.fieldsets + * {
     clear:both;
@@ -150,63 +166,56 @@ img#logo {
     background: #FFFEDC;
 }
 
-#window_content {
-    color: #b81900;
-    width: 80px;
-}
-
-.panel-heading
-{
-    background-color:#0CF;
-}
-
-
 #id_sites {
     width: 250px;
     font-size: 13px;
 
 }
 
+.tooltip.top .tooltip-inner {
+    background-color: #5b74a8;
+  }
+.tooltip.top .tooltip-arrow {
+    border-top-color: #5b74a8;
+}
 
-.ui-tooltip, .arrow:after {
-background: white;
-border: 2px solid white;
+
+table.bearing th {
+    text-align: center;
 }
-.ui-tooltip {
-padding: 10px 20px;
-background: #ffffff;
-border-radius: 10px;
-box-shadow: 0 0 7px black;
+
+table.bearing td {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 7px 0px 7px;
 }
-.arrow {
-width: 70px;
-height: 16px;
-overflow: hidden;
-position: absolute;
-left: 50%;
-margin-left: -35px;
-bottom: -16px;
+
+.centered {
+    text-align: center;
 }
-.arrow.top {
-top: -16px;
-bottom: auto;
+
+table.bearing {
+    font-size: 12px;
+    border-collapse: separate;
+    border-spacing: 1px;
+    *border-collapse: expression('separate', cellSpacing = '5px');
 }
-.arrow.left {
-left: 20%;
+
+#bearcol {
+    float: left;
 }
-.arrow:after {
-content: "";
-position: absolute;
-left: 20px;
-top: -20px;
-width: 25px;
-height: 25px;
-box-shadow: 6px 5px 9px -9px black;
--webkit-transform: rotate(45deg);
--ms-transform: rotate(45deg);
-transform: rotate(45deg);
+
+#biModBod {
+    background: #C5BD99;
 }
-.arrow.top:after {
-bottom: -20px;
-top: auto;
+
+#mod-content {
+    box-shadow: 0 0 0 0px;
+}
+
+.modal {
+ overflow-y: auto;
+}
+
+.modal-open {
+ overflow: auto;
 }

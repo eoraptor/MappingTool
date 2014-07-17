@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.forms.models import modelformset_factory
 import json
 import pickle
 from django.core import serializers
@@ -248,6 +249,19 @@ def edittcn(request):
 
         retreat = None
 
+        bearings = request.session['bearings'+counter]
+
+        data = []
+        for item in bearings:
+            dict = {}
+            dict['bearing'] = item[0]
+            dict['inclination'] = item[1]
+            data.append(dict)
+
+
+        BearingsFormSet = modelformset_factory(Bearing_Inclination, BearingInclinationForm)
+        BearingsFormSet(queryset=Bearing_Inclination.objects.none())
+
     # A HTTP POST?
     if request.method == 'POST':
 
@@ -260,6 +274,7 @@ def edittcn(request):
         tcnForm = TCNForm(request.POST, instance=tcn)
         sitechoicesForm = ExistingSitesForm(request.POST)
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
+        bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
 
         #
         # bearincForm = BearingInclinationForm(request.POST)
@@ -314,6 +329,7 @@ def edittcn(request):
         tcnForm = TCNForm(instance=tcn)
         sitechoicesForm = ExistingSitesForm()
         hiddensiteForm = HiddenSiteForm(prefix='hidden')
+        bearingsFormSet = BearingsFormSet(initial=data)
 
 
         # bearincForm = BearingInclinationForm()
@@ -322,7 +338,7 @@ def edittcn(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html', {'hiddensiteform':hiddensiteForm, 'site_name':site_name,
+    return render_to_response('mappingapp/edittcn.html', {'bearingformset':bearingsFormSet, 'hiddensiteform':hiddensiteForm, 'site_name':site_name,
                                                           'sitechoices':sitechoicesForm, 'retform': retForm,
                                                           'tranform': tranForm, 'tcnform':tcnForm,
                                                           'samplecoordform':samplecoordForm, 'siteform': siteForm,

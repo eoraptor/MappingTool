@@ -6,7 +6,7 @@ var fields = ['#id_site_name', '#id_county', '#id_site_date', '#id_site_location
 $(document).ready(function(){
     $('#savebutton').hide();
     var site_name = $('#site_option').text();
-    if (site_name != null) {
+    if (site_name != 'None') {
         $('#id_sites').val(site_name);
     }
     $('#site_selected').text(site_name);
@@ -116,9 +116,10 @@ $('#modalbutton2').click(function(){
  });
 
 
+$('[data-toggle="tooltip"]').tooltip({
+    'placement': 'top'
+});
 
 
-// $(function() {
-//$( document ).tooltip();
-//});
+
 
