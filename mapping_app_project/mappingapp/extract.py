@@ -75,16 +75,25 @@ def get_site_info(wb):
     if site_longitude is not None:
         site_longitude = convert_lat_long(site_longitude)
 
+    site_coordinates = None
 
-    site_coordinates = Coordinates.objects.get_or_create(bng_ing=bng_ing, grid_reference=None, easting=site_easting,
-                                  northing=site_northing, latitude=site_latitude, longitude=site_longitude,
-                                  elevation=site_elevation)[0]
+    if bng_ing is None and site_easting is None and site_northing is None and site_latitude is None and\
+                    site_longitude is None and site_elevation is None:
+        pass
+    else:
+        site_coordinates = Coordinates.objects.get_or_create(bng_ing=bng_ing, grid_reference=None, easting=site_easting,
+                                                             northing=site_northing, latitude=site_latitude,
+                                                             longitude=site_longitude, elevation=site_elevation)[0]
 
-    site = Sample_Site.objects.get_or_create(site_name=site_name, site_location=site_location, county=None,
-                                             site_date=None, operator=None, geomorph_setting=geomorph,
-                                             sample_type_collected=type, photos_taken=photographs,
-                                            photographs=photo_labels, site_notes=site_notes,
-                                            site_coordinates=site_coordinates)
+    if site_name is None and site_location is None and site_date is None and geomorph is None and type is None and\
+                    photographs is None and photo_labels is None and site_notes is None and site_coordinates is None:
+        pass
+    else:
+        site = Sample_Site.objects.get_or_create(site_name=site_name, site_location=site_location, county=None,
+                                                 site_date=None, operator=None, geomorph_setting=geomorph,
+                                                 sample_type_collected=type, photos_taken=photographs,
+                                                 photographs=photo_labels, site_notes=site_notes,
+                                                 site_coordinates=site_coordinates)
     #, collector=collector
 
     site_details = {'site_name':site_name}

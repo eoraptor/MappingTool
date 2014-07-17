@@ -5,8 +5,10 @@ var fields = ['#id_site_name', '#id_county', '#id_site_date', '#id_site_location
 
 $(document).ready(function(){
     $('#savebutton').hide();
-    var site_name = $('#site_name').text();
-    $('#id_sites').val(site_name);
+    var site_name = $('#site_option').text();
+    if (site_name != null) {
+        $('#id_sites').val(site_name);
+    }
     $('#site_selected').text(site_name);
 });
 

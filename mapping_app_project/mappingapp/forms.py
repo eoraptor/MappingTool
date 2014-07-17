@@ -270,7 +270,7 @@ class HiddenSiteForm(forms.ModelForm):
 
     def save(self, commit=True):
         site = super(HiddenSiteForm, self).save(commit=False)
-        if site.site_name is None:
+        if site.site_name is None or site.site_name == '':
             return None
         else:
             site_choice = Sample_Site.objects.get(site_name=site.site_name)

@@ -267,10 +267,9 @@ def edittcn(request):
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
-        if siteForm.is_valid():
+        if siteForm.is_valid() and sampForm.is_valid() and tcnForm.is_valid() and samplecoordForm.is_valid() and\
+                tranForm.is_valid() and retForm.is_valid():
 
-        # if sampForm.is_valid() and tcnForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
-        #     samplecoordForm.is_valid() and sitecoordForm.is_valid() and siteForm.is_valid() and\
         #     bearincForm.is_valid():
 
             sample_coords = samplecoordForm.save()
@@ -285,10 +284,9 @@ def edittcn(request):
             sample.transect = transect
             sample.retreat = retreat
             sample.sample_coordinates = sample_coords
-            sample.sample_site = site_selected
             sample.save()
 
-            # tcnForm.save()
+            tcnForm.save()
 
             # sampleBI = sampleBIForm.save(commit=False)
             # sampleBI.sample_with_bearing = tcnsample
@@ -324,8 +322,9 @@ def edittcn(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html', {'hiddensiteform':hiddensiteForm, 'site_name':site_name, 'sitechoices':sitechoicesForm,
-                                                          'retform': retForm,'tranform': tranForm, 'tcnform':tcnForm,
+    return render_to_response('mappingapp/edittcn.html', {'hiddensiteform':hiddensiteForm, 'site_name':site_name,
+                                                          'sitechoices':sitechoicesForm, 'retform': retForm,
+                                                          'tranform': tranForm, 'tcnform':tcnForm,
                                                           'samplecoordform':samplecoordForm, 'siteform': siteForm,
                                                           'sitecoordform':sitecoordForm, 'sampform':sampForm}, context)
 
