@@ -3,6 +3,12 @@ var fields = ['#id_site_name', '#id_county', '#id_site_date', '#id_site_location
 "#id_site-easting", "#id_site-northing", "#id_site-elevation", "#id_site-grid_reference", "#id_site-bng_ing",
     "#id_collected_by"]
 
+var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_date', '#id_collector',
+'#id_sample_location_name', '#id_sampled_material', '#id_lithology', '#id_quartz_content',
+'#id_sample_surface_strike_dip', '#id_boulder_dimensions', '#id_grain_size', '#id_sample_setting',
+'#id_sample_notes', '#id_sample-latitude', '#id_sample-longitude', '#id_sample-easting', '#id_sample-northing',
+'#id_sample-elevation', '#id_sample-bng_ing']
+
 
 $(document).ready(function(){
     $('#savebutton').hide();
@@ -11,6 +17,14 @@ $(document).ready(function(){
         $('#id_sites').val(site_name);
     }
     $('#site_selected').text(site_name);
+
+    for (var i = 0 ; i < sample_fields.length ; i++) {
+        if ($(sample_fields[i]).val() == "TCN Sample Sheet") {
+            $(sample_fields[i]).val('');
+            $(sample_fields[i]).css("border-color", 'red');
+        }
+    }
+
 });
 
 $('#id_sites').change(function() {
