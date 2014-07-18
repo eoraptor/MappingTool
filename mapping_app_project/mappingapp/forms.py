@@ -85,8 +85,8 @@ class RetreatForm(forms.ModelForm):
 
     def save(self, commit=True):
         retreat = super(RetreatForm, self).save(commit=False)
-        if retreat.zone_number != '':
-            return Retreat_Zone.objects.get_or_create(zone_number=retreat.zone_number)[0]
+        if retreat.zone_number != '' and retreat.zone_number != '1' and retreat.zone_number is not None:
+            return Retreat_Zone.objects.get_or_create(zone_number=int(retreat.zone_number)-1)[0]
 
 
 class SampleForm(forms.ModelForm):
@@ -232,8 +232,13 @@ class TCNForm(forms.ModelForm):
 
 
 class BearingInclinationForm(forms.ModelForm):
-    bearing = forms.IntegerField(help_text='Bearing', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 1, 'resize':'none'}))
-    inclination = forms.IntegerField(help_text='Inclination', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 1, 'resize':'none'}))
+    bearing = forms.IntegerField(help_text='Bearing', required=False,
+                                 widget=forms.Textarea(attrs={'class':'noresize',
+                                                              'rows': 1, 'cols': 1, 'resize':'none'}))
+    inclination = forms.IntegerField(help_text='Inclination',
+                                     required=False, widget=forms.Textarea(attrs={'class':'noresize',
+                                                                                  'rows': 1,
+                                                                                  'cols': 1, 'resize':'none'}))
 
     class Meta:
         model = Bearing_Inclination
@@ -243,7 +248,7 @@ class BearingInclinationForm(forms.ModelForm):
         if bearinc.bearing is None and bearinc.inclination is None:
             return None
         else:
-            bearinc.save()
+            return Bearing_Inclination.objects.get_or_create(bearing=bearinc.bearing, inclination=bearinc.inclination)[0]
 
 
 class Sample_BI_Form(forms.ModelForm):

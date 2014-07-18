@@ -248,6 +248,8 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         date = str(sample_date)
         if '.' in date:
             sample_date = convert_date(date)
+        else:
+            sample_date = sample_date.strftime("%d-%m-%Y")
 
     # convert latitude and longitude if format incorrect
     if latitude is not None:
@@ -263,15 +265,13 @@ def get_tcn_sample_info(sample_sheet, sample_count):
                       'sample_easting'+counter:sample_easting, 'sample_northing'+counter:sample_northing,
                       'sample_latitude'+counter:latitude, 'sample_longitude'+counter:longitude,
                       'sample_elevation'+counter:elevation, 'sample_code'+counter:sample_code,
-                      'sample_location_name'+counter:sample_location_name, 'sample_date'+counter:None,
+                      'sample_location_name'+counter:sample_location_name, 'sample_date'+counter:sample_date,
                       'collector'+counter:collector, 'sample_notes'+counter:notes, 'transect'+counter:transect,
                       'quartz_content'+counter:quartz, 'sample_setting'+counter:setting,
                       'sampled_material'+counter:material, 'boulder_dimensions'+counter:boulder_dim,
                       'sample_surface_strike_dip'+counter:surface_strike, 'sample_thickness'+counter:thickness,
-                      'grain_size'+counter:grain_size, 'lithology'+counter:lithology}
+                      'grain_size'+counter:grain_size, 'lithology'+counter:lithology, 'bearings'+counter:bearing}
 
-    if bearing is not None:
-        sample_details['bearings'+counter] = bearing
 
     return sample_details
 

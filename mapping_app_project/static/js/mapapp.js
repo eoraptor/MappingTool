@@ -18,6 +18,7 @@ $(document).ready(function(){
     }
     $('#site_selected').text(site_name);
 
+//    check if TCN spreadsheet has incorrect field names.  Will need similar checks for OSL and C14
     for (var i = 0 ; i < sample_fields.length ; i++) {
         if ($(sample_fields[i]).val() == "TCN Sample Sheet") {
             $(sample_fields[i]).val('');
@@ -58,6 +59,7 @@ $('#modalbutton1').click(function(){
         if (val.operator == null) {
             val.operator = ''
         }
+        $('#id_site_date').val(val.date, true).prop( "disabled", true );
         $('#id_operator').val(val.operator, true).prop( "disabled", true );
         $('#id_photographs').val(val.photographs, true).prop( "disabled", true );
         $('#id_site_notes').val(val.notes, true).prop( "disabled", true );

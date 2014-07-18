@@ -40,8 +40,9 @@ fieldset.standard {
     background: #d7e9c6;
     margin-left: auto;
     margin-right: auto;
-
 }
+
+
 
 #window_content {
     width: 65px;
@@ -74,6 +75,12 @@ legend.fieldsets {
     padding-left: 7px;
     background: #424242;
     color: #ffffff;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
 }
 legend.fieldsets + * {
     clear:both;

@@ -2,12 +2,10 @@
 
 {% block title %}Edit TCN Record{% endblock %}
 {% block age %}{% endblock age %}
-{% block edit %}{% endblock edit %}
-{% block activeedit %}
-    <li class="active" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
-        xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
-        xmlns="http://www.w3.org/1999/html"><a href="/mappingapp/edit">Edit Records</a></li>
-{% endblock activeedit %}
+{% block upload %}{% endblock upload %}
+{% block activeupload %}
+    <li class="active"><a href="#">Upload Files</a></li>
+{% endblock activeupload %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
@@ -26,13 +24,6 @@
         {% for hidden in sampform.hidden_fields %}
             {{ hidden }}
         {% endfor %}
-        {% for hidden in bearincform.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-        {% for hidden in sampleBIform.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-
 
         <div class="bs-example bs-example-tabs">
             <ul id="tcntab" class="nav nav-tabs" role="tablist">
@@ -514,9 +505,6 @@
                 <br />
                 <br />
                 <br />
-
-
-
                     </div>
 
                 <br />
