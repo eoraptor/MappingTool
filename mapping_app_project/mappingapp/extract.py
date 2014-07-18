@@ -76,6 +76,7 @@ def get_site_info(wb):
         site_longitude = convert_lat_long(site_longitude)
 
     site_coordinates = None
+    site = None
 
     if bng_ing is None and site_easting is None and site_northing is None and site_latitude is None and\
                     site_longitude is None and site_elevation is None:
@@ -86,15 +87,22 @@ def get_site_info(wb):
                                                              longitude=site_longitude, elevation=site_elevation)[0]
 
     if site_name is None and site_location is None and site_date is None and geomorph is None and type is None and\
-                    photographs is None and photo_labels is None and site_notes is None and site_coordinates is None:
+                    photographs is None and photo_labels is None and site_notes is None and\
+                    site_coordinates is None and collector is None:
         pass
+
     else:
-        site = Sample_Site.objects.get_or_create(site_name=site_name, site_location=site_location, county=None,
-                                                 site_date=None, operator=None, geomorph_setting=geomorph,
+        try:
+            site = Sample_Site.objects.get(site_name=site_name)
+        except:
+            pass
+
+        if site is None:
+            Sample_Site.objects.create(site_name=site_name, site_location=site_location, county=None,
+                                                 site_date=site_date, operator=None, geomorph_setting=geomorph,
                                                  sample_type_collected=type, photos_taken=photographs,
                                                  photographs=photo_labels, site_notes=site_notes,
-                                                 site_coordinates=site_coordinates)
-    #, collector=collector
+                                                 site_coordinates=site_coordinates, collected_by=collector)
 
     site_details = {'site_name':site_name}
 
@@ -250,6 +258,7 @@ def get_tcn_sample_info(sample_sheet, sample_count):
 
     counter = str(sample_count)
 
+
     sample_details = {'sample_bng_ing'+counter:bng_ing, 'sample_grid_reference'+counter:None,
                       'sample_easting'+counter:sample_easting, 'sample_northing'+counter:sample_northing,
                       'sample_latitude'+counter:latitude, 'sample_longitude'+counter:longitude,
@@ -259,7 +268,10 @@ def get_tcn_sample_info(sample_sheet, sample_count):
                       'quartz_content'+counter:quartz, 'sample_setting'+counter:setting,
                       'sampled_material'+counter:material, 'boulder_dimensions'+counter:boulder_dim,
                       'sample_surface_strike_dip'+counter:surface_strike, 'sample_thickness'+counter:thickness,
-                      'grain_size'+counter:grain_size, 'lithology'+counter:lithology, 'bearings'+counter:bearing}
+                      'grain_size'+counter:grain_size, 'lithology'+counter:lithology}
+
+    if bearing is not None:
+        sample_details['bearings'+counter] = bearing
 
     return sample_details
 
@@ -284,7 +296,10 @@ def get_bearing(sample_sheet, start_cell):
 
         start += 1
 
-    return data
+    if len(data) == 0:
+        return None
+    else:
+        return data
 
 
 # process a complete file

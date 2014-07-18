@@ -51,6 +51,7 @@ def create_site(request):
         type = request.GET['type']
         geomorph = request.GET['geomorph']
         photos_taken = request.GET['photos_taken']
+        collected_by = request.GET['collected_by']
 
         latitude = request.GET['latitude']
         longitude = request.GET['longitude']
@@ -66,23 +67,22 @@ def create_site(request):
                                                     site_location=site_location, photographs=photographs,
                                                     operator=site_operator, geomorph_setting=geomorph,
                                                     photos_taken=photos_taken, sample_type_collected=type,
-                                                    site_notes=notes)
+                                                    site_notes=notes, collected_by=collected_by)
                                             # , site_date=site_date
 
-        #if site[1] is True:
-        if easting == '':
-            easting = None
-        if northing == '':
-            northing = None
+        if site[1] is True:
+            if easting == '':
+                easting = None
+            if northing == '':
+                northing = None
 
+            coordinates = Coordinates.objects.create(latitude=latitude, longitude=longitude, easting=easting,
+                                                     elevation=elevation, northing=northing, bng_ing=bng,
+                                                     grid_reference=grid)
 
-        coordinates = Coordinates.objects.create(latitude=latitude, longitude=longitude, easting=easting,
-                                                 elevation=elevation, northing=northing, bng_ing=bng,
-                                                 grid_reference=grid)
-
-        sample_site = site[0]
-        sample_site.site_coordinates = coordinates
-        sample_site.save()
+            sample_site = site[0]
+            sample_site.site_coordinates = coordinates
+            sample_site.save()
 
         reply = json.dumps([{'created':site[1]}])
         return HttpResponse(reply, mimetype='application/json')
@@ -112,14 +112,16 @@ def sites(request):
                                     'operator':site.operator, 'type':site.sample_type_collected,
                                     'geomorph':site.geomorph_setting, 'photographs':site.photographs,
                                     'notes':site.site_notes, 'photos_taken':photos_taken, 'bng':coordinates.bng_ing,
-                                    'grid':coordinates.grid_reference, 'easting':coordinates.easting,
-                                    'northing':coordinates.northing, 'latitude':coordinates.latitude,
-                                    'longitude':coordinates.longitude,'elevation':coordinates.elevation}])
+                                    'grid':coordinates.grid_reference, 'collected_by':site.collected_by,
+                                    'easting':coordinates.easting, 'northing':coordinates.northing,
+                                    'latitude':coordinates.latitude, 'longitude':coordinates.longitude,
+                                    'elevation':coordinates.elevation}])
     else:
         site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
                                     'operator':site.operator, 'type':site.sample_type_collected,
                                     'geomorph':site.geomorph_setting, 'photographs':site.photographs,
-                                    'notes':site.site_notes, 'photos_taken':photos_taken}])
+                                    'notes':site.site_notes, 'photos_taken':photos_taken,
+                                    'collected_by':site.collected_by}])
 
                                 # 'date':date,
 
@@ -163,6 +165,7 @@ def upload(request):
         if form.is_valid():
 
             sample_data = process_file(request.FILES['file'])
+
             for k, v in sample_data.iteritems():
                 request.session[k] = v
 
@@ -249,18 +252,24 @@ def edittcn(request):
 
         retreat = None
 
-        bearings = request.session['bearings'+counter]
+        bearings = None
+
+        if 'bearings'+counter in request.session:
+            bearings = request.session['bearings'+counter]
+            del request.session['bearings'+counter]
+            request.session.modified = True
 
         data = []
-        for item in bearings:
-            dict = {}
-            dict['bearing'] = item[0]
-            dict['inclination'] = item[1]
-            data.append(dict)
+        if bearings is not None:
+            for item in bearings:
+                dict = {}
+                dict['bearing'] = item[0]
+                dict['inclination'] = item[1]
+                data.append(dict)
 
 
         BearingsFormSet = modelformset_factory(Bearing_Inclination, BearingInclinationForm)
-        BearingsFormSet(queryset=Bearing_Inclination.objects.none())
+
 
     # A HTTP POST?
     if request.method == 'POST':
@@ -274,10 +283,8 @@ def edittcn(request):
         tcnForm = TCNForm(request.POST, instance=tcn)
         sitechoicesForm = ExistingSitesForm(request.POST)
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
-        bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
+        bearingsFormSet = BearingsFormSet(request.POST, request.FILES, queryset=Bearing_Inclination.objects.none())
 
-        #
-        # bearincForm = BearingInclinationForm(request.POST)
         # sampleBIForm = Sample_BI_Form(request.POST)
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
@@ -294,14 +301,22 @@ def edittcn(request):
             retreat = retForm.save()
 
             site_selected = hiddensiteForm.save()
+            sample_site = None
+            try:
+                sample_site = Sample_Site.objects.get(site_name=site_selected)
+            except:
+                pass
 
             sample = sampForm.save(commit=False)
             sample.transect = transect
             sample.retreat = retreat
             sample.sample_coordinates = sample_coords
+            sample.sample_site = sample_site
             sample.save()
 
-            tcnForm.save()
+            tcn = tcnForm.save(commit=False)
+            tcn.tcn_sample = sample
+            tcn.save()
 
             # sampleBI = sampleBIForm.save(commit=False)
             # sampleBI.sample_with_bearing = tcnsample
@@ -329,7 +344,8 @@ def edittcn(request):
         tcnForm = TCNForm(instance=tcn)
         sitechoicesForm = ExistingSitesForm()
         hiddensiteForm = HiddenSiteForm(prefix='hidden')
-        bearingsFormSet = BearingsFormSet(initial=data)
+        bearingsFormSet = BearingsFormSet(initial=data, queryset=Bearing_Inclination.objects.none())
+
 
 
         # bearincForm = BearingInclinationForm()

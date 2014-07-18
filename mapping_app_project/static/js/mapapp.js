@@ -1,6 +1,7 @@
 var fields = ['#id_site_name', '#id_county', '#id_site_date', '#id_site_location', '#id_operator', '#id_photographs',
 '#id_site_notes', '#id_geomorph_setting', '#id_sample_type_collected', "#id_site-latitude", '#id_site-longitude',
-"#id_site-easting", "#id_site-northing", "#id_site-elevation", "#id_site-grid_reference", "#id_site-bng_ing"]
+"#id_site-easting", "#id_site-northing", "#id_site-elevation", "#id_site-grid_reference", "#id_site-bng_ing",
+    "#id_collected_by"]
 
 
 $(document).ready(function(){
@@ -49,6 +50,7 @@ $('#modalbutton1').click(function(){
         $('#id_geomorph_setting').val(val.geomorph, true).prop( "disabled", true );
         $('#id_sample_type_collected').val(val.type, true).prop( "disabled", true );
         $("#id_photos_taken").val(val.photos_taken).prop( "disabled", true );
+        $("#id_collected_by").val(val.collected_by).prop("disabled", true);
 
         $("#id_site-latitude").val(val.latitude).prop( "disabled", true );
         $("#id_site-longitude").val(val.longitude).prop( "disabled", true );
@@ -75,6 +77,7 @@ $('#savebutton').click(function(){
     var sample_type = $('#id_sample_type_collected').val();
     var geomorph = $('#id_geomorph_setting').val();
     var photos_taken = $('#id_photos_taken option:selected').val();
+    var collected_by = $("#id_collected_by").val();
 
     var latitude = $("#id_site-latitude").text();
     var longitude = $("#id_site-longitude").text();
@@ -89,7 +92,7 @@ $('#savebutton').click(function(){
     $.getJSON('/mappingapp/create_site/', {site_name: site, photographs:photographs, site_operator:operator,
         site_county:county, site_location:location, notes:site_notes, type:sample_type, photos_taken:photos_taken,
         geomorph:geomorph, latitude:latitude, longitude:longitude, easting:easting, northing:northing,
-        elevation:elevation, grid:grid, bng:bng}, function(data){
+        elevation:elevation, grid:grid, bng:bng, collected_by:collected_by}, function(data){
 
         $.each(data, function( key, val) {
             if ((val.created) == true) {

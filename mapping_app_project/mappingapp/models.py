@@ -175,16 +175,16 @@ class Radiocarbon_Sample(models.Model):
 
 
 class SiteManager(models.Manager):
-    def create_site(self, name, location, county, date, operator, setting, type, photos_taken, photographs, notes,
+    def create_site(self, collected, name, location, county, date, operator, setting, type, photos_taken, photographs, notes,
                     coords):
-        site = self.create(site_name=name, site_location=location, county=county, site_date=date, operator=operator,
-                           geomorph_setting=setting, sample_type_collected=type, photos_taken=photos_taken,
-                           photographs=photographs, site_notes=notes, site_coordinates=coords)
+        site = self.create(collected_by=collected, site_name=name, site_location=location, county=county,
+                           site_date=date, operator=operator, geomorph_setting=setting, sample_type_collected=type,
+                           photos_taken=photos_taken, photographs=photographs, site_notes=notes, site_coordinates=coords)
         return site
 
 
 class Sample_Site(models.Model):
-    # add collected by
+    collected_by = models.CharField(max_length=255, null=True, blank=True)
     site_name = models.CharField(max_length=255, null=True, blank=True)
     site_location = models.CharField(max_length=255, null=True, blank=True)
     county = models.CharField(max_length=255, null=True, blank=True)

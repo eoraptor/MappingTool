@@ -426,6 +426,11 @@
                                                     {{ siteform.sample_type_collected }}
                                                 </div>
                                                 <div class="formspan">
+                                                    {{ siteform.collected_by.errors }}
+                                                    <label class="formlabel">{{ siteform.collected_by.help_text }}</label>
+                                                    {{ siteform.collected_by }}
+                                                </div>
+                                                <div class="formspan">
                                                     {{ siteform.geomorph_setting.errors }}
                                                     <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>
                                                     {{ siteform.geomorph_setting }}

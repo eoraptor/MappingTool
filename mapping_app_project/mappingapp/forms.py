@@ -138,17 +138,29 @@ class RadiocarbonForm(forms.ModelForm):
 
 
 class SampleSiteForm(forms.ModelForm):
-    site_name = forms.CharField(help_text='Name', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 35}))
-    site_location = forms.CharField(help_text='Location', required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
-    county = forms.CharField(help_text='County', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
-    site_date = forms.DateField(help_text='Date', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
-    operator = forms.CharField(help_text='Operator', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
-    geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False, widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
-    sample_type_collected = forms.CharField(help_text='Sample Type', required=False, widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 30}))
+    collected_by = forms.CharField(help_text='Collector(s)', required=False,
+                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows':1, 'cols':39}))
+    site_name = forms.CharField(help_text='Name', required=False,
+                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 35}))
+    site_location = forms.CharField(help_text='Location', required=False,
+                                    widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
+    county = forms.CharField(help_text='County', required=False,
+                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+    site_date = forms.DateField(help_text='Date', required=False,
+                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    operator = forms.CharField(help_text='Operator', required=False,
+                               widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+    geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False,
+                                       widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
+    sample_type_collected = forms.CharField(help_text='Sample Type', required=False,
+                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     photos_taken = forms.NullBooleanField(help_text='Photos Taken', required=False)
-    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
-    site_notes = forms.CharField(help_text='Notes', required=False, widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
-    site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(), widget=forms.HiddenInput(), required=False)
+    photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False,
+                                  widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
+    site_notes = forms.CharField(help_text='Notes', required=False,
+                                 widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
+    site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
+                                              widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Sample_Site
@@ -158,7 +170,7 @@ class SampleSiteForm(forms.ModelForm):
         if site.site_name == '' and site.site_location == '' and site.county == '' and\
             site.site_date == '' and site.operator == '' and site.geomorph_setting == '' and\
             site.sample_type_collected == '' and site.photos_taken == 1 and site.photographs == '' and\
-            site.site_notes == '' and site.site_coordinates is None:
+            site.site_notes == '' and site.collected_by == '' and site.site_coordinates is None:
                 return None
         else:
             site.save()
@@ -209,7 +221,13 @@ class TCNForm(forms.ModelForm):
             tcn.grain_size == '' and tcn.lithology == '' and tcn.tcn_sample is None:
                 return None
         else:
-            tcn.save()
+            return TCN_Sample.objects.create(quartz_content=tcn.quartz_content, sample_setting=tcn.sample_setting,
+                                             sampled_material=tcn.sampled_material,
+                                             boulder_dimensions=tcn.boulder_dimensions,
+                                             sample_surface_strike_dip=tcn.sample_surface_strike_dip,
+                                             sample_thickness=tcn.sample_thickness,
+                                             grain_size=tcn.grain_size, lithology=tcn.lithology,
+                                             tcn_sample=tcn.tcn_sample)
 
 
 
