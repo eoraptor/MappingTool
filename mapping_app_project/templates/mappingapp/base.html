@@ -48,7 +48,7 @@
                         <li><a href="/mappingapp/search/">Advanced Search</a></li>
                     {% endblock search %}
                     {% block activesearch %}{% endblock activesearch %}
-
+                {% if is_member %}
                     {% block upload %}
                     <li><a href="/mappingapp/upload/">Upload Files</a></li>
                     {% endblock upload %}
@@ -58,7 +58,7 @@
                     <li><a href="/mappingapp/edit">Edit Records</a></li>
                     {% endblock edit %}
                     {% block activeedit %}{% endblock activeedit %}
-
+                {% endif %}
                 {%  endif %}
             </ul>
 

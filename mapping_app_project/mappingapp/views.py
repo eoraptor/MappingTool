@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
 import json
@@ -15,6 +15,9 @@ from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Z
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 from mappingapp.extract import process_file
 
+
+def is_member(user):
+    return user.groups.filter(name='Consortium Super User')
 
 def markers(request):
     context = RequestContext(request)
@@ -149,7 +152,9 @@ def index(request):
 
     context = RequestContext(request)
 
-    return render_to_response('mappingapp/index.html', {}, context)
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
+    return render_to_response('mappingapp/index.html', {'is_member':is_member}, context)
 
 
 @login_required
@@ -171,6 +176,7 @@ def results(request):
 
 
 @login_required
+@user_passes_test(is_member)
 def upload(request):
 
     context = RequestContext(request)
@@ -199,6 +205,7 @@ def upload(request):
 
 
 @login_required
+@user_passes_test(is_member)
 def edit(request):
     context = RequestContext(request)
 
@@ -222,6 +229,7 @@ def edit(request):
 
 
 @login_required
+@user_passes_test(is_member)
 def validatesample(request):
 
     context = RequestContext(request)
@@ -408,3 +416,5 @@ def user_logout(request):
     logout(request)
 
     return HttpResponseRedirect('/mappingapp/')
+
+
