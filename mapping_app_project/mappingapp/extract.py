@@ -249,7 +249,7 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         if '.' in date:
             sample_date = convert_date(date)
         else:
-            sample_date = sample_date.strftime("%d-%m-%Y")
+            sample_date = sample_date.strftime("%d/%m/%Y")
 
     # convert latitude and longitude if format incorrect
     if latitude is not None:

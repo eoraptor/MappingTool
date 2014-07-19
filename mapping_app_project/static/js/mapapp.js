@@ -18,6 +18,24 @@ $(document).ready(function(){
     }
     $('#site_selected').text(site_name);
 
+    var sample = $('#id_sample_code').text();
+
+    $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function(data){
+        $.each(data, function( key, val) {
+            var response = val.exists;
+            if (response == true) {
+                $('#id_sample_code').css("color", 'red');
+                $('#validatebutton').attr("disabled", true);
+                alert('Sample Code already exists.  To edit the existing sample use the edit link at the top of the' +
+                    ' page. To save the exiting details as a new sample enter a different sample code.')
+                $('#transect').hide();
+                $('#retreat').hide();
+                $('#checkbutton').show();
+            }
+        });
+    });
+
+
 //    check if TCN spreadsheet has incorrect field names.  Will need similar checks for OSL and C14
     for (var i = 0 ; i < sample_fields.length ; i++) {
         if ($(sample_fields[i]).val() == "TCN Sample Sheet") {
@@ -25,13 +43,14 @@ $(document).ready(function(){
             $(sample_fields[i]).css("border-color", 'red');
         }
     }
-
 });
+
 
 $('#id_sites').change(function() {
     var selected = $('#id_sites option:selected').text();
     $('#id_hidden-site_name').val(selected);
 });
+
 
 $('#myModal').on('hidden.bs.modal', function (e) {
     for (var i = 0; i < fields.length ; i++) {
@@ -85,7 +104,7 @@ $('#savebutton').click(function(){
     var site = $('#id_site_name').val();
 
     var county = $('#id_county').val();
-//    var date = $('#id_site_date').val();
+    var date = $('#id_site_date').val();
     var location = $('#id_site_location').val();
     var operator = $('#id_operator').val();
     var photographs = $('#id_photographs').val();
@@ -103,12 +122,10 @@ $('#savebutton').click(function(){
     var grid = $("#id_site-grid_reference").text();
     var bng = $("#id_site-bng_ing").text();
 
-//      , date:date,
-
     $.getJSON('/mappingapp/create_site/', {site_name: site, photographs:photographs, site_operator:operator,
         site_county:county, site_location:location, notes:site_notes, type:sample_type, photos_taken:photos_taken,
         geomorph:geomorph, latitude:latitude, longitude:longitude, easting:easting, northing:northing,
-        elevation:elevation, grid:grid, bng:bng, collected_by:collected_by}, function(data){
+        elevation:elevation, grid:grid, bng:bng, collected_by:collected_by, date:date}, function(data){
 
         $.each(data, function( key, val) {
             if ((val.created) == true) {
@@ -140,5 +157,31 @@ $('[data-toggle="tooltip"]').tooltip({
 });
 
 
+$('#checkbutton').click(function(){
+    var sample1 = $('#id_sample_code').text();
 
+    $.getJSON('/mappingapp/check_sample/', {sample_code: sample1}, function(data){
+        $.each(data, function( key, val) {
+            var response = val.exists;
+            if (response == true) {
+                $('#id_sample_code').css("color", 'red');
+                $('#validatebutton').attr("disabled", true);
+                alert('Sample Code exists please enter another')
+            }
+            else{
+                $('#id_sample_code').css("color", 'black');
+                $('#validatebutton').attr("disabled", false);
+                alert('Sample Code valid')
+                $('#transect').show();
+                $('#retreat').show();
+                $('#checkbutton').hide();
+            }
+        });
+    });
+});
 
+$(document).ready(function() {
+    $('textarea[name=sample_code]').keyup(function() {
+      $('#id_sample_code').text($(this).val());
+    });
+    });

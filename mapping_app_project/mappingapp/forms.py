@@ -1,5 +1,6 @@
+import datetime
 from django import forms
-from django.utils.safestring import mark_safe
+
 from mappingapp.models import Core_Details, Photograph, Coordinates, Transect, Retreat_Zone, Sample, Photo_Of
 from mappingapp.models import Radiocarbon_Sample, Sample_Site, Location_Photo, OSL_Sample, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
@@ -119,7 +120,26 @@ class SampleForm(forms.ModelForm):
     class Meta:
         model = Sample
 
+    def save(self, commit=True):
 
+        sample = None
+        form_data = super(SampleForm, self).save(commit=False)
+        if form_data.collection_date is not None and not isinstance(form_data.collection_date, datetime.date):
+            date = datetime.strptime(form_data.collection_date, '%d %m %Y')
+
+        try:
+            sample = Sample.objects.get(sample_code=form_data.sample_code)
+        except:
+            pass
+
+        if sample is None:
+            sample = Sample.objects.create(sample_code=form_data.sample_code,
+                                           sample_location_name=form_data.sample_location_name, collection_date=form_data.collection_date,
+                                           collector=form_data.collector, sample_notes=form_data.sample_notes,
+                                           dating_priority=form_data.dating_priority, age=form_data.age,
+                                           age_error=form_data.age_error, calendar_age=form_data.calendar_age,
+                                           calendar_error=form_data.calendar_error, lab_code=form_data.lab_code)
+        return sample
 
 
 class RadiocarbonForm(forms.ModelForm):
@@ -279,7 +299,7 @@ class PhotoOfForm(forms.ModelForm):
 class ExistingSitesForm(forms.Form):
 
     sites = forms.ModelChoiceField(help_text="Select from existing sites:",
-                                   queryset=Sample_Site.objects.values_list('site_name', flat=True), required=False)
+                                   queryset=Sample_Site.objects.values_list('site_name', flat=True).order_by('site_name'), required=False)
 
 
 

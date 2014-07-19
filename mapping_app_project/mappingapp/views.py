@@ -25,11 +25,35 @@ def markers(request):
         samples = Sample.objects.all()
         if samples is not None:
 
-            sample_details = json.dumps( [{'latitude': sample.sample_coordinates.latitude,
-                                       'longitude': sample.sample_coordinates.longitude,
-                                       'code': sample.sample_code} for sample in samples])
+            sample_details = json.dumps([{'latitude': sample.sample_coordinates.latitude,
+                                        'longitude': sample.sample_coordinates.longitude,
+                                        'code': sample.sample_code} for sample in samples])
 
     return HttpResponse(sample_details, mimetype='application/json')
+
+
+# check to see if sample exists in database
+def check_sample(request):
+    context = RequestContext(request)
+
+    if request.method == 'GET':
+        sample_code = request.GET['sample_code']
+
+    sample = None
+    existing = False
+
+    try:
+        sample = Sample.objects.get(sample_code=sample_code)
+    except:
+        pass
+
+    if sample is not None:
+        existing = True
+
+    result = json.dumps([{'exists': existing}])
+
+    return HttpResponse(result, mimetype='application/json')
+
 
 
 def create_site(request):
@@ -94,7 +118,7 @@ def sites(request):
     site = Sample_Site.objects.get(site_name=site_name)
     coordinates = site.site_coordinates
 
-    date = site.site_date.strftime("%d-%m-%Y")
+    date = site.site_date.strftime("%d/%m/%Y")
 
     photos_taken = 1
     if site.photos_taken is True:
@@ -165,7 +189,7 @@ def upload(request):
             request.session['source'] = 'file'
 
             # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('edittcn'))
+            return HttpResponseRedirect(reverse('validatesample'))
 
     else:
         form = UploadFileForm() # A empty, unbound form
@@ -185,7 +209,7 @@ def edit(request):
 
             request.session['sample'] = sample_code
             request.session['source'] = 'code'
-            return HttpResponseRedirect(reverse('edittcn'))
+            return HttpResponseRedirect(reverse('validatesample'))
 
         else:
             print 'Error'
@@ -198,7 +222,7 @@ def edit(request):
 
 
 @login_required
-def edittcn(request):
+def validatesample(request):
 
     context = RequestContext(request)
 
@@ -223,7 +247,7 @@ def edittcn(request):
                                     latitude=request.session['sample_latitude'+counter],
                                     longitude=request.session['sample_longitude'+counter],
                                     elevation=request.session['sample_elevation'+counter])
-                
+
         sample = Sample(sample_code=request.session['sample_code'+counter],
                         sample_location_name=request.session['sample_location_name'+counter],
                         collection_date=request.session['sample_date'+counter],
@@ -327,11 +351,14 @@ def edittcn(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/edittcn.html', {'bearingformset':bearingsFormSet, 'hiddensiteform':hiddensiteForm, 'site_name':site_name,
-                                                          'sitechoices':sitechoicesForm, 'retform': retForm,
-                                                          'tranform': tranForm, 'tcnform':tcnForm,
-                                                          'samplecoordform':samplecoordForm, 'siteform': siteForm,
-                                                          'sitecoordform':sitecoordForm, 'sampform':sampForm}, context)
+    return render_to_response('mappingapp/validatesample.html', {'bearingformset':bearingsFormSet,
+                                                                 'hiddensiteform':hiddensiteForm, 'site_name':site_name,
+                                                                 'sitechoices':sitechoicesForm, 'retform': retForm,
+                                                                 'tranform': tranForm, 'tcnform':tcnForm,
+                                                                 'samplecoordform':samplecoordForm,
+                                                                 'siteform': siteForm,
+                                                                 'sitecoordform':sitecoordForm,
+                                                                 'sampform':sampForm}, context)
 
 
 def userlogin(request):
