@@ -64,17 +64,22 @@
 
             {% if not user.is_authenticated %}
 
-                <div id="login">
+                 <div id="loginform">
                     {% block login %}
                         <form class="navbar-form navbar-right" id="login_form" method="post" action="{% url 'userlogin' %}">
                             {% csrf_token %}
                             <div class="form-group">
-                                <input type="text" placeholder="Username" class="form-control" name="username">
+
+                                <div class="input-group input-group-sm">
+                                    <input type="text" placeholder="Username" class="form-control" name="username" id="login">
+                                </div>
                             </div>
                             <div class="form-group">
-                                <input type="password" placeholder="Password" class="form-control" name="password">
+                                <div class="input-group input-group-sm">
+                                    <input type="password" placeholder="Password" class="form-control" name="password" id="login">
+                                </div>
                             </div>
-                                <button type="submit" class="btn btn-success">Sign in</button>
+                            <button type="submit" class="btn btn-success">Sign in</button>
                         </form>
                     {% endblock login %}
             {% else %}
