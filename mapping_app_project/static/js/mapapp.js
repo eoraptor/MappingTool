@@ -14,7 +14,7 @@ $(document).ready(function(){
     $('#savebutton').hide();
     var site_name = $('#site_option').text();
     if (site_name != 'None') {
-        $('#id_sites').val(site_name);
+        $('#id_main-sites').val(site_name);
     }
     $('#site_selected').text(site_name);
 
@@ -46,8 +46,8 @@ $(document).ready(function(){
 });
 
 
-$('#id_sites').change(function() {
-    var selected = $('#id_sites option:selected').text();
+$('#id_main-sites').change(function() {
+    var selected = $('#id_main-sites option:selected').text();
     $('#id_hidden-site_name').val(selected);
 });
 
@@ -60,44 +60,6 @@ $('#myModal').on('hidden.bs.modal', function (e) {
      $( "#savebutton" ).hide();
 });
 
-
-$('#modalbutton1').click(function(){
-    var site = $('#id_sites option:selected').text();
-
-    $.getJSON('/mappingapp/sites/', {site_name: site}, function(data){
-        var items = [];
-        $.each(data, function( key, val) {
-        $('#id_site_name').val(val.name, true).prop( "disabled", true );
-        if (val.county == null) {
-            val.county = ''
-        }
-        $('#id_county').val(val.county, true).prop( "disabled", true );
-        $('#id_site_date').val(val.date, true).prop( "disabled", true );
-        $('#id_site_location').val(val.loc, true).prop( "disabled", true );
-
-        if (val.operator == null) {
-            val.operator = ''
-        }
-        $('#id_site_date').val(val.date, true).prop( "disabled", true );
-        $('#id_operator').val(val.operator, true).prop( "disabled", true );
-        $('#id_photographs').val(val.photographs, true).prop( "disabled", true );
-        $('#id_site_notes').val(val.notes, true).prop( "disabled", true );
-        $('#id_geomorph_setting').val(val.geomorph, true).prop( "disabled", true );
-        $('#id_sample_type_collected').val(val.type, true).prop( "disabled", true );
-        $("#id_photos_taken").val(val.photos_taken).prop( "disabled", true );
-        $("#id_collected_by").val(val.collected_by).prop("disabled", true);
-
-        $("#id_site-latitude").val(val.latitude).prop( "disabled", true );
-        $("#id_site-longitude").val(val.longitude).prop( "disabled", true );
-        $("#id_site-easting").val(val.easting).prop( "disabled", true );
-        $("#id_site-northing").val(val.northing).prop( "disabled", true );
-        $("#id_site-elevation").val(val.elevation).prop( "disabled", true );
-        $("#id_site-grid_reference").val(val.grid).prop( "disabled", true );
-        $("#id_site-bng_ing").val(val.bng).prop( "disabled", true );
-
-        });
-    });
-});
 
 
 $('#savebutton').click(function(){
@@ -113,29 +75,32 @@ $('#savebutton').click(function(){
     var geomorph = $('#id_geomorph_setting').val();
     var photos_taken = $('#id_photos_taken option:selected').val();
     var collected_by = $("#id_collected_by").val();
+    var date = date.toDateString()
+//    var latitude = $("#id_site-latitude").text();
+//    var longitude = $("#id_site-longitude").text();
+//    var easting = $("#id_site-easting").text();
+//    var northing = $("#id_site-northing").text();
+//    var elevation = $("#id_site-elevation").text();
+//    var grid = $("#id_site-grid_reference").text();
+//    var bng = $("#id_site-bng_ing").text();
 
-    var latitude = $("#id_site-latitude").text();
-    var longitude = $("#id_site-longitude").text();
-    var easting = $("#id_site-easting").text();
-    var northing = $("#id_site-northing").text();
-    var elevation = $("#id_site-elevation").text();
-    var grid = $("#id_site-grid_reference").text();
-    var bng = $("#id_site-bng_ing").text();
-
-    $.getJSON('/mappingapp/create_site/', {site_name: site, photographs:photographs, site_operator:operator,
-        site_county:county, site_location:location, notes:site_notes, type:sample_type, photos_taken:photos_taken,
-        geomorph:geomorph, latitude:latitude, longitude:longitude, easting:easting, northing:northing,
-        elevation:elevation, grid:grid, bng:bng, collected_by:collected_by, date:date}, function(data){
+    $.getJSON('/mappingapp/create_site/', {site_name: site, site_county:county, site_location:location,
+        geomorph:geomorph, type:sample_type, photographs:photographs, notes:site_notes, site_operator:operator,
+        photos_taken:photos_taken, collected_by:collected_by, date:date}, function(data){
+//        ,
+//        n,
+//        latitude:latitude, longitude:longitude, easting:easting, northing:northing,
+//        elevation:elevation, grid:grid, bng:bng, }
 
         $.each(data, function( key, val) {
             if ((val.created) == true) {
-            $('#id_sites').append(new Option(site))
+            $('#id_main-sites').append(new Option(site))
             alert('Site Saved')
             }else if ((val.created) == false) {
                 alert('Site Already Exists')
             }
         });
-    $("#id_sites").val(site);
+    $("#id_main-sites").val(site);
   });
 
     $('#myModal').hide()
@@ -143,12 +108,11 @@ $('#savebutton').click(function(){
 
 
 $('#modalbutton2').click(function(){
-    for (var i = 0; i < fields.length ; i++) {
-        $(fields[i]).prop( "disabled", false );
-    }
-
-    $("#id_photos_taken").prop( "disabled", false );
+    enable();
     $( "#savebutton" ).show();
+    $('.site-info').css('visibility','visible');
+    $('.sitech').css('visibility','visible');
+
  });
 
 
@@ -184,4 +148,72 @@ $(document).ready(function() {
     $('textarea[name=sample_code]').keyup(function() {
       $('#id_sample_code').text($(this).val());
     });
+});
+
+
+var enable = function() {
+    for (var i = 0 ; i < fields.length ; i++) {
+    $(fields[i]).prop( "disabled", false );
+    $("#id_photos_taken").prop( "disabled", false );
+    }
+}
+
+var disable = function() {
+    for (var i = 0 ; i < fields.length ; i++) {
+    $(fields[i]).prop( "disabled", true );
+    $("#id_photos_taken").prop( "disabled", true );
+    }
+}
+
+
+var getsites = function(element) {
+    var site = $(element + ' option:selected' ).val();
+
+   $.getJSON('/mappingapp/sites/', {site_name: site}, function(data){
+        var items = [];
+        $.each(data, function( key, val) {
+        $('#id_site_name').val(val.name, true);
+        if (val.county == null) {
+            val.county = ''
+        }
+        $('#id_county').val(val.county, true);
+        $('#id_site_date').val(val.date, true);
+        $('#id_site_location').val(val.loc, true);
+
+        if (val.operator == null) {
+            val.operator = ''
+        }
+        $('#id_site_date').val(val.date, true);
+        $('#id_operator').val(val.operator, true);
+        $('#id_photographs').val(val.photographs, true);
+        $('#id_site_notes').val(val.notes, true);
+        $('#id_geomorph_setting').val(val.geomorph, true);
+        $('#id_sample_type_collected').val(val.type, true);
+        $("#id_photos_taken").val(val.photos_taken);
+        $("#id_collected_by").val(val.collected_by);
+
+        $("#id_site-latitude").val(val.latitude);
+        $("#id_site-longitude").val(val.longitude);
+        $("#id_site-easting").val(val.easting);
+        $("#id_site-northing").val(val.northing);
+        $("#id_site-elevation").val(val.elevation);
+        $("#id_site-grid_reference").val(val.grid);
+        $("#id_site-bng_ing").val(val.bng);
+        });
     });
+}
+
+
+
+$( "#id_fill-sites" ).change(function () {
+    getsites("#id_fill-sites");
+});
+
+
+$( "#modalbutton1" ).click(function () {
+    getsites("#id_main-sites");
+    disable();
+    $('.site-info').css('visibility','hidden');
+    $('.sitech').css('visibility','hidden');
+});
+

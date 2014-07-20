@@ -145,10 +145,26 @@ img#logo {
 
 #mod-header {
     background: #424242;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 5px;
+    padding-bottom: 6px;
 }
 
+#siteDetailsLabel {
+    width: 175px;
+    float: left;
+    color: #ffffff;
+}
+
+.site-info {
+    width: 120px;
+    float: left;
+    color: #ffffff;
+    margin-top: 1px;
+}
+
+.sitech {
+    font-size: 13px;
+}
 #myModalLabel {
     color: #ffffff;
 }

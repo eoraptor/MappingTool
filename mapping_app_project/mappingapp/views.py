@@ -77,33 +77,42 @@ def create_site(request):
         photos_taken = request.GET['photos_taken']
         collected_by = request.GET['collected_by']
 
-        latitude = request.GET['latitude']
-        longitude = request.GET['longitude']
-        easting = request.GET['easting']
-        northing = request.GET['northing']
-        elevation = request.GET['elevation']
-        grid = request.GET['grid']
-        bng = request.GET['bng']
 
-        site = Sample_Site.objects.get_or_create(site_name=site_name, county=site_county,
-                                                    site_location=site_location, photographs=photographs,
-                                                    operator=site_operator, geomorph_setting=geomorph,
-                                                    photos_taken=photos_taken, sample_type_collected=type,
-                                                    site_notes=notes, collected_by=collected_by, site_date=site_date)
 
-        if site[1] is True:
-            if easting == '':
-                easting = None
-            if northing == '':
-                northing = None
+        # latitude = request.GET['latitude']
+        # longitude = request.GET['longitude']
+        # easting = request.GET['easting']
+        # northing = request.GET['northing']
+        # elevation = request.GET['elevation']
+        # grid = request.GET['grid']
+        # bng = request.GET['bng']
 
-            coordinates = Coordinates.objects.create(latitude=latitude, longitude=longitude, easting=easting,
-                                                     elevation=elevation, northing=northing, bng_ing=bng,
-                                                     grid_reference=grid)
+        site = Sample_Site.objects.get_or_create(site_name=site_name, county=site_county,site_location=site_location,
+                                                 site_notes=notes, photographs=photographs, operator=site_operator,
+                                                 photos_taken=photos_taken, collected_by=collected_by,
+                                                 geomorph_setting=geomorph, sample_type_collected=type,
+                                                 site_date=site_date)
+            # ,
+            #
+            #
+            #                                      )
 
-            sample_site = site[0]
-            sample_site.site_coordinates = coordinates
-            sample_site.save()
+            #                                          ,
+            #                                     )
+
+        # if site[1] is True:
+        #     if easting == '':
+        #         easting = None
+        #     if northing == '':
+        #         northing = None
+        #
+        #     coordinates = Coordinates.objects.create(latitude=latitude, longitude=longitude, easting=easting,
+        #                                              elevation=elevation, northing=northing, bng_ing=bng,
+        #                                              grid_reference=grid)
+        #
+        #     sample_site = site[0]
+        #     sample_site.site_coordinates = coordinates
+        #     sample_site.save()
 
         reply = json.dumps([{'created':site[1]}])
         return HttpResponse(reply, mimetype='application/json')
@@ -303,7 +312,7 @@ def validatesample(request):
         tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat)
         tcnForm = TCNForm(request.POST, instance=tcn)
-        sitechoicesForm = ExistingSitesForm(request.POST)
+        sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
         bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
 
@@ -353,9 +362,10 @@ def validatesample(request):
         tranForm = TransectForm(instance=transect)
         retForm = RetreatForm(instance=retreat)
         tcnForm = TCNForm(instance=tcn)
-        sitechoicesForm = ExistingSitesForm()
+        sitechoicesForm = ExistingSitesForm(prefix='main')
         hiddensiteForm = HiddenSiteForm(prefix='hidden')
         bearingsFormSet = BearingsFormSet(initial=data)
+        fillsiteForm = ExistingSitesForm(request.POST, prefix='fill')
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
@@ -366,7 +376,8 @@ def validatesample(request):
                                                                  'samplecoordform':samplecoordForm,
                                                                  'siteform': siteForm,
                                                                  'sitecoordform':sitecoordForm,
-                                                                 'sampform':sampForm}, context)
+                                                                 'sampform':sampForm, 'fillsiteform':fillsiteForm},
+                                                                context)
 
 
 def userlogin(request):
