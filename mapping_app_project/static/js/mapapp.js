@@ -75,22 +75,21 @@ $('#savebutton').click(function(){
     var geomorph = $('#id_geomorph_setting').val();
     var photos_taken = $('#id_photos_taken option:selected').val();
     var collected_by = $("#id_collected_by").val();
-    var date = date.toDateString()
-//    var latitude = $("#id_site-latitude").text();
-//    var longitude = $("#id_site-longitude").text();
-//    var easting = $("#id_site-easting").text();
-//    var northing = $("#id_site-northing").text();
-//    var elevation = $("#id_site-elevation").text();
-//    var grid = $("#id_site-grid_reference").text();
-//    var bng = $("#id_site-bng_ing").text();
+
+    var stringdate = date.split(' ')[0];
+
+    var latitude = $("#id_site-latitude").val();
+    var longitude = $("#id_site-longitude").val();
+    var easting = $("#id_site-easting").val();
+    var northing = $("#id_site-northing").val();
+    var elevation = $("#id_site-elevation").val();
+    var grid = $("#id_site-grid_reference").val();
+    var bng = $("#id_site-bng_ing").val();
 
     $.getJSON('/mappingapp/create_site/', {site_name: site, site_county:county, site_location:location,
         geomorph:geomorph, type:sample_type, photographs:photographs, notes:site_notes, site_operator:operator,
-        photos_taken:photos_taken, collected_by:collected_by, date:date}, function(data){
-//        ,
-//        n,
-//        latitude:latitude, longitude:longitude, easting:easting, northing:northing,
-//        elevation:elevation, grid:grid, bng:bng, }
+        photos_taken:photos_taken, collected_by:collected_by, date:stringdate, latitude:latitude,
+         northing:northing, easting:easting, longitude:longitude, elevation:elevation, grid:grid, bng:bng}, function(data){
 
         $.each(data, function( key, val) {
             if ((val.created) == true) {
@@ -172,6 +171,7 @@ var getsites = function(element) {
    $.getJSON('/mappingapp/sites/', {site_name: site}, function(data){
         var items = [];
         $.each(data, function( key, val) {
+
         $('#id_site_name').val(val.name, true);
         if (val.county == null) {
             val.county = ''

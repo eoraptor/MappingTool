@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
 import json
+import datetime
 
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm
@@ -77,38 +78,44 @@ def create_site(request):
         photos_taken = request.GET['photos_taken']
         collected_by = request.GET['collected_by']
 
+        if site_date == '':
+            date = None
+        else:
+            date = datetime.datetime.strptime(site_date, '%d/%m/%Y').date()
 
+        if photos_taken == '1':
+            photos_taken = None
+        elif photos_taken == '2':
+            photos_taken = True
+        else:
+            photos_taken = False
 
-        # latitude = request.GET['latitude']
-        # longitude = request.GET['longitude']
-        # easting = request.GET['easting']
-        # northing = request.GET['northing']
-        # elevation = request.GET['elevation']
-        # grid = request.GET['grid']
-        # bng = request.GET['bng']
+        latitude = request.GET['latitude']
+        longitude = request.GET['longitude']
+        easting = request.GET['easting']
+        northing = request.GET['northing']
+        elevation = request.GET['elevation']
+        grid = request.GET['grid']
+        bng = request.GET['bng']
 
         site = Sample_Site.objects.get_or_create(site_name=site_name, county=site_county,site_location=site_location,
                                                  site_notes=notes, photographs=photographs, operator=site_operator,
                                                  photos_taken=photos_taken, collected_by=collected_by,
                                                  geomorph_setting=geomorph, sample_type_collected=type,
-                                                 site_date=site_date)
-            # ,
-            #
-            #
-            #                                      )
-
-            #                                          ,
-            #                                     )
+                                                 site_date=date)
 
         # if site[1] is True:
         #     if easting == '':
-        #         easting = None
+        #          easting = None
         #     if northing == '':
         #         northing = None
+        #     if latitude == '':
+        #         latitude = None
+        #     if longitude == '':
+        #         longitude = None
         #
-        #     coordinates = Coordinates.objects.create(latitude=latitude, longitude=longitude, easting=easting,
-        #                                              elevation=elevation, northing=northing, bng_ing=bng,
-        #                                              grid_reference=grid)
+        #     coordinates = Coordinates.objects.create(elevation=elevation, latitude=latitude, longitude=longitude,
+        #                                          grid_reference=grid, bng_ing=bng, easting=easting, northing=northing,)
         #
         #     sample_site = site[0]
         #     sample_site.site_coordinates = coordinates
@@ -130,7 +137,10 @@ def sites(request):
     site = Sample_Site.objects.get(site_name=site_name)
     coordinates = site.site_coordinates
 
-    date = site.site_date.strftime("%d/%m/%Y")
+
+    date = site.site_date
+    if date is not None:
+        date = date.strftime("%d/%m/%Y")
 
     photos_taken = 1
     if site.photos_taken is True:
