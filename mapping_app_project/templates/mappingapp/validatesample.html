@@ -4,15 +4,16 @@
 {% block age %}{% endblock age %}
 {% block upload %}{% endblock upload %}
 {% block activeupload %}
-    <li class="active"><a href="#">Upload Files</a></li>
+    <li class="active"><a href="/mappingapp/upload">Upload Files</a></li>
 {% endblock activeupload %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
 
 <div class="jumbotron" id="editjumbo">
+{% block formblock %}
     <form id="validate_form" method="post" action="/mappingapp/validatesample/">
-
+{% endblock %}
         {% csrf_token %}
 
         {% for hidden in siteform.hidden_fields %}

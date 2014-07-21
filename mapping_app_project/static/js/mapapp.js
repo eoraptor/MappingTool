@@ -12,28 +12,34 @@ var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_
 
 $(document).ready(function(){
     $('#savebutton').hide();
+
+    $('textarea[name=sample_code]').keyup(function() {
+    $('#id_sample_code').text($(this).val());
+    });
+
     var site_name = $('#site_option').text();
     if (site_name != 'None') {
         $('#id_main-sites').val(site_name);
     }
     $('#site_selected').text(site_name);
+    $('#id_hidden-site_name').val(site_name);
 
-    var sample = $('#id_sample_code').text();
-
-    $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function(data){
-        $.each(data, function( key, val) {
-            var response = val.exists;
-            if (response == true) {
-                $('#id_sample_code').css("color", 'red');
-                $('#validatebutton').attr("disabled", true);
-                alert('Sample Code already exists.  To edit the existing sample use the edit link at the top of the' +
-                    ' page. To save the exiting details as a new sample enter a different sample code.')
-                $('#transect').hide();
-                $('#retreat').hide();
-                $('#checkbutton').show();
-            }
-        });
-    });
+//    var sample = $('#id_sample_code').text();
+//
+//    $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function(data){
+//        $.each(data, function( key, val) {
+//            var response = val.exists;
+//            if (response == true) {
+//                $('#id_sample_code').css("color", 'red');
+//                $('#validatebutton').attr("disabled", true);
+//                alert('Sample Code already exists.  To edit the existing sample use the edit link at the top of the' +
+//                    ' page. To save the exiting details as a new sample enter a different sample code.')
+//                $('#transect').hide();
+//                $('#retreat').hide();
+//                $('#checkbutton').show();
+//            }
+//        });
+//    });
 
 
 //    check if TCN spreadsheet has incorrect field names.  Will need similar checks for OSL and C14
@@ -47,7 +53,7 @@ $(document).ready(function(){
 
 
 $('#id_main-sites').change(function() {
-    var selected = $('#id_main-sites option:selected').text();
+    var selected = $('#id_main-sites option:selected').val();
     $('#id_hidden-site_name').val(selected);
 });
 
@@ -94,6 +100,7 @@ $('#savebutton').click(function(){
         $.each(data, function( key, val) {
             if ((val.created) == true) {
             $('#id_main-sites').append(new Option(site))
+            $('#id_fill-sites').append(new Option(site))
             alert('Site Saved')
             }else if ((val.created) == false) {
                 alert('Site Already Exists')
@@ -101,7 +108,6 @@ $('#savebutton').click(function(){
         });
     $("#id_main-sites").val(site);
   });
-
     $('#myModal').hide()
 });
 
@@ -109,6 +115,7 @@ $('#savebutton').click(function(){
 $('#modalbutton2').click(function(){
     enable();
     $( "#savebutton" ).show();
+    $('#id_fill-sites').val('');
     $('.site-info').css('visibility','visible');
     $('.sitech').css('visibility','visible');
 
@@ -140,12 +147,6 @@ $('#checkbutton').click(function(){
                 $('#checkbutton').hide();
             }
         });
-    });
-});
-
-$(document).ready(function() {
-    $('textarea[name=sample_code]').keyup(function() {
-      $('#id_sample_code').text($(this).val());
     });
 });
 

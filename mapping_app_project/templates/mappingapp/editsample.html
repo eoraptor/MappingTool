@@ -1,0 +1,16 @@
+{% extends 'mappingapp/validatesample.html' %}
+
+
+{% block title %}Edit Records{% endblock %}
+{% block age %}{% endblock age %}
+{% block edit %}{% endblock edit %}
+{% block activeedit %}
+    <li class="active" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+        xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"><a href="/mappingapp/edit">Edit Records</a></li>
+{% endblock activeedit %}
+{% block login %}{% endblock login %}
+
+
+{% block formblock %}
+    <form id="validate_form" method="post" action="/mappingapp/editsample/">
+{% endblock %}

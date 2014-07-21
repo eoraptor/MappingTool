@@ -8,10 +8,10 @@ from django.forms.models import formset_factory
 import json
 import datetime
 
-from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm
-from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm
-from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form
-from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm
+from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm, EditCoordinatesForm
+from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm, EditSampleSiteForm
+from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, EditTCNForm
+from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 from mappingapp.extract import process_file
@@ -27,11 +27,15 @@ def markers(request):
 
     if request.method == 'GET':
         samples = Sample.objects.all()
-        if samples is not None:
+        samples_with_coordinates = []
+        for sample in samples:
+            if sample.sample_coordinates is not None:
+                samples_with_coordinates.append(sample)
 
+        if len(samples_with_coordinates) != 0:
             sample_details = json.dumps([{'latitude': sample.sample_coordinates.latitude,
                                         'longitude': sample.sample_coordinates.longitude,
-                                        'code': sample.sample_code} for sample in samples])
+                                        'code': sample.sample_code} for sample in samples_with_coordinates])
 
     return HttpResponse(sample_details, mimetype='application/json')
 
@@ -104,22 +108,22 @@ def create_site(request):
                                                  geomorph_setting=geomorph, sample_type_collected=type,
                                                  site_date=date)
 
-        # if site[1] is True:
-        #     if easting == '':
-        #          easting = None
-        #     if northing == '':
-        #         northing = None
-        #     if latitude == '':
-        #         latitude = None
-        #     if longitude == '':
-        #         longitude = None
-        #
-        #     coordinates = Coordinates.objects.create(elevation=elevation, latitude=latitude, longitude=longitude,
-        #                                          grid_reference=grid, bng_ing=bng, easting=easting, northing=northing,)
-        #
-        #     sample_site = site[0]
-        #     sample_site.site_coordinates = coordinates
-        #     sample_site.save()
+        if site[1] is True:
+            if easting == '':
+                 easting = None
+            if northing == '':
+                northing = None
+            if latitude == '':
+                latitude = None
+            if longitude == '':
+                longitude = None
+
+            coordinates = Coordinates.objects.create(elevation=elevation, latitude=latitude, longitude=longitude,
+                                                 grid_reference=grid, bng_ing=bng, easting=easting, northing=northing,)
+
+            sample_site = site[0]
+            sample_site.site_coordinates = coordinates
+            sample_site.save()
 
         reply = json.dumps([{'created':site[1]}])
         return HttpResponse(reply, mimetype='application/json')
@@ -198,6 +202,8 @@ def results(request):
 @user_passes_test(is_member)
 def upload(request):
 
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
     context = RequestContext(request)
 
     # Handle file upload
@@ -220,7 +226,7 @@ def upload(request):
         form = UploadFileForm() # A empty, unbound form
 
     # Render list page with the documents and the form
-    return render_to_response('mappingapp/upload.html', {'form': form}, context)
+    return render_to_response('mappingapp/upload.html', {'is_member':is_member, 'form': form}, context)
 
 
 @login_required
@@ -228,14 +234,16 @@ def upload(request):
 def edit(request):
     context = RequestContext(request)
 
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
     if request.method == 'POST':
         sample_code = request.POST['sample_code']
 
         if sample_code is not None:
 
             request.session['sample'] = sample_code
-            request.session['source'] = 'code'
-            return HttpResponseRedirect(reverse('validatesample'))
+
+            return HttpResponseRedirect(reverse('editsample'))
 
         else:
             print 'Error'
@@ -243,7 +251,7 @@ def edit(request):
     else:
        selectsampleform = SelectSampleForm()
 
-    return render_to_response('mappingapp/edit.html', {'selectsampleform':selectsampleform}, context)
+    return render_to_response('mappingapp/edit.html', {'is_member':is_member, 'selectsampleform':selectsampleform}, context)
 
 
 
@@ -253,63 +261,60 @@ def validatesample(request):
 
     context = RequestContext(request)
 
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
     # retrieve objects to populate form fields
     sample = None
 
     request.session['counter'] = 1
 
-    if request.session['source'] == 'code':
-        sample_code = request.session['sample']
-        sample = Sample.objects.get(sample_code=sample_code)
+    site_name = request.session['site_name']
 
-    elif request.session['source'] == 'file':
+    counter = str(request.session['counter'])
 
-        site_name = request.session['site_name']
+    sample_coords = Coordinates(bng_ing=request.session['sample_bng_ing'+counter],
+                                grid_reference=request.session['sample_grid_reference'+counter],
+                                easting=request.session['sample_easting'+counter],
+                                northing=request.session['sample_northing'+counter],
+                                latitude=request.session['sample_latitude'+counter],
+                                longitude=request.session['sample_longitude'+counter],
+                                elevation=request.session['sample_elevation'+counter])
 
-        counter = str(request.session['counter'])
-        sample_coords = Coordinates(bng_ing=request.session['sample_bng_ing'+counter],
-                                    grid_reference=request.session['sample_grid_reference'+counter],
-                                    easting=request.session['sample_easting'+counter],
-                                    northing=request.session['sample_northing'+counter],
-                                    latitude=request.session['sample_latitude'+counter],
-                                    longitude=request.session['sample_longitude'+counter],
-                                    elevation=request.session['sample_elevation'+counter])
+    sample = Sample(sample_code=request.session['sample_code'+counter],
+                    sample_location_name=request.session['sample_location_name'+counter],
+                    collection_date=request.session['sample_date'+counter],
+                    collector=request.session['collector'+counter],
+                    sample_notes=request.session['sample_notes'+counter],
+                    dating_priority=None, age=None, age_error=None, calendar_age=None, calendar_error=None,
+                    lab_code=None, sample_coordinates=None, sample_site=None, transect=None, retreat=None)
 
-        sample = Sample(sample_code=request.session['sample_code'+counter],
-                        sample_location_name=request.session['sample_location_name'+counter],
-                        collection_date=request.session['sample_date'+counter],
-                        collector=request.session['collector'+counter],
-                        sample_notes=request.session['sample_notes'+counter],
-                        dating_priority=None, age=None, age_error=None, calendar_age=None, calendar_error=None,
-                        lab_code=None, sample_coordinates=None, sample_site=None, transect=None, retreat=None)
+    tcn = TCN_Sample(quartz_content=request.session['quartz_content'+counter],
+                     sample_setting=request.session['sample_setting'+counter],
+                     sampled_material=request.session['sampled_material'+counter],
+                     boulder_dimensions=request.session['boulder_dimensions'+counter],
+                     sample_surface_strike_dip=request.session['sample_surface_strike_dip'+counter],
+                     sample_thickness=request.session['sample_thickness'+counter],
+                     grain_size=request.session['grain_size'+counter],
+                     lithology=request.session['lithology'+counter])
 
-        tcn = TCN_Sample(quartz_content=request.session['quartz_content'+counter],
-                         sample_setting=request.session['sample_setting'+counter],
-                         sampled_material=request.session['sampled_material'+counter],
-                         boulder_dimensions=request.session['boulder_dimensions'+counter],
-                         sample_surface_strike_dip=request.session['sample_surface_strike_dip'+counter],
-                         sample_thickness=request.session['sample_thickness'+counter],
-                         grain_size=request.session['grain_size'+counter],
-                         lithology=request.session['lithology'+counter])
+    transect = Transect(transect_number=request.session['transect'+counter])
 
-        transect = Transect(transect_number=request.session['transect'+counter])
+    retreat = None
 
-        retreat = None
+    bearings = None
 
-        bearings = None
+    if 'bearings'+counter in request.session:
+        bearings = request.session['bearings'+counter]
 
-        if 'bearings'+counter in request.session:
-            bearings = request.session['bearings'+counter]
+    data = []
+    if bearings is not None:
+        for item in bearings:
+            dict = {}
+            dict['bearing'] = item[0]
+            dict['inclination'] = item[1]
+            data.append(dict)
 
-        data = []
-        if bearings is not None:
-            for item in bearings:
-                dict = {}
-                dict['bearing'] = item[0]
-                dict['inclination'] = item[1]
-                data.append(dict)
-
-        BearingsFormSet = formset_factory(BearingInclinationForm, extra=5)
+    BearingsFormSet = formset_factory(BearingInclinationForm, extra=5)
 
 
     # A HTTP POST?
@@ -384,10 +389,125 @@ def validatesample(request):
                                                                  'sitechoices':sitechoicesForm, 'retform': retForm,
                                                                  'tranform': tranForm, 'tcnform':tcnForm,
                                                                  'samplecoordform':samplecoordForm,
-                                                                 'siteform': siteForm,
-                                                                 'sitecoordform':sitecoordForm,
-                                                                 'sampform':sampForm, 'fillsiteform':fillsiteForm},
-                                                                context)
+                                                                 'siteform': siteForm, 'sitecoordform':sitecoordForm,
+                                                                 'sampform':sampForm, 'fillsiteform':fillsiteForm,
+                                                                 'is_member':is_member}, context)
+
+
+def editsample(request):
+
+    context = RequestContext(request)
+
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
+    # retrieve objects to populate form fields
+    sample = None
+
+    request.session['counter'] = 1
+
+    sample_code = request.session['sample']
+    sample = Sample.objects.filter(sample_code=sample_code)[0]
+
+    sample_site = None
+    tcn_data = None
+    transect = None
+    retreat_zone = None
+
+    if sample is not None:
+        site_name = None
+        if sample.sample_site is not None:
+            site_name = sample.sample_site.site_name
+        sample_coordinates = sample.sample_coordinates
+        transect = sample.transect
+        retreat_zone = sample.retreat
+        tcn_data = None
+        try:
+            tcn_data = TCN_Sample.objects.get(tcn_sample=sample)
+
+        except:
+            pass
+
+        #bearing inclination
+
+    #BearingsFormSet = formset_factory(BearingInclinationForm, extra=5)
+
+
+    # A HTTP POST?
+    if request.method == 'POST':
+
+        sampleForm = EditSampleForm(request.POST, instance=sample)
+        samplecoordForm = EditCoordinatesForm(request.POST, prefix='sample', instance=sample_coordinates)
+        siteForm = EditSampleSiteForm(request.POST)
+        sitecoordForm = EditCoordinatesForm(request.POST, prefix='site')
+        tranForm = TransectForm(request.POST, instance=transect)
+        retForm = RetreatForm(request.POST, instance=retreat_zone)
+        tcnForm = EditTCNForm(request.POST, instance=tcn_data)
+        sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
+        hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
+        # bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
+
+        # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
+        # foreign key values where required
+        if sampleForm.is_valid():
+        # if siteForm.is_valid() and sampleForm.is_valid() and tcnForm.is_valid() and samplecoordForm.is_valid() and\
+        #         tranForm.is_valid() and retForm.is_valid():
+
+            sample = sampleForm.save(commit=False)
+            sample_coordinates = samplecoordForm.save()
+            site_name = hiddensiteForm.save()
+            sample_site = None
+            try:
+                sample_site = Sample_Site.objects.get(site_name=site_name)
+            except:
+                pass
+
+            transect = tranForm.save()
+
+            retreat = retForm.save()
+
+            sample.transect = transect
+            sample.retreat = retreat
+            sample.sample_coordinates = sample_coordinates
+            sample.sample_site = sample_site
+            sample.save()
+
+            tcn = tcnForm.save(commit=False)
+            tcn.tcn_sample = sample
+            tcn.save()
+            #
+            # for form in bearingsFormSet.forms:
+            #     bear_inc = form.save()
+            #     sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
+            #                                                                       bear_inc=bear_inc)
+            # The user will be returned to the homepage.
+            return index(request)
+        else:
+            # The supplied form contained errors - just print them to the terminal.
+            print sample.errors
+    else:
+        sampleForm = EditSampleForm(instance=sample)
+        samplecoordForm = EditCoordinatesForm(prefix='sample', instance=sample_coordinates)
+        siteForm = EditSampleSiteForm()
+        sitecoordForm = EditCoordinatesForm(prefix='site')
+        tranForm = TransectForm(instance=transect)
+        retForm = RetreatForm(instance=retreat_zone)
+        tcnForm = EditTCNForm(instance=tcn_data)
+        sitechoicesForm = ExistingSitesForm(prefix='main')
+        hiddensiteForm = HiddenSiteForm(prefix='hidden')
+        # bearingsFormSet = BearingsFormSet(initial=data)
+        fillsiteForm = ExistingSitesForm(request.POST, prefix='fill')
+
+    # Bad form (or form details), no form supplied...
+    # Render the form with error messages (if any).
+    return render_to_response('mappingapp/editsample.html', {'sitecoordform':sitecoordForm,'siteform': siteForm,
+                                                            'samplecoordform':samplecoordForm,'sampform':sampleForm,
+                                                            'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
+                                                            'sitechoices':sitechoicesForm, 'retform': retForm,
+                                                            'fillsiteform':fillsiteForm,'is_member':is_member,
+                                                            'tcnform':tcnForm,'site_name':site_name}, context)
+
+        # 'bearingformset':bearingsFormSet,
+
 
 
 def userlogin(request):

@@ -29,7 +29,7 @@ class PhotographForm(forms.ModelForm):
         model = Photograph
 
 
-class CoordinatesForm(forms.ModelForm):
+class EditCoordinatesForm(forms.ModelForm):
     bng_ing = forms.CharField(help_text='BNG/ING', required=False,
                               widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     grid_reference = forms.CharField(help_text='Grid Reference', required=False,
@@ -43,23 +43,12 @@ class CoordinatesForm(forms.ModelForm):
     longitude = forms.FloatField(help_text='Longitude', required=False,
                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     elevation = forms.CharField(help_text='Elevation', required=False,
-                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 4}))
+                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 7}))
 
     class Meta:
         model = Coordinates
 
-    def save(self, commit=True):
-        coords = super(CoordinatesForm, self).save(commit=False)
-        if coords.bng_ing == '' and coords.grid_reference == '' and\
-            coords.easting is None and coords.northing is None and\
-            coords.latitude is None and coords.longitude is None and coords.elevation == '':
-            return None
-        else:
 
-            return Coordinates.objects.create(bng_ing=coords.bng_ing, grid_reference=coords.grid_reference,
-                                              easting=coords.easting, northing=coords.northing,
-                                              latitude=coords.latitude, longitude=coords.longitude,
-                                              elevation=coords.elevation)
 
 
 class TransectForm(forms.ModelForm):
@@ -90,7 +79,7 @@ class RetreatForm(forms.ModelForm):
             return Retreat_Zone.objects.get_or_create(zone_number=int(retreat.zone_number)-1)[0]
 
 
-class SampleForm(forms.ModelForm):
+class EditSampleForm(forms.ModelForm):
     sample_code = forms.CharField(help_text='Sample Code', required=True,
                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False,
@@ -120,26 +109,6 @@ class SampleForm(forms.ModelForm):
     class Meta:
         model = Sample
 
-    def save(self, commit=True):
-
-        sample = None
-        form_data = super(SampleForm, self).save(commit=False)
-        if form_data.collection_date is not None and not isinstance(form_data.collection_date, datetime.date):
-            date = datetime.strptime(form_data.collection_date, '%d %m %Y')
-
-        try:
-            sample = Sample.objects.get(sample_code=form_data.sample_code)
-        except:
-            pass
-
-        if sample is None:
-            sample = Sample.objects.create(sample_code=form_data.sample_code,
-                                           sample_location_name=form_data.sample_location_name, collection_date=form_data.collection_date,
-                                           collector=form_data.collector, sample_notes=form_data.sample_notes,
-                                           dating_priority=form_data.dating_priority, age=form_data.age,
-                                           age_error=form_data.age_error, calendar_age=form_data.calendar_age,
-                                           calendar_error=form_data.calendar_error, lab_code=form_data.lab_code)
-        return sample
 
 
 class RadiocarbonForm(forms.ModelForm):
@@ -157,7 +126,7 @@ class RadiocarbonForm(forms.ModelForm):
         model = Radiocarbon_Sample
 
 
-class SampleSiteForm(forms.ModelForm):
+class EditSampleSiteForm(forms.ModelForm):
     collected_by = forms.CharField(help_text='Collector(s)', required=False,
                                    widget=forms.Textarea(attrs={'class':'noresize', 'rows':1, 'cols':39}))
     site_name = forms.CharField(help_text='Name', required=False,
@@ -185,15 +154,7 @@ class SampleSiteForm(forms.ModelForm):
     class Meta:
         model = Sample_Site
 
-    def save(self, commit=True):
-        site = super(SampleSiteForm, self).save(commit=False)
-        if site.site_name == '' and site.site_location == '' and site.county == '' and\
-            site.site_date == '' and site.operator == '' and site.geomorph_setting == '' and\
-            site.sample_type_collected == '' and site.photos_taken == 1 and site.photographs == '' and\
-            site.site_notes == '' and site.collected_by == '' and site.site_coordinates is None:
-                return None
-        else:
-            site.save()
+
 
 
 
@@ -212,7 +173,7 @@ class OSLSampleForm(forms.ModelForm):
         model = OSL_Sample
 
 
-class TCNForm(forms.ModelForm):
+class EditTCNForm(forms.ModelForm):
     quartz_content = forms.CharField(help_text='Quartz Content', required=False,
                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     sample_setting = forms.CharField(help_text='Sample Setting', required=False,
@@ -234,20 +195,7 @@ class TCNForm(forms.ModelForm):
     class Meta:
         model = TCN_Sample
 
-    def save(self, commit=True):
-        tcn = super(TCNForm, self).save(commit=False)
-        if tcn.quartz_content == '' and tcn.sample_setting == '' and tcn.sampled_material == '' and\
-            tcn.boulder_dimensions == '' and tcn.sample_surface_strike_dip == '' and tcn.sample_thickness == '' and\
-            tcn.grain_size == '' and tcn.lithology == '' and tcn.tcn_sample is None:
-                return None
-        else:
-            return TCN_Sample.objects.create(quartz_content=tcn.quartz_content, sample_setting=tcn.sample_setting,
-                                             sampled_material=tcn.sampled_material,
-                                             boulder_dimensions=tcn.boulder_dimensions,
-                                             sample_surface_strike_dip=tcn.sample_surface_strike_dip,
-                                             sample_thickness=tcn.sample_thickness,
-                                             grain_size=tcn.grain_size, lithology=tcn.lithology,
-                                             tcn_sample=tcn.tcn_sample)
+
 
 
 
@@ -322,5 +270,70 @@ class HiddenSiteForm(forms.ModelForm):
 
 
 
+# forms for creating new instances which overwrite the default save method
+class SampleForm(EditSampleForm):
+    def save(self, commit=True):
+
+        sample = None
+        form_data = super(SampleForm, self).save(commit=False)
+        if form_data.collection_date is not None and not isinstance(form_data.collection_date, datetime.date):
+            date = datetime.strptime(form_data.collection_date, '%d %m %Y')
+
+        try:
+            sample = Sample.objects.get(sample_code=form_data.sample_code)
+        except:
+            pass
+
+        if sample is None:
+            sample = Sample.objects.create(sample_code=form_data.sample_code,
+                                           sample_location_name=form_data.sample_location_name,
+                                           collection_date=form_data.collection_date,
+                                           collector=form_data.collector, sample_notes=form_data.sample_notes,
+                                           dating_priority=form_data.dating_priority, age=form_data.age,
+                                           age_error=form_data.age_error, calendar_age=form_data.calendar_age,
+                                           calendar_error=form_data.calendar_error, lab_code=form_data.lab_code)
+
+        return sample
 
 
+class CoordinatesForm(EditCoordinatesForm):
+    def save(self, commit=True):
+        coords = super(CoordinatesForm, self).save(commit=False)
+        if coords.bng_ing == '' and coords.grid_reference == '' and\
+            coords.easting is None and coords.northing is None and\
+            coords.latitude is None and coords.longitude is None and coords.elevation == '':
+            return None
+        else:
+            return Coordinates.objects.create(bng_ing=coords.bng_ing, grid_reference=coords.grid_reference,
+                                              easting=coords.easting, northing=coords.northing,
+                                              latitude=coords.latitude, longitude=coords.longitude,
+                                              elevation=coords.elevation)
+
+
+class SampleSiteForm(EditSampleSiteForm):
+    def save(self, commit=True):
+        site = super(SampleSiteForm, self).save(commit=False)
+        if site.site_name == '' and site.site_location == '' and site.county == '' and\
+            site.site_date == '' and site.operator == '' and site.geomorph_setting == '' and\
+            site.sample_type_collected == '' and site.photos_taken == 1 and site.photographs == '' and\
+            site.site_notes == '' and site.collected_by == '' and site.site_coordinates is None:
+                return None
+        else:
+            site.save()
+
+
+class TCNForm(EditTCNForm):
+    def save(self, commit=True):
+        tcn = super(TCNForm, self).save(commit=False)
+        if tcn.quartz_content == '' and tcn.sample_setting == '' and tcn.sampled_material == '' and\
+            tcn.boulder_dimensions == '' and tcn.sample_surface_strike_dip == '' and tcn.sample_thickness == '' and\
+            tcn.grain_size == '' and tcn.lithology == '' and tcn.tcn_sample is None:
+                return None
+        else:
+            return TCN_Sample.objects.create(quartz_content=tcn.quartz_content, sample_setting=tcn.sample_setting,
+                                             sampled_material=tcn.sampled_material,
+                                             boulder_dimensions=tcn.boulder_dimensions,
+                                             sample_surface_strike_dip=tcn.sample_surface_strike_dip,
+                                             sample_thickness=tcn.sample_thickness,
+                                             grain_size=tcn.grain_size, lithology=tcn.lithology,
+                                             tcn_sample=tcn.tcn_sample)
