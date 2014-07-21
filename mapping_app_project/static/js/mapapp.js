@@ -24,32 +24,35 @@ $(document).ready(function(){
     $('#site_selected').text(site_name);
     $('#id_hidden-site_name').val(site_name);
 
-//    var sample = $('#id_sample_code').text();
-//
-//    $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function(data){
-//        $.each(data, function( key, val) {
-//            var response = val.exists;
-//            if (response == true) {
-//                $('#id_sample_code').css("color", 'red');
-//                $('#validatebutton').attr("disabled", true);
-//                alert('Sample Code already exists.  To edit the existing sample use the edit link at the top of the' +
-//                    ' page. To save the exiting details as a new sample enter a different sample code.')
-//                $('#transect').hide();
-//                $('#retreat').hide();
-//                $('#checkbutton').show();
-//            }
-//        });
-//    });
-
-
-//    check if TCN spreadsheet has incorrect field names.  Will need similar checks for OSL and C14
+    // check if TCN spreadsheet has incorrect field names.  Will need similar checks for OSL and C14
     for (var i = 0 ; i < sample_fields.length ; i++) {
         if ($(sample_fields[i]).val() == "TCN Sample Sheet") {
             $(sample_fields[i]).val('');
             $(sample_fields[i]).css("border-color", 'red');
         }
     }
+
+    var elementExists = document.getElementById("#validate_sample");
+    if (elementExists) {
+    var sample = $('#id_sample_code').text();
+
+    $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function(data){
+        $.each(data, function( key, val) {
+            var response = val.exists;
+            if (response == true) {
+                $('#id_sample_code').css("color", 'red');
+                $('#validatebutton').attr("disabled", true);
+                alert('Sample Code already exists.  To edit the existing sample use the edit link at the top of the' +
+                    ' page. To save the exiting details as a new sample enter a different sample code.')
+                $('#transect').hide();
+                $('#retreat').hide();
+                $('#checkbutton').show();
+            }
+        });
+    });
+  }
 });
+
 
 
 $('#id_main-sites').change(function() {

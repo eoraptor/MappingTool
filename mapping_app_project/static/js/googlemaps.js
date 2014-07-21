@@ -16,7 +16,7 @@ var map;
         var mapDiv = document.getElementById('map-canvas');
 
         var map_options = {
-                    center: new google.maps.LatLng(55.8720, -2.2921),
+                    center: new google.maps.LatLng(56, -4.2921),
                     zoom: 5,
                     mapTypeId: google.maps.MapTypeId.SATELLITE,
                     panControl: false,

@@ -70,10 +70,12 @@ def get_site_info(wb):
         site_easting = int(site_easting)
 
     if site_latitude is not None:
-        site_latitude = convert_lat_long(site_latitude)
+        if type(site_latitude) is not float:
+            site_latitude = convert_lat_long(site_latitude)
 
     if site_longitude is not None:
-        site_longitude = convert_lat_long(site_longitude)
+        if type(site_longitude) is not float:
+            site_longitude = -1 * convert_lat_long(site_longitude)
 
     site_coordinates = None
     site = None
@@ -253,10 +255,12 @@ def get_tcn_sample_info(sample_sheet, sample_count):
 
     # convert latitude and longitude if format incorrect
     if latitude is not None:
-        latitude = convert_lat_long(latitude)
+        if type(latitude) is not float:
+            latitude = convert_lat_long(latitude)
 
     if longitude is not None:
-        longitude = convert_lat_long(longitude)
+        if type(longitude) is not float:
+            longitude = -1 * convert_lat_long(longitude)
 
     counter = str(sample_count)
 
@@ -372,13 +376,10 @@ def get_sample_type(ws):
 
 # convert lat/long in degrees, minutes to decimal format
 def convert_lat_long(coord):
-    if type(coord) is float:
-        return coord
-    else:
-        result = "".join(i for i in coord if ord(i)<128)
+    result = "".join(i for i in coord if ord(i)<128)
 
-        degrees = float(result[:result.index(' ')])
-        minutes = float(result[result.rindex(' ')+1:])
-        return degrees + (minutes/60)
+    degrees = float(result[:result.index(' ')])
+    minutes = float(result[result.rindex(' ')+1:])
+    return degrees + (minutes/60)
 
 
