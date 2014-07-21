@@ -4,14 +4,14 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
-from django.forms.models import formset_factory
+from django.forms.models import formset_factory, modelformset_factory
 import json
 import datetime
 
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm, EditCoordinatesForm
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm, EditSampleSiteForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, EditTCNForm
-from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm
+from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm, EditBIForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 from mappingapp.extract import process_file
@@ -362,7 +362,8 @@ def validatesample(request):
 
             for form in bearingsFormSet.forms:
                 bear_inc = form.save()
-                sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
+                if bear_inc is not None:
+                    sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
                                                                                   bear_inc=bear_inc)
             # The user will be returned to the homepage.
             return index(request)
@@ -408,13 +409,12 @@ def editsample(request):
     sample_code = request.session['sample']
     sample = Sample.objects.filter(sample_code=sample_code)[0]
 
-    sample_site = None
+    site_name = None
     tcn_data = None
     transect = None
     retreat_zone = None
 
     if sample is not None:
-        site_name = None
         if sample.sample_site is not None:
             site_name = sample.sample_site.site_name
         sample_coordinates = sample.sample_coordinates
@@ -427,10 +427,15 @@ def editsample(request):
         except:
             pass
 
-        #bearing inclination
+    BearingsFormSet = formset_factory(EditBIForm, extra=5)
 
-    #BearingsFormSet = formset_factory(BearingInclinationForm, extra=5)
+    bearings = Sample_Bearing_Inclination.objects.filter(sample_with_bearing=tcn_data)
 
+    data = []
+    for item in bearings:
+        values = item.bear_inc
+        if values is not None:
+            data.append({'bearing':values.bearing, 'inclination':values.inclination})
 
     # A HTTP POST?
     if request.method == 'POST':
@@ -444,7 +449,7 @@ def editsample(request):
         tcnForm = EditTCNForm(request.POST, instance=tcn_data)
         sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
-        # bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
+        bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
@@ -474,11 +479,21 @@ def editsample(request):
             tcn = tcnForm.save(commit=False)
             tcn.tcn_sample = sample
             tcn.save()
-            #
-            # for form in bearingsFormSet.forms:
-            #     bear_inc = form.save()
-            #     sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
-            #                                                                       bear_inc=bear_inc)
+
+            tracker = 0
+            for form in bearingsFormSet.forms:
+                bear_inc = form.save(commit=False)
+                if bear_inc is not None:
+                    if tracker < len(bearings):
+                        bearings[tracker].bear_inc.bearing = bear_inc.bearing
+                        bearings[tracker].bear_inc.inclination = bear_inc.inclination
+                        bearings[tracker].bear_inc.save()
+                        tracker += 1
+                    else:
+                        if bear_inc.bearing is not None and bear_inc.inclination is not None:
+                            bear_inc.save()
+                            Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn_data, bear_inc=bear_inc)
+
             # The user will be returned to the homepage.
             return index(request)
         else:
@@ -494,8 +509,12 @@ def editsample(request):
         tcnForm = EditTCNForm(instance=tcn_data)
         sitechoicesForm = ExistingSitesForm(prefix='main')
         hiddensiteForm = HiddenSiteForm(prefix='hidden')
-        # bearingsFormSet = BearingsFormSet(initial=data)
         fillsiteForm = ExistingSitesForm(request.POST, prefix='fill')
+
+
+
+        bearingsFormSet = BearingsFormSet(initial=data)
+
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
@@ -504,9 +523,8 @@ def editsample(request):
                                                             'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
                                                             'sitechoices':sitechoicesForm, 'retform': retForm,
                                                             'fillsiteform':fillsiteForm,'is_member':is_member,
-                                                            'tcnform':tcnForm,'site_name':site_name}, context)
-
-        # 'bearingformset':bearingsFormSet,
+                                                            'bearingformset':bearingsFormSet, 'tcnform':tcnForm,
+                                                            'site_name':site_name}, context)
 
 
 

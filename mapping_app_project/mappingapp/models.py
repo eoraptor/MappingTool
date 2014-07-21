@@ -120,6 +120,7 @@ class Sample(models.Model):
     transect = models.ForeignKey(Transect, null=True, blank=True)
     retreat = models.ForeignKey(Retreat_Zone, null=True, blank=True)
 
+
     objects = SampleManager()
 
     def __unicode__(self):

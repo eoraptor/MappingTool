@@ -199,7 +199,7 @@ class EditTCNForm(forms.ModelForm):
 
 
 
-class BearingInclinationForm(forms.ModelForm):
+class EditBIForm(forms.ModelForm):
     bearing = forms.IntegerField(help_text='Bearing', required=False,
                                  widget=forms.Textarea(attrs={'class':'noresize',
                                                               'rows': 1, 'cols': 1, 'resize':'none'}))
@@ -211,12 +211,7 @@ class BearingInclinationForm(forms.ModelForm):
     class Meta:
         model = Bearing_Inclination
 
-    def save(self, commit=True):
-        bearinc = super(BearingInclinationForm, self).save(commit=False)
-        if bearinc.bearing is None and bearinc.inclination is None:
-            return None
-        else:
-            return Bearing_Inclination.objects.get_or_create(bearing=bearinc.bearing, inclination=bearinc.inclination)[0]
+
 
 
 class Sample_BI_Form(forms.ModelForm):
@@ -258,14 +253,14 @@ class HiddenSiteForm(forms.ModelForm):
     class Meta:
         model = Sample_Site
 
-
     def save(self, commit=True):
         site = super(HiddenSiteForm, self).save(commit=False)
-        if site.site_name is None or site.site_name == '':
-            return None
-        else:
+        site_choice = None
+        try:
             site_choice = Sample_Site.objects.get(site_name=site.site_name)
-            return site_choice
+        except:
+            pass
+        return site_choice
 
 
 
@@ -337,3 +332,11 @@ class TCNForm(EditTCNForm):
                                              sample_thickness=tcn.sample_thickness,
                                              grain_size=tcn.grain_size, lithology=tcn.lithology,
                                              tcn_sample=tcn.tcn_sample)
+
+class BearingInclinationForm(EditBIForm):
+    def save(self, commit=True):
+        bearinc = super(BearingInclinationForm, self).save(commit=False)
+        if bearinc.bearing is None and bearinc.inclination is None:
+            return None
+        else:
+            return Bearing_Inclination.objects.create(bearing=bearinc.bearing, inclination=bearinc.inclination)
