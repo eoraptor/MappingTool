@@ -70,11 +70,11 @@ def get_site_info(wb):
         site_easting = int(site_easting)
 
     if site_latitude is not None:
-        if type(site_latitude) is not float:
+        if not isinstance(site_latitude, float):
             site_latitude = convert_lat_long(site_latitude)
 
     if site_longitude is not None:
-        if type(site_longitude) is not float:
+        if not isinstance(site_longitude, float):
             site_longitude = -1 * convert_lat_long(site_longitude)
 
     site_coordinates = None
@@ -255,11 +255,11 @@ def get_tcn_sample_info(sample_sheet, sample_count):
 
     # convert latitude and longitude if format incorrect
     if latitude is not None:
-        if type(latitude) is not float:
+        if not isinstance(latitude, float):
             latitude = convert_lat_long(latitude)
 
     if longitude is not None:
-        if type(longitude) is not float:
+        if not isinstance(longitude, float):
             longitude = -1 * convert_lat_long(longitude)
 
     counter = str(sample_count)

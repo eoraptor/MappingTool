@@ -32,8 +32,7 @@ $(document).ready(function(){
         }
     }
 
-    var elementExists = document.getElementById("#validate_sample");
-    if (elementExists) {
+    if ($("#validate_sample").length > 0) {
     var sample = $('#id_sample_code').text();
 
     $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function(data){

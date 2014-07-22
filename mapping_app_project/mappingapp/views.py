@@ -407,12 +407,16 @@ def editsample(request):
     request.session['counter'] = 1
 
     sample_code = request.session['sample']
-    sample = Sample.objects.filter(sample_code=sample_code)[0]
+    try:
+        sample = Sample.objects.get(sample_code=sample_code)
+    except:
+        pass
 
     site_name = None
     tcn_data = None
     transect = None
     retreat_zone = None
+    sample_coordinates = None
 
     if sample is not None:
         if sample.sample_site is not None:
