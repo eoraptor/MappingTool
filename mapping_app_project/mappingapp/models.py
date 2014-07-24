@@ -9,8 +9,8 @@ class CoreDetailsManager(models.Manager):
         return core_details
 
 class Core_Details(models.Model):
-    exposure_core = models.IntegerField(null=True, blank=True)
-    core_number = models.IntegerField(null=True, blank=True)
+    exposure_core = models.CharField(max_length=255, null=True, blank=True)
+    core_number = models.CharField(max_length=255, null=True, blank=True)
 
     objects = CoreDetailsManager()
 
@@ -221,21 +221,29 @@ class Location_Photo(models.Model):
 
 
 class OSLManager(models.Manager):
-    def create_osl(self, position, litho, depth_history, water_table, burial_depth,
-                   gamma, sample, core):
-        osl = self.create(stratigraphic_postion=position, lithofacies=litho, burial_depth_history=depth_history,
-                          pot_perturb_water_table=water_table, pot_perturb_burial_depth=burial_depth,
-                          gamma_dose=gamma, osl_sample=sample, osl_core=core)
+    def create_osl(self, position, lithofacies, depth, lithology, gamma, equip_no, probe_no, file, time, duration,
+                   potassium, thorium, uranium, sample, core):
+        osl = self.create(stratigraphic_postion=position, lithofacies=lithofacies, burial_depth=depth,
+                          lithology=lithology, gamma_spec=gamma, equipment_number=equip_no, probe_serial_no=probe_no,
+                          filename=file, sample_time=time, sample_duration=duration, potassium=potassium,
+                          thorium=thorium, uranium=uranium, osl_sample=sample, osl_core=core)
         return osl
 
 
 class OSL_Sample(models.Model):
-    stratigraphic_position = models.CharField(max_length=20, null=True, blank=True)
-    lithofacies = models.CharField(max_length=50, null=True, blank=True)
-    burial_depth_history = models.CharField(max_length=50, null=True, blank=True)
-    pot_perturb_water_table = models.CharField(max_length=50, null=True, blank=True)
-    pot_perturb_burial_depth = models.CharField(max_length=50, null=True, blank=True)
-    gamma_dose = models.CharField(max_length=50, null=True, blank=True)
+    stratigraphic_position = models.CharField(max_length=255, null=True, blank=True)
+    lithofacies = models.CharField(max_length=255, null=True, blank=True)
+    burial_depth = models.CharField(max_length=50, null=True, blank=True)
+    lithology = models.CharField(max_length=255, null=True, blank=True)
+    gamma_spec = models.CharField(max_length=255, null=True, blank=True)
+    equipment_number = models.CharField(max_length=255, null=True, blank=True)
+    probe_serial_no = models.CharField(max_length=255, null=True, blank=True)
+    filename = models.CharField(max_length=255, null=True, blank=True)
+    sample_time = models.CharField(max_length=255, null=True, blank=True)
+    sample_duration = models.CharField(max_length=255, null=True, blank=True)
+    potassium = models.CharField(max_length=255, null=True, blank=True)
+    thorium = models.CharField(max_length=255, null=True, blank=True)
+    uranium = models.CharField(max_length=255, null=True, blank=True)
     osl_sample = models.ForeignKey(Sample, null=True, blank=True)
     osl_core = models.ForeignKey(Core_Details, null=True, blank=True)
 

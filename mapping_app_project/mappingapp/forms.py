@@ -14,8 +14,10 @@ class UploadFileForm(forms.Form):
 
 
 class CoreDetailsForm(forms.ModelForm):
-    exposure_core = forms.IntegerField(help_text='Exposure Core', required=False)
-    core_number = forms.IntegerField(help_text='Core Number', required=False)
+    exposure_core = forms.CharField(help_text='Exposure Core', required=False,
+                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
+    core_number = forms.CharField(help_text='Core Number', required=False,
+                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
 
     class Meta:
         model = Core_Details
@@ -155,17 +157,33 @@ class EditSampleSiteForm(forms.ModelForm):
         model = Sample_Site
 
 
-
-
-
-
 class OSLSampleForm(forms.ModelForm):
-    stratigraphic_position = forms.CharField(max_length=20, help_text='Stratigraphic Position', required=False)
-    lithofacies = forms.CharField(max_length=50, help_text='Lithofacies', required=False)
-    burial_depth_history = forms.CharField(max_length=50, help_text='Burial Depth History', required=False)
-    pot_perturb_water_table = forms.CharField(max_length=50, help_text='Potential Perturb of Water Table', required=False)
-    pot_perturb_burial_depth = forms.CharField(max_length=50, help_text='Potential Perturb of Burial Depth', required=False)
-    gamma_dose = forms.CharField(max_length=50, help_text='Gamma Dose', required=False)
+    stratigraphic_position = forms.CharField(help_text='Stratigraphic Position', required=False,
+                                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
+    lithofacies = forms.CharField(help_text='Lithofacies', required=False,
+                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 28}))
+    burial_depth = forms.CharField(help_text='Burial Depth', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 3}))
+    lithology = forms.CharField(help_text='Lithology', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
+    gamma_spec = forms.CharField(help_text='Gamma Spec Model', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 32}))
+    equipment_number = forms.CharField(help_text='Equip No.', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 3}))
+    probe_serial_number = forms.CharField(help_text='Probe Serial No.', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 66}))
+    filename = forms.CharField(help_text='Filename', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 22}))
+    sample_time = forms.CharField(help_text='Sample Time', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    sample_duration = forms.CharField(help_text='Sample Duration', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
+    potassium = forms.CharField(help_text='K', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    thorium = forms.CharField(help_text='Th', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    uranium = forms.CharField(help_text='U', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     osl_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
     osl_core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput(), required=False)
 

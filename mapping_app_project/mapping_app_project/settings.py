@@ -19,15 +19,15 @@ ADMINS = (
 MANAGERS = ADMINS
 
 #database path for use with sqllite
-DATABASE_PATH = os.path.join(PROJECT_PATH, 'mapapp.db')
+#DATABASE_PATH = os.path.join(PROJECT_PATH, 'mapapp.db')
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', #'django.db.backends.postgresql_psycopg2', 'mysql',  or 'oracle'.
-        'NAME': DATABASE_PATH,   #'mapdata',                       Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', #'django.db.backends.sqlite3', 'mysql',  or 'oracle'.
+        'NAME': 'mapdata', #DATABASE_PATH,                          Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': '',#'map1',
-        'PASSWORD': '',#'map123',
+        'USER': 'map1', #'',
+        'PASSWORD': 'map123', #'',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }

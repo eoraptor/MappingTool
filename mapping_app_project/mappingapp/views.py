@@ -11,7 +11,8 @@ import datetime
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm, EditCoordinatesForm
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm, EditSampleSiteForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, EditTCNForm
-from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm, EditBIForm
+from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm,\
+    EditBIForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 from mappingapp.extract import process_file
@@ -316,7 +317,6 @@ def validatesample(request):
 
     BearingsFormSet = formset_factory(BearingInclinationForm, extra=5)
 
-
     # A HTTP POST?
     if request.method == 'POST':
 
@@ -330,6 +330,9 @@ def validatesample(request):
         sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
         bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
+
+        oslForm = OSLSampleForm(request.POST)
+        coreForm = CoreDetailsForm(request.POST)
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
@@ -383,9 +386,13 @@ def validatesample(request):
         bearingsFormSet = BearingsFormSet(initial=data)
         fillsiteForm = ExistingSitesForm(request.POST, prefix='fill')
 
+        oslForm = OSLSampleForm()
+        coreForm = CoreDetailsForm()
+
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/validatesample.html', {'bearingformset':bearingsFormSet,
+    return render_to_response('mappingapp/validatesample.html', {'coreform':coreForm, 'oslform':oslForm,
+                                                                 'bearingformset':bearingsFormSet,
                                                                  'hiddensiteform':hiddensiteForm, 'site_name':site_name,
                                                                  'sitechoices':sitechoicesForm, 'retform': retForm,
                                                                  'tranform': tranForm, 'tcnform':tcnForm,
