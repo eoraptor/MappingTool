@@ -35,7 +35,7 @@ class EditCoordinatesForm(forms.ModelForm):
     bng_ing = forms.CharField(help_text='BNG/ING', required=False,
                               widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
     grid_reference = forms.CharField(help_text='Grid Reference', required=False,
-                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 15}))
     easting = forms.IntegerField(help_text='Easting', required=False,
                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     northing = forms.IntegerField(help_text='Northing', required=False,
@@ -170,7 +170,7 @@ class OSLSampleForm(forms.ModelForm):
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 32}))
     equipment_number = forms.CharField(help_text='Equip No.', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 3}))
-    probe_serial_number = forms.CharField(help_text='Probe Serial No.', required=False,
+    probe_serial_no = forms.CharField(help_text='Probe Serial Number', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 66}))
     filename = forms.CharField(help_text='Filename', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 22}))
@@ -178,11 +178,11 @@ class OSLSampleForm(forms.ModelForm):
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     sample_duration = forms.CharField(help_text='Sample Duration', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
-    potassium = forms.CharField(help_text='K', required=False,
+    potassium = forms.CharField(help_text='Potassium', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    thorium = forms.CharField(help_text='Th', required=False,
+    thorium = forms.CharField(help_text='Thorium', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    uranium = forms.CharField(help_text='U', required=False,
+    uranium = forms.CharField(help_text='Uranium', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     osl_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
     osl_core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput(), required=False)

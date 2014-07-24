@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from openpyxl import load_workbook
 from mappingapp.models import Sample_Site, Coordinates, Sample, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination, Transect
-
+from mappingapp.extractosl import get_osl_sample_info
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
             'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -30,16 +30,76 @@ def get_site_cell_positions(ws):
     return positions
 
 
+# get OSL site cell positions
+def get_osl_site_cell_positions(ws):
+
+    osl_positions = {'Site Name: ': '', 'Location (inc. Transect no.)': '', 'Latitude': '',
+             'Longtitude (East +ve)': '', 'BNG (Easting)': '', 'Northing': '', 'ING (Easting)': '',
+             'Elevation (m asl)': '', 'Date Sampled': '', 'Geomorph Setting': '',
+             'Type of Samples collected (TCN/14C/OSL)': '', 'Collected by': '', 'Photographs Taken (Y/N)': '',
+             'Photo labels/Time stamps': '', 'Notes': '', 'BNG/ING?':''}
+
+    for row in ws.iter_rows():
+        for cell in row:
+            val = cell.value
+            if val is not None and isinstance(val, basestring):
+                val = val.replace('\n', '')
+
+                if val in osl_positions:
+                    if val == 'Notes':
+                        osl_positions[val] = cell.column + str(cell.row+1)
+                    elif val == 'Site Name: ':
+                        col = columns.index(cell.column)
+                        val_col = columns[col+1]
+                        osl_positions[val] = val_col + str(cell.row-1)
+                    else:
+                        col = columns.index(cell.column)
+                        val_col = columns[col+1]
+                        osl_positions[val] = val_col + str(cell.row)
+
+    # BNG or ING data?
+    if ws[osl_positions['BNG (Easting)']].value is not None:
+        easting_cell = osl_positions['BNG (Easting)']
+        northing_cell = columns[easting_cell.column+3] + str(easting_cell.row)
+        osl_positions['BNG/ING?'] = 'BNG'
+    elif ws[osl_positions['ING (Easting)']].value is not None:
+        easting_cell = osl_positions['ING (Easting)']
+        northing_cell = columns[columns.index(easting_cell[0])+3] + easting_cell[1]
+        osl_positions['BNG/ING?'] = 'ING'
+
+    positions = {'Site Name: ': osl_positions['Site Name: '],
+                 'Location (inc. Transect no.)': osl_positions['Location (inc. Transect no.)'],
+                 'Latitude(decimal deg)': osl_positions['Latitude'],
+                 'Longtitude(decimal deg)(West is -ve)': osl_positions['Longtitude (East +ve)'],
+                 'BNG/ING?': osl_positions['BNG/ING?'],
+                 'Northing:': northing_cell, 'Easting:': easting_cell,
+                 'Elevation             (m ASL)': osl_positions['Elevation (m asl)'],
+                 'Date Sampled:': osl_positions['Date Sampled'],
+                 'Geomorph Setting:': osl_positions['Geomorph Setting'],
+                 'Type of Samples collected (TCN/14C/OSL)': osl_positions['Type of Samples collected (TCN/14C/OSL)'],
+                 'Collected by:': osl_positions['Collected by'],
+                 'Photographs Taken (Y/N):': osl_positions['Photographs Taken (Y/N)'],
+                 'Photo labels/Time stamps:': osl_positions['Photo labels/Time stamps'],
+                 'Notes': osl_positions['Notes']}
+
+    return positions
+
+
 # extract the data from the site sheet
 def get_site_info(wb):
     site_sheet = wb["Site Info"]
-    positions = get_site_cell_positions(site_sheet)
+
+    if site_sheet['A1'].value == 'Section A: Site Information':
+        positions = get_osl_site_cell_positions(site_sheet)
+        bng_ing = positions['BNG/ING?']
+    else:
+        positions = get_site_cell_positions(site_sheet)
+        bng_ing = site_sheet[positions['BNG/ING?']].value
 
     site_name = site_sheet[positions['Site Name: ']].value
     site_location = site_sheet[positions['Location (inc. Transect no.)']].value
     site_latitude = site_sheet[positions['Latitude(decimal deg)']].value
     site_longitude = site_sheet[positions['Longtitude(decimal deg)(West is -ve)']].value
-    bng_ing = site_sheet[positions['BNG/ING?']].value
     site_northing = site_sheet[positions['Northing:']].value
     site_easting = site_sheet[positions['Easting:']].value
     site_elevation = site_sheet[positions['Elevation             (m ASL)']].value
@@ -334,6 +394,11 @@ def process_file(filename):
                 for k, v in results.iteritems():
                     samples[k] = v
 
+            elif type == 'OSL':
+                counter += 1
+                results = get_osl_sample_info(ws, counter)
+                for k, v in results.iteritems():
+                    samples[k] = v
 
     samples['sample_count'] = counter-1
     return samples
@@ -368,7 +433,7 @@ def get_sample_type(ws):
     elif ws['A1'].value == '14C Sample Sheet' and ws['B3'].value is not None:
         return '14C'
 
-    elif ws['A1'].value == 'OSL Sample Sheet' and ws['B3'].value is not None:
+    elif ws['A1'].value == 'Section B: OSL Sample Sheet' and ws['B3'].value is not None:
         return 'OSL'
     else:
         return None
