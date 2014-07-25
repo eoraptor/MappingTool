@@ -6,7 +6,7 @@
 <fieldset class="standard">
     <legend class="fieldsets">OSL Sample Details <a href="#"><span class="glyphicon glyphicon-info-sign"
                       style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
-                      title="Fields with red borders have failed to import correctly from the spreadsheet"></span></a></legend></legend>
+                      title="Fields with red borders have failed to import correctly from the spreadsheet"></span></a></legend>
         <div class="formspan left" {% block validate %}id="validate_sample"{% endblock validate %}>
             {{ sampform.sample_code.errors }}
             <label class="formlabel">{{ sampform.sample_code.help_text }}</label>
@@ -53,17 +53,17 @@
             <label class="formlabel">{{ coreform.core_number.help_text }}</label>
             {{ coreform.core_number }}
         </div>
-        <div class="formspan left">
+        <div class="formspan">
             {{ oslform.stratigraphic_position.errors }}
             <label class="formlabel">{{ oslform.stratigraphic_position.help_text }}</label>
             {{ oslform.stratigraphic_position }}
         </div>
-       <div class="formspan">
+       <div class="formspan left">
             {{ oslform.lithology.errors }}
             <label class="formlabel">{{ oslform.lithology.help_text }}</label>
             {{ oslform.lithology }}
         </div>
-        <div class="formspan left">
+        <div class="formspan">
             {{ oslform.lithofacies.errors }}
             <label class="formlabel">{{ oslform.lithofacies.help_text }}</label>
             {{ oslform.lithofacies }}
@@ -73,27 +73,31 @@
             <label class="formlabel">{{ oslform.burial_depth.help_text }}</label>
             {{ oslform.burial_depth }}
         </div>
-        <div class="formspan">
-            {{ oslform.gamma_spec.errors }}
-            <label class="formlabel">{{ oslform.gamma_spec.help_text }}</label>
-            {{ oslform.gamma_spec }}
+        <div class="formspan left">
+            {{ sampform.sample_notes.errors }}
+            <label class="formlabel">{{ sampform.sample_notes.help_text }}</label>
+            {{ sampform.sample_notes }}
+        </div>
+</fieldset>
+
+<fieldset class="standard">
+    <legend class="fieldsets">Dose Information</legend>
+        <div class="formspan left">
+            {{ oslform.filename.errors }}
+            <label class="formlabel">{{ oslform.filename.help_text }}</label>
+            {{ oslform.filename }}
         </div>
         <div class="formspan">
             {{ oslform.equipment_number.errors }}
             <label class="formlabel">{{ oslform.equipment_number.help_text }}</label>
             {{ oslform.equipment_number }}
         </div>
-        <div class="formspan left">
-            {{ oslform.probe_serial_no.errors }}
-            <label class="formlabel">{{ oslform.probe_serial_no.help_text }}</label>
-            {{ oslform.probe_serial_no }}
+        <div class="formspan">
+            {{ oslform.gamma_spec.errors }}
+            <label class="formlabel">{{ oslform.gamma_spec.help_text }}</label>
+            {{ oslform.gamma_spec }}
         </div>
         <div class="formspan">
-            {{ oslform.filename.errors }}
-            <label class="formlabel">{{ oslform.filename.help_text }}</label>
-            {{ oslform.filename }}
-        </div>
-        <div class="formspan left">
             {{ oslform.sample_time.errors }}
             <label class="formlabel">{{ oslform.sample_time.help_text }}</label>
             {{ oslform.sample_time }}
@@ -103,6 +107,14 @@
             <label class="formlabel">{{ oslform.sample_duration.help_text }}</label>
             {{ oslform.sample_duration }}
         </div>
+        <div class="formspan left">
+            {{ oslform.probe_serial_no.errors }}
+            <label class="formlabel">{{ oslform.probe_serial_no.help_text }}</label>
+            {{ oslform.probe_serial_no }}
+        </div>
+
+
+
         <div class="formspan">
             {{ oslform.potassium.errors }}
             <label class="formlabel">{{ oslform.potassium.help_text }}</label>
@@ -117,10 +129,5 @@
             {{ oslform.uranium.errors }}
             <label class="formlabel">{{ oslform.uranium.help_text }}</label>
             {{ oslform.uranium }}
-        </div>
-        <div class="formspan left">
-            {{ sampform.sample_notes.errors }}
-            <label class="formlabel">{{ sampform.sample_notes.help_text }}</label>
-            {{ sampform.sample_notes }}
         </div>
 </fieldset>

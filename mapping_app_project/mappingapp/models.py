@@ -42,7 +42,7 @@ class CoordinatesManager(models.Manager):
 
 class Coordinates(models.Model):
     bng_ing = models.CharField(max_length=255, null=True, blank=True)
-    grid_reference = models.CharField(max_length=12, null=True, blank=True)
+    grid_reference = models.CharField(max_length=20, null=True, blank=True)
     easting = models.IntegerField(null=True, blank=True)
     northing = models.IntegerField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
@@ -233,7 +233,7 @@ class OSLManager(models.Manager):
 class OSL_Sample(models.Model):
     stratigraphic_position = models.CharField(max_length=255, null=True, blank=True)
     lithofacies = models.CharField(max_length=255, null=True, blank=True)
-    burial_depth = models.CharField(max_length=50, null=True, blank=True)
+    burial_depth = models.CharField(max_length=255, null=True, blank=True)
     lithology = models.CharField(max_length=255, null=True, blank=True)
     gamma_spec = models.CharField(max_length=255, null=True, blank=True)
     equipment_number = models.CharField(max_length=255, null=True, blank=True)

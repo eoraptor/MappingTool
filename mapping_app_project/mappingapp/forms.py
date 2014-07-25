@@ -1,4 +1,4 @@
-import datetime
+import datetime, time
 from django import forms
 
 from mappingapp.models import Core_Details, Photograph, Coordinates, Transect, Retreat_Zone, Sample, Photo_Of
@@ -14,10 +14,10 @@ class UploadFileForm(forms.Form):
 
 
 class CoreDetailsForm(forms.ModelForm):
-    exposure_core = forms.CharField(help_text='Exposure Core', required=False,
-                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
+    exposure_core = forms.CharField(help_text='Exposure/Core', required=False,
+                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
     core_number = forms.CharField(help_text='Core Number', required=False,
-                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
+                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 24}))
 
     class Meta:
         model = Core_Details
@@ -86,8 +86,8 @@ class EditSampleForm(forms.ModelForm):
                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 56}))
-    collection_date = forms.DateField(help_text='Collection Date', required=False,
-                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    collection_date = forms.DateField(help_text='Collection Date', input_formats=['%m/%d/%Y', '%d/%m/%Y'], required=False,
+                                      widget=forms.DateInput(format='%d/%m/%Y', attrs={'size':10}))
     collector = forms.CharField(help_text='Collector(s)', required=False,
                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 32}))
     sample_notes = forms.CharField(help_text='Notes', required=False,
@@ -167,17 +167,17 @@ class OSLSampleForm(forms.ModelForm):
     lithology = forms.CharField(help_text='Lithology', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
     gamma_spec = forms.CharField(help_text='Gamma Spec Model', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 32}))
-    equipment_number = forms.CharField(help_text='Equip No.', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 3}))
-    probe_serial_no = forms.CharField(help_text='Probe Serial Number', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 66}))
-    filename = forms.CharField(help_text='Filename', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 22}))
-    sample_time = forms.CharField(help_text='Sample Time', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
-    sample_duration = forms.CharField(help_text='Sample Duration', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
+    equipment_number = forms.CharField(help_text='Equip No.', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 1}))
+    probe_serial_no = forms.CharField(help_text='Probe Serial Number', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 52}))
+    filename = forms.CharField(help_text='Filename', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 18}))
+    sample_time = forms.CharField(help_text='Time', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 3}))
+    sample_duration = forms.CharField(help_text='Duration', required=False,
+                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
     potassium = forms.CharField(help_text='Potassium', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     thorium = forms.CharField(help_text='Thorium', required=False,
@@ -260,7 +260,9 @@ class PhotoOfForm(forms.ModelForm):
 class ExistingSitesForm(forms.Form):
 
     sites = forms.ModelChoiceField(help_text="Select from existing sites:",
-                                   queryset=Sample_Site.objects.values_list('site_name', flat=True).order_by('site_name'), required=False)
+                                   queryset=Sample_Site.objects.values_list('site_name',
+                                                                            flat=True).order_by('site_name'),
+                                   required=False)
 
 
 
@@ -289,8 +291,9 @@ class SampleForm(EditSampleForm):
 
         sample = None
         form_data = super(SampleForm, self).save(commit=False)
-        if form_data.collection_date is not None and not isinstance(form_data.collection_date, datetime.date):
-            date = datetime.strptime(form_data.collection_date, '%d %m %Y')
+        sample_date = form_data.collection_date
+        if sample_date is not None and not isinstance(sample_date, datetime.date):
+             sample_date = time.strptime(sample_date, '%d/%m/%Y')
 
         try:
             sample = Sample.objects.get(sample_code=form_data.sample_code)
@@ -300,7 +303,7 @@ class SampleForm(EditSampleForm):
         if sample is None:
             sample = Sample.objects.create(sample_code=form_data.sample_code,
                                            sample_location_name=form_data.sample_location_name,
-                                           collection_date=form_data.collection_date,
+                                           collection_date=sample_date,
                                            collector=form_data.collector, sample_notes=form_data.sample_notes,
                                            dating_priority=form_data.dating_priority, age=form_data.age,
                                            age_error=form_data.age_error, calendar_age=form_data.calendar_age,

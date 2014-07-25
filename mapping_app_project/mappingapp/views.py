@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
 import json
-import datetime
+import datetime, time
 
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm, EditCoordinatesForm
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm, EditSampleSiteForm
@@ -219,8 +219,6 @@ def upload(request):
             for k, v in sample_data.iteritems():
                 request.session[k] = v
 
-            request.session['source'] = 'file'
-
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('validatesample'))
 
@@ -281,6 +279,7 @@ def validatesample(request):
                                 latitude=request.session['sample_latitude'+counter],
                                 longitude=request.session['sample_longitude'+counter],
                                 elevation=request.session['sample_elevation'+counter])
+
 
     sample = Sample(sample_code=request.session['sample_code'+counter],
                     sample_location_name=request.session['sample_location_name'+counter],
@@ -354,31 +353,37 @@ def validatesample(request):
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
-        if siteForm.is_valid() and sampForm.is_valid():
+        if sampForm.is_valid():
 
             # and tcnForm.is_valid() and samplecoordForm.is_valid() and\
-            #     tranForm.is_valid() and retForm.is_valid():
+            # siteForm.is_valid() and     tranForm.is_valid() and retForm.is_valid():
 
-            # sample_coords = samplecoordForm.save()
+            sample_coords = samplecoordForm.save()
 
             # transect = tranForm.save()
             #
-            # retreat = retForm.save()
+            retreat = retForm.save()
 
-            # site_selected = hiddensiteForm.save()
-            #sample_site = None
-            # try:
-            #     sample_site = Sample_Site.objects.get(site_name=site_selected)
-            # except:
-            #     pass
+            site_selected = hiddensiteForm.save()
+            sample_site = None
+            try:
+                 sample_site = Sample_Site.objects.get(site_name=site_selected)
+            except:
+                 pass
 
-            # sample = sampForm.save(commit=False)
-            # sample.transect = transect
-            # sample.retreat = retreat
-            # sample.sample_coordinates = sample_coords
-            # sample.sample_site = sample_site
-            # sample.save()
-            #
+            sample = sampForm.save(commit=False)
+            #sample.transect = transect
+            sample.retreat = retreat
+            sample.sample_coordinates = sample_coords
+            sample.sample_site = sample_site
+            sample.save()
+
+            core = coreForm.save()
+
+            osl = oslForm.save(commit=False)
+            osl.osl_sample = sample
+            osl.osl_core = core
+            osl.save()
             # tcn = tcnForm.save(commit=False)
             # tcn.tcn_sample = sample
             # tcn.save()

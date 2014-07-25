@@ -1,4 +1,5 @@
 from openpyxl import load_workbook
+import datetime
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
             'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -86,7 +87,7 @@ def get_osl_sample_info(sample_sheet, sample_count):
             sample_date = sample_date.strftime("%d/%m/%Y")
 
     # convert sample time to string
-    if sample_time is not None:
+    if sample_time is not None and isinstance(sample_time, datetime.time):
         sample_time = sample_time.strftime("%H:%M")
 
     sample_details = {'sample_grid_reference'+counter:grid, 'lithology'+counter:lithology,
@@ -100,8 +101,8 @@ def get_osl_sample_info(sample_sheet, sample_count):
                       'equipment_number'+counter:equipment_number, 'probe_number'+counter:probe_serial_number,
                       'filename'+counter:filename, 'sample_time'+counter:sample_time,
                       'sample_duration'+counter:sample_duration, 'potassium'+counter:potassium,
-                      'thorium'+counter:thorium, 'uranium'+counter:uranium, 'sample_bng_ing'+counter:'',
-                      'sample_easting'+counter:'', 'sample_northing'+counter:''}
+                      'thorium'+counter:thorium, 'uranium'+counter:uranium, 'sample_bng_ing'+counter:None,
+                      'sample_easting'+counter:None, 'sample_northing'+counter:None}
 
     return sample_details
 
