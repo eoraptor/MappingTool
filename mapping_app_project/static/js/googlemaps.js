@@ -39,7 +39,7 @@ var map;
             })
 
             var infowindow = new google.maps.InfoWindow({
-                maxWidth: 70
+                maxWidth: 120
             });
             infowindow.setContent('<div id="window_content">' + '<div id="infoText">' + String(val.code) + '</div>' + '</div>')
             google.maps.event.addListener(marker, 'click', function() {

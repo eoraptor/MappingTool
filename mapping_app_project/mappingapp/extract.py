@@ -112,17 +112,33 @@ def get_site_info(wb):
     photo_labels = site_sheet[positions['Photo labels/Time stamps:']].value
     site_notes = site_sheet[positions['Notes']].value
 
+    # convert photographs into boolean.  If not yes/no, add to site notes
     if photographs is not None:
-        photographs = photographs.lower()
-        if photographs.startswith('y'):
-            photographs = True
+        if len(photographs) > 3:
+            if site_notes is not None:
+                site_notes = site_notes + photographs + '. '
+            else:
+                site_notes = photographs + '. '
+                photographs = None
         else:
-            photographs = False
+            photographs = photographs.lower()
+            if photographs.startswith('y'):
+                photographs = True
+            elif photographs.startswith('n'):
+                photographs = False
 
+    # convert date to correct format.  If notes add to site notes.
     if site_date is not None:
-        date = str(site_date)
-        if '.' in date:
-            site_date = convert_date(date)
+        if len(site_date) > 10:
+            if site_notes is not None:
+                site_notes = site_notes + site_date
+                site_date = None
+            else:
+                site_notes = site_date
+        else:
+            date = str(site_date)
+            if '.' in date:
+                site_date = convert_date(date)
 
     if site_northing is not None:
         site_northing = int(site_northing)

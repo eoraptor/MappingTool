@@ -70,7 +70,7 @@ class TransectForm(forms.ModelForm):
 
 class RetreatForm(forms.ModelForm):
     ZONE_CHOICES = (('1', ''), ('2', '1'), ('3', '2'), ('4', '3'), ('5', '4'), ('6', '5'), ('7', '6'), ('8', '7'))
-    zone_number = forms.ChoiceField(help_text='Retreat Zone', required=False, choices=ZONE_CHOICES)
+    zone_number = forms.ChoiceField(help_text='Retreat', required=False, choices=ZONE_CHOICES)
 
     class Meta:
         model = Retreat_Zone
@@ -83,7 +83,7 @@ class RetreatForm(forms.ModelForm):
 
 class EditSampleForm(forms.ModelForm):
     sample_code = forms.CharField(help_text='Sample Code', required=True,
-                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 16}))
+                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 24}))
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 56}))
     collection_date = forms.DateField(help_text='Collection Date', input_formats=['%m/%d/%Y', '%d/%m/%Y'], required=False,
@@ -95,13 +95,13 @@ class EditSampleForm(forms.ModelForm):
     dating_priority = forms.CharField(help_text='Dating Priority', required=False,
                                       widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     age = forms.IntegerField(help_text='Sample Age', required=False,
-                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     age_error = forms.IntegerField(help_text='Age Error', required=False,
-                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     calendar_age = forms.IntegerField(help_text='Calendar Age', required=False,
-                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     calendar_error = forms.IntegerField(help_text='Calendar Error', required=False,
-                                        widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                        widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     lab_code = forms.CharField(help_text='Lab Code', required=False,
                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
@@ -114,15 +114,14 @@ class EditSampleForm(forms.ModelForm):
 
 
 class RadiocarbonForm(forms.ModelForm):
-    depth_below_SL = forms.CharField(help_text='Depth Below SL', required=False,
+    depth_below_SL = forms.CharField(help_text='Depth', required=False,
                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2}))
     material = forms.CharField(help_text='Material', required=False,
-                               widget=forms.Textarea(attrs={'rows': 2, 'cols': 98}))
+                               widget=forms.Textarea(attrs={'rows': 2, 'cols': 63}))
     geological_setting = forms.CharField(help_text='Geological Setting', required=False,
                                          widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
     stratigraphic_position_depth = forms.CharField(help_text='Stratigraphic Position Depth', required=False,
-                                                   widget=forms.Textarea(attrs={'class':'noresize',
-                                                                                'rows': 1, 'cols': 8}))
+                                                   widget=forms.Textarea(attrs={'rows': 2, 'cols': 25}))
     sample_weight = forms.CharField(help_text='Weight (g)', required=False,
                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     pot_contamination = forms.CharField(help_text='Potential Contamination', required=False,

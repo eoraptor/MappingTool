@@ -315,17 +315,6 @@ def validatesample(request):
                              sample_weight=request.session['weight'+counter],
                              pot_contamination=request.session['contamination'+counter])
 
-    y = radiocarbon.depth_below_SL
-
-        # ,
-        #                      material='xxx',
-        #                      geological_setting='xxx',
-        #                      stratigraphic_position_depth='xxx',
-        #                      sample_weight='xxx',
-        #                      pot_contamination='xxx')
-
-
-
     # osl = OSL_Sample(stratigraphic_position=request.session['position'+counter],
     #                  lithofacies=request.session['lithofacies'+counter],
     #                  burial_depth=request.session['burial_depth'+counter],
@@ -352,7 +341,8 @@ def validatesample(request):
     #                  grain_size=request.session['grain_size'+counter],
     #                  lithology=request.session['lithology'+counter])
 
-    # transect = Transect(transect_number=request.session['transect'+counter])
+    if request.session['transect'+counter] is not None:
+        transect = Transect(transect_number=request.session['transect'+counter])
 
     retreat = None
 
@@ -378,7 +368,7 @@ def validatesample(request):
         samplecoordForm = CoordinatesForm(request.POST, prefix='sample', instance=sample_coords)
         siteForm = SampleSiteForm(request.POST)
         sitecoordForm = CoordinatesForm(request.POST, prefix='site')
-        # tranForm = TransectForm(request.POST, instance=transect)
+        tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat)
         # tcnForm = TCNForm(request.POST, instance=tcn)
         sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
@@ -398,8 +388,8 @@ def validatesample(request):
 
             sample_coords = samplecoordForm.save()
 
-            # transect = tranForm.save()
-            #
+            transect = tranForm.save()
+
             retreat = retForm.save()
 
             site_selected = hiddensiteForm.save()
@@ -410,7 +400,7 @@ def validatesample(request):
                  pass
 
             sample = sampForm.save(commit=False)
-            #sample.transect = transect
+            sample.transect = transect
             sample.retreat = retreat
             sample.sample_coordinates = sample_coords
             sample.sample_site = sample_site
@@ -418,6 +408,10 @@ def validatesample(request):
 
             core = coreForm.save()
 
+            c14 = c14Form.save(commit=False)
+            c14.c14_sample = sample
+            c14.c14_core = core
+            c14.save()
             # osl = oslForm.save(commit=False)
             # osl.osl_sample = sample
             # osl.osl_core = core
@@ -441,7 +435,7 @@ def validatesample(request):
         samplecoordForm = CoordinatesForm(prefix='sample', instance=sample_coords)
         siteForm = SampleSiteForm()
         sitecoordForm = CoordinatesForm(prefix='site')
-        # tranForm = TransectForm(instance=transect)
+        tranForm = TransectForm(instance=transect)
         retForm = RetreatForm(instance=retreat)
         # tcnForm = TCNForm(instance=tcn)
         sitechoicesForm = ExistingSitesForm(prefix='main')
@@ -456,13 +450,14 @@ def validatesample(request):
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
     return render_to_response('mappingapp/validatesample.html', {'c14form':c14Form, 'coreform':coreForm,
-                                                                 'hiddensiteform':hiddensiteForm, 'site_name':site_name,
-                                                                 'sitechoices':sitechoicesForm,                                                                 'samplecoordform':samplecoordForm,
+                                                                 'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
+                                                                 'site_name':site_name, 'sitechoices':sitechoicesForm,
+                                                                 'samplecoordform':samplecoordForm,
                                                                  'siteform': siteForm, 'sitecoordform':sitecoordForm,
                                                                  'sampform':sampForm, 'fillsiteform':fillsiteForm,
                                                                  'is_member':is_member,  'retform': retForm}, context)
 
-    # 'bearingformset':bearingsFormSet, 'tranform': tranForm, 'tcnform':tcnForm, 'oslform':oslForm,
+    # 'bearingformset':bearingsFormSet,  'tcnform':tcnForm, 'oslform':oslForm,
 
 
 

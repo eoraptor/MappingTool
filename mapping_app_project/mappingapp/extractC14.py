@@ -80,9 +80,8 @@ def get_C14_sample_info(sample_sheet, sample_count):
 
     # add T to transect if missing
     if transect is not None:
-
         if isinstance(transect, (int, float)):
-            transect = 'T'+str(transect)
+            transect = 'T'+ str(int(transect))
 
     counter = str(sample_count)
 

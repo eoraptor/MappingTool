@@ -33,11 +33,6 @@
             <label class="formlabel">{{ sampform.collection_date.help_text }}</label>
             {{ sampform.collection_date }}
         </div>
-        <div class="formspan">
-            {{ c14form.sample_weight.errors }}
-            <label class="formlabel">{{ c14form.sample_weight.help_text }}</label>
-            {{ c14form.sample_weight }}
-        </div>
         <div class="formspan left">
             {{ sampform.collector.errors }}
             <label class="formlabel">{{ sampform.collector.help_text }}</label>
@@ -64,11 +59,16 @@
             {{ c14form.depth_below_SL }}
         </div>
         <div class="formspan">
+            {{ c14form.sample_weight.errors }}
+            <label class="formlabel">{{ c14form.sample_weight.help_text }}</label>
+            {{ c14form.sample_weight }}
+        </div><br />
+        <div class="formspan left">
             {{ c14form.stratigraphic_position_depth.errors }}
             <label class="formlabel">{{ c14form.stratigraphic_position_depth.help_text }}</label>
             {{ c14form.stratigraphic_position_depth }}
         </div>
-       <div class="formspan left">
+       <div class="formspan">
             {{ c14form.material.errors }}
             <label class="formlabel">{{ c14form.material.help_text }}</label>
             {{ c14form.material }}

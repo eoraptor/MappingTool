@@ -45,12 +45,12 @@ fieldset.standard {
 
 
 #window_content {
-    width: 65px;
+    width: 220px;
     color: red;
 }
 
 #infoText {
-    max-width: 70px;
+    max-width: 220px;
 }
 
 fieldset#site {
