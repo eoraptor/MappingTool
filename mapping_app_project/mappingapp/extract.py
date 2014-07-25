@@ -2,6 +2,7 @@
 from openpyxl import load_workbook
 from mappingapp.models import Sample_Site, Coordinates, Sample, TCN_Sample, Bearing_Inclination, Sample_Bearing_Inclination, Transect
 from mappingapp.extractosl import get_osl_sample_info
+from mappingapp.extractC14 import get_C14_sample_info
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
             'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -161,7 +162,7 @@ def get_site_info(wb):
 
         if site is None:
             Sample_Site.objects.create(site_name=site_name, site_location=site_location, county=None,
-                                                 site_date=site_date, operator=None, geomorph_setting=geomorph,
+                                                 site_date=None, operator=None, geomorph_setting=geomorph,
                                                  sample_type_collected=type, photos_taken=photographs,
                                                  photographs=photo_labels, site_notes=site_notes,
                                                  site_coordinates=site_coordinates, collected_by=collector)
@@ -397,6 +398,12 @@ def process_file(filename):
             elif type == 'OSL':
                 counter += 1
                 results = get_osl_sample_info(ws, counter)
+                for k, v in results.iteritems():
+                    samples[k] = v
+
+            elif type == '14C':
+                counter += 1
+                results = get_C14_sample_info(ws, counter)
                 for k, v in results.iteritems():
                     samples[k] = v
 

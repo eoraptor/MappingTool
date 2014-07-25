@@ -157,13 +157,13 @@ class RadiocarbonManager(models.Manager):
 
 
 class Radiocarbon_Sample(models.Model):
-    depth_below_SL = models.IntegerField(null=True, blank=True)
-    material = models.CharField(max_length=45, null=True, blank=True)
-    geological_setting = models.CharField(max_length=45, null=True, blank=True)
-    stratigraphic_position_depth = models.IntegerField(null=True, blank=True)
-    sample_weight = models.IntegerField(null=True, blank=True)
-    pot_contamination = models.CharField(max_length=100, null=True, blank=True)
-    calibration_curve = models.CharField(max_length=20, null=True, blank=True)
+    depth_below_SL = models.CharField(max_length=255, null=True, blank=True)
+    material = models.CharField(max_length=1000, null=True, blank=True)
+    geological_setting = models.CharField(max_length=1500, null=True, blank=True)
+    stratigraphic_position_depth = models.CharField(max_length=255, null=True, blank=True)
+    sample_weight = models.CharField(max_length=255, null=True, blank=True)
+    pot_contamination = models.CharField(max_length=1500, null=True, blank=True)
+    calibration_curve = models.CharField(max_length=255, null=True, blank=True)
     c14_core = models.ForeignKey(Core_Details, null=True, blank=True)
     c14_sample = models.ForeignKey(Sample, null=True, blank=True)
 

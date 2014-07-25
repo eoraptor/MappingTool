@@ -1,0 +1,92 @@
+{% for hidden in c14form.hidden_fields %}
+    {{ hidden }}
+{% endfor %}
+
+
+<fieldset class="standard">
+    <legend class="fieldsets">C14 Sample Details <a href="#"><span class="glyphicon glyphicon-info-sign"
+                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
+                      title="Fields with red borders have failed to import correctly from the spreadsheet"></span></a></legend>
+        <div class="formspan left" {% block validate %}id="validate_sample"{% endblock validate %}>
+            {{ sampform.sample_code.errors }}
+            <label class="formlabel">{{ sampform.sample_code.help_text }}</label>
+            {{ sampform.sample_code }}
+        </div>
+        <div class="formspan" id="transect">
+            {{ tranform.transect_number.errors }}
+            <label class="formlabel">{{ tranform.transect_number.help_text }}</label>
+            {{ tranform.transect_number }}
+        </div>
+        <div class="formspan" id="retreat">
+            {{ retform.zone_number.errors }}
+            <label class="formlabel">{{ retform.zone_number.help_text }}</label>
+            {{ retform.zone_number }}
+        </div>
+        <button type="button" class="btn-danger btn-sm" id="checkbutton">Check Code</button>
+        <div class="formspan">
+            {{ sampform.dating_priority.errors }}
+             <label class="formlabel">{{ sampform.dating_priority.help_text }}</label>
+            {{ sampform.dating_priority }}
+        </div>
+         <div class="formspan">
+            {{ sampform.collection_date.errors }}
+            <label class="formlabel">{{ sampform.collection_date.help_text }}</label>
+            {{ sampform.collection_date }}
+        </div>
+        <div class="formspan">
+            {{ c14form.sample_weight.errors }}
+            <label class="formlabel">{{ c14form.sample_weight.help_text }}</label>
+            {{ c14form.sample_weight }}
+        </div>
+        <div class="formspan left">
+            {{ sampform.collector.errors }}
+            <label class="formlabel">{{ sampform.collector.help_text }}</label>
+            {{ sampform.collector }}
+        </div>
+        <div class="formspan">
+            {{ sampform.sample_location_name.errors }}
+            <label class="formlabel">{{ sampform.sample_location_name.help_text }}</label>
+            {{ sampform.sample_location_name }}
+        </div>
+        <div class="formspan left">
+            {{ coreform.exposure_core.errors }}
+            <label class="formlabel">{{ coreform.exposure_core.help_text }}</label>
+            {{ coreform.exposure_core }}
+        </div>
+        <div class="formspan">
+            {{ coreform.core_number.errors }}
+            <label class="formlabel">{{ coreform.core_number.help_text }}</label>
+            {{ coreform.core_number }}
+        </div>
+        <div class="formspan">
+            {{ c14form.depth_below_SL.errors }}
+            <label class="formlabel">{{ c14form.depth_below_SL.help_text }}</label>
+            {{ c14form.depth_below_SL }}
+        </div>
+        <div class="formspan">
+            {{ c14form.stratigraphic_position_depth.errors }}
+            <label class="formlabel">{{ c14form.stratigraphic_position_depth.help_text }}</label>
+            {{ c14form.stratigraphic_position_depth }}
+        </div>
+       <div class="formspan left">
+            {{ c14form.material.errors }}
+            <label class="formlabel">{{ c14form.material.help_text }}</label>
+            {{ c14form.material }}
+        </div>
+        <div class="formspan left">
+            {{ c14form.geological_setting.errors }}
+            <label class="formlabel">{{ c14form.geological_setting.help_text }}</label>
+            {{ c14form.geological_setting }}
+        </div>
+
+        <div class="formspan left">
+            {{ c14form.pot_contamination.errors }}
+            <label class="formlabel">{{ c14form.pot_contamination.help_text }}</label>
+            {{ c14form.pot_contamination }}
+        </div>
+        <div class="formspan left">
+            {{ sampform.sample_notes.errors }}
+            <label class="formlabel">{{ sampform.sample_notes.help_text }}</label>
+            {{ sampform.sample_notes }}
+        </div>
+</fieldset>

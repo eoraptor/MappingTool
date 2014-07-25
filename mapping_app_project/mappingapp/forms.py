@@ -83,7 +83,7 @@ class RetreatForm(forms.ModelForm):
 
 class EditSampleForm(forms.ModelForm):
     sample_code = forms.CharField(help_text='Sample Code', required=True,
-                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 16}))
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 56}))
     collection_date = forms.DateField(help_text='Collection Date', input_formats=['%m/%d/%Y', '%d/%m/%Y'], required=False,
@@ -91,7 +91,7 @@ class EditSampleForm(forms.ModelForm):
     collector = forms.CharField(help_text='Collector(s)', required=False,
                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 32}))
     sample_notes = forms.CharField(help_text='Notes', required=False,
-                                   widget=forms.Textarea(attrs={'rows': 4, 'cols': 98}))
+                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
     dating_priority = forms.CharField(help_text='Dating Priority', required=False,
                                       widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     age = forms.IntegerField(help_text='Sample Age', required=False,
@@ -114,13 +114,21 @@ class EditSampleForm(forms.ModelForm):
 
 
 class RadiocarbonForm(forms.ModelForm):
-    depth_below_SL = forms.IntegerField(help_text='Depth Below Sea Level', required=False)
-    material = forms.CharField(max_length=45, help_text='Material', required=False)
-    geological_setting = forms.CharField(max_length=45, help_text='Geological Setting', required=False)
-    stratigraphic_position_depth = forms.IntegerField(help_text='Stratigraphic Position Depth', required=False)
-    sample_weight = forms.IntegerField(help_text='Sample Weight', required=False)
-    pot_contamination = forms.CharField(max_length=100, help_text='Potential Contamination', required=False)
-    calibration_curve = forms.CharField(max_length=20, help_text='Calibration Curve', required=False)
+    depth_below_SL = forms.CharField(help_text='Depth Below SL', required=False,
+                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2}))
+    material = forms.CharField(help_text='Material', required=False,
+                               widget=forms.Textarea(attrs={'rows': 2, 'cols': 98}))
+    geological_setting = forms.CharField(help_text='Geological Setting', required=False,
+                                         widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
+    stratigraphic_position_depth = forms.CharField(help_text='Stratigraphic Position Depth', required=False,
+                                                   widget=forms.Textarea(attrs={'class':'noresize',
+                                                                                'rows': 1, 'cols': 8}))
+    sample_weight = forms.CharField(help_text='Weight (g)', required=False,
+                                    widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+    pot_contamination = forms.CharField(help_text='Potential Contamination', required=False,
+                                        widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
+    calibration_curve = forms.CharField(help_text='Calibration Curve', required=False,
+                                        widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     c14_core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput(), required=False)
     c14_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
 

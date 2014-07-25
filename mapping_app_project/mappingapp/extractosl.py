@@ -61,7 +61,9 @@ def get_osl_sample_info(sample_sheet, sample_count):
     uranium = sample_sheet[positions['U']].value
 
     # remove newlines from notes
-    notes = notes.replace('\n', ' ')
+    if notes is not None:
+        notes = notes.replace('\n', ' ')
+        notes = ' '.join(notes.split())
 
     # convert date if format incorrect
     if sample_date is not None:

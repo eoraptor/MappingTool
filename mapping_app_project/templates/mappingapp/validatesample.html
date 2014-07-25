@@ -33,7 +33,8 @@
 
                     <div class="container-fluid">
                         <div class="col-md-6" id="leftcol">
-                            {% include "mappingapp/oslform.html" %}
+                            {% include "mappingapp/c14form.html" %}
+{#                            {% include "mappingapp/oslform.html" %}#}
 {#                            {% include 'mappingapp/tcnform.html' %}#}
                         </div>
 
@@ -103,6 +104,11 @@
                             {{ sampform.lab_code.errors }}
                             <label class="formlabel">{{ sampform.lab_code.help_text }}</label>
                             {{ sampform.lab_code }}
+                        </div>
+                        <div class="formspan left">
+                            {{ c14form.calibration_curve.errors }}
+                            <label class="formlabel">{{ c14form.calibration_curve.help_text }}</label>
+                            {{ c14form.calibration_curve }}
                         </div>
                     </fieldset>
                 </div><br />
