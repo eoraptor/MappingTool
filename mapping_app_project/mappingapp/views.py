@@ -18,7 +18,6 @@ from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination, O
 from mappingapp.extract import process_file
 
 
-
 def is_member(user):
     return user.groups.filter(name='Consortium Super User')
 
@@ -218,11 +217,12 @@ def upload(request):
 
             for k, v in sample_data.iteritems():
                 request.session[k] = v
-
+                request.session.modified = True
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('validatesample'))
 
     else:
+
         form = UploadFileForm() # A empty, unbound form
 
     # Render list page with the documents and the form
@@ -311,6 +311,7 @@ def validatesample(request):
 
     sample_type = request.session['sample_type'+counter]
 
+    transect = None
     if request.session['transect'+counter] is not None:
         transect = Transect(transect_number=request.session['transect'+counter])
 
@@ -427,25 +428,31 @@ def validatesample(request):
             sample.sample_site = sample_site
             sample.save()
 
-            core = coreForm.save()
+            if sample_type == 'OSL' or sample_type == 'C14':
+                core = coreForm.save()
 
-            c14 = c14Form.save(commit=False)
-            c14.c14_sample = sample
-            c14.c14_core = core
-            c14.save()
-            # osl = oslForm.save(commit=False)
-            # osl.osl_sample = sample
-            # osl.osl_core = core
-            # osl.save()
-            # tcn = tcnForm.save(commit=False)
-            # tcn.tcn_sample = sample
-            # tcn.save()
-            #
-            # for form in bearingsFormSet.forms:
-            #     bear_inc = form.save()
-            #     if bear_inc is not None:
-            #         sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
-             #                                                                     bear_inc=bear_inc)
+            if sample_type == 'C14':
+                c14 = c14Form.save(commit=False)
+                c14.c14_sample = sample
+                c14.c14_core = core
+                c14.save()
+
+            if sample_type == 'OSL':
+                osl = oslForm.save(commit=False)
+                osl.osl_sample = sample
+                osl.osl_core = core
+                osl.save()
+
+            if sample_type == 'TCN':
+                tcn = tcnForm.save(commit=False)
+                tcn.tcn_sample = sample
+                tcn.save()
+
+                for form in bearingsFormSet.forms:
+                    bear_inc = form.save()
+                    if bear_inc is not None:
+                        sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
+                                                                                     bear_inc=bear_inc)
             # The user will be returned to the homepage.
             return index(request)
         else:

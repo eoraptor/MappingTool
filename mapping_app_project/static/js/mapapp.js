@@ -32,7 +32,6 @@ $(document).ready(function(){
         }
     }
 
-    if ($("#validate_sample").length > 0) {
     var sample = $('#id_sample_code').text();
 
     $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function(data){
@@ -41,15 +40,10 @@ $(document).ready(function(){
             if (response == true) {
                 $('#id_sample_code').css("color", 'red');
                 $('#validatebutton').attr("disabled", true);
-                alert('Sample Code already exists.  To edit the existing sample use the edit link at the top of the' +
-                    ' page. To save the exiting details as a new sample enter a different sample code.')
-                $('#transect').hide();
-                $('#retreat').hide();
-                $('#checkbutton').show();
+                alert('Sample Code already exists.')
             }
-        });
     });
-  }
+  });
 });
 
 

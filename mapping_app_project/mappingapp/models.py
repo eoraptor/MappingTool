@@ -104,7 +104,7 @@ class SampleManager(models.Manager):
         return sample
 
 class Sample(models.Model):
-    sample_code = models.CharField(max_length=20, null=True, blank=True)
+    sample_code = models.CharField(max_length=100, null=True, blank=True)
     sample_location_name = models.CharField(max_length=255, null=True, blank=True)
     collection_date = models.DateField(null=True, blank=True)
     collector = models.CharField(max_length=255, null=True, blank=True)

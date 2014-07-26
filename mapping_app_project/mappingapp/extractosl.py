@@ -109,6 +109,7 @@ def get_osl_sample_info(sample_sheet, sample_count):
                       'filename'+counter:filename, 'sample_time'+counter:sample_time,
                       'sample_duration'+counter:sample_duration, 'potassium'+counter:potassium,
                       'thorium'+counter:thorium, 'uranium'+counter:uranium, 'sample_bng_ing'+counter:None,
-                      'sample_easting'+counter:None, 'sample_northing'+counter:None, 'sample_type'+counter:sample_type}
+                      'sample_easting'+counter:None, 'sample_northing'+counter:None, 'sample_type'+counter:sample_type,
+                      'transect'+counter:None}
 
     return sample_details
