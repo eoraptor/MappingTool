@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 from openpyxl import load_workbook
+from mappingapp.conversion import convert_date, convert_lat_long
 import datetime
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -92,6 +94,9 @@ def get_osl_sample_info(sample_sheet, sample_count):
     if sample_time is not None and isinstance(sample_time, datetime.time):
         sample_time = sample_time.strftime("%H:%M")
 
+    # set sample type
+    sample_type = 'OSL'
+
     sample_details = {'sample_grid_reference'+counter:grid, 'lithology'+counter:lithology,
                       'sample_latitude'+counter:latitude, 'sample_longitude'+counter:longitude,
                       'sample_elevation'+counter:elevation, 'sample_code'+counter:sample_code,
@@ -104,40 +109,6 @@ def get_osl_sample_info(sample_sheet, sample_count):
                       'filename'+counter:filename, 'sample_time'+counter:sample_time,
                       'sample_duration'+counter:sample_duration, 'potassium'+counter:potassium,
                       'thorium'+counter:thorium, 'uranium'+counter:uranium, 'sample_bng_ing'+counter:None,
-                      'sample_easting'+counter:None, 'sample_northing'+counter:None}
+                      'sample_easting'+counter:None, 'sample_northing'+counter:None, 'sample_type'+counter:sample_type}
 
     return sample_details
-
-
-# take incorrect date format and replace
-def convert_date(date):
-    first_point = date.find('.')
-    last_point = date.rfind('.')
-
-    day = date[:first_point].strip(' ')
-    month = date[first_point+1:last_point].strip(' ')
-    year = date[last_point+1:].strip(' ')
-
-    if len(day) == 1:
-        day = '0' + day
-
-    if len(month) == 1:
-        month = '0' + month
-
-    if len(year) == 2:
-        year = '20' + year
-
-    return year + '-' + month + '-' + day
-
-
-# convert lat/long in degrees, minutes to decimal format
-def convert_lat_long(coord):
-    if type(coord) is float:
-        return coord
-    else:
-        result = "".join(i for i in coord if ord(i)<128)
-
-        degrees = float(result[:result.index(' ')])
-        minutes = float(result[result.rindex(' ')+1:])
-        return degrees + (minutes/60)
-

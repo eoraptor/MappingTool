@@ -275,6 +275,7 @@ def validatesample(request):
     latitude = request.session['sample_latitude'+counter]
     longitude = request.session['sample_longitude'+counter]
 
+    # set lat/long to site values if sample has no lat/long values
     if latitude is None or longitude is None:
         site_coordinates = None
         site = None
@@ -308,58 +309,72 @@ def validatesample(request):
                     collector=request.session['collector'+counter],
                     sample_notes=request.session['sample_notes'+counter])
 
-    radiocarbon = Radiocarbon_Sample(depth_below_SL=request.session['depth'+counter],
-                             material=request.session['material'+counter],
-                             geological_setting=request.session['setting'+counter],
-                             stratigraphic_position_depth=request.session['position'+counter],
-                             sample_weight=request.session['weight'+counter],
-                             pot_contamination=request.session['contamination'+counter])
-
-    # osl = OSL_Sample(stratigraphic_position=request.session['position'+counter],
-    #                  lithofacies=request.session['lithofacies'+counter],
-    #                  burial_depth=request.session['burial_depth'+counter],
-    #                  lithology=request.session['lithology'+counter],
-    #                  gamma_spec=request.session['gamma_spec'+counter],
-    #                  equipment_number=request.session['equipment_number'+counter],
-    #                  probe_serial_no=request.session['probe_number'+counter],
-    #                  filename=request.session['filename'+counter],
-    #                  sample_time=request.session['sample_time'+counter],
-    #                  sample_duration=request.session['sample_duration'+counter],
-    #                  potassium=request.session['potassium'+counter],
-    #                  thorium=request.session['thorium'+counter],
-    #                  uranium=request.session['uranium'+counter])
-
-    core = Core_Details(exposure_core=request.session['exposure_core'+counter],
-                        core_number=request.session['core_number'+counter])
-
-    # tcn = TCN_Sample(quartz_content=request.session['quartz_content'+counter],
-    #                  sample_setting=request.session['sample_setting'+counter],
-    #                  sampled_material=request.session['sampled_material'+counter],
-    #                  boulder_dimensions=request.session['boulder_dimensions'+counter],
-    #                  sample_surface_strike_dip=request.session['sample_surface_strike_dip'+counter],
-    #                  sample_thickness=request.session['sample_thickness'+counter],
-    #                  grain_size=request.session['grain_size'+counter],
-    #                  lithology=request.session['lithology'+counter])
+    sample_type = request.session['sample_type'+counter]
 
     if request.session['transect'+counter] is not None:
         transect = Transect(transect_number=request.session['transect'+counter])
 
     retreat = None
 
-    # bearings = None
-    #
-    # if 'bearings'+counter in request.session:
-    #     bearings = request.session['bearings'+counter]
-    #
-    # data = []
-    # if bearings is not None:
-    #     for item in bearings:
-    #         dict = {}
-    #         dict['bearing'] = item[0]
-    #         dict['inclination'] = item[1]
-    #         data.append(dict)
-    #
-    # BearingsFormSet = formset_factory(BearingInclinationForm, extra=5)
+    if sample_type == 'C14':
+        radiocarbon = Radiocarbon_Sample(depth_below_SL=request.session['depth'+counter],
+                                 material=request.session['material'+counter],
+                                 geological_setting=request.session['setting'+counter],
+                                 stratigraphic_position_depth=request.session['position'+counter],
+                                 sample_weight=request.session['weight'+counter],
+                                 pot_contamination=request.session['contamination'+counter])
+
+        core = Core_Details(exposure_core=request.session['exposure_core'+counter],
+                        core_number=request.session['core_number'+counter])
+
+    elif sample_type == 'OSL':
+        osl = OSL_Sample(stratigraphic_position=request.session['position'+counter],
+                         lithofacies=request.session['lithofacies'+counter],
+                         burial_depth=request.session['burial_depth'+counter],
+                         lithology=request.session['lithology'+counter],
+                         gamma_spec=request.session['gamma_spec'+counter],
+                         equipment_number=request.session['equipment_number'+counter],
+                         probe_serial_no=request.session['probe_number'+counter],
+                         filename=request.session['filename'+counter],
+                         sample_time=request.session['sample_time'+counter],
+                         sample_duration=request.session['sample_duration'+counter],
+                         potassium=request.session['potassium'+counter],
+                         thorium=request.session['thorium'+counter],
+                         uranium=request.session['uranium'+counter])
+
+        core = Core_Details(exposure_core=request.session['exposure_core'+counter],
+                        core_number=request.session['core_number'+counter])
+
+    elif sample_type == 'TCN':
+        tcn = TCN_Sample(quartz_content=request.session['quartz_content'+counter],
+                         sample_setting=request.session['sample_setting'+counter],
+                         sampled_material=request.session['sampled_material'+counter],
+                         boulder_dimensions=request.session['boulder_dimensions'+counter],
+                         sample_surface_strike_dip=request.session['sample_surface_strike_dip'+counter],
+                         sample_thickness=request.session['sample_thickness'+counter],
+                         grain_size=request.session['grain_size'+counter],
+                         lithology=request.session['lithology'+counter])
+
+        bearings = None
+
+        if 'bearings'+counter in request.session:
+            bearings = request.session['bearings'+counter]
+
+        data = []
+        if bearings is not None:
+            for item in bearings:
+                dict = {}
+                dict['bearing'] = item[0]
+                dict['inclination'] = item[1]
+                data.append(dict)
+
+        BearingsFormSet = formset_factory(BearingInclinationForm, extra=5)
+
+    tcnForm = None
+    oslForm = None
+    coreForm = None
+    bearingsFormSet = None
+    c14Form = None
 
     # A HTTP POST?
     if request.method == 'POST':
@@ -370,14 +385,20 @@ def validatesample(request):
         sitecoordForm = CoordinatesForm(request.POST, prefix='site')
         tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat)
-        # tcnForm = TCNForm(request.POST, instance=tcn)
         sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
-        # bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
 
-        #oslForm = OSLSampleForm(request.POST, instance=osl)
-        coreForm = CoreDetailsForm(request.POST, instance=core)
-        c14Form = RadiocarbonForm(request.POST, instance=radiocarbon)
+        if sample_type == 'TCN':
+            tcnForm = TCNForm(request.POST, instance=tcn)
+            bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
+
+        elif sample_type == 'OSL':
+            oslForm = OSLSampleForm(request.POST, instance=osl)
+            coreForm = CoreDetailsForm(request.POST, instance=core)
+
+        elif sample_type == 'C14':
+            coreForm = CoreDetailsForm(request.POST, instance=core)
+            c14Form = RadiocarbonForm(request.POST, instance=radiocarbon)
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
@@ -437,15 +458,22 @@ def validatesample(request):
         sitecoordForm = CoordinatesForm(prefix='site')
         tranForm = TransectForm(instance=transect)
         retForm = RetreatForm(instance=retreat)
-        # tcnForm = TCNForm(instance=tcn)
         sitechoicesForm = ExistingSitesForm(prefix='main')
         hiddensiteForm = HiddenSiteForm(prefix='hidden')
-        # bearingsFormSet = BearingsFormSet(initial=data)
         fillsiteForm = ExistingSitesForm(request.POST, prefix='fill')
 
-        #oslForm = OSLSampleForm(instance=osl)
-        coreForm = CoreDetailsForm(instance=core)
-        c14Form = RadiocarbonForm(instance=radiocarbon)
+        if sample_type == 'TCN':
+            tcnForm = TCNForm(instance=tcn)
+            bearingsFormSet = BearingsFormSet(initial=data)
+
+        elif sample_type == 'OSL':
+            oslForm = OSLSampleForm(instance=osl)
+            coreForm = CoreDetailsForm(instance=core)
+
+        elif sample_type == 'C14':
+            coreForm = CoreDetailsForm(instance=core)
+            c14Form = RadiocarbonForm(instance=radiocarbon)
+
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
@@ -455,10 +483,10 @@ def validatesample(request):
                                                                  'samplecoordform':samplecoordForm,
                                                                  'siteform': siteForm, 'sitecoordform':sitecoordForm,
                                                                  'sampform':sampForm, 'fillsiteform':fillsiteForm,
-                                                                 'is_member':is_member,  'retform': retForm}, context)
-
-    # 'bearingformset':bearingsFormSet,  'tcnform':tcnForm, 'oslform':oslForm,
-
+                                                                 'is_member':is_member,  'retform': retForm,
+                                                                 'sample_type':sample_type,
+                                                                 'bearingformset':bearingsFormSet,  'tcnform':tcnForm,
+                                                                 'oslform':oslForm,}, context)
 
 
 def editsample(request):

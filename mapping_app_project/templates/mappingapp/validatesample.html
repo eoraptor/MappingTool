@@ -33,9 +33,15 @@
 
                     <div class="container-fluid">
                         <div class="col-md-6" id="leftcol">
-                            {% include "mappingapp/c14form.html" %}
-{#                            {% include "mappingapp/oslform.html" %}#}
-{#                            {% include 'mappingapp/tcnform.html' %}#}
+
+                            {% if sample_type == 'C14' %}
+                                {% include "mappingapp/c14form.html" %}
+                            {% elif sample_type == 'OSL' %}
+                                {% include "mappingapp/oslform.html" %}
+                            {% elif sample_type == 'TCN' %}
+                                {% include 'mappingapp/tcnform.html' %}
+                            {%  endif %}
+
                         </div>
 
                         <div class="col-md-6" id="agecol">
