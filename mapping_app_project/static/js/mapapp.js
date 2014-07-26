@@ -38,9 +38,9 @@ $(document).ready(function(){
         $.each(data, function( key, val) {
             var response = val.exists;
             if (response == true) {
-                $('#id_sample_code').css("color", 'red');
+                $('#id_sample_code').css("background", '#FF7F50');
                 $('#validatebutton').attr("disabled", true);
-                alert('Sample Code already exists.')
+                alert('Sample Code already exists.');
             }
     });
   });
@@ -123,25 +123,22 @@ $('[data-toggle="tooltip"]').tooltip({
 });
 
 
-$('#checkbutton').click(function(){
-    var sample1 = $('#id_sample_code').text();
+$(document).ready(function() {
+    $('#id_sample_code').keyup(function () {
+        var sample1 = $('#id_sample_code').text();
 
-    $.getJSON('/mappingapp/check_sample/', {sample_code: sample1}, function(data){
-        $.each(data, function( key, val) {
-            var response = val.exists;
-            if (response == true) {
-                $('#id_sample_code').css("color", 'red');
-                $('#validatebutton').attr("disabled", true);
-                alert('Sample Code exists please enter another')
-            }
-            else{
-                $('#id_sample_code').css("color", 'black');
-                $('#validatebutton').attr("disabled", false);
-                alert('Sample Code valid')
-                $('#transect').show();
-                $('#retreat').show();
-                $('#checkbutton').hide();
-            }
+        $.getJSON('/mappingapp/check_sample/', {sample_code: sample1}, function (data) {
+            $.each(data, function (key, val) {
+                var response = val.exists;
+                if (response == true) {
+                    $('#id_sample_code').css("background", '#FF7F50');
+                    $('#validatebutton').attr("disabled", true);
+                }
+                else {
+                    $('#id_sample_code').css("background", 'white');
+                    $('#validatebutton').attr("disabled", false);
+                }
+            });
         });
     });
 });
