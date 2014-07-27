@@ -505,8 +505,6 @@ def editsample(request):
     # retrieve objects to populate form fields
     sample = None
 
-    request.session['counter'] = 1
-
     sample_code = request.session['sample']
     try:
         sample = Sample.objects.get(sample_code=sample_code)
@@ -514,10 +512,30 @@ def editsample(request):
         pass
 
     site_name = None
-    tcn_data = None
     transect = None
     retreat_zone = None
     sample_coordinates = None
+    osl_data = None
+    c14_data = None
+    tcn_data = None
+    bearings = None
+    sample_type = None
+
+    if sample is not None:
+        try:
+            tcn_data = TCN_Sample.objects.get(tcn_sample=sample)
+        except:
+            pass
+    if tcn_data is None:
+        try:
+            osl_data = OSL_Sample.objects.get(osl_sample=sample)
+        except:
+            pass
+    if tcn_data is None and osl_data is None:
+        try:
+            c14_data = Radiocarbon_Sample.objects.get(c14_sample=sample)
+        except:
+            pass
 
     if sample is not None:
         if sample.sample_site is not None:
@@ -525,22 +543,31 @@ def editsample(request):
         sample_coordinates = sample.sample_coordinates
         transect = sample.transect
         retreat_zone = sample.retreat
-        tcn_data = None
-        try:
-            tcn_data = TCN_Sample.objects.get(tcn_sample=sample)
 
-        except:
-            pass
+    if tcn_data is not None:
+        BearingsFormSet = formset_factory(EditBIForm, extra=5)
+        bearings = Sample_Bearing_Inclination.objects.filter(sample_with_bearing=tcn_data)
+        sample_type = 'TCN'
 
-    BearingsFormSet = formset_factory(EditBIForm, extra=5)
+        data = []
+        for item in bearings:
+            values = item.bear_inc
+            if values is not None:
+                data.append({'bearing':values.bearing, 'inclination':values.inclination})
 
-    bearings = Sample_Bearing_Inclination.objects.filter(sample_with_bearing=tcn_data)
+    if osl_data is not None:
+        core = osl_data.osl_core
+        sample_type = 'OSL'
 
-    data = []
-    for item in bearings:
-        values = item.bear_inc
-        if values is not None:
-            data.append({'bearing':values.bearing, 'inclination':values.inclination})
+    if c14_data is not None:
+        core = c14_data.c14_core
+        sample_type = 'C14'
+
+    oslForm = None
+    c14Form = None
+    tcnForm = None
+    coreForm = None
+    bearingsFormSet = None
 
     # A HTTP POST?
     if request.method == 'POST':
@@ -551,10 +578,20 @@ def editsample(request):
         sitecoordForm = EditCoordinatesForm(request.POST, prefix='site')
         tranForm = TransectForm(request.POST, instance=transect)
         retForm = RetreatForm(request.POST, instance=retreat_zone)
-        tcnForm = EditTCNForm(request.POST, instance=tcn_data)
         sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
-        bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
+
+        if tcn_data is not None:
+            bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
+            tcnForm = EditTCNForm(request.POST, instance=tcn_data)
+
+        elif osl_data is not None:
+            oslForm = OSLSampleForm(request.POST, instance=osl_data)
+            coreForm = CoreDetailsForm(request.POST, instance=core)
+
+        elif c14_data is not None:
+            c14Form = RadiocarbonForm(request.POST, instance=c14_data)
+            coreForm = CoreDetailsForm(request.POST, instance=core)
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
@@ -611,14 +648,21 @@ def editsample(request):
         sitecoordForm = EditCoordinatesForm(prefix='site')
         tranForm = TransectForm(instance=transect)
         retForm = RetreatForm(instance=retreat_zone)
-        tcnForm = EditTCNForm(instance=tcn_data)
         sitechoicesForm = ExistingSitesForm(prefix='main')
         hiddensiteForm = HiddenSiteForm(prefix='hidden')
         fillsiteForm = ExistingSitesForm(request.POST, prefix='fill')
 
+        if tcn_data is not None:
+            bearingsFormSet = BearingsFormSet(initial=data)
+            tcnForm = EditTCNForm(instance=tcn_data)
 
+        elif osl_data is not None:
+            oslForm = OSLSampleForm(instance=osl_data)
+            coreForm = CoreDetailsForm(instance=core)
 
-        bearingsFormSet = BearingsFormSet(initial=data)
+        elif c14_data is not None:
+            c14Form = RadiocarbonForm(instance=c14_data)
+            coreForm = CoreDetailsForm(instance=core)
 
 
     # Bad form (or form details), no form supplied...
@@ -629,7 +673,9 @@ def editsample(request):
                                                             'sitechoices':sitechoicesForm, 'retform': retForm,
                                                             'fillsiteform':fillsiteForm,'is_member':is_member,
                                                             'bearingformset':bearingsFormSet, 'tcnform':tcnForm,
-                                                            'site_name':site_name}, context)
+                                                            'site_name':site_name, 'oslform':oslForm,
+                                                            'c14form':c14Form, 'coreform':coreForm,
+                                                            'sample_type':sample_type}, context)
 
 
 
