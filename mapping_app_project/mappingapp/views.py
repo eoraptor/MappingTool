@@ -16,6 +16,7 @@ from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, 
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination, OSL_Sample, Core_Details, Radiocarbon_Sample
 from mappingapp.extract import process_file
+from mappingapp.conversion import get_transect
 
 
 def is_member(user):
@@ -314,6 +315,9 @@ def validatesample(request):
     transect = None
     if request.session['transect'+counter] is not None:
         transect = Transect(transect_number=request.session['transect'+counter])
+
+    if transect is None and site_name is not None:
+        transect = get_transect(site_name)
 
     retreat = None
 
@@ -618,23 +622,39 @@ def editsample(request):
             sample.sample_site = sample_site
             sample.save()
 
-            tcn = tcnForm.save(commit=False)
-            tcn.tcn_sample = sample
-            tcn.save()
+            if sample_type == 'TCN':
+                tcn = tcnForm.save(commit=False)
+                tcn.tcn_sample = sample
+                tcn.save()
 
-            tracker = 0
-            for form in bearingsFormSet.forms:
-                bear_inc = form.save(commit=False)
-                if bear_inc is not None:
-                    if tracker < len(bearings):
-                        bearings[tracker].bear_inc.bearing = bear_inc.bearing
-                        bearings[tracker].bear_inc.inclination = bear_inc.inclination
-                        bearings[tracker].bear_inc.save()
-                        tracker += 1
-                    else:
-                        if bear_inc.bearing is not None and bear_inc.inclination is not None:
-                            bear_inc.save()
-                            Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn_data, bear_inc=bear_inc)
+                tracker = 0
+                for form in bearingsFormSet.forms:
+                    bear_inc = form.save(commit=False)
+                    if bear_inc is not None:
+                        if tracker < len(bearings):
+                            bearings[tracker].bear_inc.bearing = bear_inc.bearing
+                            bearings[tracker].bear_inc.inclination = bear_inc.inclination
+                            bearings[tracker].bear_inc.save()
+                            tracker += 1
+                        else:
+                            if bear_inc.bearing is not None and bear_inc.inclination is not None:
+                                bear_inc.save()
+                                Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn_data,
+                                                                          bear_inc=bear_inc)
+
+            elif sample_type == 'C14':
+                core = coreForm.save()
+                c14 = c14Form.save(commit=False)
+                c14.c14_sample = sample
+                c14.c14_core = core
+                c14.save()
+
+            elif sample_type == 'OSL':
+                core = coreForm.save()
+                osl = oslForm.save(commit=False)
+                osl.osl_sample = sample
+                osl.osl_core = core
+                osl.save()
 
             # The user will be returned to the homepage.
             return index(request)

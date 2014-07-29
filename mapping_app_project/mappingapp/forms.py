@@ -55,7 +55,7 @@ class EditCoordinatesForm(forms.ModelForm):
 
 class TransectForm(forms.ModelForm):
 
-    TRANSECT_CHOICES = (('T1', 'T1'), ('T2', 'T2'), ('T3', 'T3'), ('T4', 'T4'), ('T5', 'T5'), ('T6', 'T6'),
+    TRANSECT_CHOICES = ((None, None), ('T1', 'T1'), ('T2', 'T2'), ('T3', 'T3'), ('T4', 'T4'), ('T5', 'T5'), ('T6', 'T6'),
                         ('T7', 'T7'), ('T8', 'T8'))
     transect_number = forms.ChoiceField(help_text='Transect', required=False, choices=TRANSECT_CHOICES)
 

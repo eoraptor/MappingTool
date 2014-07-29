@@ -23,6 +23,8 @@
             {{ hidden }}
         {% endfor %}
 
+        {% block validate %} <div class="hidden" id="validate"></div> {% endblock validate %}
+
         <div class="bs-example bs-example-tabs">
             <ul id="tcntab" class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>

@@ -32,18 +32,21 @@ $(document).ready(function(){
         }
     }
 
-    var sample = $('#id_sample_code').text();
+    if ($('#validate').length > 0) {
+        var sample = $('#id_sample_code').text();
 
-    $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function(data){
-        $.each(data, function( key, val) {
-            var response = val.exists;
-            if (response == true) {
-                $('#id_sample_code').css("background", '#FF7F50');
-                $('#validatebutton').attr("disabled", true);
-                alert('Sample Code already exists.');
-            }
-    });
-  });
+        $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function (data) {
+            $.each(data, function (key, val) {
+                var response = val.exists;
+                if (response == true) {
+                    $('#id_sample_code').css("background", '#FF7F50');
+                    $('#validatebutton').attr("disabled", true);
+                    alert('Sample Code already exists.');
+                }
+
+            });
+        });
+    }
 });
 
 
@@ -126,6 +129,8 @@ $('[data-toggle="tooltip"]').tooltip({
 $(document).ready(function() {
     $('#id_sample_code').keyup(function () {
         var sample1 = $('#id_sample_code').text();
+    if ($('#validate').length > 0) {
+        var sample = $('#id_sample_code').text();
 
         $.getJSON('/mappingapp/check_sample/', {sample_code: sample1}, function (data) {
             $.each(data, function (key, val) {
@@ -140,6 +145,7 @@ $(document).ready(function() {
                 }
             });
         });
+        }
     });
 });
 
