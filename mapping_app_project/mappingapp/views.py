@@ -221,8 +221,9 @@ def upload(request):
             for k, v in sample_data.iteritems():
                 request.session[k] = v
                 request.session.modified = True
-            # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('validatesample'))
+
+            # Redirect to summary of file contents after upload
+            return HttpResponseRedirect(reverse('filesummary'))
 
     else:
 
@@ -267,6 +268,8 @@ def filesummary(request):
 
     file_name = request.session['file_name']
     sample_count = request.session['sample_count']
+    request.session['counter'] = 1
+
     counter = 1
 
     samples = []
@@ -274,13 +277,13 @@ def filesummary(request):
     samples_unique = True
     samples_in_db = []
     exist_in_db = False
+    samples_seen = set()
 
     while counter <= sample_count:
         samples.append(request.session['sample_code'+str(counter)])
         counter += 1
 
     if len(samples) != 0:
-        samples_seen = set()
         for sample in samples:
             samples_seen.add(sample)
 
@@ -302,11 +305,10 @@ def filesummary(request):
     if len(samples_in_db) > 0:
         exist_in_db = True
 
-
-    return render_to_response('mappingapp/filesummary.html', {'is_member':is_member, 'file_name':file_name,
-                                                              'samples':samples, 'count':sample_count,
-                                                              'samples_unique':samples_unique,
-                                                              'exist_in_db':samples_in_db, 'existing':exist_in_db}, context)
+    return render_to_response('mappingapp/filesummary.html',
+                              {'is_member':is_member, 'file_name':file_name,
+                              'samples':samples, 'count':sample_count, 'samples_unique':samples_unique,
+                              'exist_in_db':samples_in_db, 'existing':exist_in_db}, context)
 
 
 
@@ -322,11 +324,10 @@ def validatesample(request):
     # retrieve objects to populate form fields
     sample = None
 
-    request.session['counter'] = 1
-
     site_name = request.session['site_name']
 
     counter = str(request.session['counter'])
+    num_samples = request.session['sample_count']
 
     latitude = request.session['sample_latitude'+counter]
     longitude = request.session['sample_longitude'+counter]
@@ -513,7 +514,12 @@ def validatesample(request):
                         sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
                                                                                      bear_inc=bear_inc)
             # The user will be returned to the homepage.
-            return index(request)
+            if request.session['counter'] < num_samples:
+                counter = request.session['counter']
+                request.session['counter'] = counter+1
+                return HttpResponseRedirect(reverse('validatesample'))
+            else:
+                return index(request)
         else:
             # The supplied form contained errors - just print them to the terminal.
             print sample.errors

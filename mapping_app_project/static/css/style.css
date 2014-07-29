@@ -272,7 +272,7 @@ html {
     background: #FFFEDC;
 }
 
-.panel {
+#summarypanel {
     margin-left: auto;
     margin-right: auto;
     width: 450px;

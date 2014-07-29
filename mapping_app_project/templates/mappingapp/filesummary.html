@@ -21,9 +21,14 @@
         <div class="panel" id="summarypanel">
             <div class="panel-heading" id="panelhead"><h4>Filename: {{ file_name }}</h4></div>
                 <ul class="list-group">
-                    {% for sample in samples %}
-                        <li class="list-group-item" id="panelbod">{{ sample }}</li>
-                    {% endfor %}
+                    <li class="list-group-item" id="panelbod">Sample Code(s):
+                        <ul>
+                            {% for sample in samples %}
+                                <li>{{ sample }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+
                 </ul>
             <div class="panel-footer" id="panelhead">Number of samples: {{ count }}</div>
         </div>
@@ -31,8 +36,8 @@
 
     <div class="col-md-6" id="agecol">
 
-        <div class="panel panel-danger" id="fileconflicts">
-            <div class="panel-heading">Sample Code Conflicts</div>
+        <div class="panel panel-danger" id="summarypanel">
+            <div class="panel-heading"><h4>Sample Code Conflicts</h4></div>
                 <ul class="list-group">
                     {% if not samples_unique %}
                         <li class="list-group-item"><h4>
@@ -49,11 +54,14 @@
                         </ul>
                         </li>
                     {% endif %}
+                    {% if samples_unique and not existing %}
+                        <li class="list-group-item"><h4>None</h4></li>
+                    {% endif %}
                 </ul>
             <div class="panel-footer"></div>
         </div>
     <div class="span2 text-center">
-      <button type="button" class="btn-success btn-xl" name="Proceed" id="validatebutton">Proceed</button>
+      <a href="/mappingapp/validatesample"><button type="button" class="btn-success btn-xl" name="Proceed" id="validatebutton">Proceed</button></a>
     </div>
 </div>
 

@@ -237,7 +237,7 @@ def process_file(filename):
                 for k, v in results.iteritems():
                     samples[k] = v
 
-    samples['sample_count'] = counter-1
+    samples['sample_count'] = counter
     return samples
 
 
