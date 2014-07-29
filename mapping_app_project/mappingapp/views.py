@@ -30,14 +30,44 @@ def markers(request):
     if request.method == 'GET':
         samples = Sample.objects.all()
         samples_with_coordinates = []
+
         for sample in samples:
             if sample.sample_coordinates is not None:
-                samples_with_coordinates.append(sample)
+
+                sample_type = None
+                type = None
+
+                try:
+                    type = TCN_Sample.objects.get(tcn_sample=sample)
+                except:
+                    pass
+                if type is not None:
+                    sample_type = 'tcn'
+
+                if sample_type is None:
+                    try:
+                        type = OSL_Sample.objects.get(osl_sample=sample)
+                    except:
+                        pass
+                    if type is not None:
+                        sample_type = 'osl'
+
+                if sample_type is None:
+                    try:
+                        type = Radiocarbon_Sample.objects.get(c14_sample=sample)
+                    except:
+                        pass
+                    if type is not None:
+                        sample_type = 'c14'
+
+                data = {'latitude': sample.sample_coordinates.latitude,
+                        'longitude': sample.sample_coordinates.longitude,
+                        'code': sample.sample_code, 'type':sample_type}
+
+                samples_with_coordinates.append(data)
 
         if len(samples_with_coordinates) != 0:
-            sample_details = json.dumps([{'latitude': sample.sample_coordinates.latitude,
-                                        'longitude': sample.sample_coordinates.longitude,
-                                        'code': sample.sample_code} for sample in samples_with_coordinates])
+            sample_details = json.dumps(samples_with_coordinates)
 
     return HttpResponse(sample_details, mimetype='application/json')
 
@@ -321,13 +351,17 @@ def validatesample(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
+    counter = str(request.session['counter'])
+
+    num_samples = request.session['sample_count']
+
+    if request.session['counter'] > num_samples:
+        return index(request)
+
     # retrieve objects to populate form fields
     sample = None
 
     site_name = request.session['site_name']
-
-    counter = str(request.session['counter'])
-    num_samples = request.session['sample_count']
 
     latitude = request.session['sample_latitude'+counter]
     longitude = request.session['sample_longitude'+counter]
@@ -513,12 +547,13 @@ def validatesample(request):
                     if bear_inc is not None:
                         sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
                                                                                      bear_inc=bear_inc)
-            # The user will be returned to the homepage.
+            # Process remaining samples
             if request.session['counter'] < num_samples:
                 counter = request.session['counter']
                 request.session['counter'] = counter+1
                 return HttpResponseRedirect(reverse('validatesample'))
             else:
+                # all samples checked, return to home page
                 return index(request)
         else:
             # The supplied form contained errors - just print them to the terminal.
@@ -558,7 +593,21 @@ def validatesample(request):
                                                                  'is_member':is_member,  'retform': retForm,
                                                                  'sample_type':sample_type,
                                                                  'bearingformset':bearingsFormSet,  'tcnform':tcnForm,
-                                                                 'oslform':oslForm,}, context)
+                                                                 'oslform':oslForm, 'count':counter,
+                                                                 'num_samples':num_samples}, context)
+
+def incrementcounter(request):
+
+    context = RequestContext(request)
+
+    if request.method == 'GET':
+
+        counter = request.session['counter'] + 1
+        request.session['counter'] = counter
+
+    sample_details = json.dumps([{'exists': True}])
+
+    return HttpResponse(sample_details, mimetype='application/json')
 
 
 def editsample(request):

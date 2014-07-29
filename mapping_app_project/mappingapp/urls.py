@@ -16,6 +16,7 @@ urlpatterns = patterns('',
                        url(r'^check_sample/$', views.check_sample, name='check_sample'),
                        url(r'^editsample/$', views.editsample, name='editsample'),
                        url(r'^filesummary/$', views.filesummary, name='filesummary'),
+                       url(r'^incrementcounter/$', views.incrementcounter, name='incrementcounter'),
                        )
 
 

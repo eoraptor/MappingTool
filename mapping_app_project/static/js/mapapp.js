@@ -217,3 +217,19 @@ $( "#modalbutton1" ).click(function () {
     $('.sitech').css('visibility','hidden');
 });
 
+
+$( "#skipbutton" ).click(function () {
+    var sample = $('#id_sample_code').text();
+
+    $.getJSON('/mappingapp/incrementcounter/', {sample_code: sample}, function (data) {
+        $.each(data, function (key, val) {
+            var response = val.exists;
+            if (response == true) {
+                location.reload();
+                $('#validatebutton').attr("disabled", false);
+            }
+
+        });
+    });
+});
+
