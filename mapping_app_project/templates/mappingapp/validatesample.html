@@ -201,15 +201,15 @@
                                                     <label class="formlabel">{{ siteform.photographs.help_text }}</label>
                                                     {{ siteform.photographs }}
                                                 </div><br />
+                                                <div class="formspan" style="vertical-align: top">
+                                                    {{ siteform.sample_type_collected.errors }}
+                                                    <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
+                                                    {{ siteform.sample_type_collected }}
+                                                </div>
                                                 <div class="formspan">
                                                     {{ siteform.operator.errors }}
                                                     <label class="formlabel">{{ siteform.operator.help_text }}</label>
                                                     {{ siteform.operator }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ siteform.sample_type_collected.errors }}
-                                                    <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
-                                                    {{ siteform.sample_type_collected }}
                                                 </div>
                                                 <div class="formspan">
                                                     {{ siteform.collected_by.errors }}

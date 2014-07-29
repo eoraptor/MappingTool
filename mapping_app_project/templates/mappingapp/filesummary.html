@@ -1,0 +1,64 @@
+{% extends 'mappingapp/base.html' %}
+{% load static %}
+
+{% block title %}File Summary{% endblock %}
+
+{% block age %}{% endblock age %}
+{% block upload %}{% endblock upload %}
+
+{% block activeupload %}
+    <li class="active"><a href="/mappingapp/upload">Upload Files</a></li>
+{% endblock activeupload %}
+
+{% block login %}{% endblock login %}
+
+{% block body_block %}
+<div class="jumbotron" id="editjumbo">
+<div class="container-fluid">
+
+    <div class="col-md-6" id="leftcol">
+
+        <div class="panel" id="summarypanel">
+            <div class="panel-heading" id="panelhead"><h4>Filename: {{ file_name }}</h4></div>
+                <ul class="list-group">
+                    {% for sample in samples %}
+                        <li class="list-group-item" id="panelbod">{{ sample }}</li>
+                    {% endfor %}
+                </ul>
+            <div class="panel-footer" id="panelhead">Number of samples: {{ count }}</div>
+        </div>
+    </div>
+
+    <div class="col-md-6" id="agecol">
+
+        <div class="panel panel-danger" id="fileconflicts">
+            <div class="panel-heading">Sample Code Conflicts</div>
+                <ul class="list-group">
+                    {% if not samples_unique %}
+                        <li class="list-group-item"><h4>
+                        <span class="glyphicon glyphicon-warning-sign"></span>  Duplicate sample codes exist in file</h4>
+                        </li>
+                    {% endif %}
+                    {% if existing %}
+                        <li class="list-group-item"><h4>
+                        <span class="glyphicon glyphicon-warning-sign"></span>  Sample codes below exist in database:</h4>
+                        <ul>
+                            {% for sample in exist_in_db %}
+                                <li>{{ sample }}</li>
+                            {% endfor %}
+                        </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            <div class="panel-footer"></div>
+        </div>
+    <div class="span2 text-center">
+      <button type="button" class="btn-success btn-xl" name="Proceed" id="validatebutton">Proceed</button>
+    </div>
+</div>
+
+    </div>
+</div>
+
+{% endblock %}
+

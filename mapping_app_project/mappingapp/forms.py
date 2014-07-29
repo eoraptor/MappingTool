@@ -15,9 +15,9 @@ class UploadFileForm(forms.Form):
 
 class CoreDetailsForm(forms.ModelForm):
     exposure_core = forms.CharField(help_text='Exposure/Core', required=False,
-                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
+                              widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
     core_number = forms.CharField(help_text='Core Number', required=False,
-                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 24}))
+                              widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
 
     class Meta:
         model = Core_Details
@@ -93,7 +93,7 @@ class EditSampleForm(forms.ModelForm):
     sample_notes = forms.CharField(help_text='Notes', required=False,
                                    widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
     dating_priority = forms.CharField(help_text='Dating Priority', required=False,
-                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 6}))
     age = forms.IntegerField(help_text='Sample Age', required=False,
                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     age_error = forms.IntegerField(help_text='Age Error', required=False,
@@ -117,11 +117,11 @@ class RadiocarbonForm(forms.ModelForm):
     depth_below_SL = forms.CharField(help_text='Depth', required=False,
                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2}))
     material = forms.CharField(help_text='Material', required=False,
-                               widget=forms.Textarea(attrs={'rows': 2, 'cols': 63}))
+                               widget=forms.Textarea(attrs={'rows': 2, 'cols': 86}))
     geological_setting = forms.CharField(help_text='Geological Setting', required=False,
                                          widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
     stratigraphic_position_depth = forms.CharField(help_text='Stratigraphic Position Depth', required=False,
-                                                   widget=forms.Textarea(attrs={'rows': 2, 'cols': 25}))
+                                                   widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
     sample_weight = forms.CharField(help_text='Weight (g)', required=False,
                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
     pot_contamination = forms.CharField(help_text='Potential Contamination', required=False,
@@ -137,7 +137,7 @@ class RadiocarbonForm(forms.ModelForm):
 
 class EditSampleSiteForm(forms.ModelForm):
     collected_by = forms.CharField(help_text='Collector(s)', required=False,
-                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows':1, 'cols':39}))
+                                   widget=forms.Textarea(attrs={'rows':2, 'cols':39}))
     site_name = forms.CharField(help_text='Name', required=False,
                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 35}))
     site_location = forms.CharField(help_text='Location', required=False,
@@ -147,7 +147,7 @@ class EditSampleSiteForm(forms.ModelForm):
     site_date = forms.DateField(help_text='Date', required=False,
                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     operator = forms.CharField(help_text='Operator', required=False,
-                               widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+                               widget=forms.Textarea(attrs={'rows': 2, 'cols': 20}))
     geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False,
                                        widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
     sample_type_collected = forms.CharField(help_text='Sample Type', required=False,
@@ -156,7 +156,7 @@ class EditSampleSiteForm(forms.ModelForm):
     photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False,
                                   widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
     site_notes = forms.CharField(help_text='Notes', required=False,
-                                 widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
+                                 widget=forms.Textarea(attrs={'rows': 2, 'cols': 100}))
     site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
                                               widget=forms.HiddenInput(), required=False)
 
@@ -166,7 +166,7 @@ class EditSampleSiteForm(forms.ModelForm):
 
 class OSLSampleForm(forms.ModelForm):
     stratigraphic_position = forms.CharField(help_text='Stratigraphic Position', required=False,
-                                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
+                                             widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
     lithofacies = forms.CharField(help_text='Lithofacies', required=False,
                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 28}))
     burial_depth = forms.CharField(help_text='Burial Depth', required=False,

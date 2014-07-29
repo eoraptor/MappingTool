@@ -263,3 +263,19 @@ html {
   overflow-y: scroll;
 }
 
+#panelhead {
+    background: #424242;
+    color: white;
+}
+
+#panelbod {
+    background: #FFFEDC;
+}
+
+.panel {
+    margin-left: auto;
+    margin-right: auto;
+    width: 450px;
+    border: #000000;
+}
+

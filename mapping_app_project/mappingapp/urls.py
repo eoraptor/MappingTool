@@ -15,6 +15,7 @@ urlpatterns = patterns('',
                        url(r'^create_site/$', views.create_site, name='create_site'),
                        url(r'^check_sample/$', views.check_sample, name='check_sample'),
                        url(r'^editsample/$', views.editsample, name='editsample'),
+                       url(r'^filesummary/$', views.filesummary, name='filesummary'),
                        )
 
 

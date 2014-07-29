@@ -216,6 +216,8 @@ def upload(request):
 
             sample_data = process_file(request.FILES['file'])
 
+            request.session['file_name'] = request.FILES['file'].name
+
             for k, v in sample_data.iteritems():
                 request.session[k] = v
                 request.session.modified = True
@@ -253,6 +255,59 @@ def edit(request):
        selectsampleform = SelectSampleForm()
 
     return render_to_response('mappingapp/edit.html', {'is_member':is_member, 'selectsampleform':selectsampleform}, context)
+
+
+@login_required
+@user_passes_test(is_member)
+def filesummary(request):
+
+    context = RequestContext(request)
+
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
+    file_name = request.session['file_name']
+    sample_count = request.session['sample_count']
+    counter = 1
+
+    samples = []
+
+    samples_unique = True
+    samples_in_db = []
+    exist_in_db = False
+
+    while counter <= sample_count:
+        samples.append(request.session['sample_code'+str(counter)])
+        counter += 1
+
+    if len(samples) != 0:
+        samples_seen = set()
+        for sample in samples:
+            samples_seen.add(sample)
+
+        if len(samples_seen) != len(samples):
+            samples_unique = False
+
+    if len(samples_seen) > 0:
+        existing = None
+        for sample in samples_seen:
+            try:
+                existing = Sample.objects.get(sample_code=sample)
+            except:
+                pass
+
+            if existing is not None:
+                samples_in_db.append(existing)
+                existing = None
+
+    if len(samples_in_db) > 0:
+        exist_in_db = True
+
+
+    return render_to_response('mappingapp/filesummary.html', {'is_member':is_member, 'file_name':file_name,
+                                                              'samples':samples, 'count':sample_count,
+                                                              'samples_unique':samples_unique,
+                                                              'exist_in_db':samples_in_db, 'existing':exist_in_db}, context)
+
 
 
 
