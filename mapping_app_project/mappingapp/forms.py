@@ -113,7 +113,7 @@ class EditSampleForm(forms.ModelForm):
 
 
 
-class RadiocarbonForm(forms.ModelForm):
+class EditRadiocarbonForm(forms.ModelForm):
     depth_below_SL = forms.CharField(help_text='Depth', required=False,
                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2}))
     material = forms.CharField(help_text='Material', required=False,
@@ -164,7 +164,7 @@ class EditSampleSiteForm(forms.ModelForm):
         model = Sample_Site
 
 
-class OSLSampleForm(forms.ModelForm):
+class EditOSLSampleForm(forms.ModelForm):
     stratigraphic_position = forms.CharField(help_text='Stratigraphic Position', required=False,
                                              widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
     lithofacies = forms.CharField(help_text='Lithofacies', required=False,
@@ -308,7 +308,7 @@ class SampleForm(EditSampleForm):
             pass
 
         if sample is None:
-            sample = Sample.objects.create(sample_code=form_data.sample_code,
+            sample = Sample(sample_code=form_data.sample_code,
                                            sample_location_name=form_data.sample_location_name,
                                            collection_date=sample_date,
                                            collector=form_data.collector, sample_notes=form_data.sample_notes,
@@ -360,6 +360,47 @@ class TCNForm(EditTCNForm):
                                              sample_thickness=tcn.sample_thickness,
                                              grain_size=tcn.grain_size, lithology=tcn.lithology,
                                              tcn_sample=tcn.tcn_sample)
+
+
+class OSLSampleForm(EditOSLSampleForm):
+    def save(self, commit=True):
+        osl = super(OSLSampleForm, self).save(commit=False)
+        if osl.stratigraphic_position == '' and osl.lithofacies == '' and osl.burial_depth == '' and\
+            osl.lithology == '' and osl.gamma_spec == '' and osl.equipment_number == '' and\
+            osl.probe_serial_no == '' and osl.filename == '' and osl.sample_time == '' and\
+            osl.sample_duration == '' and osl.potassium == '' and osl.thorium == '' and osl.uranium == '' and\
+            osl.osl_sample is None and osl.osl_core is None:
+            return None
+
+        else:
+            return OSL_Sample.objects.create(stratigraphic_position=osl.stratigraphic_position,
+                                             lithofacies=osl.lithofacies, burial_depth=osl.burial_depth,
+                                             lithology=osl.lithology, gamma_spec=osl.gamma_spec,
+                                             equipment_number=osl.equipment_number,
+                                             probe_serial_no=osl.probe_serial_no, filename=osl.filename,
+                                             sample_time=osl.sample_time, sample_duration=osl.sample_duration,
+                                             potassium=osl.potassium, thorium=osl.thorium, uranium=osl.uranium,
+                                             osl_sample=osl.osl_sample, osl_core=osl.osl_core)
+
+
+class RadiocarbonForm(EditRadiocarbonForm):
+    def save(self, commit=True):
+        c14 = super(RadiocarbonForm, self).save(commit=False)
+        if c14.depth_below_SL == '' and c14.material == '' and c14.geological_setting == '' and\
+            c14.stratigraphic_position_depth == '' and c14.sample_weight == '' and c14.pot_contamination == '' and\
+            c14.calibration_curve == '' and c14.c14_core is None and c14.c14_sample is None:
+
+            return None
+
+        else:
+            return Radiocarbon_Sample.objects.create(depth_below_SL=c14.depth_below_SL, material=c14.material,
+                                                     geological_setting=c14.geological_setting,
+                                                     stratigraphic_position_depth=c14.stratigraphic_position_depth,
+                                                     sample_weight=c14.sample_weight,
+                                                     pot_contamination=c14.pot_contamination,
+                                                     calibration_curve=c14.calibration_curve, c14_core=c14.c14_core,
+                                                     c14_sample=c14.c14_sample)
+
 
 class BearingInclinationForm(EditBIForm):
     def save(self, commit=True):

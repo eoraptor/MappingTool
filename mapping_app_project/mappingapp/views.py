@@ -19,6 +19,7 @@ from mappingapp.extract import process_file
 from mappingapp.conversion import get_transect
 
 
+
 def is_member(user):
     return user.groups.filter(name='Consortium Super User')
 
@@ -238,6 +239,12 @@ def upload(request):
 
     context = RequestContext(request)
 
+    #mysession = request.session.items()
+    for k in request.session.keys():
+        if k != u'_auth_user_backend' and k != u'_auth_user_id':
+            del request.session[k]
+    #mysession2 = request.session.items()
+
     # Handle file upload
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -250,6 +257,7 @@ def upload(request):
 
             for k, v in sample_data.iteritems():
                 request.session[k] = v
+
                 request.session.modified = True
 
             # Redirect to summary of file contents after upload
@@ -356,6 +364,8 @@ def validatesample(request):
     num_samples = request.session['sample_count']
 
     if request.session['counter'] > num_samples:
+        del request.session['counter']
+        del request.session['sample_count']
         return index(request)
 
     # retrieve objects to populate form fields
@@ -364,6 +374,7 @@ def validatesample(request):
     site_name = request.session['site_name']
 
     latitude = request.session['sample_latitude'+counter]
+
     longitude = request.session['sample_longitude'+counter]
 
     # set lat/long to site values if sample has no lat/long values
@@ -502,59 +513,75 @@ def validatesample(request):
             # and tcnForm.is_valid() and samplecoordForm.is_valid() and\
             # siteForm.is_valid() and     tranForm.is_valid() and retForm.is_valid():
 
-            sample_coords = samplecoordForm.save()
-
-            transect = tranForm.save()
-
-            retreat = retForm.save()
-
-            site_selected = hiddensiteForm.save()
-            sample_site = None
-            try:
-                 sample_site = Sample_Site.objects.get(site_name=site_selected)
-            except:
-                 pass
-
+            sample = None
             sample = sampForm.save(commit=False)
-            sample.transect = transect
-            sample.retreat = retreat
-            sample.sample_coordinates = sample_coords
-            sample.sample_site = sample_site
-            sample.save()
 
-            if sample_type == 'OSL' or sample_type == 'C14':
-                core = coreForm.save()
+            # prevent second save of existing form if user presses back on browser
+            existing = None
+            if sample.sample_code is not None:
+                try:
+                    existing = Sample.objects.get(sample_code=sample.sample_code)
+                except:
+                    pass
 
-            if sample_type == 'C14':
-                c14 = c14Form.save(commit=False)
-                c14.c14_sample = sample
-                c14.c14_core = core
-                c14.save()
+            if existing is not None:
+                pass
+            else:
 
-            if sample_type == 'OSL':
-                osl = oslForm.save(commit=False)
-                osl.osl_sample = sample
-                osl.osl_core = core
-                osl.save()
+                sample_coords = samplecoordForm.save()
 
-            if sample_type == 'TCN':
-                tcn = tcnForm.save(commit=False)
-                tcn.tcn_sample = sample
-                tcn.save()
+                transect = tranForm.save()
 
-                for form in bearingsFormSet.forms:
-                    bear_inc = form.save()
-                    if bear_inc is not None:
-                        sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
-                                                                                     bear_inc=bear_inc)
+                retreat = retForm.save()
+
+                site_selected = hiddensiteForm.save()
+                sample_site = None
+                try:
+                     sample_site = Sample_Site.objects.get(site_name=site_selected)
+                except:
+                     pass
+
+                sample.transect = transect
+                sample.retreat = retreat
+                sample.sample_coordinates = sample_coords
+                sample.sample_site = sample_site
+                sample.save()
+
+                if sample_type == 'OSL' or sample_type == 'C14':
+                    core = coreForm.save()
+
+                if sample_type == 'C14':
+                    c14 = c14Form.save(commit=False)
+                    c14.c14_sample = sample
+                    c14.c14_core = core
+                    c14.save()
+
+                if sample_type == 'OSL':
+                    osl = oslForm.save(commit=False)
+                    osl.osl_sample = sample
+                    osl.osl_core = core
+                    osl.save()
+
+                if sample_type == 'TCN':
+                    tcn = tcnForm.save(commit=False)
+                    tcn.tcn_sample = sample
+                    tcn.save()
+
+                    for form in bearingsFormSet.forms:
+                        bear_inc = form.save()
+                        if bear_inc is not None:
+                            sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
+                                                                                         bear_inc=bear_inc)
+
             # Process remaining samples
             if request.session['counter'] < num_samples:
                 counter = request.session['counter']
                 request.session['counter'] = counter+1
                 return HttpResponseRedirect(reverse('validatesample'))
+
             else:
                 # all samples checked, return to home page
-                return index(request)
+                return HttpResponseRedirect(reverse('index'))
         else:
             # The supplied form contained errors - just print them to the terminal.
             print sample.errors

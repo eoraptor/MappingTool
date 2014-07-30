@@ -99,7 +99,7 @@ window.onload = function() {
         var name = type.name;
         var icon = type.icon;
         var div = document.createElement("row");
-        div.innerHTML = name + '<img src="' + icon + '" height="15px">';
+        div.innerHTML = name + '<img src="' + icon + '" height="20px">';
         legend.appendChild(div);
     }
 
