@@ -43,14 +43,9 @@ fieldset.standard {
 }
 
 
-
-#window_content {
-    width: 220px;
+.gm-style-iw {
+    width: 125px;
     color: red;
-}
-
-#infoText {
-    max-width: 220px;
 }
 
 fieldset#site {
