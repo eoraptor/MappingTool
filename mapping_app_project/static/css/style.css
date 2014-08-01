@@ -1,7 +1,6 @@
 #map-canvas {
     width: 100%;
-    height: 590px;
-    border: 1px solid #000;
+    height: 92vh;
 }
 
 /* remove resize option on selected text areas */
@@ -24,6 +23,16 @@
 
 .formspan.left {
     padding-left: 6px;
+}
+
+.formspan.left.search {
+
+    margin-bottom: 30px;
+}
+
+.formspan.left.search {
+
+    margin-bottom: 30px;
 }
 
 fieldset.standard {
@@ -57,6 +66,13 @@ fieldset#coordinates {
     align-self: center;
 }
 
+fieldset#search {
+    width:220px;
+    align-self: center;
+    padding-bottom: 0px;
+
+}
+
 fieldset#age {
     width:470px;
     align-self: center;
@@ -79,6 +95,22 @@ legend.fieldsets {
 }
 legend.fieldsets + * {
     clear:both;
+}
+
+legend.fieldsets.middle {
+    text-align: center;
+    padding-left: 0px;
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+legend.fieldsets.top {
+    text-align: center;
+    padding-left: 0px;
 }
 
 button.btn-xl {
@@ -112,6 +144,19 @@ img#logo {
 #editjumbo {
     margin-top: -30px;
     max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    float: none;
+    box-shadow:0 0 10px #999;
+}
+
+#standardjumbo {
+    max-width: 1180px;
+    /*height: 80vh;*/
+    margin-top: -10px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 5px;
@@ -274,3 +319,7 @@ html {
     border: #000000;
 }
 
+#searchcol {
+    border-right: 2px solid;
+    border-right-color: #d1d1d1;
+}

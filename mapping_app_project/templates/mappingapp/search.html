@@ -1,14 +1,66 @@
 {% extends 'mappingapp/base.html' %}
 {% load static %}
 
-{% block title %}Advanced Search{% endblock %}
+{% block title %}Search{% endblock %}
 {% block age %}{% endblock age %}
 {% block search %}{% endblock search %}
 {% block activesearch %}
-     <li class="active"><a href="/mappingapp/search/">Advanced Search</a></li>
-
+     <li class="active"><a href="/mappingapp/search/">Search</a></li>
 {% endblock activesearch %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
+    <div class="jumbotron search" id="standardjumbo">
+        <div class="container-fluid">
+            <div class="col-lg-3" id="searchcol">
+
+               
+                <fieldset class="standard" id="search">
+                <legend class="fieldsets top">Transect</legend>
+                <div class="formspan left search" id="transect">
+                    {{ transectform.transect_number }}
+                 </div><br/>
+                <legend class="fieldsets middle">Sample Type</legend>
+                <div class="formspan left search" id="types">
+                    {{ sampletypeform.types }}
+                 </div><br/>
+                <form>
+
+    <legend class="fieldsets middle">Age Range</legend>
+
+                <div class="formspan left search" id="agefrom">
+                    {{ agerange.start.errors }}
+                    <label class="formlabel">{{ agerange.start.help_text }}</label>
+                    {{ agerange.start }}
+                 </div>
+                <div class="formspan left search" id="ageto">
+                    {{ agerange.end.errors }}
+                    <label class="formlabel">{{ agerange.end.help_text }}</label>
+                    {{ agerange.end }}
+                </div><br />
+    <legend class="fieldsets middle">Sample Code(s)</legend>
+
+                    </form>
+                <div class="formspan left search" id="code">
+                        {{ samplecode.code }}
+                </div><br />
+                                <legend class="fieldsets middle">Keyword(s)</legend>
+                <div class="formspan left" id="keyword">
+                        {{ keyword.string }}
+
+                </div><br /><br />
+                                    <div class="centered">
+                <button type="button" class="btn-primary btn-lg">Search</button>
+                </div><br />
+                </fieldset>
+
+
+            </div>
+
+            <div class="col-lg-8">
+            <h3>Results</h3>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

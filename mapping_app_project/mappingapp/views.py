@@ -12,7 +12,7 @@ from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, Co
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm, EditSampleSiteForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, EditTCNForm
 from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm,\
-    EditBIForm
+    EditBIForm, SampleTypeForm, AgeRangeForm, KeywordForm, CodeForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination, OSL_Sample, Core_Details, Radiocarbon_Sample
 from mappingapp.extract import process_file
@@ -214,13 +214,22 @@ def index(request):
 
 
 @login_required
+@user_passes_test(is_member)
 def search(request):
+
+    is_member = request.user.groups.filter(name='Consortium Super User')
 
     context = RequestContext(request)
 
-    context_dict = {}
+    transectform = TransectForm()
+    sampletypeform = SampleTypeForm()
+    agerangeform = AgeRangeForm()
+    samplecodeform = CodeForm()
+    keyword = KeywordForm()
 
-    return render_to_response('mappingapp/search.html', context_dict, context)
+    return render_to_response('mappingapp/search.html', {'keyword':keyword, 'samplecode':samplecodeform, 'agerange':agerangeform,
+                                                         'sampletypeform':sampletypeform, 'is_member':is_member,
+                                                         'transectform':transectform}, context)
 
 
 def results(request):

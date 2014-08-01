@@ -55,7 +55,7 @@ class EditCoordinatesForm(forms.ModelForm):
 
 class TransectForm(forms.ModelForm):
 
-    TRANSECT_CHOICES = ((None, None), ('T1', 'T1'), ('T2', 'T2'), ('T3', 'T3'), ('T4', 'T4'), ('T5', 'T5'), ('T6', 'T6'),
+    TRANSECT_CHOICES = ((None, ''), ('T1', 'T1'), ('T2', 'T2'), ('T3', 'T3'), ('T4', 'T4'), ('T5', 'T5'), ('T6', 'T6'),
                         ('T7', 'T7'), ('T8', 'T8'))
     transect_number = forms.ChoiceField(help_text='Transect', required=False, choices=TRANSECT_CHOICES)
 
@@ -409,3 +409,26 @@ class BearingInclinationForm(EditBIForm):
             return None
         else:
             return Bearing_Inclination.objects.create(bearing=bearinc.bearing, inclination=bearinc.inclination)
+
+
+
+# search forms
+class SampleTypeForm(forms.Form):
+    SAMPLE_CHOICES = ((None, ''), ('TCN', 'TCN'), ('OSL', 'OSL'), ('C14', 'C14'))
+
+    types = forms.ChoiceField(help_text='Sample Type', required=False, choices=SAMPLE_CHOICES)
+
+class AgeRangeForm(forms.Form):
+    start = forms.IntegerField(help_text='From', required=False,
+                               widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 9}))
+    end = forms.IntegerField(help_text='To', required=False,
+                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 9}))
+
+
+class KeywordForm(forms.Form):
+    string = forms.CharField(help_text='Keyword', required=False,
+                             widget=forms.Textarea(attrs={'rows': 2, 'cols': 31}))
+
+class CodeForm(forms.Form):
+    code = forms.CharField(required=False,
+                             widget=forms.Textarea(attrs={'rows': 2, 'cols': 31}))
