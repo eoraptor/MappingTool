@@ -323,3 +323,28 @@ html {
     border-right: 2px solid;
     border-right-color: #d1d1d1;
 }
+
+.form-control.narrow {
+    width: 80px;
+}
+
+.form-control.mid {
+    width: 125px;
+}
+
+.form-control.wide {
+    width: 150px;
+}
+
+#choice {
+    padding-right: 15px;
+}
+
+#end {
+    margin-left: -20px;
+}
+
+#searchbutton {
+    margin-top: 25px;
+    margin-left: -15px;
+}

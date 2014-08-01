@@ -96,6 +96,48 @@ def check_sample(request):
     return HttpResponse(result, mimetype='application/json')
 
 
+# check to see if sample exists in database
+def query(request):
+    context = RequestContext(request)
+
+    results = []
+
+    if request.method == 'GET':
+        transect = request.GET['transect']
+        type = request.GET['type']
+
+
+    if transect is not None:
+        try:
+            transect_object = Transect.objects.get(transect_number=transect)
+        except:
+            pass
+
+    if transect_object is not None:
+        samples = Sample.objects.filter(transect=transect_object)
+
+    if samples is not None:
+        for sample in samples:
+            site = ''
+            latitude = None
+            longitude = None
+
+            if sample.sample_site is not None:
+                site = sample.sample_site.site_name
+            if sample.sample_coordinates is not None:
+                latitude = sample.sample_coordinates.latitude
+                longitude = sample.sample_coordinates.longitude
+            data = {'code': sample.sample_code, 'latitude':latitude, 'longitude':longitude,
+            'site':site, 'notes':sample.sample_notes, 'age':sample.age,
+            'age_error':sample.age_error}
+
+
+            results.append(data)
+
+    results = json.dumps(results)
+
+    return HttpResponse(results, mimetype='application/json')
+
 
 def create_site(request):
     context = RequestContext(request)
@@ -230,14 +272,6 @@ def search(request):
     return render_to_response('mappingapp/search.html', {'keyword':keyword, 'samplecode':samplecodeform, 'agerange':agerangeform,
                                                          'sampletypeform':sampletypeform, 'is_member':is_member,
                                                          'transectform':transectform}, context)
-
-
-def results(request):
-   context = RequestContext(request)
-
-   context_dict = {}
-
-   return render_to_response('mappingapp/results.html', context_dict, context)
 
 
 @login_required

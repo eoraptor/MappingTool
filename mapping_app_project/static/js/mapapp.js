@@ -13,6 +13,12 @@ var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_
 $(document).ready(function(){
     $('#savebutton').hide();
 
+    $(function(){
+        $("#myTable")
+        .tablesorter({theme: 'green', widthFixed: true, widgets: ['zebra']})
+        .tablesorterPager({container: $("#pager")});
+    });
+
     $('textarea[name=sample_code]').keyup(function() {
     $('#id_sample_code').text($(this).val());
     });
@@ -233,3 +239,20 @@ $( "#skipbutton" ).click(function () {
     });
 });
 
+
+$( "#searchbutton" ).click(function () {
+    $('#resultstable').empty();
+    var transect = $('#transectsearch option:selected').text();
+    var type = $('#sampletype:selected').text();
+
+    $.getJSON('/mappingapp/query/', {transect: transect, type:type}, function (data) {
+        $.each(data, function (key, val) {
+
+            $('#resultstable').append("<tr><td>"+val.code+"</td>" +
+                "<td>"+val.latitude+"</td><td>"+val.longitude+"</td>" +
+            "<td>"+val.site+"</td>" + "<td>"+val.notes+"</td>" +
+                "<td>"+val.age+"</td>" + "<td>"+val.age_error+"</td></tr>")
+        });
+    $("table").trigger('update');
+    });
+});

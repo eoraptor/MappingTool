@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block title %}Search{% endblock %}
-{% block age %}{% endblock age %}
+{% block age %}
+<li style="visibility: hidden"><a href="/mappingapp/">Age Filter</a></li>
+{% endblock age %}
 {% block search %}{% endblock search %}
 {% block activesearch %}
      <li class="active"><a href="/mappingapp/search/">Search</a></li>
@@ -12,55 +14,97 @@
 {% block body_block %}
     <div class="jumbotron search" id="standardjumbo">
         <div class="container-fluid">
-            <div class="col-lg-3" id="searchcol">
 
-               
-                <fieldset class="standard" id="search">
-                <legend class="fieldsets top">Transect</legend>
-                <div class="formspan left search" id="transect">
-                    {{ transectform.transect_number }}
-                 </div><br/>
-                <legend class="fieldsets middle">Sample Type</legend>
-                <div class="formspan left search" id="types">
-                    {{ sampletypeform.types }}
-                 </div><br/>
-                <form>
-
-    <legend class="fieldsets middle">Age Range</legend>
-
-                <div class="formspan left search" id="agefrom">
-                    {{ agerange.start.errors }}
-                    <label class="formlabel">{{ agerange.start.help_text }}</label>
-                    {{ agerange.start }}
-                 </div>
-                <div class="formspan left search" id="ageto">
-                    {{ agerange.end.errors }}
-                    <label class="formlabel">{{ agerange.end.help_text }}</label>
-                    {{ agerange.end }}
-                </div><br />
-    <legend class="fieldsets middle">Sample Code(s)</legend>
-
-                    </form>
-                <div class="formspan left search" id="code">
-                        {{ samplecode.code }}
-                </div><br />
-                                <legend class="fieldsets middle">Keyword(s)</legend>
-                <div class="formspan left" id="keyword">
-                        {{ keyword.string }}
-
-                </div><br /><br />
-                                    <div class="centered">
-                <button type="button" class="btn-primary btn-lg">Search</button>
-                </div><br />
-                </fieldset>
-
-
+        <div class="col-md-1 col-xs-2" id="choice">
+            <div class="form-group">
+            <label class="control-label" for="searchtransect">Transect</label>
+            <select name="searchtransect" id="transectsearch" class="form-control narrow">
+  <option></option>
+  <option>T1</option>
+  <option>T2</option>
+  <option>T3</option>
+  <option>T4</option>
+  <option>T5</option>
+  <option>T6</option>
+  <option>T7</option>
+  <option>T8</option>
+                </select>
+     </div>
+        </div>
+        <div class="col-md-2 col-xs-2" id="choice">
+            <div class="form-group choice">
+            <label class="control-label" for="sampletype">Type</label>
+            <select name="sampletype" id="sampletype" class="form-control narrow">
+                  <option></option>
+  <option>TCN</option>
+  <option>OSL</option>
+  <option>C14</option>
+</select>
+          </div>
+        </div>
+        <div class="col-md-1 col-xs-3" id="start">
+            <div class="form-group">
+            <label class="control-label" for="startage">Start Age</label>
+            <input type="text" class="form-control narrow" id="startage" placeholder="Start">
+                </div>
             </div>
+                <div class="col-md-2 col-xs-3" id="age">
+            <div class="form-group">
+            <label class="control-label" for="endage">End Age</label>
+            <input type="text" class="form-control narrow" id="endage" placeholder="End">
+                </div>
+          </div>
+    <div class="col-md-2 col-xs-3">
+    <div class="form-group">
+    <label for="searchcode">Sample Code</label>
+    <input type="text" class="form-control wide" id="searchcode" placeholder="Sample Code(s)">
+  </div>
+        </div>
+    <div class="col-md-2 col-xs-4">
+    <div class="form-group">
+    <label class="formspan" for="searchkeyword">Keyword(s)</label>
+    <input type="text" class="form-control wide" id="searchkeyword" placeholder="Keyword(s)">
+  </div>
+        </div>
+    <div class="col-md-1 col-xs-2">
+ <button type="button" class="btn-primary btn-sm" id="searchbutton">Search</button>
+    </div>
 
-            <div class="col-lg-8">
-            <h3>Results</h3>
+
+<table id="myTable" class="tablesorter">
+  <thead>
+    <tr>
+      <th>Sample Code</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Site</th>
+      <th>Notes</th>
+      <th>Age</th>
+      <th>Age Error</th>
+    </tr>
+  </thead>
+  <tbody id="resultstable">
+  </tbody>
+</table>
+
+            <!-- pager -->
+<div id="pager" class="pager">
+  <form>
+    <img src={% static 'imgs/first.png' %} class="first"/>
+    <img src={% static 'imgs/prev.png' %} class="prev"/>
+    <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+    <img src={% static 'imgs/next.png' %} class="next"/>
+    <img src={% static 'imgs/last.png' %} class="last"/>
+    <select class="pagesize">
+      <option selected="selected" value="10">10</option>
+      <option value="20">20</option>
+      <option value="30">30</option>
+      <option value="40">40</option>
+    </select>
+  </form>
+</div>
             </div>
         </div>
-    </div>
+
 
 {% endblock %}

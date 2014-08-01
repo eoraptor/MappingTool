@@ -1,7 +1,9 @@
 {% extends 'mappingapp/base.html' %}
 
 {% block title %}Validate Sample Data{% endblock %}
-{% block age %}{% endblock age %}
+{% block age %}
+<li style="visibility: hidden"><a href="/mappingapp/">Age Filter</a></li>
+{% endblock age %}
 {% block upload %}{% endblock upload %}
 {% block activeupload %}
     <li class="active"><a href="/mappingapp/upload">Upload Files</a></li>

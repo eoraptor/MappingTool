@@ -3,7 +3,6 @@ from mappingapp import views
 
 urlpatterns = patterns('',
                        url(r'^$', views.index, name='index'),
-                       url(r'^results/', views.results, name='results'),
                        url(r'^search/', views.search, name='search'),
                        url(r'^upload/', views.upload, name='upload'),
                        url(r'^edit/', views.edit, name='edit'),
@@ -17,6 +16,7 @@ urlpatterns = patterns('',
                        url(r'^editsample/$', views.editsample, name='editsample'),
                        url(r'^filesummary/$', views.filesummary, name='filesummary'),
                        url(r'^incrementcounter/$', views.incrementcounter, name='incrementcounter'),
+                       url(r'^query/$', views.query, name='query'),
                        )
 
 
