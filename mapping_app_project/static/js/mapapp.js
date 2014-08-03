@@ -243,7 +243,8 @@ $( "#skipbutton" ).click(function () {
 $( "#searchbutton" ).click(function () {
     $('#resultstable').empty();
     var transect = $('#transectsearch option:selected').text();
-    var type = $('#sampletype:selected').text();
+    var type = $('#sampletype option:selected').text();
+//    $('#startage').val(type);
 
     $.getJSON('/mappingapp/query/', {transect: transect, type:type}, function (data) {
         $.each(data, function (key, val) {
@@ -254,5 +255,6 @@ $( "#searchbutton" ).click(function () {
                 "<td>"+val.age+"</td>" + "<td>"+val.age_error+"</td></tr>")
         });
     $("table").trigger('update');
+        $("table").trigger("appendCache");
     });
 });

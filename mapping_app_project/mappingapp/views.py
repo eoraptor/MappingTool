@@ -101,13 +101,15 @@ def query(request):
     context = RequestContext(request)
 
     results = []
+    transect_object = None
+    type = None
 
     if request.method == 'GET':
         transect = request.GET['transect']
         type = request.GET['type']
 
-
-    if transect is not None:
+    # search for samples belonging to one transect
+    if transect != '':
         try:
             transect_object = Transect.objects.get(transect_number=transect)
         except:
@@ -116,6 +118,22 @@ def query(request):
     if transect_object is not None:
         samples = Sample.objects.filter(transect=transect_object)
 
+    # search for samples of one type
+    if type != '':
+        samples = []
+
+        if type == 'TCN':
+            sample_list = TCN_Sample.objects.values_list('tcn_sample', flat=True)
+        elif type == 'OSL':
+            sample_list = OSL_Sample.objects.values_list('osl_sample', flat=True)
+        elif type == 'C14':
+            sample_list = Radiocarbon_Sample.objects.values_list('c14_sample', flat=True)
+
+        if sample_list is not None:
+            for pk in sample_list:
+                samples.append(Sample.objects.get(pk=pk))
+
+    # return values for display
     if samples is not None:
         for sample in samples:
             site = ''
