@@ -244,9 +244,10 @@ $( "#searchbutton" ).click(function () {
     $('#resultstable').empty();
     var transect = $('#transectsearch option:selected').text();
     var type = $('#sampletype option:selected').text();
-//    $('#startage').val(type);
+    var code = $('#searchcode').val()
+//    $('#startage').val(code);
 
-    $.getJSON('/mappingapp/query/', {transect: transect, type:type}, function (data) {
+    $.getJSON('/mappingapp/query/', {code:code, transect: transect, type:type}, function (data) {
         $.each(data, function (key, val) {
 
             $('#resultstable').append("<tr><td>"+val.code+"</td>" +

@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
+from django.db.models import Q
 import json
 import datetime, time
 
@@ -96,7 +97,7 @@ def check_sample(request):
     return HttpResponse(result, mimetype='application/json')
 
 
-# check to see if sample exists in database
+# search functionality
 def query(request):
     context = RequestContext(request)
 
@@ -107,6 +108,7 @@ def query(request):
     if request.method == 'GET':
         transect = request.GET['transect']
         type = request.GET['type']
+        sample_code = request.GET['code']
 
     # search for samples belonging to one transect
     if transect != '':
@@ -132,6 +134,16 @@ def query(request):
         if sample_list is not None:
             for pk in sample_list:
                 samples.append(Sample.objects.get(pk=pk))
+
+    #search using sample code/code fragment
+    if sample_code is not None and sample_code != '':
+        if ',' in sample_code:
+            samples = []
+            codes = [code.strip for code in sample_code.split(',')]
+            for code in codes:
+                samples.append(Sample.objects.get(sample_code=code))
+        else:
+            samples = Sample.objects.filter(Q(sample_code__startswith=sample_code))
 
     # return values for display
     if samples is not None:
