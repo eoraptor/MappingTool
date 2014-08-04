@@ -345,6 +345,11 @@ html {
 }
 
 #searchbutton {
-    margin-top: 25px;
+    margin-top: 24px;
+    margin-left: -15px;
+}
+
+#getcsv {
+    margin-top: 24px;
     margin-left: -15px;
 }

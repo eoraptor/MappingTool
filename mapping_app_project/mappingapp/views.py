@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
 from django.db.models import Q
 import json
+import csv
 import datetime, time
 
 from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, CoordinatesForm, EditCoordinatesForm
@@ -104,11 +105,20 @@ def query(request):
     results = []
     transect_object = None
     type = None
+    type_samples = None
+    code_samples = None
+    age_samples = None
+    keyword_samples = None
+    samples = None
+
 
     if request.method == 'GET':
         transect = request.GET['transect']
         type = request.GET['type']
         sample_code = request.GET['code']
+        start_age = request.GET['start']
+        end_age = request.GET['end']
+        keyword = request.GET['keyword']
 
     # search for samples belonging to one transect
     if transect != '':
@@ -121,9 +131,9 @@ def query(request):
         samples = Sample.objects.filter(transect=transect_object)
 
     # search for samples of one type
-    if type != '':
-        samples = []
-
+    if type != '' and type is not None:
+        type_samples = []
+        sample_list = None
         if type == 'TCN':
             sample_list = TCN_Sample.objects.values_list('tcn_sample', flat=True)
         elif type == 'OSL':
@@ -133,17 +143,55 @@ def query(request):
 
         if sample_list is not None:
             for pk in sample_list:
-                samples.append(Sample.objects.get(pk=pk))
+                type_samples.append(Sample.objects.get(pk=pk))
+
+    if samples is not None and type_samples is not None:
+        samples = set(samples).intersection(type_samples)
+    elif samples is None and type_samples is not None:
+        samples = type_samples
 
     #search using sample code/code fragment
     if sample_code is not None and sample_code != '':
+        code_samples = []
         if ',' in sample_code:
-            samples = []
-            codes = [code.strip for code in sample_code.split(',')]
+            codes = [code.strip() for code in sample_code.split(',')]
             for code in codes:
-                samples.append(Sample.objects.get(sample_code=code))
+                code_samples.append(Sample.objects.get(sample_code=code))
         else:
-            samples = Sample.objects.filter(Q(sample_code__startswith=sample_code))
+            code_samples = Sample.objects.filter(Q(sample_code__startswith=sample_code))
+
+    if samples is not None and code_samples is not None:
+        samples = set(samples).intersection(code_samples)
+    elif samples is None and code_samples is not None:
+        samples = code_samples
+
+    #search using sample age
+    if start_age is not None and start_age != '':
+
+        if end_age is None or end_age == '':
+            end_age = 0
+
+        age_samples = Sample.objects.filter(age__lte=start_age, age__gte=end_age)
+
+    if samples is not None and age_samples is not None:
+        samples = set(samples).intersection(age_samples)
+    elif samples is None and age_samples is not None:
+        samples = age_samples
+
+    # search using keywords
+    if keyword is not None and keyword != '':
+        keyword_samples = []
+        if ',' in keyword:
+            words = [word.strip() for word in keyword.split(',')]
+            for word in words:
+                keyword_samples.extend(Sample.objects.filter(Q(sample_notes__icontains=word)))
+        else:
+            keyword_samples = Sample.objects.filter(Q(sample_notes__icontains=keyword))
+
+    if samples is not None and keyword_samples is not None:
+        samples = set(samples).intersection(keyword_samples)
+    elif samples is None and age_samples is not None:
+        samples = keyword_samples
 
     # return values for display
     if samples is not None:
@@ -166,7 +214,7 @@ def query(request):
 
     results = json.dumps(results)
 
-    return HttpResponse(results, mimetype='application/json')
+    return HttpResponse(results, content_type='application/json')
 
 
 def create_site(request):
@@ -293,15 +341,7 @@ def search(request):
 
     context = RequestContext(request)
 
-    transectform = TransectForm()
-    sampletypeform = SampleTypeForm()
-    agerangeform = AgeRangeForm()
-    samplecodeform = CodeForm()
-    keyword = KeywordForm()
-
-    return render_to_response('mappingapp/search.html', {'keyword':keyword, 'samplecode':samplecodeform, 'agerange':agerangeform,
-                                                         'sampletypeform':sampletypeform, 'is_member':is_member,
-                                                         'transectform':transectform}, context)
+    return render_to_response('mappingapp/search.html', {'is_member':is_member}, context)
 
 
 @login_required

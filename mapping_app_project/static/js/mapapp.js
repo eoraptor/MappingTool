@@ -14,8 +14,17 @@ $(document).ready(function(){
     $('#savebutton').hide();
 
     $(function(){
-        $("#myTable")
-        .tablesorter({theme: 'green', widthFixed: true, widgets: ['zebra']})
+       var $table = $('table');
+
+        $('#getcsv').click(function(){
+    // get delivery type
+        $table.trigger('outputTable');
+    });
+        $table
+        .tablesorter({
+                theme: 'green',
+                widthFixed: true,
+                widgets: ['zebra', 'filter', 'output']})
         .tablesorterPager({container: $("#pager")});
     });
 
@@ -244,10 +253,14 @@ $( "#searchbutton" ).click(function () {
     $('#resultstable').empty();
     var transect = $('#transectsearch option:selected').text();
     var type = $('#sampletype option:selected').text();
-    var code = $('#searchcode').val()
-//    $('#startage').val(code);
+    var code = $('#searchcode').val();
+    var start = $('#startage').val();
+    var end = $('#endage').val();
+    var keyword = $('#searchkeyword').val()
 
-    $.getJSON('/mappingapp/query/', {code:code, transect: transect, type:type}, function (data) {
+//    $('#searchcode').val(keyword);
+
+    $.getJSON('/mappingapp/query/', {keyword:keyword, start:start, end:end, code:code, transect: transect, type:type}, function (data) {
         $.each(data, function (key, val) {
 
             $('#resultstable').append("<tr><td>"+val.code+"</td>" +
@@ -256,6 +269,9 @@ $( "#searchbutton" ).click(function () {
                 "<td>"+val.age+"</td>" + "<td>"+val.age_error+"</td></tr>")
         });
     $("table").trigger('update');
-        $("table").trigger("appendCache");
+    $("table").trigger("appendCache");
+
     });
 });
+
+
