@@ -94,6 +94,8 @@
         {{ sampform.sample_notes }}
     </div>
 
+    <div class="hidden" id="numforms">{{ num_bearings }}</div>
+
     <div class="modal fade myModal" id="biModal" tabindex="-1" role="dialog" aria-labelledby="biModalLabel" aria-hidden="true">
         <div class="modal-dialog" id="modo">
             <div class="modal-content" id="mod-content">
@@ -143,9 +145,10 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <div class="col-md-3" id="bearcol">
+                        <div class="col-md-3{% if num_bearings < 10 %} hidden{% endif %}" id="bearcol" id="ten">
                             {% for form in bearingformset %}
                                 {% if forloop.counter == 11 %}
+
                                     <table class="bearing">
                                         <th class="centered">{{ form.bearing.help_text }}</th>
                                         <th class="centered">{{ form.inclination.help_text }}</th>
@@ -167,7 +170,7 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <div class="col-md-3" id="bearcol">
+                        <div class="col-md-3{% if num_bearings < 20 %} hidden{% endif %}" id="bearcol" name="twenty">
                             {% for form in bearingformset %}
                                 {% if forloop.counter == 21 %}
                                     <table class="bearing">
@@ -191,7 +194,7 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <div class="col-md-3" id="bearcol">
+                        <div class="col-md-3{% if num_bearings < 30 %} hidden{% endif %}" id="bearcol" id="bearcol" name="thirty">
                             {% for form in bearingformset %}
                                 {% if forloop.counter == 31 %}
                                     <table class="bearing">
@@ -214,6 +217,30 @@
                                     </table>
                                 {% endif %}
                             {% endfor %}
+                            </div>
+                            <div class="col-md-3{% if num_bearings < 40 %} hidden{% endif %}" id="bearcol" id="bearcol" name="forty">
+                            {% for form in bearingformset %}
+                                {% if forloop.counter == 41 %}
+                                    <table class="bearing">
+                                        <th class="centered">{{ form.bearing.help_text }}</th>
+                                        <th class="centered">{{ form.inclination.help_text }}</th>
+                                        <tr>
+                                            <td>{{ form.bearing }}</td>
+                                            <td>{{ form.inclination }}</td>
+                                        </tr>
+                                    </table>
+                                {% endif %}
+                            {% endfor %}
+                            {% for form in bearingformset %}
+                                {% if forloop.counter > 41 and forloop.counter <= 50 %}
+                                    <table class="bearing">
+                                        <tr>
+                                            <td>{{ form.bearing }}</td>
+                                            <td>{{ form.inclination }}</td>
+                                        </tr>
+                                    </table>
+                                {% endif %}
+                            {% endfor %}
 
                         </div></div></div></div>
                         </div>
@@ -221,6 +248,7 @@
                 </div>
             </div>
             <div class="modal-footer" id="mod-foot">
+                <button type="button" class="btn btn-success" id="addforms">Add Forms</button>
                 <button type="button" class="btn btn-primary" id="close" data-dismiss="modal">Close</button>
             </div>
         </div>

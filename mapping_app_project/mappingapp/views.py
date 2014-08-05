@@ -14,7 +14,7 @@ from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, Co
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm, EditSampleSiteForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, EditTCNForm
 from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm,\
-    EditBIForm, SampleTypeForm, AgeRangeForm, KeywordForm, CodeForm, MarkersForm
+    EditBIForm, SampleTypeForm, AgeRangeForm, KeywordForm, CodeForm, MarkersForm, EditOSLSampleForm, EditRadiocarbonForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination, OSL_Sample, Core_Details, Radiocarbon_Sample
 from mappingapp.extract import process_file
@@ -190,7 +190,7 @@ def query(request):
 
     if samples is not None and keyword_samples is not None:
         samples = set(samples).intersection(keyword_samples)
-    elif samples is None and age_samples is not None:
+    elif samples is None and keyword_samples is not None:
         samples = keyword_samples
 
     # return values for display
@@ -616,7 +616,8 @@ def validatesample(request):
                 dict['inclination'] = item[1]
                 data.append(dict)
 
-        BearingsFormSet = formset_factory(BearingInclinationForm, extra=5)
+        num_bearings = len(data)
+        BearingsFormSet = formset_factory(BearingInclinationForm, extra=50-num_bearings)
 
     tcnForm = None
     oslForm = None
@@ -753,7 +754,8 @@ def validatesample(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/validatesample.html', {'c14form':c14Form, 'coreform':coreForm,
+    return render_to_response('mappingapp/validatesample.html', {'num_bearings':num_bearings, 'c14form':c14Form,
+                                                                 'coreform':coreForm,
                                                                  'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
                                                                  'site_name':site_name, 'sitechoices':sitechoicesForm,
                                                                  'samplecoordform':samplecoordForm,
@@ -828,7 +830,6 @@ def editsample(request):
         retreat_zone = sample.retreat
 
     if tcn_data is not None:
-        BearingsFormSet = formset_factory(EditBIForm, extra=5)
         bearings = Sample_Bearing_Inclination.objects.filter(sample_with_bearing=tcn_data)
         sample_type = 'TCN'
 
@@ -837,6 +838,8 @@ def editsample(request):
             values = item.bear_inc
             if values is not None:
                 data.append({'bearing':values.bearing, 'inclination':values.inclination})
+
+        BearingsFormSet = formset_factory(EditBIForm, extra=50-len(data))
 
     if osl_data is not None:
         core = osl_data.osl_core
@@ -869,11 +872,11 @@ def editsample(request):
             tcnForm = EditTCNForm(request.POST, instance=tcn_data)
 
         elif osl_data is not None:
-            oslForm = OSLSampleForm(request.POST, instance=osl_data)
+            oslForm = EditOSLSampleForm(request.POST, instance=osl_data)
             coreForm = CoreDetailsForm(request.POST, instance=core)
 
         elif c14_data is not None:
-            c14Form = RadiocarbonForm(request.POST, instance=c14_data)
+            c14Form = EditRadiocarbonForm(request.POST, instance=c14_data)
             coreForm = CoreDetailsForm(request.POST, instance=core)
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
@@ -881,6 +884,7 @@ def editsample(request):
         if sampleForm.is_valid():
         # if siteForm.is_valid() and sampleForm.is_valid() and tcnForm.is_valid() and samplecoordForm.is_valid() and\
         #         tranForm.is_valid() and retForm.is_valid():
+
 
             sample = sampleForm.save(commit=False)
             sample_coordinates = samplecoordForm.save()
@@ -936,7 +940,7 @@ def editsample(request):
                 osl.save()
 
             # The user will be returned to the homepage.
-            return index(request)
+            return HttpResponseRedirect(reverse('index'))
         else:
             # The supplied form contained errors - just print them to the terminal.
             print sample.errors
@@ -956,17 +960,17 @@ def editsample(request):
             tcnForm = EditTCNForm(instance=tcn_data)
 
         elif osl_data is not None:
-            oslForm = OSLSampleForm(instance=osl_data)
+            oslForm = EditOSLSampleForm(instance=osl_data)
             coreForm = CoreDetailsForm(instance=core)
 
         elif c14_data is not None:
-            c14Form = RadiocarbonForm(instance=c14_data)
+            c14Form = EditRadiocarbonForm(instance=c14_data)
             coreForm = CoreDetailsForm(instance=core)
 
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/editsample.html', {'sitecoordform':sitecoordForm,'siteform': siteForm,
+    return render_to_response('mappingapp/editsample.html', {'num_bearings':len(data), 'sitecoordform':sitecoordForm,'siteform': siteForm,
                                                             'samplecoordform':samplecoordForm,'sampform':sampleForm,
                                                             'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
                                                             'sitechoices':sitechoicesForm, 'retform': retForm,

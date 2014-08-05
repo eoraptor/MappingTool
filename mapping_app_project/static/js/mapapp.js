@@ -1,17 +1,21 @@
 var fields = ['#id_site_name', '#id_county', '#id_site_date', '#id_site_location', '#id_operator', '#id_photographs',
 '#id_site_notes', '#id_geomorph_setting', '#id_sample_type_collected', "#id_site-latitude", '#id_site-longitude',
 "#id_site-easting", "#id_site-northing", "#id_site-elevation", "#id_site-grid_reference", "#id_site-bng_ing",
-    "#id_collected_by"]
+    "#id_collected_by"];
 
 var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_date', '#id_collector',
 '#id_sample_location_name', '#id_sampled_material', '#id_lithology', '#id_quartz_content',
 '#id_sample_surface_strike_dip', '#id_boulder_dimensions', '#id_grain_size', '#id_sample_setting',
 '#id_sample_notes', '#id_sample-latitude', '#id_sample-longitude', '#id_sample-easting', '#id_sample-northing',
-'#id_sample-elevation', '#id_sample-bng_ing']
+'#id_sample-elevation', '#id_sample-bng_ing'];
 
 
 $(document).ready(function(){
     $('#savebutton').hide();
+
+    if ($('#id_main-sites option:selected').val() == '') {
+        $('#modalbutton1').attr("disabled", true);
+    }
 
     $(function(){
        var $table = $('table');
@@ -69,6 +73,11 @@ $(document).ready(function(){
 $('#id_main-sites').change(function() {
     var selected = $('#id_main-sites option:selected').val();
     $('#id_hidden-site_name').val(selected);
+    if (selected == '') {
+        $('#modalbutton1').attr("disabled", true);
+    }else{
+        $('#modalbutton1').attr("disabled", false);
+    }
 });
 
 
@@ -274,4 +283,16 @@ $( "#searchbutton" ).click(function () {
     });
 });
 
-
+$('#addforms').click(function() {
+    var numforms = $('#numforms').val();
+    if (numforms < 20) {
+        $('[name="twenty"]').attr('class','col-md-3');
+        $('#numforms').val(20);
+    }else if (numforms < 30) {
+        $('[name="thirty"]').attr('class','col-md-3');
+        $('#numforms').val(30);
+    }else if (numforms < 40) {
+        $('[name="forty"]').attr('class','col-md-3');
+        $('#numforms').val(40);
+    }
+});
