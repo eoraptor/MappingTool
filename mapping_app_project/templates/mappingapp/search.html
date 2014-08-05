@@ -86,6 +86,19 @@
                 </tr>
             </thead>
             <tbody id="resultstable">
+            {% if samples %}
+                {% for sample in samples %}
+                    <tr>
+                        <td>{{ sample.sample_code }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ sample.sample_site }}</td>
+                        <td>{{ sample.sample_notes }}</td>
+                        <td>{{ sample.age }}</td>
+                        <td>{{ sample.age_error }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
             </tbody>
         </table>
 

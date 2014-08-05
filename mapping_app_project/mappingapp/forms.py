@@ -413,6 +413,10 @@ class BearingInclinationForm(EditBIForm):
 
 
 # search forms
+class MarkersForm(forms.Form):
+    sample_codes = forms.CharField(max_length=5000, required=False, widget=forms.HiddenInput())
+
+
 class SampleTypeForm(forms.Form):
     SAMPLE_CHOICES = ((None, ''), ('TCN', 'TCN'), ('OSL', 'OSL'), ('C14', 'C14'))
 

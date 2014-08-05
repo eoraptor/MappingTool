@@ -14,7 +14,7 @@ from mappingapp.forms import UploadFileForm, CoreDetailsForm, PhotographForm, Co
 from mappingapp.forms import TransectForm, RetreatForm, SampleForm, RadiocarbonForm, HiddenSiteForm, EditSampleSiteForm
 from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingInclinationForm, Sample_BI_Form, EditTCNForm
 from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm,\
-    EditBIForm, SampleTypeForm, AgeRangeForm, KeywordForm, CodeForm
+    EditBIForm, SampleTypeForm, AgeRangeForm, KeywordForm, CodeForm, MarkersForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination, OSL_Sample, Core_Details, Radiocarbon_Sample
 from mappingapp.extract import process_file
@@ -330,7 +330,24 @@ def index(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
-    return render_to_response('mappingapp/index.html', {'is_member':is_member}, context)
+    if 'markers' in request.session:
+        del request.session['markers']
+        request.session.modified = True
+
+    if request.method == 'POST':
+        form = MarkersForm(request.POST)
+
+        if form.is_valid():
+            markers = form.cleaned_data['sample_codes']
+
+            request.session['markers'] = markers
+
+            # Redirect to summary of file contents after upload
+            return HttpResponseRedirect(reverse('search'))
+    else:
+        form = MarkersForm()
+
+    return render_to_response('mappingapp/index.html', {'form':form, 'is_member':is_member}, context)
 
 
 @login_required
@@ -341,7 +358,21 @@ def search(request):
 
     context = RequestContext(request)
 
-    return render_to_response('mappingapp/search.html', {'is_member':is_member}, context)
+    samples = None
+
+    if 'markers' in request.session:
+        sample_codes = request.session['markers']
+        samples = []
+        codes = [code.strip() for code in sample_codes.split(',')]
+
+        del request.session['markers']
+        request.session.modified = True
+
+        for sample in codes:
+            samples.append(Sample.objects.get(sample_code=sample))
+
+
+    return render_to_response('mappingapp/search.html', {'samples':samples, 'is_member':is_member}, context)
 
 
 @login_required
@@ -352,11 +383,9 @@ def upload(request):
 
     context = RequestContext(request)
 
-    #mysession = request.session.items()
     for k in request.session.keys():
         if k != u'_auth_user_backend' and k != u'_auth_user_id':
             del request.session[k]
-    #mysession2 = request.session.items()
 
     # Handle file upload
     if request.method == 'POST':

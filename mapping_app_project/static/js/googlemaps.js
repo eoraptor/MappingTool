@@ -5,6 +5,8 @@ var drawingManager;
 var mapicons = [];
 var selectedShape;
 var iconBase = "/static/imgs/";
+var coordinates;
+var newShape;
 
      function clearSelection() {
         if (selectedShape) {
@@ -20,10 +22,16 @@ var iconBase = "/static/imgs/";
       }
 
       function deleteSelectedShape() {
-        if (selectedShape) {
-          selectedShape.setMap(null);
+        if (newShape) {
+          newShape.setMap(null);
+          $('#id_sample_codes').empty();
         }
       }
+
+    function submitMarkers() {
+        alert('hello')
+}
+
 
 
 var icons = {
@@ -75,7 +83,7 @@ function initialize() {
         polygonOptions: {
             fillColor: '#ffff00',
             fillOpacity: 0.4,
-            strokeWeight: 3,
+            strokeWeight: 2,
             clickable: true,
             zIndex: 1,
             editable: true,
@@ -84,7 +92,7 @@ function initialize() {
         circleOptions: {
             fillColor: '#ffff00',
             fillOpacity: 0.4,
-            strokeWeight: 3,
+            strokeWeight: 2,
             clickable: true,
             zIndex: 1,
             editable: true,
@@ -93,19 +101,43 @@ function initialize() {
         rectangleOptions: {
             fillColor: '#ffff00',
             fillOpacity: 0.4,
-            strokeWeight: 3,
+            strokeWeight: 2,
             clickable: true,
             zIndex: 1,
             editable: true,
             draggable:true
-        },
-            map: map
+        }
         });
 
+        drawingManager.setMap(map)
+
         google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
-            var coordinates = (polygon.getPath().getArray());
-            console.log(coordinates);
+            coordinates = (polygon.getPath().getArray());
+//            console.log(coordinates);
+            var poly = new google.maps.Polygon ({
+                paths: coordinates
+            });
         });
+
+        function getCoordinates() {
+           coordinates = (selectedShape.getPath().getArray());
+
+            $('#id_sample_codes').empty();
+            var poly = new google.maps.Polygon ({
+                paths: coordinates
+            });
+            var in_bounds = [];
+
+            for (var i = 0; i < markers.length; i++) {
+                if (google.maps.geometry.poly.containsLocation(markers[i].position, poly)) {
+                    in_bounds.push(markers[i].title);
+            }
+           }
+            $('#id_sample_codes').val(in_bounds);
+            if (in_bounds.length > 0) {
+                $('#submit_markers').click();
+            }
+        }
 
 
         var legend = document.getElementById('map-legend');
@@ -140,7 +172,7 @@ function initialize() {
 
         // Add an event listener that selects the newly-drawn shape when the user
         // mouses down on it.
-        var newShape = e.overlay;
+        newShape = e.overlay;
         newShape.type = e.type;
         google.maps.event.addListener(newShape, 'click', function() {
           setSelection(newShape);
@@ -151,7 +183,8 @@ function initialize() {
         google.maps.event.addDomListener(document.getElementById("clearbutton"), 'click', deleteSelectedShape);
         google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
         google.maps.event.addListener(map, 'click', clearSelection);
-    });
+        google.maps.event.addDomListener(document.getElementById("viewbutton"), 'click', getCoordinates)
+        });
 
         google.maps.event.addDomListener(map, 'idle', function () {
             calculateCenter();
@@ -160,6 +193,7 @@ function initialize() {
         google.maps.event.addDomListener(window, 'resize', function () {
             map.setCenter(center);
         });
+
 
 
         var infowindow;
@@ -173,8 +207,6 @@ function initialize() {
                 marker_data.push(sample_data);
             });
 
-
-
         for (var i = 0; i < marker_data.length; i++) {
             sample_data = marker_data[i];
             var marker = new google.maps.Marker({
@@ -183,6 +215,7 @@ function initialize() {
                 icon: mapicons[sample_data['type']],
                 title: sample_data['code']
             });
+            markers.push(marker);
 
         (function (i, marker) {
             google.maps.event.addListener(marker, 'click', function() {
@@ -202,7 +235,9 @@ function initialize() {
 };
 
 
+
 google.maps.event.addDomListener(window, 'load', initialize);
+
 
 var make_icons = function() {
     mapicons['tcn'] = new google.maps.MarkerImage(
@@ -257,4 +292,24 @@ function clearButton(controlDiv, map) {
   controlText1.style.paddingRight = '4px';
   controlText1.innerHTML = '<b>Delete Shape</b>';
   controlUI1.appendChild(controlText1);
+
+  var controlUI2 = document.createElement('div');
+  controlUI2.id = "viewbutton";
+  controlUI2.style.backgroundColor = 'white';
+  controlUI2.style.borderStyle = 'solid';
+  controlUI2.style.borderWidth = '1px';
+  controlUI2.style.cursor = 'pointer';
+  controlUI2.style.textAlign = 'center';
+  controlUI2.title = 'Click to view selected samples';
+  controlDiv.appendChild(controlUI2);
+
+  // Set CSS for the control interior
+  var controlText2 = document.createElement('div');
+  controlText2.style.fontFamily = 'Arial,sans-serif';
+  controlText2.style.fontSize = '12px';
+  controlText2.style.paddingLeft = '4px';
+  controlText2.style.paddingRight = '4px';
+  controlText2.innerHTML = '<b>View Samples</b>';
+  controlUI2.appendChild(controlText2);
+
 }
