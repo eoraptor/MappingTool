@@ -28,7 +28,7 @@
 <body role="document">
 
         <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="mynavbar">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -43,23 +43,23 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 {% block age %}
-                    <li><a href="/mappingapp/">Age Filter</a></li>
+                    <li id="nvleft"><a href="/mappingapp/">Age Filter</a></li>
                 {% endblock age %}
 
                 {% if user.is_authenticated %}
 
                     {% block search %}
-                        <li><a href="/mappingapp/search/">Search</a></li>
+                        <li id="nv"><a href="/mappingapp/search/">Search</a></li>
                     {% endblock search %}
                     {% block activesearch %}{% endblock activesearch %}
                 {% if is_member %}
                     {% block upload %}
-                    <li><a href="/mappingapp/upload/">Upload Files</a></li>
+                    <li id="nv"><a href="/mappingapp/upload/">Upload Files</a></li>
                     {% endblock upload %}
                     {% block activeupload %}{% endblock activeupload %}
 
                     {% block edit %}
-                    <li><a href="/mappingapp/edit">Edit Records</a></li>
+                    <li id="nv"><a href="/mappingapp/edit">Edit Records</a></li>
                     {% endblock edit %}
                     {% block activeedit %}{% endblock activeedit %}
                 {% endif %}

@@ -353,3 +353,56 @@ html {
     margin-top: 24px;
     margin-left: -15px;
 }
+
+#delshape {
+    position:absolute;
+    top:85px;
+    right:5px;
+    font-size: 12px;
+    width: 62px;
+}
+
+#viewsamples {
+    position:absolute;
+    top:123px;
+    right:5px;
+    font-size: 12px;
+    width: 62px;
+}
+
+#nv {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-left: 1px solid;
+    border-color: #7b7e89;
+}
+
+#nvleft {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+#nvleft > a {
+    color: rgba(240, 240, 240, 1);
+}
+
+#nvleft:hover {
+    background: #5b74a8;
+}
+
+#nv > a {
+    color: rgba(240, 240, 240, 1);
+}
+
+#nv:hover {
+    background: #5b74a8;
+}
+
+#mynavbar {
+    background-color: rgba(42, 42, 45, 1);
+    border-color: rgba(42, 42, 45, 1);
+}

@@ -504,7 +504,7 @@ def validatesample(request):
     counter = str(request.session['counter'])
 
     num_samples = request.session['sample_count']
-
+    num_bearings = None
     if request.session['counter'] > num_samples:
         del request.session['counter']
         del request.session['sample_count']
@@ -512,6 +512,8 @@ def validatesample(request):
 
     # retrieve objects to populate form fields
     sample = None
+
+    num_bearings = None
 
     site_name = request.session['site_name']
 
@@ -608,6 +610,7 @@ def validatesample(request):
         if 'bearings'+counter in request.session:
             bearings = request.session['bearings'+counter]
 
+
         data = []
         if bearings is not None:
             for item in bearings:
@@ -617,7 +620,7 @@ def validatesample(request):
                 data.append(dict)
 
         num_bearings = len(data)
-        BearingsFormSet = formset_factory(BearingInclinationForm, extra=50-num_bearings)
+        BearingsFormSet = formset_factory(BearingInclinationForm, extra=40-num_bearings)
 
     tcnForm = None
     oslForm = None
@@ -790,6 +793,8 @@ def editsample(request):
     # retrieve objects to populate form fields
     sample = None
 
+    num_bearings = None
+
     sample_code = request.session['sample']
     try:
         sample = Sample.objects.get(sample_code=sample_code)
@@ -839,7 +844,8 @@ def editsample(request):
             if values is not None:
                 data.append({'bearing':values.bearing, 'inclination':values.inclination})
 
-        BearingsFormSet = formset_factory(EditBIForm, extra=50-len(data))
+        num_bearings = len(data)
+        BearingsFormSet = formset_factory(EditBIForm, extra=40-num_bearings)
 
     if osl_data is not None:
         core = osl_data.osl_core
@@ -970,7 +976,7 @@ def editsample(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/editsample.html', {'num_bearings':len(data), 'sitecoordform':sitecoordForm,'siteform': siteForm,
+    return render_to_response('mappingapp/editsample.html', {'num_bearings':num_bearings, 'sitecoordform':sitecoordForm,'siteform': siteForm,
                                                             'samplecoordform':samplecoordForm,'sampform':sampleForm,
                                                             'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
                                                             'sitechoices':sitechoicesForm, 'retform': retForm,

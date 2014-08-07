@@ -283,16 +283,3 @@ $( "#searchbutton" ).click(function () {
     });
 });
 
-$('#addforms').click(function() {
-    var numforms = $('#numforms').val();
-    if (numforms < 20) {
-        $('[name="twenty"]').attr('class','col-md-3');
-        $('#numforms').val(20);
-    }else if (numforms < 30) {
-        $('[name="thirty"]').attr('class','col-md-3');
-        $('#numforms').val(30);
-    }else if (numforms < 40) {
-        $('[name="forty"]').attr('class','col-md-3');
-        $('#numforms').val(40);
-    }
-});

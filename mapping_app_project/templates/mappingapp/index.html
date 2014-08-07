@@ -4,8 +4,9 @@
 {% block body_block %}
 
     <div id="map-canvas"></div>
-
     <div id="map-legend"></div>
+    <button type="button" class="btn-warning" id="delshape">Delete<br/>Shape</button>
+    <button type="button" class="btn-success" id="viewsamples">View<br/>Samples</button>
 
     <form id="markers_form" method="post" action="">
 
@@ -14,7 +15,6 @@
                 {{ hidden }}
             {% endfor %}
     <button type="submit" class="button hidden" id="submit_markers"></button>
-
     </form>
 
 {% endblock %}

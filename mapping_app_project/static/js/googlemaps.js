@@ -28,8 +28,8 @@ var newShape;
         }
       }
 
-    function submitMarkers() {
-        alert('hello')
+    function setColour() {
+        document.getElementById('clearbutton').style.backgroundColor = 'red';
 }
 
 
@@ -75,9 +75,7 @@ function initialize() {
             drawingControlOptions: {
             position: google.maps.ControlPosition.TOP_RIGHT,
             drawingModes: [
-            google.maps.drawing.OverlayType.CIRCLE,
-            google.maps.drawing.OverlayType.POLYGON,
-            google.maps.drawing.OverlayType.RECTANGLE
+            google.maps.drawing.OverlayType.POLYGON
           ]
         },
         polygonOptions: {
@@ -88,28 +86,10 @@ function initialize() {
             zIndex: 1,
             editable: true,
             draggable:true
-        },
-        circleOptions: {
-            fillColor: '#ffff00',
-            fillOpacity: 0.4,
-            strokeWeight: 2,
-            clickable: true,
-            zIndex: 1,
-            editable: true,
-            draggable:true
-        },
-        rectangleOptions: {
-            fillColor: '#ffff00',
-            fillOpacity: 0.4,
-            strokeWeight: 2,
-            clickable: true,
-            zIndex: 1,
-            editable: true,
-            draggable:true
         }
         });
 
-        drawingManager.setMap(map)
+        drawingManager.setMap(map);
 
         google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
             coordinates = (polygon.getPath().getArray());
@@ -159,12 +139,6 @@ function initialize() {
             center = map.getCenter();
         }
 
-        var clearButtonDiv = document.createElement('div');
-        var clear = new clearButton(clearButtonDiv, map);
-
-        clearButtonDiv.index = 1;
-        map.controls[google.maps.ControlPosition.RIGHT_TOP].push(clearButtonDiv);
-
         google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
 
         // Switch back to non-drawing mode after drawing a shape.
@@ -180,10 +154,12 @@ function initialize() {
         setSelection(newShape);
 
         // Clear the current selection when clear button clicked
-        google.maps.event.addDomListener(document.getElementById("clearbutton"), 'click', deleteSelectedShape);
+        google.maps.event.addDomListener(document.getElementById("delshape"), 'click', deleteSelectedShape);
         google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
         google.maps.event.addListener(map, 'click', clearSelection);
-        google.maps.event.addDomListener(document.getElementById("viewbutton"), 'click', getCoordinates)
+        google.maps.event.addDomListener(document.getElementById("viewsamples"), 'click', getCoordinates);
+        google.maps.event.addDomListener(document.getElementById("clear"), 'mouseover', setColour())
+
         });
 
         google.maps.event.addDomListener(map, 'idle', function () {
@@ -232,11 +208,12 @@ function initialize() {
     })();
 
 //        bottom of function
-};
+}
 
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
 
 
 var make_icons = function() {
@@ -265,51 +242,3 @@ var make_icons = function() {
     )
 };
 
-
-function clearButton(controlDiv, map) {
-
-  // Set CSS styles for the DIV containing the control
-  // Setting padding to 5 px will offset the control
-  // from the edge of the map
-  controlDiv.style.padding = '5px';
-
-  // Set CSS for the control border
-  var controlUI1 = document.createElement('div');
-  controlUI1.id = "clearbutton";
-  controlUI1.style.backgroundColor = 'white';
-  controlUI1.style.borderStyle = 'solid';
-  controlUI1.style.borderWidth = '1px';
-  controlUI1.style.cursor = 'pointer';
-  controlUI1.style.textAlign = 'center';
-  controlUI1.title = 'Click to delete shape';
-  controlDiv.appendChild(controlUI1);
-
-  // Set CSS for the control interior
-  var controlText1 = document.createElement('div');
-  controlText1.style.fontFamily = 'Arial,sans-serif';
-  controlText1.style.fontSize = '12px';
-  controlText1.style.paddingLeft = '4px';
-  controlText1.style.paddingRight = '4px';
-  controlText1.innerHTML = '<b>Delete Shape</b>';
-  controlUI1.appendChild(controlText1);
-
-  var controlUI2 = document.createElement('div');
-  controlUI2.id = "viewbutton";
-  controlUI2.style.backgroundColor = 'white';
-  controlUI2.style.borderStyle = 'solid';
-  controlUI2.style.borderWidth = '1px';
-  controlUI2.style.cursor = 'pointer';
-  controlUI2.style.textAlign = 'center';
-  controlUI2.title = 'Click to view selected samples';
-  controlDiv.appendChild(controlUI2);
-
-  // Set CSS for the control interior
-  var controlText2 = document.createElement('div');
-  controlText2.style.fontFamily = 'Arial,sans-serif';
-  controlText2.style.fontSize = '12px';
-  controlText2.style.paddingLeft = '4px';
-  controlText2.style.paddingRight = '4px';
-  controlText2.innerHTML = '<b>View Samples</b>';
-  controlUI2.appendChild(controlText2);
-
-}
