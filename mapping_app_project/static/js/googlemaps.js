@@ -70,6 +70,8 @@ function initialize() {
 
         map = new google.maps.Map(mapDiv, map_options);
 
+        var oms = new OverlappingMarkerSpiderfier(map);
+
         drawingManager = new google.maps.drawing.DrawingManager({
             drawingControl: true,
             drawingControlOptions: {
@@ -192,6 +194,7 @@ function initialize() {
                 title: sample_data['code']
             });
             markers.push(marker);
+            oms.addMarker(marker);
 
         (function (i, marker) {
             google.maps.event.addListener(marker, 'click', function() {
@@ -203,6 +206,7 @@ function initialize() {
                 infowindow.setContent(marker.title);
                 infowindow.open(map, marker);
                 });
+
                 })(i,marker);
             }
     })();

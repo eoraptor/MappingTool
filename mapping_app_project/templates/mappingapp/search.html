@@ -2,12 +2,9 @@
 {% load static %}
 
 {% block title %}Search{% endblock %}
-{% block age %}
-<li style="visibility: hidden"><a href="/mappingapp/">Age Filter</a></li>
-{% endblock age %}
 {% block search %}{% endblock search %}
 {% block activesearch %}
-     <li class="active"><a href="/mappingapp/search/">Search</a></li>
+     <li class="li-active"><a id="activelink" href="/mappingapp/search/">Search</a></li>
 {% endblock activesearch %}
 {% block login %}{% endblock login %}
 

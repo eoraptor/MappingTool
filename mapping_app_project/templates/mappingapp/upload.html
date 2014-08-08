@@ -2,13 +2,9 @@
 {% load static %}
 
 {% block title %}Upload Files{% endblock %}
-{% block age %}
-<li style="visibility: hidden"><a href="/mappingapp/">Age Filter</a></li>
-{% endblock age %}
 {% block upload %}{% endblock upload %}
-
 {% block activeupload %}
-    <li class="active" id="nv"><a href="/mappingapp/upload">Upload Files</a></li>
+    <li class="li-active"><a id="activelink" href="/mappingapp/upload">Upload Files</a></li>
 {% endblock activeupload %}
 
 {% block login %}{% endblock login %}
