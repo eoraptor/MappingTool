@@ -1,10 +1,11 @@
 {% extends 'mappingapp/base.html' %}
 {% load static %}
-
+{% block home %}<li class="li-active"><a id="activelink" href="/mappingapp/">Home</a></li>{% endblock home %}
 {% block body_block %}
 
     <div id="map-canvas"></div>
-    <div id="map-legend"></div>
+    <a href="#"><div id="map-legend" data-toggle="tooltip" data-placement="top"
+    title="OSL: Optically Stimulated Luminescence, TCN: Terrestrial Cosmogenic Nucleotide, C14: Carbon 14"></div></a>
     <button type="button" class="btn-warning" id="delshape">Delete<br/>Shape</button>
     <button type="button" class="btn-success" id="viewsamples">View<br/>Samples</button>
 
@@ -18,3 +19,4 @@
     </form>
 
 {% endblock %}
+

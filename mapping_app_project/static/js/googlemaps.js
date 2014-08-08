@@ -28,12 +28,6 @@ var newShape;
         }
       }
 
-    function setColour() {
-        document.getElementById('clearbutton').style.backgroundColor = 'red';
-}
-
-
-
 var icons = {
     osl: {
         name: 'OSL  ',
@@ -145,6 +139,7 @@ function initialize() {
 
         // Switch back to non-drawing mode after drawing a shape.
         drawingManager.setDrawingMode(null);
+        clearSelection();
 
         // Add an event listener that selects the newly-drawn shape when the user
         // mouses down on it.
@@ -160,7 +155,7 @@ function initialize() {
         google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
         google.maps.event.addListener(map, 'click', clearSelection);
         google.maps.event.addDomListener(document.getElementById("viewsamples"), 'click', getCoordinates);
-        google.maps.event.addDomListener(document.getElementById("clear"), 'mouseover', setColour())
+
 
         });
 
@@ -171,8 +166,6 @@ function initialize() {
         google.maps.event.addDomListener(window, 'resize', function () {
             map.setCenter(center);
         });
-
-
 
         var infowindow;
 
@@ -190,6 +183,7 @@ function initialize() {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(sample_data['lat'], sample_data['long']),
                 map: map,
+                type: sample_data['type'].toUpperCase(),
                 icon: mapicons[sample_data['type']],
                 title: sample_data['code']
             });
@@ -203,7 +197,8 @@ function initialize() {
                         width: 120
                     });
                     }
-                infowindow.setContent(marker.title);
+                infowindow.setContent('<h5>'+marker.title+'</h5>'+'<hr>'+'<b>Lat: </b>'+marker.position.lat()+'<br />'+
+                '<b>Lng: </b>'+marker.position.lng()+'<br /><b>Age: </b>'+'<br /><b>Type: </b>'+marker.type+'<br /><b>Site: </b>');
                 infowindow.open(map, marker);
                 });
 
@@ -217,8 +212,6 @@ function initialize() {
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
-
-
 
 var make_icons = function() {
     mapicons['tcn'] = new google.maps.MarkerImage(

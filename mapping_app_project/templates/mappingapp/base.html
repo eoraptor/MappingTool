@@ -42,23 +42,25 @@
             </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                        {% block home %}
+                        <li id="nv"><a href="/mappingapp/">Home</a></li>
+                        {% endblock home %}
 
                 {% if user.is_authenticated %}
 
                     {% block search %}
                         <li id="nv"><a href="/mappingapp/search/">Search</a></li>
                     {% endblock search %}
-                    {% block activesearch %}{% endblock activesearch %}
+
                 {% if is_member %}
                     {% block upload %}
                     <li id="nv"><a href="/mappingapp/upload/">Upload Files</a></li>
                     {% endblock upload %}
-                    {% block activeupload %}{% endblock activeupload %}
 
                     {% block edit %}
                     <li id="nv"><a href="/mappingapp/edit">Edit Records</a></li>
                     {% endblock edit %}
-                    {% block activeedit %}{% endblock activeedit %}
+
                 {% endif %}
                 {%  endif %}
             </ul>
@@ -97,6 +99,7 @@
 
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=drawing"></script>
+    <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
     <script src="{% static 'js/googlemaps.js' %}"></script>
 
 

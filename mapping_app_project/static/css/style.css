@@ -54,9 +54,11 @@ fieldset.standard {
 
 
 .gm-style-iw {
-    width: 125px;
-    color: red;
+    width: 165px;
+    height: 165px;
+    color: #4c62ad;
 }
+
 
 fieldset#site {
     width:560px;

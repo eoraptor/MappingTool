@@ -1,10 +1,7 @@
 {% extends 'mappingapp/base.html' %}
 
 {% block title %}Edit Records{% endblock %}
-{% block edit %}{% endblock edit %}
-{% block activeedit %}
-    <li class="li-active"><a id="activelink" href="/mappingapp/edit">Edit Records</a></li>
-{% endblock activeedit %}
+{% block edit %}<li class="li-active"><a id="activelink" href="/mappingapp/edit">Edit Records</a></li>{% endblock edit %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
