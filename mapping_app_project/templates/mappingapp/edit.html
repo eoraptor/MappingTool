@@ -5,22 +5,40 @@
 {% block login %}{% endblock login %}
 
 {% block body_block %}
-    <div class="jumbotron" id="standardjumbo">
-    <div class="upload">
-     <form id="edit_form" method="post" action="/mappingapp/edit/">
+<div class="jumbotron" id="standardjumbo">
+    <div class="container-fluid">
+        <div class="col-md-6" id="editleftcol">
+            <form id="edit_form" method="post" action="/mappingapp/edit/">
+                <div class="editinput">
+                {% csrf_token %}
 
-            {% csrf_token %}
-        <div class="container-fluid">
-            <div class="formspan">
-                {{ selectsampleform.sample_code.errors }}
-                <label class="formlabel">{{ selectsampleform.sample_code.help_text }}</label>
-                {{ selectsampleform.sample_code }}<br /><br/>
+                <div class="formspan">
+                    {{ selectsampleform.samp_code.errors }}
+                    <label class="formlabel"><h4>{{ selectsampleform.samp_code.help_text }}</h4></label>
+                    {{ selectsampleform.samp_code }}
 
-                <button type="submit" class="btn btn-success btn-lg">Get Sample Details</button>
+                  <div id="suggestion">
+                        {% include 'mappingapp/code_list.html' with code_list=code_list %}
+                    </div><br>
+
+                    <button type="submit" class="btn btn-success btn-lg">Get Sample Details</button>
+                </div>
+                    </div>
+            </form>
+        </div><br />
+        <div class="col-md-6" id="editrightcol">
+
+            <div class="panel panel-success" id="sample_list">
+                <div class="panel-heading" id="sample_list_header"><h4>Complete List</h4></div>
+                <div class="panel-body" id="scrollable">
+                    <div id="selectable">
+                        {% for code in sample_codes %}
+                        <div class="row"><div class="td">{{ code }}</div></div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-
         </div>
-    </form>
-</div>
     </div>
+</div>
 {% endblock %}

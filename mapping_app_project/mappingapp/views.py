@@ -350,6 +350,42 @@ def index(request):
     return render_to_response('mappingapp/index.html', {'form':form, 'is_member':is_member}, context)
 
 
+# helper function - remove from views and import!
+def get_sample_code_list(starts_with=''):
+    code_list = []
+    code_samples = None
+
+    if starts_with:
+        code_samples = Sample.objects.filter(Q(sample_code__istartswith=starts_with))
+
+    else:
+        code_samples = Sample.objects.all()
+
+    if code_samples is not None:
+        for sample in code_samples:
+            code_list.append(sample.sample_code)
+            code_list.sort()
+
+    if len(code_list) > 15:
+        code_list = code_list[:15]
+
+    return code_list
+
+
+def suggest_code(request):
+    context = RequestContext(request)
+    code_list = []
+    starts_with = ''
+    if request.method == 'GET':
+        starts_with = request.GET['suggestion']
+
+        code_list = get_sample_code_list(starts_with)
+        #code_list = ['T5']
+
+    return render_to_response('mappingapp/code_list.html', {'code_list': code_list }, context)
+
+
+
 @login_required
 @user_passes_test(is_member)
 def search(request):
@@ -420,8 +456,10 @@ def edit(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
+    samplecodelist = Sample.objects.values_list('sample_code', flat=True).order_by('sample_code')
+
     if request.method == 'POST':
-        sample_code = request.POST['sample_code']
+        sample_code = request.POST['samp_code']
 
         if sample_code is not None:
 
@@ -435,7 +473,7 @@ def edit(request):
     else:
        selectsampleform = SelectSampleForm()
 
-    return render_to_response('mappingapp/edit.html', {'is_member':is_member, 'selectsampleform':selectsampleform}, context)
+    return render_to_response('mappingapp/edit.html', {'sample_codes':samplecodelist, 'is_member':is_member, 'selectsampleform':selectsampleform}, context)
 
 
 @login_required

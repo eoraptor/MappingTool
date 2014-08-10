@@ -6,7 +6,8 @@ from mappingapp.models import Radiocarbon_Sample, Sample_Site, Location_Photo, O
 from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination
 
 class SelectSampleForm(forms.Form):
-    sample_code = forms.CharField(help_text='Enter sample code:', required=True)
+    samp_code = forms.CharField(help_text='Enter sample code:', required=True,
+                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 30}))
 
 
 class UploadFileForm(forms.Form):

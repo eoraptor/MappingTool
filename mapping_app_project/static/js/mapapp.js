@@ -17,6 +17,13 @@ $(document).ready(function(){
         $('#modalbutton1').attr("disabled", true);
     }
 
+
+
+    $('.td').click(function() {
+    var text = $(this).text();
+    $('#id_samp_code').val(text);
+    });
+
     $(function(){
        var $table = $('table');
 
@@ -283,3 +290,10 @@ $( "#searchbutton" ).click(function () {
     });
 });
 
+$('#id_samp_code').keyup(function(){
+        var query;
+        query = $(this).val();
+        $.get('/mappingapp/suggest_code/', {suggestion: query}, function(data) {
+                $('#suggestion').html(data);
+        });
+});
