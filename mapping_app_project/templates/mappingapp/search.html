@@ -8,6 +8,12 @@
 {% block body_block %}
     <div class="jumbotron search" id="standardjumbo">
         <div class="container-fluid">
+<div class="panel panel-success" id="searchpanel">
+    <div class="panel-heading" id="searchheader">
+    <h3 class="panel-title">Search Fields</h3>
+  </div>
+  <div class="panel-body"  id="searchfieldpanel">
+
 
             <div class="col-md-1 col-xs-2" id="choice">
                 <div class="form-group">
@@ -25,7 +31,7 @@
                         </select>
                     </div>
                 </div>
-            <div class="col-md-2 col-xs-2" id="choice">
+            <div class="col-md-1 col-xs-2" id="choice">
                 <div class="form-group choice">
                     <label class="control-label" for="sampletype">Type</label>
                     <select name="sampletype" id="sampletype" class="form-control narrow">
@@ -36,19 +42,18 @@
                     </select>
                 </div>
             </div>
-        <div class="col-md-1 col-xs-3" id="start">
+        <div class="col-md-2 col-xs-4" id="start">
             <div class="form-group">
-                <label class="control-label" for="startage">Start Age</label>
+                <label class="control-label" for="startage">Age Range</label>
                 <input type="text" class="form-control narrow" id="startage" placeholder="Start">
             </div>
         </div>
-        <div class="col-md-2 col-xs-3" id="age">
+      <div class="col-md-1 col-xs-4" id="endageinput">
             <div class="form-group">
-                <label class="control-label" for="endage">End Age</label>
-                <input type="text" class="form-control narrow" id="endage" placeholder="End">
+             <input type="text" style="display:inline-block;" class="form-control narrow" id="endage" placeholder="Finish">
             </div>
         </div>
-        <div class="col-md-2 col-xs-3">
+        <div class="col-md-2 col-xs-3" id="searchcodechoice">
             <div class="form-group">
                 <label for="searchcode">Sample Code</label>
                 <input type="text" class="form-control wide" id="searchcode" placeholder="Sample Code(s)">
@@ -60,23 +65,29 @@
                 <input type="text" class="form-control wide" id="searchkeyword" placeholder="Keyword(s)">
             </div>
         </div>
-        <div class="col-md-1 col-xs-2">
+        <div class="col-md-1 col-xs-2" id="buttongroup">
             <button type="button" class="btn-success btn-sm" id="searchbutton">Search</button>
         </div>
-        <div class="col-md-1 col-xs-2">
-            <button type="button" class="btn-primary btn-sm" id="getcsv">Get CSV</button>
+      <div class="col-md-1 col-xs-2" id="buttongroup">
+            <button type="button" class="btn-warning btn-sm" id="fieldsbutton">Results Fields</button>
         </div>
 
+        <div class="col-md-1 col-xs-2" id="buttongroup2">
+            <button type="button" class="btn-primary btn-sm" id="getcsv">Get CSV</button>
+        </div>
+</div>
+</div>
         <table class="tablesorter">
             <thead>
                 <tr>
                   <th>Sample Code</th>
                   <th>Latitude</th>
                   <th>Longitude</th>
+                  <th>Elevation</th>
                   <th>Site</th>
                   <th>Notes</th>
-                  <th>Age</th>
-                  <th>Age Error</th>
+                  <th>Calendar Age</th>
+                  <th>Calendar Error</th>
                 </tr>
             </thead>
             <tbody id="resultstable">

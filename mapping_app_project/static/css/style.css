@@ -131,6 +131,16 @@ button.btn-xl {
 
 }
 
+#sample_count {
+    margin-left: 200px;
+    margin-bottom: 30px;
+    border: 2px solid;
+    border-color: #5b74a8;
+    background-color: #5b74a8;
+    cursor: default;
+}
+
+
 
 .logo-nav {
     vertical-align: middle;
@@ -322,11 +332,6 @@ table.bearing {
     padding-bottom: 50px;
 }
 
-#checkbutton {
-    display: block;
-    display: none;
-}
-
 #login {
     font-size: 12px;
 }
@@ -335,29 +340,16 @@ html {
   overflow-y: scroll;
 }
 
-#panelhead {
-    background: #424242;
-    color: white;
-}
 
-#panelbod {
-    background: #FFFEDC;
-}
-
-#summarypanel {
-    margin-left: auto;
-    margin-right: auto;
-    width: 450px;
-    border: #000000;
-}
-
+/* Search Page */
 #searchcol {
     border-right: 2px solid;
     border-right-color: #d1d1d1;
 }
 
 .form-control.narrow {
-    width: 80px;
+    width: 100px;
+    margin-bottom: 5px;
 }
 
 .form-control.mid {
@@ -369,23 +361,67 @@ html {
 }
 
 #choice {
-    padding-right: 15px;
+    margin-right: 35px;
+}
+
+#searchcodechoice {
+    margin-left: 35px;
 }
 
 #end {
     margin-left: -20px;
 }
 
+#endageinput {
+    margin-left: -80px;
+    margin-top: 25px
+}
+
 #searchbutton {
-    margin-top: 24px;
-    margin-left: -15px;
+    width: 70px;
+    height: 35px;
+    font-size: 11pt;
 }
 
 #getcsv {
-    margin-top: 24px;
-    margin-left: -15px;
+    width:90px;
+    height: 35px;
+    font-size: 11pt;
 }
 
+#fieldsbutton {
+    width: 90px;
+    padding: 0px;
+    height: 35px;
+}
+
+#buttongroup {
+    margin-left: -20px;
+    margin-top: 23px;
+}
+
+#buttongroup2 {
+    margin-top: 23px;
+}
+
+#searchfieldpanel {
+    background: #f9ffde;
+}
+
+#searchpanel {
+    border-color: #fbffe7;
+    box-shadow:0 0 5px #999;
+}
+
+#searchheader {
+    background: #a7d196;
+}
+
+
+/* end Search Page*/
+
+
+/* map drawing tools*/
 #delshape {
     position:absolute;
     top:93px;
@@ -401,6 +437,7 @@ html {
     font-size: 12px;
     width: 62px;
 }
+/* end map drawing tools*/
 
 #nv {
     font-family: 'Open Sans', sans-serif;
@@ -447,7 +484,40 @@ html {
 }
 
 
+/* file summary page*/
+#proceedbutton {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+#panelhead {
+    background: #424242;
+    color: white;
+}
+
+#panelbod {
+    background: #FFFEDC;
+}
+
+#summarypanel {
+    margin-left: auto;
+    margin-right: auto;
+    width: 450px;
+    border: #000000;
+}
+/* end of file summary page*/
+
+
 /* edit sample sample code selection page*/
+#selectsampleform {
+    margin-top: 20px;
+}
+#get_sample_button {
+    margin-left: 20px;
+}
+
 .editinput {
     width: 250px;
     margin-left: auto;
@@ -455,24 +525,35 @@ html {
 }
 
 #sample_list {
-    width: 250px;
-    margin-left: 50px;
+    width: 300px;
+    margin-top: 10px;
     margin-bottom: 20px;
     margin-left: auto;
     margin-right: auto;
 }
 
-#scrollable {
+#scrollable, #suggestion {
     overflow-y:scroll;
-    height: 400px;
+    height: 375px;
     border: 1px solid transparent;
     border-radius: 4px;
+    background-color: #fffdf4;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
+}
+
+.td {
+    padding-left: 7px;
 }
 
 .td:hover {
     background-color: #d8f0ca;
     cursor: pointer;
+}
+
+#sugg:hover{
+    background-color: #d8f0ca;
+    cursor: pointer;
+    width: 300px;
 }
 
 /* end edit sample sample code selection page*/

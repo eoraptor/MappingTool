@@ -6,8 +6,11 @@
     <div id="map-canvas"></div>
     <a href="#"><div id="map-legend" data-toggle="tooltip" data-placement="top"
     title="OSL: Optically Stimulated Luminescence, TCN: Terrestrial Cosmogenic Nucleotide, C14: Carbon 14"></div></a>
+
+    {% if user.is_authenticated %}
     <button type="button" class="btn-warning" id="delshape">Delete<br/>Shape</button>
     <button type="button" class="btn-success" id="viewsamples">View<br/>Samples</button>
+    {% endif %}
 
     <form id="markers_form" method="post" action="">
 

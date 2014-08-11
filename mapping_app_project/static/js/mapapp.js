@@ -13,7 +13,7 @@ var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_
 $(document).ready(function(){
     $('#savebutton').hide();
 
-    if ($('#id_main-sites option:selected').val() == '') {
+    if ($('#site_option').text() == 'None') {
         $('#modalbutton1').attr("disabled", true);
     }
 
@@ -254,12 +254,14 @@ $( "#skipbutton" ).click(function () {
 
     $.getJSON('/mappingapp/incrementcounter/', {sample_code: sample}, function (data) {
         $.each(data, function (key, val) {
-            var response = val.exists;
-            if (response == true) {
+            var response = val.done;
+            if (response == false) {
                 location.reload();
                 $('#validatebutton').attr("disabled", false);
+            }else{
+//          !!!!      This must be changed when not on local machine !!!
+                window.location.replace("http://127.0.0.1:8000/mappingapp/");
             }
-
         });
     });
 });
@@ -281,7 +283,7 @@ $( "#searchbutton" ).click(function () {
 
             $('#resultstable').append("<tr><td>"+val.code+"</td>" +
                 "<td>"+val.latitude+"</td><td>"+val.longitude+"</td>" +
-            "<td>"+val.site+"</td>" + "<td>"+val.notes+"</td>" +
+            "<td>"+val.elevation+"</td>" + "<td>"+val.site+"</td>" + "<td>"+val.notes+"</td>" +
                 "<td>"+val.age+"</td>" + "<td>"+val.age_error+"</td></tr>")
         });
     $("table").trigger('update');
@@ -290,6 +292,7 @@ $( "#searchbutton" ).click(function () {
     });
 });
 
+// function to retrieve sample code suggestions in Enter Sample Code (Edit Sample) page
 $('#id_samp_code').keyup(function(){
         var query;
         query = $(this).val();
@@ -297,3 +300,10 @@ $('#id_samp_code').keyup(function(){
                 $('#suggestion').html(data);
         });
 });
+
+
+// function to add sample code from suggestions to sample code input box in Enter Sample Code (Edit Sample) page
+$('#suggestion').on('click', '#sugg', function() {
+  var text = $(this).text();
+    $('#id_samp_code').val(text);
+    });

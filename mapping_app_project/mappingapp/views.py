@@ -171,7 +171,7 @@ def query(request):
         if end_age is None or end_age == '':
             end_age = 0
 
-        age_samples = Sample.objects.filter(age__lte=start_age, age__gte=end_age)
+        age_samples = Sample.objects.filter(calendar_age__lte=start_age, calendar_age__gte=end_age)
 
     if samples is not None and age_samples is not None:
         samples = set(samples).intersection(age_samples)
@@ -205,9 +205,10 @@ def query(request):
             if sample.sample_coordinates is not None:
                 latitude = sample.sample_coordinates.latitude
                 longitude = sample.sample_coordinates.longitude
-            data = {'code': sample.sample_code, 'latitude':latitude, 'longitude':longitude,
-            'site':site, 'notes':sample.sample_notes, 'age':sample.age,
-            'age_error':sample.age_error}
+                elevation = sample.sample_coordinates.elevation
+            data = {'code': sample.sample_code, 'latitude':latitude, 'longitude':longitude, 'elevation':elevation,
+            'site':site, 'notes':sample.sample_notes, 'age':sample.calendar_age,
+            'age_error':sample.calendar_error}
 
 
             results.append(data)
@@ -366,8 +367,8 @@ def get_sample_code_list(starts_with=''):
             code_list.append(sample.sample_code)
             code_list.sort()
 
-    if len(code_list) > 15:
-        code_list = code_list[:15]
+    if len(code_list) > 50:
+        code_list = code_list[:50]
 
     return code_list
 
@@ -380,7 +381,6 @@ def suggest_code(request):
         starts_with = request.GET['suggestion']
 
         code_list = get_sample_code_list(starts_with)
-        #code_list = ['T5']
 
     return render_to_response('mappingapp/code_list.html', {'code_list': code_list }, context)
 
@@ -812,12 +812,17 @@ def incrementcounter(request):
 
     context = RequestContext(request)
 
+    done = {'response': True}
+
     if request.method == 'GET':
 
         counter = request.session['counter'] + 1
         request.session['counter'] = counter
+        num_samples = request.session['sample_count']
+        if counter < num_samples:
+            done = {'response':False}
 
-    sample_details = json.dumps([{'exists': True}])
+    sample_details = json.dumps(done)
 
     return HttpResponse(sample_details, mimetype='application/json')
 

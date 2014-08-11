@@ -291,6 +291,14 @@
                     <button type="button" class="btn-danger btn-xl" name="save-button" id="skipbutton">Skip</button>
                     {% endblock buttonblock %}
                 </div>
+                    {% block samplecounter %}
+                    <button class="btn btn-primary" type="button" id="sample_count">
+                            Sample
+                        <span class="badge">{{ count }}</span>
+                            of
+                        <span class="badge">{{ num_samples }}</span>
+                    </button>
+                        {% endblock %}
 </div>
             </div>
         </div>

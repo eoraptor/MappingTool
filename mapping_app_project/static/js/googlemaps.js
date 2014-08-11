@@ -62,6 +62,7 @@ function initialize() {
             }
         };
 
+
         map = new google.maps.Map(mapDiv, map_options);
 
         var oms = new OverlappingMarkerSpiderfier(map);
@@ -85,7 +86,9 @@ function initialize() {
         }
         });
 
-        drawingManager.setMap(map);
+         if ($('#delshape').length > 0) {
+             drawingManager.setMap(map);
+         }
 
         google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
             coordinates = (polygon.getPath().getArray());

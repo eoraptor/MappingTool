@@ -12,24 +12,30 @@
                 <div class="editinput">
                 {% csrf_token %}
 
-                <div class="formspan">
+                <div class="formspan" id="selectsampleform">
                     {{ selectsampleform.samp_code.errors }}
                     <label class="formlabel"><h4>{{ selectsampleform.samp_code.help_text }}</h4></label>
                     {{ selectsampleform.samp_code }}
-
-                  <div id="suggestion">
-                        {% include 'mappingapp/code_list.html' with code_list=code_list %}
-                    </div><br>
-
-                    <button type="submit" class="btn btn-success btn-lg">Get Sample Details</button>
-                </div>
+                </div><br /><br />
+                    <button type="submit" class="btn-success btn-lg" id="get_sample_button">Get Sample Details</button>
                     </div>
-            </form>
+            </form><br />
+
+
         </div><br />
         <div class="col-md-6" id="editrightcol">
+            <ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="#home" role="tab" data-toggle="tab">Select From List</a></li>
+  <li><a href="#profile" role="tab" data-toggle="tab">Search Using Partial Code</a></li>
+</ul>
 
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane fade in active" id="home">
             <div class="panel panel-success" id="sample_list">
-                <div class="panel-heading" id="sample_list_header"><h4>Complete List</h4></div>
+                <div class="panel-heading" id="sample_list_header"><h4>All Samples <a href="#"><span class="glyphicon glyphicon-info-sign"
+                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
+                      title="Click on a code to select."></span></a></h4></div>
                 <div class="panel-body" id="scrollable">
                     <div id="selectable">
                         {% for code in sample_codes %}
@@ -37,6 +43,22 @@
                         {% endfor %}
                     </div>
                 </div>
+            </div>
+  </div>
+  <div class="tab-pane fade" id="profile">
+           <div class="panel panel-success" id="sample_list">
+                <div class="panel-heading" id="sample_list_header"><h4>Suggestions <a href="#"><span class="glyphicon glyphicon-info-sign"
+                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
+                      title="Begin typing in sample code input box to see suggestions."></span></a></h4></div>
+                <div class="panel-body" id="suggestion">
+                     <table id="suggestiontable">
+                        {% include 'mappingapp/code_list.html' with code_list=code_list %}
+                    </table>
+                    </div>
+
+
+  </div>
+</div>
             </div>
         </div>
     </div>
