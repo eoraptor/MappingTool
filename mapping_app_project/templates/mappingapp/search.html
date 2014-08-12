@@ -69,8 +69,9 @@
             <button type="button" class="btn-success btn-sm" id="searchbutton">Search</button>
         </div>
       <div class="col-md-1 col-xs-2" id="buttongroup">
-            <button type="button" class="btn-warning btn-sm" id="fieldsbutton">Results Fields</button>
+            <button type="button" class="btn-warning btn-sm" data-toggle="modal" data-target="#fieldsModal" id="fieldsbutton">Results Fields</button>
         </div>
+        {% include "mappingapp/fieldselect.html" %}
 
         <div class="col-md-1 col-xs-2" id="buttongroup2">
             <button type="button" class="btn-primary btn-sm" id="getcsv">Get CSV</button>

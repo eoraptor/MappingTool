@@ -437,3 +437,4 @@ class KeywordForm(forms.Form):
 class CodeForm(forms.Form):
     code = forms.CharField(required=False,
                              widget=forms.Textarea(attrs={'rows': 2, 'cols': 31}))
+

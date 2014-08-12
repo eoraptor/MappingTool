@@ -307,3 +307,31 @@ $('#suggestion').on('click', '#sugg', function() {
   var text = $(this).text();
     $('#id_samp_code').val(text);
     });
+
+
+
+
+$(function(){
+    $(".check").on('change', function(e) {
+        if($(this).is(':checked')) {
+            $(this).attr('checked', 'checked');
+        }else{
+            $(this).removeAttr('checked');
+        }
+    });
+});
+
+
+$("#selectall").click(function(e) {
+        $(".check").prop('checked', 'checked')
+        $(".check").attr('checked', 'checked')
+    });
+
+
+
+$("#clearall").click(function(e) {
+        $(".check").removeAttr('checked');
+    });
+
+
+

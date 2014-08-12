@@ -140,6 +140,15 @@ button.btn-xl {
     cursor: default;
 }
 
+#fieldsmodal-header {
+    height: 45px;
+    background: #424242;
+}
+
+#fieldsmodal-title {
+    color: #ffffff;
+    line-height: 1;
+}
 
 
 .logo-nav {
@@ -197,7 +206,6 @@ img#logo {
 
 #standardjumbo {
     max-width: 1180px;
-    /*height: 80vh;*/
     margin-top: -10px;
     margin-left: auto;
     margin-right: auto;
@@ -557,3 +565,5 @@ html {
 }
 
 /* end edit sample sample code selection page*/
+
+
