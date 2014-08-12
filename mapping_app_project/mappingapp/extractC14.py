@@ -28,6 +28,7 @@ def get_C14_cell_positions(ws):
                         col = columns.index(cell.column)
                         val_col = columns[col+1]
                         positions[val] = val_col + str(cell.row)
+
                     else:
                         col = columns.index(cell.column)
                         val_col = columns[col+2]

@@ -274,7 +274,7 @@ $( "#searchbutton" ).click(function () {
     var code = $('#searchcode').val();
     var start = $('#startage').val();
     var end = $('#endage').val();
-    var keyword = $('#searchkeyword').val()
+    var keyword = $('#searchkeyword').val();
 
 //    $('#searchcode').val(keyword);
 

@@ -542,6 +542,7 @@ def validatesample(request):
     counter = str(request.session['counter'])
 
     num_samples = request.session['sample_count']
+
     num_bearings = None
     if request.session['counter'] > num_samples:
         del request.session['counter']
@@ -812,17 +813,17 @@ def incrementcounter(request):
 
     context = RequestContext(request)
 
-    done = {'response': True}
+    done = True
 
     if request.method == 'GET':
 
         counter = request.session['counter'] + 1
         request.session['counter'] = counter
         num_samples = request.session['sample_count']
-        if counter < num_samples:
-            done = {'response':False}
+        if counter <= num_samples:
+            done = False
 
-    sample_details = json.dumps(done)
+    sample_details = json.dumps([{'done': done}])
 
     return HttpResponse(sample_details, mimetype='application/json')
 
