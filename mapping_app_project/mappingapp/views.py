@@ -199,16 +199,204 @@ def query(request):
             site = ''
             latitude = None
             longitude = None
+            elevation = None
+            type = None
+            type_found = None
+            transect = None
+            retreat = None
+
+            # get sample type
+            try:
+                type_found = TCN_Sample.objects.get(tcn_sample=sample.pk)
+            except:
+                pass
+            if type_found is not None:
+                type = 'TCN'
+
+            if type is None:
+                try:
+                    type_found = OSL_Sample.objects.get(osl_sample=sample.pk)
+                except:
+                    pass
+                if type_found is not None:
+                    type = 'OSL'
+
+            if type is None:
+                try:
+                    type_found = Radiocarbon_Sample.objects.get(c14_sample=sample.pk)
+                except:
+                    pass
+                if type_found is not None:
+                    type = 'C14'
 
             if sample.sample_site is not None:
                 site = sample.sample_site.site_name
+
             if sample.sample_coordinates is not None:
                 latitude = sample.sample_coordinates.latitude
                 longitude = sample.sample_coordinates.longitude
                 elevation = sample.sample_coordinates.elevation
-            data = {'code': sample.sample_code, 'latitude':latitude, 'longitude':longitude, 'elevation':elevation,
-            'site':site, 'notes':sample.sample_notes, 'age':sample.calendar_age,
-            'age_error':sample.calendar_error}
+
+            if sample.transect is not None:
+                transect = sample.transect.transect_number
+
+            if sample.retreat is not None:
+                retreat = sample.retreat.zone_number
+
+
+            if type == 'C14':
+                c14_data = None
+                try:
+                    c14_data = Radiocarbon_Sample.objects.get(c14_sample=sample)
+                except:
+                    pass
+                if c14_data is not None:
+                    c14Depth = c14_data.depth_below_SL
+                    c14Material = c14_data.material
+                    c14Setting = c14_data.geological_setting
+                    c14Pos = c14_data.stratigraphic_position_depth
+                    c14Weight = c14_data.sample_weight
+                    c14Contam = c14_data.pot_contamination
+                    c14Curve = c14_data.calibration_curve
+
+                    core = c14_data.c14_core
+                    if core is not None:
+                        expcore = core.exposure_core
+                        core = core.core_number
+
+
+                else:
+                    c14Depth = None
+                    c14Material = None
+                    c14Setting = None
+                    c14Pos = None
+                    c14Weight = None
+                    c14Contam = None
+                    c14Curve = None
+                    expcore = None
+                    core = None
+
+            else:
+                c14Depth = 'N/A'
+                c14Material = 'N/A'
+                c14Setting = 'N/A'
+                c14Pos = 'N/A'
+                c14Weight = 'N/A'
+                c14Contam = 'N/A'
+                c14Curve = 'N/A'
+
+            if type == 'OSL':
+                osl_data = None
+                try:
+                    osl_data = OSL_Sample.objects.get(osl_sample=sample)
+                except:
+                    pass
+
+                if osl_data is not None:
+                    oslPosition = osl_data.stratigraphic_position
+                    oslLithofacies = osl_data.lithofacies
+                    oslDepth = osl_data.burial_depth
+                    oslLithology = osl_data.lithology
+                    oslGamma = osl_data.gamma_spec
+                    oslEquip = osl_data.equipment_number
+                    oslProbe = osl_data.probe_serial_no
+                    oslFile = osl_data.filename
+                    oslTime = osl_data.sample_time
+                    oslDuration = osl_data.sample_duration
+                    oslPotassium = osl_data.potassium
+                    oslThorium = osl_data.thorium
+                    oslUranium = osl_data.uranium
+
+                    core = osl_data.osl_core
+                    if core is not None:
+                        expcore = core.exposure_core
+                        core = core.core_number
+
+                else:
+                    oslPosition = None
+                    oslLithofacies = None
+                    oslDepth = None
+                    oslLithology = None
+                    oslGamma = None
+                    oslEquip = None
+                    oslProbe = None
+                    oslFile = None
+                    oslTime = None
+                    oslDuration = None
+                    oslPotassium = None
+                    oslThorium = None
+                    oslUranium = None
+                    expcore = None
+                    core = None
+
+
+            else:
+                oslPosition = 'N/A'
+                oslLithofacies = 'N/A'
+                oslDepth = 'N/A'
+                oslLithology = 'N/A'
+                oslGamma = 'N/A'
+                oslEquip = 'N/A'
+                oslProbe = 'N/A'
+                oslFile = 'N/A'
+                oslTime = 'N/A'
+                oslDuration = 'N/A'
+                oslPotassium = 'N/A'
+                oslThorium = 'N/A'
+                oslUranium = 'N/A'
+
+
+            if type == 'TCN':
+                tcn_data = None
+                expcore = 'N/A'
+                core = 'N/A'
+                try:
+                    tcn_data = TCN_Sample.objects.get(tcn_sample=sample)
+                except:
+                    pass
+
+                if tcn_data is not None:
+                    tcnQuartz = tcn_data.quartz_content
+                    tcnSetting = tcn_data.sample_setting
+                    tcnMaterial = tcn_data.sampled_material
+                    tcnBoulder = tcn_data.boulder_dimensions
+                    tcnStrike = tcn_data.sample_surface_strike_dip
+                    tcnThickness = tcn_data.sample_thickness
+                    tcnGrain = tcn_data.grain_size
+                    tcnLithology = tcn_data.lithology
+
+                else:
+                    tcnQuartz = None
+                    tcnSetting = None
+                    tcnMaterial = None
+                    tcnBoulder = None
+                    tcnStrike = None
+                    tcnThickness = None
+                    tcnGrain = None
+                    tcnLithology = None
+
+            else:
+                tcnQuartz = 'N/A'
+                tcnSetting = 'N/A'
+                tcnMaterial = 'N/A'
+                tcnBoulder = 'N/A'
+                tcnStrike = 'N/A'
+                tcnThickness = 'N/A'
+                tcnGrain = 'N/A'
+                tcnLithology = 'N/A'
+
+            data = {'code': sample.sample_code, 'sampletype':type, 'latitude':latitude, 'longitude':longitude,
+                    'elevation':elevation, 'site':site, 'notes':sample.sample_notes, 'cal_age':sample.calendar_age,
+            'cal_age_error':sample.calendar_error, 'age':sample.age, 'age_error':sample.age_error,
+            'lab_code':sample.lab_code, 'transect':transect, 'retreat':retreat, 'c14Depth':c14Depth,
+            'c14Material':c14Material, 'c14Setting':c14Setting, 'c14Pos':c14Pos, 'c14Weight':c14Weight,
+            'c14Contam':c14Contam, 'c14Curve':c14Curve, 'oslPosition':oslPosition, 'oslLithofacies':oslLithofacies,
+            'oslDepth':oslDepth, 'oslLithology':oslLithology, 'oslGamma':oslGamma, 'oslEquip':oslEquip,
+            'oslProbe':oslProbe, 'oslFile':oslFile, 'oslTime':oslTime, 'oslDuration':oslDuration,
+            'oslPotassium':oslPotassium, 'oslThorium':oslThorium, 'oslUranium':oslUranium, 'expcore':expcore,
+            'core':core, 'tcnQuartz':tcnQuartz, 'tcnSetting':tcnSetting, 'tcnMaterial':tcnMaterial,
+            'tcnBoulder':tcnBoulder, 'tcnStrike':tcnStrike, 'tcnThickness':tcnThickness, 'tcnGrain':tcnGrain,
+            'tcnLithology':tcnLithology}
 
 
             results.append(data)

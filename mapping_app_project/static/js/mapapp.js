@@ -45,10 +45,10 @@ $(document).ready(function(){
         0: 'disable' /* set to disabled; not allowed to unselect it */
       },
       // remember selected columns (requires $.tablesorter.storage)
-      columnSelector_saveColumns: true,
+      columnSelector_saveColumns: false,
 
       // container layout
-      columnSelector_layout : '<label><input type="checkbox">{name}</label>',
+      columnSelector_layout : '<div class="col-md-4"><label><input type="checkbox"> {name}</label></div>',
       // data attribute containing column name to use in the selector container
       columnSelector_name  : 'data-selector-name',
 
@@ -56,9 +56,9 @@ $(document).ready(function(){
       // enable/disable mediaquery breakpoints
       columnSelector_mediaquery: true,
       // toggle checkbox name
-      columnSelector_mediaqueryName: 'Auto: ',
+      columnSelector_mediaqueryName: 'Select All',
       // breakpoints checkbox initial setting
-      columnSelector_mediaqueryState: true,
+      columnSelector_mediaqueryState: false,
       // responsive table hides columns with priority 1-6 at these breakpoints
       // see http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/#Applyingapresetbreakpoint
       // *** set to false to disable ***
@@ -308,19 +308,26 @@ $( "#searchbutton" ).click(function () {
     var end = $('#endage').val();
     var keyword = $('#searchkeyword').val();
 
-//    $('#searchcode').val(keyword);
-
-    $.getJSON('/mappingapp/query/', {keyword:keyword, start:start, end:end, code:code, transect: transect, type:type}, function (data) {
+    $.getJSON('/mappingapp/query/', {keyword:keyword, start:start, end:end, code:code, transect: transect, type:type},
+        function (data) {
         $.each(data, function (key, val) {
 
-            $('#resultstable').append("<tr><td>"+val.code+"</td>" +
+            $('#resultstable').append("<tr><td>"+val.code+"</td><td>"+val.sampletype+"</td>"+
                 "<td>"+val.latitude+"</td><td>"+val.longitude+"</td>" +
             "<td>"+val.elevation+"</td>" + "<td>"+val.site+"</td>" + "<td>"+val.notes+"</td>" +
-                "<td>"+val.age+"</td>" + "<td>"+val.age_error+"</td></tr>")
+                "<td>"+val.cal_age+"</td>" + "<td>"+val.cal_age_error+"</td><td>"+val.age+"</td><td>"
+                +val.age_error+"</td><td>"+val.lab_code+"</td><td>"+val.transect+"</td><td>"+val.retreat+"</td><td>"+
+                val.c14Depth+"</td><td>"+val.c14Material+"</td><td>"+val.c14Setting+"</td><td>"+val.c14Pos+"</td><td>"+
+                val.c14Weight+"</td><td>"+val.c14Contam+"</td><td>"+val.c14Curve+"</td><td>"+val.oslPosition+
+                "</td><td>"+val.oslLithofacies+"</td><td>"+val.oslDepth+"</td><td>"+val.oslLithology+"</td><td>"+
+                val.oslGamma+"</td><td>"+val.oslEquip+"</td><td>"+val.oslProbe+"</td><td>"+val.oslFile+"</td><td>"+
+                val.oslTime+"</td><td>"+val.oslDuration+"</td><td>"+val.oslPotassium+"</td><td>"+val.oslThorium+
+                "</td><td>"+val.oslUranium+"</td><td>"+val.expcore+"</td><td>"+val.core+"</td><td>"
+                +val.tcnQuartz+"</td><td>"+val.tcnSetting+"</td><td>"+val.tcnMaterial+"</td><td>"+val.tcnBoulder+
+                "</td><td>"+val.tcnStrike+"</td><td>"+val.tcnThickness+"</td><td>"+val.tcnGrain+"</td><td>"+
+                val.tcnLithology+"</td></tr>")
         });
-    $("table").trigger('update');
-    $("table").trigger("appendCache");
-
+    $("table").trigger('update').trigger("appendCache");
     });
 });
 
