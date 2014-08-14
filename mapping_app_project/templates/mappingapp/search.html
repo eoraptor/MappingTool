@@ -53,7 +53,7 @@
              <input type="text" style="display:inline-block;" class="form-control narrow" id="endage" placeholder="Finish">
             </div>
         </div>
-        <div class="col-md-2 col-xs-3" id="searchcodechoice">
+        <div class="col-md-2 col-xs-4" id="searchcodechoice">
             <div class="form-group">
                 <label for="searchcode">Sample Code</label>
                 <input type="text" class="form-control wide" id="searchcode" placeholder="Sample Code(s)">
@@ -68,45 +68,42 @@
         <div class="col-md-1 col-xs-2" id="buttongroup">
             <button type="button" class="btn-success btn-sm" id="searchbutton">Search</button>
         </div>
-      <div class="col-md-1 col-xs-2" id="buttongroup">
-            <button type="button" class="btn-warning btn-sm" data-toggle="modal" data-target="#fieldsModal" id="fieldsbutton">Results Fields</button>
-        </div>
-        {% include "mappingapp/fieldselect.html" %}
-
         <div class="col-md-1 col-xs-2" id="buttongroup2">
             <button type="button" class="btn-primary btn-sm" id="getcsv">Get CSV</button>
         </div>
 </div>
 </div>
-        <table class="tablesorter">
-            <thead>
-                <tr>
-                  <th>Sample Code</th>
-                  <th>Latitude</th>
-                  <th>Longitude</th>
-                  <th>Elevation</th>
-                  <th>Site</th>
-                  <th>Notes</th>
-                  <th>Calendar Age</th>
-                  <th>Calendar Error</th>
-                </tr>
-            </thead>
-            <tbody id="resultstable">
-            {% if samples %}
-                {% for sample in samples %}
-                    <tr>
-                        <td>{{ sample.sample_code }}</td>
-                        <td></td>
-                        <td></td>
-                        <td>{{ sample.sample_site }}</td>
-                        <td>{{ sample.sample_notes }}</td>
-                        <td>{{ sample.age }}</td>
-                        <td>{{ sample.age_error }}</td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            </tbody>
-        </table>
+
+
+<!-- This selector markup is completely customizable -->
+<div class="columnSelectorWrapper">
+<input id="colSelect1" type="checkbox" class="hidden">
+<label class="columnSelectorButton" for="colSelect1">Column</label>
+<div id="columnSelector" class="columnSelector">
+<!-- this div is where the column selector is added -->
+</div>
+</div>
+<table class="tablesorter custom-popup">
+<thead>
+<tr>
+<th data-priority="critical">Sample Code</th>
+<!-- Remove column from selection popup by including -->
+<!-- data-priority="Anything other than 1-6" OR data-column-selector="disable" OR class="columnSelector-disable" -->
+<th data-priority="1">Type</th>
+<!-- columnSelector-false will initially hide the column -->
+<th data-priority="2">Latitude</th>
+<th data-priority="3">Longitude</th>
+<th data-priority="4">Elevation</th>
+<th data-priority="5">Notes</th>
+<th data-priority="6">Site</th>
+<th data-priority="7">Calendar Age</th>
+<th data-priority="8">Calendar Error</th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
 
             <!-- pager -->
         <div id="pager" class="pager">
@@ -123,80 +120,6 @@
                   <option value="40">40</option>
                 </select>
             </form>
-
-
-{#<table class="tablesorter">#}
-{#    <thead>#}
-{#        <tr>#}
-{#            <th>AlphaNumeric</th>#}
-{#            <th>Numeric</th>#}
-{#            <th>Animals</th>#}
-{#            <th>Sites</th>#}
-{#        </tr>#}
-{#    </thead>#}
-{#    <tbody>#}
-{#        <tr>#}
-{#            <td>abc 123</td>#}
-{#            <td>10</td>#}
-{#            <td>Koala</td>#}
-{#            <td>http://www.google.com</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>abc 1</td>#}
-{#            <td>234</td>#}
-{#            <td>Ox</td>#}
-{#            <td>http://www.yahoo.com</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>abc 9</td>#}
-{#            <td>10</td>#}
-{#            <td>Girafee</td>#}
-{#            <td>http://www.facebook.com</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>zyx 24</td>#}
-{#            <td>767</td>#}
-{#            <td>Bison</td>#}
-{#            <td>http://www.whitehouse.gov/</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>abc 11</td>#}
-{#            <td>3</td>#}
-{#            <td>Chimp</td>#}
-{#            <td>http://www.ucla.edu/</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>abc 2</td>#}
-{#            <td>56</td>#}
-{#            <td>Elephant</td>#}
-{#            <td>http://www.wikipedia.org/</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>abc 9</td>#}
-{#            <td>155</td>#}
-{#            <td>Lion</td>#}
-{#            <td>http://www.nytimes.com/</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>ABC 10</td>#}
-{#            <td>87</td>#}
-{#            <td>Zebra</td>#}
-{#            <td>http://www.google.com</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>zyx 1</td>#}
-{#            <td>999</td>#}
-{#            <td>Koala</td>#}
-{#            <td>http://www.mit.edu/</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td>zyx 12</td>#}
-{#            <td>0</td>#}
-{#            <td>Llama</td>#}
-{#            <td>http://www.nasa.gov/</td>#}
-{#        </tr>#}
-{#    </tbody>#}
-{#</table>#}
         </div>
     </div>
 </div>

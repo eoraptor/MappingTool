@@ -9,6 +9,7 @@ var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_
 '#id_sample_notes', '#id_sample-latitude', '#id_sample-longitude', '#id_sample-easting', '#id_sample-northing',
 '#id_sample-elevation', '#id_sample-bng_ing'];
 
+var $table;
 
 $(document).ready(function(){
     $('#savebutton').hide();
@@ -17,15 +18,14 @@ $(document).ready(function(){
         $('#modalbutton1').attr("disabled", true);
     }
 
-
-
     $('.td').click(function() {
     var text = $(this).text();
     $('#id_samp_code').val(text);
     });
 
     $(function(){
-       var $table = $('table');
+
+    $table = $('table');
 
         $('#getcsv').click(function(){
     // get delivery type
@@ -35,7 +35,40 @@ $(document).ready(function(){
         .tablesorter({
                 theme: 'green',
                 widthFixed: true,
-                widgets: ['zebra', 'filter', 'output']})
+                widgets: ['zebra', 'filter', 'columnSelector','output'],
+                widgetOptions : {
+      // target the column selector markup
+      columnSelector_container : $('#columnSelector'),
+      // column status, true = display, false = hide
+      // disable = do not display on list
+      columnSelector_columns : {
+        0: 'disable' /* set to disabled; not allowed to unselect it */
+      },
+      // remember selected columns (requires $.tablesorter.storage)
+      columnSelector_saveColumns: true,
+
+      // container layout
+      columnSelector_layout : '<label><input type="checkbox">{name}</label>',
+      // data attribute containing column name to use in the selector container
+      columnSelector_name  : 'data-selector-name',
+
+      /* Responsive Media Query settings */
+      // enable/disable mediaquery breakpoints
+      columnSelector_mediaquery: true,
+      // toggle checkbox name
+      columnSelector_mediaqueryName: 'Auto: ',
+      // breakpoints checkbox initial setting
+      columnSelector_mediaqueryState: true,
+      // responsive table hides columns with priority 1-6 at these breakpoints
+      // see http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/#Applyingapresetbreakpoint
+      // *** set to false to disable ***
+      columnSelector_breakpoints : [ '20em', '30em', '40em', '50em', '60em', '70em' ],
+      // data attribute containing column priority
+      // duplicates how jQuery mobile uses priorities:
+      // http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/
+      columnSelector_priority : 'data-priority'
+    }
+            })
         .tablesorterPager({container: $("#pager")});
     });
 
@@ -186,14 +219,14 @@ var enable = function() {
     $(fields[i]).prop( "disabled", false );
     $("#id_photos_taken").prop( "disabled", false );
     }
-}
+};
 
 var disable = function() {
     for (var i = 0 ; i < fields.length ; i++) {
     $(fields[i]).prop( "disabled", true );
     $("#id_photos_taken").prop( "disabled", true );
     }
-}
+};
 
 
 var getsites = function(element) {
@@ -214,7 +247,6 @@ var getsites = function(element) {
         if (val.operator == null) {
             val.operator = ''
         }
-        $('#id_site_date').val(val.date, true);
         $('#id_operator').val(val.operator, true);
         $('#id_photographs').val(val.photographs, true);
         $('#id_site_notes').val(val.notes, true);
@@ -232,7 +264,7 @@ var getsites = function(element) {
         $("#id_site-bng_ing").val(val.bng);
         });
     });
-}
+};
 
 
 
@@ -307,31 +339,5 @@ $('#suggestion').on('click', '#sugg', function() {
   var text = $(this).text();
     $('#id_samp_code').val(text);
     });
-
-
-
-
-$(function(){
-    $(".check").on('change', function(e) {
-        if($(this).is(':checked')) {
-            $(this).attr('checked', 'checked');
-        }else{
-            $(this).removeAttr('checked');
-        }
-    });
-});
-
-
-$("#selectall").click(function(e) {
-        $(".check").prop('checked', 'checked')
-        $(".check").attr('checked', 'checked')
-    });
-
-
-
-$("#clearall").click(function(e) {
-        $(".check").removeAttr('checked');
-    });
-
 
 

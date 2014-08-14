@@ -828,6 +828,8 @@ def incrementcounter(request):
     return HttpResponse(sample_details, mimetype='application/json')
 
 
+@login_required
+@user_passes_test(is_member)
 def editsample(request):
 
     context = RequestContext(request)
