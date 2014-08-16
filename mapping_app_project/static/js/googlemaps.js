@@ -25,8 +25,29 @@ var newShape;
         if (newShape) {
           newShape.setMap(null);
           $('#id_sample_codes').empty();
+
         }
       }
+
+       // filter markers based on age
+        function markeragefilter() {
+            var start = $('#startagefilter').val();
+            var end = $('#endagefilter').val();
+
+
+            for (var i = 0; i < markers.length; i++) {
+                var marker = markers[i];
+                if ((marker.age > start && marker.age < end) || marker.age == null) {
+                    marker.setMap(null);
+                }
+            }
+        }
+
+
+
+
+
+
 
 var icons = {
     osl: {
@@ -70,7 +91,7 @@ function initialize() {
         drawingManager = new google.maps.drawing.DrawingManager({
             drawingControl: true,
             drawingControlOptions: {
-            position: google.maps.ControlPosition.TOP_RIGHT,
+            position: google.maps.ControlPosition.TOP_CENTER,
             drawingModes: [
             google.maps.drawing.OverlayType.POLYGON
           ]
@@ -158,8 +179,6 @@ function initialize() {
         google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
         google.maps.event.addListener(map, 'click', clearSelection);
         google.maps.event.addDomListener(document.getElementById("viewsamples"), 'click', getCoordinates);
-
-
         });
 
         google.maps.event.addDomListener(map, 'idle', function () {
@@ -177,7 +196,7 @@ function initialize() {
         $.getJSON('/mappingapp/markers/', function (data) {
 
             $.each(data, function (key, val) {
-                sample_data = {'lat': val.latitude, 'long': val.longitude, 'type': val.type, 'code': val.code};
+                sample_data = {'lat': val.latitude, 'long': val.longitude, 'type': val.type, 'code': val.code, 'age':val.age, 'site':val.site};
                 marker_data.push(sample_data);
             });
 
@@ -187,6 +206,8 @@ function initialize() {
                 position: new google.maps.LatLng(sample_data['lat'], sample_data['long']),
                 map: map,
                 type: sample_data['type'].toUpperCase(),
+                age: sample_data['age'],
+                site: sample_data['site'],
                 icon: mapicons[sample_data['type']],
                 title: sample_data['code']
             });
@@ -201,7 +222,8 @@ function initialize() {
                     });
                     }
                 infowindow.setContent('<h5>'+marker.title+'</h5>'+'<hr>'+'<b>Lat: </b>'+marker.position.lat()+'<br />'+
-                '<b>Lng: </b>'+marker.position.lng()+'<br /><b>Age: </b>'+'<br /><b>Type: </b>'+marker.type+'<br /><b>Site: </b>');
+                '<b>Lng: </b>'+marker.position.lng()+'<br /><b>Calendar Age: </b>'+marker.age+
+                    '<br /><b>Type: </b>'+marker.type+'<br /><b>Site: </b>'+marker.site);
                 infowindow.open(map, marker);
                 });
 
@@ -209,12 +231,16 @@ function initialize() {
             }
     })();
 
+
 //        bottom of function
 }
 
-
-
 google.maps.event.addDomListener(window, 'load', initialize);
+
+var filterbutton = document.getElementById("filterbutton");
+filterbutton.addEventListener("click", markeragefilter, false);
+
+
 
 var make_icons = function() {
     mapicons['tcn'] = new google.maps.MarkerImage(

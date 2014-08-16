@@ -39,6 +39,13 @@ def markers(request):
 
                 sample_type = None
                 type = None
+                site_name = None
+                latitude = None
+                longitude = None
+
+                if sample.sample_site is not None:
+
+                    site_name = sample.sample_site.site_name
 
                 try:
                     type = TCN_Sample.objects.get(tcn_sample=sample)
@@ -63,9 +70,8 @@ def markers(request):
                     if type is not None:
                         sample_type = 'c14'
 
-                data = {'latitude': sample.sample_coordinates.latitude,
-                        'longitude': sample.sample_coordinates.longitude,
-                        'code': sample.sample_code, 'type':sample_type}
+                data = {'latitude': sample.sample_coordinates.latitude, 'longitude': sample.sample_coordinates.longitude, 'code': sample.sample_code,
+                        'type':sample_type, 'age':sample.calendar_age, 'site':site_name}
 
                 samples_with_coordinates.append(data)
 
@@ -600,6 +606,8 @@ def upload(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
+    sample_data = None
+
     context = RequestContext(request)
 
     for k in request.session.keys():
@@ -616,8 +624,11 @@ def upload(request):
         form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-
+            # try:
             sample_data = process_file(request.FILES['file'])
+
+            # except:
+            #     return HttpResponseRedirect(reverse('index'))
 
             request.session['file_name'] = request.FILES['file'].name
 

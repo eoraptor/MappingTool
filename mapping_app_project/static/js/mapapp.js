@@ -35,39 +35,46 @@ $(document).ready(function(){
         .tablesorter({
                 theme: 'green',
                 widthFixed: true,
-                widgets: ['zebra', 'filter', 'columnSelector','output'],
+                widgets: ['zebra', 'filter', 'columnSelector','output', 'resizable'],
                 widgetOptions : {
-      // target the column selector markup
-      columnSelector_container : $('#columnSelector'),
-      // column status, true = display, false = hide
-      // disable = do not display on list
-      columnSelector_columns : {
-        0: 'disable' /* set to disabled; not allowed to unselect it */
-      },
-      // remember selected columns (requires $.tablesorter.storage)
-      columnSelector_saveColumns: false,
 
-      // container layout
-      columnSelector_layout : '<div class="col-md-4"><label><input type="checkbox"> {name}</label></div>',
-      // data attribute containing column name to use in the selector container
-      columnSelector_name  : 'data-selector-name',
+                    resizable: true,
 
-      /* Responsive Media Query settings */
-      // enable/disable mediaquery breakpoints
-      columnSelector_mediaquery: true,
-      // toggle checkbox name
-      columnSelector_mediaqueryName: 'Select All',
-      // breakpoints checkbox initial setting
-      columnSelector_mediaqueryState: false,
-      // responsive table hides columns with priority 1-6 at these breakpoints
-      // see http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/#Applyingapresetbreakpoint
-      // *** set to false to disable ***
-      columnSelector_breakpoints : [ '20em', '30em', '40em', '50em', '60em', '70em' ],
-      // data attribute containing column priority
-      // duplicates how jQuery mobile uses priorities:
-      // http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/
-      columnSelector_priority : 'data-priority'
-    }
+                    // These are the default column widths which are used when the table is
+                    // initialized or resizing is reset; note that the "Age" column is not
+                    // resizable, but the width can still be set to 40px here
+                    resizable_widths : [ '10%', '10%', '40px', '10%', '100px' ],
+                    // target the column selector markup
+                    columnSelector_container : $('#columnSelector'),
+                    // column status, true = display, false = hide
+                    // disable = do not display on list
+                    columnSelector_columns : {
+                        0: 'disable' /* set to disabled; not allowed to unselect it */
+                    },
+                    // remember selected columns (requires $.tablesorter.storage)
+                    columnSelector_saveColumns: false,
+
+                    // container layout
+                    columnSelector_layout : '<div class="col-md-4"><label><input type="checkbox"> {name}</label></div>',
+                    // data attribute containing column name to use in the selector container
+                    columnSelector_name  : 'data-selector-name',
+
+                    /* Responsive Media Query settings */
+                    // enable/disable mediaquery breakpoints
+                    columnSelector_mediaquery: true,
+                    // toggle checkbox name
+                    columnSelector_mediaqueryName: 'Select All',
+                    // breakpoints checkbox initial setting
+                    columnSelector_mediaqueryState: false,
+                    // responsive table hides columns with priority 1-6 at these breakpoints
+                    // see http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/#Applyingapresetbreakpoint
+                    // *** set to false to disable ***
+                    columnSelector_breakpoints : [ '20em', '30em', '40em', '50em', '60em', '70em' ],
+                    // data attribute containing column priority
+                    // duplicates how jQuery mobile uses priorities:
+                    // http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/
+                    columnSelector_priority : 'data-priority'
+                }
             })
         .tablesorterPager({container: $("#pager")});
     });
@@ -111,7 +118,26 @@ $(document).ready(function(){
         $('#searchcode').val(sample_codes);
         $('#searchbutton').trigger( "click" );
     }
+
 });
+
+
+$(document).ready(function(){
+    $(function() {
+$("#dialog").dialog({
+               autoOpen: false
+            });
+});
+});
+
+$('#agedialogue').click(function() {
+    $("#dialog").dialog("open");
+});
+
+
+
+
+
 
 
 

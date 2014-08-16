@@ -63,7 +63,7 @@
 			pageReset: 0,
 
 			// Number of visible rows
-			size: 5,
+			size: 10,
 
 			// Save pager page & size if the storage script is loaded (requires $.tablesorter.storage in jquery.tablesorter.widgets.js)
 			savePages: true,

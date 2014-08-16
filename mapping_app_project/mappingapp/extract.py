@@ -194,9 +194,22 @@ def get_site_info(site_sheet, type):
     return site_name
 
 
+# does the sheet have a sample code?
+def get_sample_code(sheet):
+    for row in sheet.iter_rows():
+        id = None
+        for cell in row:
+            if cell.value is not None and isinstance(cell.value, basestring):
+                if 'Unique Sample Identifier' in cell.value:
+                    print 'here'
+                    col = columns.index(cell.column)
+                    val_col = columns[col+1]
+                    id = sheet[val_col + str(cell.row)].value
+                    return id
+
+
 # determine what type of sample, if any, is on a worksheet
 def get_sheet_type(site_sheet):
-
     for row in site_sheet.iter_rows():
         for cell in row:
             if cell.value is not None and isinstance(cell.value, basestring):
@@ -235,6 +248,7 @@ def process_file(filename):
     for sheet in sheet_names:
         site_sheet = wb[sheet]
         type = get_sheet_type(site_sheet)
+        id = get_sample_code(site_sheet)
 
         if type == 'standard_site':
             site_name = get_site_info(site_sheet, 'standard')
@@ -243,22 +257,25 @@ def process_file(filename):
             site_name = get_site_info(site_sheet, 'osl')
 
         elif type == '14C_Sample':
-            counter += 1
-            results = get_C14_sample_info(site_sheet, counter)
-            for k, v in results.iteritems():
-                samples[k] = v
+            if id is not None:
+                counter += 1
+                results = get_C14_sample_info(site_sheet, counter)
+                for k, v in results.iteritems():
+                    samples[k] = v
 
         elif type == 'OSL_Sample':
-            counter += 1
-            results = get_osl_sample_info(site_sheet, counter)
-            for k, v in results.iteritems():
-                samples[k] = v
+            if id is not None:
+                counter += 1
+                results = get_osl_sample_info(site_sheet, counter)
+                for k, v in results.iteritems():
+                    samples[k] = v
 
         elif type == 'TCN_Sample':
-            counter += 1
-            results = get_tcn_sample_info(site_sheet, counter)
-            for k, v in results.iteritems():
-                samples[k] = v
+            if id is not None:
+                counter += 1
+                results = get_tcn_sample_info(site_sheet, counter)
+                for k, v in results.iteritems():
+                    samples[k] = v
 
     samples['sample_count'] = counter
     samples['site_name'] = site_name

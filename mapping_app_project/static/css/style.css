@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+    position: relative;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -10,6 +11,8 @@ body {
     height: 91vh;
     margin-top: 9px;
 }
+
+
 
 /* remove resize option on selected text areas */
 .noresize {
@@ -432,21 +435,55 @@ html {
 
 
 /* map drawing tools*/
-#delshape {
+#delshape, #viewsamples {
     position:absolute;
-    top:93px;
-    right:5px;
-    font-size: 12px;
+    top:65px;
+    right:586px;
+    font-size: 15px;
     width: 62px;
+    height: 25px;
 }
 
 #viewsamples {
     position:absolute;
-    top:131px;
-    right:5px;
-    font-size: 12px;
-    width: 62px;
+    right:470px;
+    width: 115px;
 }
+
+#drawinglabel {
+    position: absolute;
+    margin-left:500px;
+    width: 150px;
+    top: 64px;
+    height: 26px;
+    background-color: #fbffe7;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 3px;
+    border: 1px solid;
+    border-color: #808080;
+}
+
+
+#endagefilter {
+    margin-top: 27px;
+    margin-left: -80px;
+}
+
+.filterbuttons {
+    margin-left: auto;
+    margin-right: auto;
+    width: 185px;
+}
+
+#agedialogue {
+    position: absolute;
+    left:37px;
+    width: 150px;
+    top: 66px;
+}
+
+
 /* end map drawing tools*/
 
 #nv {
@@ -607,6 +644,7 @@ html {
   width: 630px;
   height: 300px;
   position: absolute;
+  z-index: 999;
   top: -150px;
   left:200px;
   padding: 10px;
@@ -635,4 +673,8 @@ html {
 /* scrollable div for search results table */
 .tablescroll {
     overflow-x:scroll;
+}
+
+th.tablesorter-header.resizable-false {
+  background-color: #e6bf99;
 }
