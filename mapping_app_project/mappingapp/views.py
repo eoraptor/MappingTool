@@ -586,15 +586,10 @@ def search(request):
 
     if 'markers' in request.session:
         sample_codes = request.session['markers']
-        samples = []
-        codes = [code.strip() for code in sample_codes.split(',')]
+        samples = [code.strip() for code in sample_codes.split(',')]
 
         del request.session['markers']
         request.session.modified = True
-
-        for sample in codes:
-            samples.append(Sample.objects.get(sample_code=sample))
-
 
     return render_to_response('mappingapp/search.html', {'samples':samples, 'is_member':is_member}, context)
 
@@ -608,8 +603,13 @@ def upload(request):
     context = RequestContext(request)
 
     for k in request.session.keys():
-        if k != u'_auth_user_backend' and k != u'_auth_user_id':
+        if k != u'_auth_user_backend' and k != u'_auth_user_id' and k !=u'files_saved':
             del request.session[k]
+
+    files = None
+    if 'files_saved' in request.session:
+        files = request.session['files_saved']
+
 
     # Handle file upload
     if request.method == 'POST':
@@ -621,20 +621,24 @@ def upload(request):
 
             request.session['file_name'] = request.FILES['file'].name
 
-            for k, v in sample_data.iteritems():
-                request.session[k] = v
+            if sample_data is None:
+                return HttpResponseRedirect(reverse('index'))
 
-                request.session.modified = True
+            else:
+                for k, v in sample_data.iteritems():
+                    request.session[k] = v
 
-            # Redirect to summary of file contents after upload
-            return HttpResponseRedirect(reverse('filesummary'))
+                    request.session.modified = True
+
+                # Redirect to summary of file contents after upload
+                return HttpResponseRedirect(reverse('filesummary'))
 
     else:
 
         form = UploadFileForm() # A empty, unbound form
 
     # Render list page with the documents and the form
-    return render_to_response('mappingapp/upload.html', {'is_member':is_member, 'form': form}, context)
+    return render_to_response('mappingapp/upload.html', {'files':files, 'is_member':is_member, 'form': form}, context)
 
 
 @login_required
@@ -945,6 +949,11 @@ def validatesample(request):
                         if bear_inc is not None:
                             sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
                                                                                          bear_inc=bear_inc)
+            if 'files_saved' in request.session:
+                if request.session['file_name'] not in request.session['files_saved']:
+                    request.session['files_saved'] = request.session['files_saved'] + ', ' + request.session['file_name']
+            else:
+                request.session['files_saved'] = request.session['file_name']
 
             # Process remaining samples
             if request.session['counter'] < num_samples:

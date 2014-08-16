@@ -6,6 +6,9 @@
 {% block login %}{% endblock login %}
 
 {% block body_block %}
+
+<div class="hidden" id="marker_codes">{% for sample in samples %}{{ sample }},{% endfor %}</div>
+
     <div class="jumbotron search" id="standardjumbo">
         <div class="container-fluid">
 <div class="panel panel-success" id="searchpanel">
@@ -55,7 +58,7 @@
         </div>
         <div class="col-md-2 col-xs-4" id="searchcodechoice">
             <div class="form-group">
-                <label for="searchcode">Sample Code</label>
+                <label for="searchcode">Sample Code(s)</label>
                 <input type="text" class="form-control wide" id="searchcode" placeholder="Sample Code(s)">
             </div>
         </div>

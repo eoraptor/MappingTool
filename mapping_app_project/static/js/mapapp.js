@@ -106,6 +106,11 @@ $(document).ready(function(){
             });
         });
     }
+    if ($('#marker_codes').text() != 'None') {
+        var sample_codes = $('#marker_codes').text().slice(0,-1);
+        $('#searchcode').val(sample_codes);
+        $('#searchbutton').trigger( "click" );
+    }
 });
 
 
@@ -162,8 +167,8 @@ $('#savebutton').click(function(){
 
         $.each(data, function( key, val) {
             if ((val.created) == true) {
-            $('#id_main-sites').append(new Option(site))
-            $('#id_fill-sites').append(new Option(site))
+            $('#id_main-sites').append(new Option(site));
+            $('#id_fill-sites').append(new Option(site));
             alert('Site Saved')
             }else if ((val.created) == false) {
                 alert('Site Already Exists')

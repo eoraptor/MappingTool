@@ -91,10 +91,9 @@ def get_osl_site_cell_positions(ws):
 
 
 # extract the data from the site sheet
-def get_site_info(wb):
-    site_sheet = wb["Site Info"]
+def get_site_info(site_sheet, type):
 
-    if site_sheet['A1'].value == 'Section A: Site Information':
+    if type == 'osl':
         positions = get_osl_site_cell_positions(site_sheet)
         bng_ing = positions['BNG/ING?']
     else:
@@ -192,67 +191,83 @@ def get_site_info(wb):
                                                  photographs=photo_labels, site_notes=site_notes,
                                                  site_coordinates=site_coordinates, collected_by=collector)
 
-    site_details = {'site_name':site_name}
+    return site_name
 
-    return site_details
 
+# determine what type of sample, if any, is on a worksheet
+def get_sheet_type(site_sheet):
+
+    for row in site_sheet.iter_rows():
+        for cell in row:
+            if cell.value is not None and isinstance(cell.value, basestring):
+                if 'Section A: Site Information' in cell.value:
+                    sheet = 'osl_site'
+                    return sheet
+                elif 'Site Information' in cell.value and 'Section A' not in cell.value:
+                    sheet = 'standard_site'
+                    return sheet
+                elif 'TCN' in cell.value:
+                    sheet = 'TCN_Sample'
+                    return sheet
+                elif 'OSL' in cell.value:
+                    sheet = 'OSL_Sample'
+                    return sheet
+                elif '14C' in cell.value:
+                    sheet = '14C_Sample'
+                    return sheet
+    return None
 
 # process a complete file
 def process_file(filename):
     # need error handling
 
+    site_name = None
+
     samples = {}
-
-    wb = load_workbook(filename, use_iterators=True)
-
-    site_details = get_site_info(wb)
-
-    for k, v in site_details.iteritems():
-        samples[k] = v
 
     counter = 0
 
+    wb = load_workbook(filename, use_iterators=True)
+
     sheet_names = wb.get_sheet_names()
+    site_name = None
 
     for sheet in sheet_names:
-        if sheet != 'Site Info' and sheet != 'Sheet1':
-            ws = wb[sheet]
-            type = get_sample_type(ws)
+        site_sheet = wb[sheet]
+        type = get_sheet_type(site_sheet)
 
-            if type == 'TCN':
-                counter += 1
-                results = get_tcn_sample_info(ws, counter)
-                for k, v in results.iteritems():
-                    samples[k] = v
+        if type == 'standard_site':
+            site_name = get_site_info(site_sheet, 'standard')
 
-            elif type == 'OSL':
-                counter += 1
-                results = get_osl_sample_info(ws, counter)
-                for k, v in results.iteritems():
-                    samples[k] = v
+        elif type == 'osl_site':
+            site_name = get_site_info(site_sheet, 'osl')
 
-            elif type == '14C':
-                counter += 1
-                results = get_C14_sample_info(ws, counter)
-                for k, v in results.iteritems():
-                    samples[k] = v
+        elif type == '14C_Sample':
+            counter += 1
+            results = get_C14_sample_info(site_sheet, counter)
+            for k, v in results.iteritems():
+                samples[k] = v
+
+        elif type == 'OSL_Sample':
+            counter += 1
+            results = get_osl_sample_info(site_sheet, counter)
+            for k, v in results.iteritems():
+                samples[k] = v
+
+        elif type == 'TCN_Sample':
+            counter += 1
+            results = get_tcn_sample_info(site_sheet, counter)
+            for k, v in results.iteritems():
+                samples[k] = v
 
     samples['sample_count'] = counter
-    return samples
+    samples['site_name'] = site_name
 
-
-# determine what type of sample, if any, is on a worksheet
-def get_sample_type(ws):
-    if ws['A1'].value == 'TCN Sample Sheet' and ws['B3'].value is not None:
-        return 'TCN'
-
-    elif ws['A1'].value == '14C Sample Sheet' and ws['B3'].value is not None:
-        return '14C'
-
-    elif ws['A1'].value == 'Section B: OSL Sample Sheet' and ws['B3'].value is not None:
-        return 'OSL'
-    else:
+    if counter == 0:
         return None
+    else:
+        return samples
+
 
 
 
