@@ -32,8 +32,9 @@ def convert_lat_long(coord):
         result = "".join(i for i in coord if ord(i)<128)
 
         degrees = float(result[:result.index(' ')])
-        minutes = float(result[result.rindex(' ')+1:])
-        return degrees + (minutes/60)
+        minutes = float(result[result.rindex(' ')+1:])/60
+        minutes = round(minutes, 5)
+        return degrees + minutes
 
 
 # get transect number from site location if not on sample form

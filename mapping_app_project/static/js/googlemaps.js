@@ -29,6 +29,11 @@ var newShape;
         }
       }
 
+        var opendialogue = function() {
+        $("#dialog").dialog("open");
+        };
+
+
        // filter markers based on age
         function markeragefilter() {
             var start = $('#startagefilter').val();
@@ -42,11 +47,6 @@ var newShape;
                 }
             }
         }
-
-
-
-
-
 
 
 var icons = {
@@ -67,6 +67,10 @@ var icons = {
 function initialize() {
 
         make_icons();
+
+        $("#dialog").dialog({
+               autoOpen: false
+            });
 
         var mapDiv = document.getElementById('map-canvas');
 
@@ -107,8 +111,24 @@ function initialize() {
         }
         });
 
-         if ($('#delshape').length > 0) {
+        var markerfilterDiv = document.createElement('div');
+             var markerfilter = new MarkerFilterButton(markerfilterDiv, map);
+             markerfilterDiv.index = 1;
+             map.controls[google.maps.ControlPosition.TOP_LEFT].push(markerfilterDiv);
+
+         if ($('#viewastable').length > 0) {
              drawingManager.setMap(map);
+
+             var drawingControlDiv = document.createElement('div');
+             var drawingControl = new MarkerSelectControl(drawingControlDiv, map);
+             drawingControlDiv.index = 1;
+             map.controls[google.maps.ControlPosition.TOP_CENTER].push(drawingControlDiv);
+
+             var helpDiv = document.createElement('div');
+             var help = new MarkerSelectHelp(helpDiv, map);
+             helpDiv.index = -1;
+             map.controls[google.maps.ControlPosition.TOP_CENTER].push(helpDiv);
+
          }
 
         google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
@@ -178,7 +198,7 @@ function initialize() {
         google.maps.event.addDomListener(document.getElementById("delshape"), 'click', deleteSelectedShape);
         google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
         google.maps.event.addListener(map, 'click', clearSelection);
-        google.maps.event.addDomListener(document.getElementById("viewsamples"), 'click', getCoordinates);
+        google.maps.event.addDomListener(document.getElementById('viewbutton'), 'click', getCoordinates);
         });
 
         google.maps.event.addDomListener(map, 'idle', function () {
@@ -221,8 +241,10 @@ function initialize() {
                         width: 120
                     });
                     }
-                infowindow.setContent('<h5>'+marker.title+'</h5>'+'<hr>'+'<b>Lat: </b>'+marker.position.lat()+'<br />'+
-                '<b>Lng: </b>'+marker.position.lng()+'<br /><b>Calendar Age: </b>'+marker.age+
+                var latitude = Math.round(marker.position.lat() * Math.pow(10, 5))/Math.pow(10, 5);
+                var longitude = Math.round(marker.position.lng() * Math.pow(10, 5))/Math.pow(10, 5);
+                infowindow.setContent('<h5>'+marker.title+'</h5>'+'<hr>'+'<b>Lat: </b>'+latitude+'<br />'+
+                '<b>Lng: </b>'+longitude+'<br /><b>Calendar Age: </b>'+marker.age+
                     '<br /><b>Type: </b>'+marker.type+'<br /><b>Site: </b>'+marker.site);
                 infowindow.open(map, marker);
                 });
@@ -239,8 +261,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 var filterbutton = document.getElementById("filterbutton");
 filterbutton.addEventListener("click", markeragefilter, false);
-
-
 
 var make_icons = function() {
     mapicons['tcn'] = new google.maps.MarkerImage(
@@ -268,3 +288,77 @@ var make_icons = function() {
     )
 };
 
+
+function MarkerSelectControl(controlDiv, map) {
+
+  // Set CSS styles for the DIV containing the control
+  // Setting padding to 5 px will offset the control
+  // from the edge of the map.
+  controlDiv.style.paddingTop = '6px';
+
+  // Set CSS for the control border.
+  var clearbutton = document.createElement('button');
+  clearbutton.className = 'btn-warning';
+  clearbutton.style.height = '25px';
+  clearbutton.style.verticalAlign = 'middle';
+  clearbutton.title = 'Click to delete the shape';
+  clearbutton.innerHTML = 'Clear';
+  clearbutton.style.fontSize = '15px';
+  controlDiv.appendChild(clearbutton);
+
+  google.maps.event.addDomListener(clearbutton, 'click', deleteSelectedShape);
+
+  var viewbutton = document.createElement('button');
+  viewbutton.className = 'btn-success';
+  viewbutton.id = 'viewbutton';
+  viewbutton.style.height = '25px';
+  viewbutton.style.verticalAlign = 'middle';
+  viewbutton.title = 'Click to view selected sample data in a table';
+  viewbutton.innerHTML = 'View Samples';
+  viewbutton.style.fontSize = '15px';
+  controlDiv.appendChild(viewbutton);
+
+}
+
+function MarkerSelectHelp(controlDiv, map) {
+
+  // Set CSS styles for the DIV containing the control
+  // Setting padding to 5 px will offset the control
+  // from the edge of the map.
+  controlDiv.style.paddingTop = '6px';
+
+  // Set CSS for the control border.
+  var help = document.createElement('div');
+  help.id = 'helplabel';
+  help.style.height = '25px';
+  help.style.backgroundColor = '#d7e9c6';
+  help.style.border = '1px solid';
+  help.style.paddingLeft = '4px';
+  help.style.paddingRight = '4px';
+  help.style.borderColor = 'black';
+  help.style.verticalAlign = 'middle';
+  help.innerHTML = 'Drawing Controls';
+  help.style.fontSize = '15px';
+  controlDiv.appendChild(help);
+}
+
+
+function MarkerFilterButton(controlDiv, map) {
+
+    // Set CSS styles for the DIV containing the control
+    // Setting padding to 5 px will offset the control
+    // from the edge of the map.
+    controlDiv.style.paddingTop = '6px';
+
+    // Set CSS for the control border.
+    var markerfilter = document.createElement('button');
+    markerfilter.className = 'btn-info';
+    markerfilter.style.height = '35px';
+    markerfilter.style.verticalAlign = 'middle';
+    markerfilter.title = 'Click to filter markers by age range';
+    markerfilter.innerHTML = 'Age Filter';
+    markerfilter.style.fontSize = '18px';
+    controlDiv.appendChild(markerfilter);
+
+    google.maps.event.addDomListener(markerfilter, 'click', opendialogue);
+}

@@ -1,7 +1,6 @@
 html,
 body {
   height: 100%;
-    position: relative;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -11,6 +10,36 @@ body {
     height: 91vh;
     margin-top: 9px;
 }
+
+.x {
+    position: relative;
+}
+
+#map-legend {
+    font-family: "Century Schoolbook", sans-serif, 5px;
+    background: #ffffff;
+    padding: 2px;
+    margin: 10px;
+    border: 1px solid #444;
+    box-shadow:0 0 5px #555;
+}
+
+/* map drawing tools*/
+.filterages {
+    width: 250px;
+    margin-bottom: 5px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#filterbuttoncol {
+    margin-left: 20px;
+    margin-right: 0px;
+    margin-top: 0px;
+
+}
+
+/* end map drawing tools*/
 
 
 
@@ -167,32 +196,24 @@ img#logo {
 
 .loginform {
     padding-top: 5px;
+    margin-top: 4px;
 }
 
-#loginbutton {
-    margin-top: 6px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+#loginbutton, #logoutbutton {
+    height: 27px;
+    margin-top: 9px;
+    padding-top: 2px;
+    padding-bottom: 3px;
     padding-left: 7px;
     padding-right: 7px;
+    border-radius: 2px;
 }
 
 #logoutbutton {
-    margin-top: 12px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 7px;
-    padding-right: 7px;
+    margin-top: 16px;
 }
 
-#map-legend {
-    font-family: "Century Schoolbook", sans-serif, 5px;
-    background: #ffffff;
-    padding: 2px;
-    margin: 10px;
-    border: 1px solid #444;
-    box-shadow:0 0 5px #555;
-}
+
 
 
 #editjumbo {
@@ -285,7 +306,14 @@ img#logo {
 #id_sites {
     width: 250px;
     font-size: 13px;
+}
 
+#id_main-sites, #id_main-sites option {
+    width: 240px !important;
+}
+
+#id_fill-sites, #id_fill-sites option {
+    width: 210px !important;
 }
 
 .tooltip.top .tooltip-inner {
@@ -345,6 +373,8 @@ table.bearing {
 
 #login {
     font-size: 12px;
+    height: 26px;
+    padding: 1px 2px;
 }
 
 html {
@@ -434,57 +464,6 @@ html {
 /* end Search Page*/
 
 
-/* map drawing tools*/
-#delshape, #viewsamples {
-    position:absolute;
-    top:65px;
-    right:586px;
-    font-size: 15px;
-    width: 62px;
-    height: 25px;
-}
-
-#viewsamples {
-    position:absolute;
-    right:470px;
-    width: 115px;
-}
-
-#drawinglabel {
-    position: absolute;
-    margin-left:500px;
-    width: 150px;
-    top: 64px;
-    height: 26px;
-    background-color: #fbffe7;
-    text-align: center;
-    vertical-align: middle;
-    padding-top: 3px;
-    border: 1px solid;
-    border-color: #808080;
-}
-
-
-#endagefilter {
-    margin-top: 27px;
-    margin-left: -80px;
-}
-
-.filterbuttons {
-    margin-left: auto;
-    margin-right: auto;
-    width: 185px;
-}
-
-#agedialogue {
-    position: absolute;
-    left:37px;
-    width: 150px;
-    top: 66px;
-}
-
-
-/* end map drawing tools*/
 
 #nv {
     font-family: 'Open Sans', sans-serif;

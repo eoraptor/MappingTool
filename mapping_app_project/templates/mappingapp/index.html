@@ -2,17 +2,10 @@
 {% load static %}
 {% block home %}<li class="li-active"><a id="activelink" href="/mappingapp/">Home</a></li>{% endblock home %}
 {% block body_block %}
-<div class="x">
+
     <div id="map-canvas"></div>
     <a href="#"><div id="map-legend" data-toggle="tooltip" data-placement="top"
     title="OSL: Optically Stimulated Luminescence, TCN: Terrestrial Cosmogenic Nucleotide, C14: Carbon 14"></div></a>
-
-
-    {% if user.is_authenticated %}
-    <div id="drawinglabel">Marker Selection Tool</div>
-    <button type="button" class="btn-warning" id="delshape">Clear</button>
-    <button type="button" class="btn-success" id="viewsamples">View Samples</button>
-    {% endif %}
 
     <form id="markers_form" method="post" action="">
 
@@ -24,26 +17,29 @@
     </form>
 
         <button type="button" class="btn btn-info" id="agedialogue">Open Age Filter</button>
-</div>
+
 
     <div id="dialog" title="Age Filter">
 <p>Enter an age range to filter samples</p>
-    <div class="col-md-9">
+    <div class="filterages">
+    <div class="col-md-5 col-xs-6">
             <div class="form-group">
-                <label class="control-label" for="startagefilter">Calendar Age Range</label>
                 <input type="text" class="form-control narrow" id="startagefilter" placeholder="Start">
             </div>
         </div>
-      <div class="col-md-1">
-            <div class="form-group">
+                <div class="col-md-4">
              <input type="text" class="form-control narrow" id="endagefilter" placeholder="Finish">
             </div>
-        </div><br />
-            <div class="filterbuttons">
+</div>
+        <br />
+            <div class="col-md-11 col-xs-11" id="filterbuttoncol">
             <button type="button" class="btn-success btn-sm" id="filterbutton">Filter</button>
+                {% if user.is_authenticated %}
             <button type="button" class="btn-primary btn-sm" id="viewastable">View As Table</button>
+                {% endif %}
+
 </div>
-</div>
+    </div>
 
 {% endblock %}
 

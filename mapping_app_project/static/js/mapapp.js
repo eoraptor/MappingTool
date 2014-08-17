@@ -122,25 +122,6 @@ $(document).ready(function(){
 });
 
 
-$(document).ready(function(){
-    $(function() {
-$("#dialog").dialog({
-               autoOpen: false
-            });
-});
-});
-
-$('#agedialogue').click(function() {
-    $("#dialog").dialog("open");
-});
-
-
-
-
-
-
-
-
 $('#id_main-sites').change(function() {
     var selected = $('#id_main-sites option:selected').val();
     $('#id_hidden-site_name').val(selected);

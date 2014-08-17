@@ -63,6 +63,11 @@
                 {% endif %}
                 {%  endif %}
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li id="nv"><a href="#">About</a></li>
+                <li id="nv"><a href="#">Contact</a></li>
+            </ul>
+
 
             {% if not user.is_authenticated %}
 
@@ -85,6 +90,7 @@
                         </form>
                     {% endblock login %}
             {% else %}
+
                 <div class="navbar-header navbar-right">
                     <a href="/mappingapp/logout/"><button type="submit" class="btn btn-success navbar-btn" id="logoutbutton">Logout</button></a>
                 </div>
