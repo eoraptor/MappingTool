@@ -14,9 +14,16 @@ var $table;
 $(document).ready(function(){
     $('#savebutton').hide();
 
-    if ($('#site_option').text() == 'None') {
+    var site_name = $('#site_option').text();
+
+    if (site_name == 'None') {
         $('#modalbutton1').attr("disabled", true);
+    }else{
+        $('#id_main-sites').val(site_name);
     }
+
+    $('#site_selected').text(site_name);
+    $('#id_hidden-site_name').val(site_name);
 
     $('.td').click(function() {
     var text = $(this).text();
@@ -79,16 +86,34 @@ $(document).ready(function(){
         .tablesorterPager({container: $("#pager")});
     });
 
+
+
     $('textarea[name=sample_code]').keyup(function() {
     $('#id_sample_code').text($(this).val());
     });
 
-    var site_name = $('#site_option').text();
-    if (site_name != 'None') {
-        $('#id_main-sites').val(site_name);
-    }
-    $('#site_selected').text(site_name);
-    $('#id_hidden-site_name').val(site_name);
+    // check numerical fields in Edit and Validate pages match expected type
+    // prevent saving if non-numerical
+    function check_number(field, value) {
+
+    if (!jQuery.isNumeric(value) && value != '') {
+        $('#'+field).css("background-color", "#E6760C");
+        $('#validatebutton').attr("disabled", true);
+        $('#editbutton').attr("disabled", true);
+    }else{
+        $('#'+field).css("background", "white");
+        $('#editbutton').attr("disabled", false);
+        $('#validatebutton').attr("disabled", false);
+    }}
+
+    $('textarea[class=noresizenumber]').keyup(function(){
+        var field = this.id;
+        var value = this.value;
+        check_number(field, value);
+    });
+
+
+
 
     // check if TCN spreadsheet has incorrect field names.  Will need similar checks for OSL and C14
     for (var i = 0 ; i < sample_fields.length ; i++) {
@@ -337,7 +362,7 @@ $( "#searchbutton" ).click(function () {
                 "</td><td>"+val.oslUranium+"</td><td>"+val.expcore+"</td><td>"+val.core+"</td><td>"
                 +val.tcnQuartz+"</td><td>"+val.tcnSetting+"</td><td>"+val.tcnMaterial+"</td><td>"+val.tcnBoulder+
                 "</td><td>"+val.tcnStrike+"</td><td>"+val.tcnThickness+"</td><td>"+val.tcnGrain+"</td><td>"+
-                val.tcnLithology+"</td></tr>")
+                val.tcnLithology+"</td><td>"+val.tcnBearInc+"</td></tr>")
         });
     $("table").trigger('update').trigger("appendCache");
     });

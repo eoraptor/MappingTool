@@ -1,0 +1,25 @@
+{% extends 'mappingapp/base.html' %}
+{% load static %}
+
+{% block title %}Contact{% endblock %}
+{% block contact %}<li class="li-active"><a id="activelink" href="/mappingapp/contact">Contact</a></li>{% endblock contact %}
+{% block login %}{% endblock login %}
+
+{% block body_block %}
+<div class="jumbotron" id="standardjumbo">
+<div class="container-fluid">
+<h3>Contact Information</h3>
+    <h4>Email:</h4>
+    {% for user in user_data %}
+        <a href="mailto:{{ user.email }}" target="_top">{{ user.first_name }} {{ user.last_name }}</a>
+    {% endfor %}
+<br />
+<br />
+<h4>Postal Address:</h4>
+
+
+
+</div>
+</div>
+
+{% endblock %}

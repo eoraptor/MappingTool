@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, models
 from django.template import RequestContext
+from django.contrib.auth.models import User, Group
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
@@ -24,6 +25,29 @@ from mappingapp.conversion import get_transect
 
 def is_member(user):
     return user.groups.filter(name='Consortium Super User')
+
+
+def about(request):
+    context = RequestContext(request)
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
+    return render_to_response('mappingapp/about.html', {'is_member':is_member}, context)
+
+
+def contact(request):
+    context = RequestContext(request)
+
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
+    user_list = User.objects.filter(groups__name='Consortium Super User')
+    users = []
+
+    for user in user_list:
+        data = {'email':user.email, 'first_name':user.first_name, 'last_name':user.last_name}
+        users.append(data)
+
+    return render_to_response('mappingapp/contact.html', {'is_member':is_member, 'user_data':users}, context)
+
 
 def markers(request):
     context = RequestContext(request)
@@ -370,6 +394,22 @@ def query(request):
                     tcnThickness = tcn_data.sample_thickness
                     tcnGrain = tcn_data.grain_size
                     tcnLithology = tcn_data.lithology
+                    bearIncList = Sample_Bearing_Inclination.objects.filter(sample_with_bearing=tcn_data)
+                    tcnBearInc = None
+                    data = ''
+                    counter = 1
+                    for item in bearIncList:
+                         values = item.bear_inc
+                         if values is not None:
+                             bearing = values.bearing
+                             inclination = values.inclination
+                             bear = 'B'+str(counter)
+                             inc = 'I'+str(counter)
+                             data += ("(%s: %s, %s: %s), " %(bear, bearing, inc, inclination))
+                             counter += 1
+                    if len(data) != 0:
+                         data = data[0:-2]
+                         tcnBearInc = data
 
                 else:
                     tcnQuartz = None
@@ -381,6 +421,7 @@ def query(request):
                     tcnGrain = None
                     tcnLithology = None
 
+
             else:
                 tcnQuartz = 'N/A'
                 tcnSetting = 'N/A'
@@ -390,6 +431,7 @@ def query(request):
                 tcnThickness = 'N/A'
                 tcnGrain = 'N/A'
                 tcnLithology = 'N/A'
+                tcnBearInc = 'N/A'
 
             data = {'code': sample.sample_code, 'sampletype':type, 'latitude':latitude, 'longitude':longitude,
                     'elevation':elevation, 'site':site, 'notes':sample.sample_notes, 'cal_age':sample.calendar_age,
@@ -402,7 +444,7 @@ def query(request):
             'oslPotassium':oslPotassium, 'oslThorium':oslThorium, 'oslUranium':oslUranium, 'expcore':expcore,
             'core':core, 'tcnQuartz':tcnQuartz, 'tcnSetting':tcnSetting, 'tcnMaterial':tcnMaterial,
             'tcnBoulder':tcnBoulder, 'tcnStrike':tcnStrike, 'tcnThickness':tcnThickness, 'tcnGrain':tcnGrain,
-            'tcnLithology':tcnLithology}
+            'tcnLithology':tcnLithology, 'tcnBearInc':tcnBearInc}
 
 
             results.append(data)

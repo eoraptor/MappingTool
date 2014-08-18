@@ -49,6 +49,27 @@ var newShape;
         }
 
 
+function getCoordinates() {
+
+           coordinates = (selectedShape.getPath().getArray());
+
+            var poly = new google.maps.Polygon ({
+                paths: coordinates
+            });
+            var in_bounds = [];
+
+            for (var i = 0; i < markers.length; i++) {
+                if (google.maps.geometry.poly.containsLocation(markers[i].position, poly)) {
+                    in_bounds.push(markers[i].title);
+            }
+           }
+            $('#id_sample_codes').empty().val(in_bounds);
+            if (in_bounds.length > 0) {
+                $('#submit_markers').click();
+            }
+        }
+
+
 var icons = {
     osl: {
         name: 'OSL  ',
@@ -139,25 +160,7 @@ function initialize() {
             });
         });
 
-        function getCoordinates() {
-           coordinates = (selectedShape.getPath().getArray());
 
-            $('#id_sample_codes').empty();
-            var poly = new google.maps.Polygon ({
-                paths: coordinates
-            });
-            var in_bounds = [];
-
-            for (var i = 0; i < markers.length; i++) {
-                if (google.maps.geometry.poly.containsLocation(markers[i].position, poly)) {
-                    in_bounds.push(markers[i].title);
-            }
-           }
-            $('#id_sample_codes').val(in_bounds);
-            if (in_bounds.length > 0) {
-                $('#submit_markers').click();
-            }
-        }
 
 
         var legend = document.getElementById('map-legend');
@@ -198,7 +201,6 @@ function initialize() {
         google.maps.event.addDomListener(document.getElementById("delshape"), 'click', deleteSelectedShape);
         google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
         google.maps.event.addListener(map, 'click', clearSelection);
-        google.maps.event.addDomListener(document.getElementById('viewbutton'), 'click', getCoordinates);
         });
 
         google.maps.event.addDomListener(map, 'idle', function () {
@@ -317,6 +319,8 @@ function MarkerSelectControl(controlDiv, map) {
   viewbutton.innerHTML = 'View Samples';
   viewbutton.style.fontSize = '15px';
   controlDiv.appendChild(viewbutton);
+
+  google.maps.event.addDomListener(viewbutton, 'click', getCoordinates);
 
 }
 

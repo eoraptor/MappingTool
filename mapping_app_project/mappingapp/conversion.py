@@ -33,7 +33,6 @@ def convert_lat_long(coord):
 
         degrees = float(result[:result.index(' ')])
         minutes = float(result[result.rindex(' ')+1:])/60
-        minutes = round(minutes, 5)
         return degrees + minutes
 
 

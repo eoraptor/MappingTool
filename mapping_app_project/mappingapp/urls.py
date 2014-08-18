@@ -18,6 +18,8 @@ urlpatterns = patterns('',
                        url(r'^incrementcounter/$', views.incrementcounter, name='incrementcounter'),
                        url(r'^query/$', views.query, name='query'),
                        url(r'^suggest_code/$', views.suggest_code, name='suggest_code'),
+                       url(r'^contact/$', views.contact, name='contact'),
+                       url(r'^about/$', views.about, name='about'),
                        )
 
 

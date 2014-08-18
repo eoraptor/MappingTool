@@ -64,8 +64,8 @@
                 {%  endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li id="nv"><a href="#">About</a></li>
-                <li id="nv"><a href="#">Contact</a></li>
+                {% block about %}<li id="nv"><a href="/mappingapp/about">About</a></li>{% endblock about %}
+                {% block contact %}<li id="nv"><a href="/mappingapp/contact">Contact</a></li>{% endblock contact %}
             </ul>
 
 

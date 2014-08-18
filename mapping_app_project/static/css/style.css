@@ -44,11 +44,12 @@ body {
 
 
 /* remove resize option on selected text areas */
-.noresize {
+.noresize, .noresizenumber {
     resize: none;
     height: 23px;
     vertical-align: middle;
 }
+
 
 .formlabel {
 	display: block;						/* Force label onto its own line. */
@@ -405,17 +406,14 @@ html {
     margin-right: 35px;
 }
 
-#searchcodechoice {
-    margin-left: 35px;
-}
-
 #end {
     margin-left: -20px;
 }
 
 #endageinput {
     margin-left: -80px;
-    margin-top: 25px
+    margin-top: 25px;
+    margin-right: -55px;
 }
 
 #searchbutton {
@@ -656,4 +654,8 @@ html {
 
 th.tablesorter-header.resizable-false {
   background-color: #e6bf99;
+}
+
+#colortester {
+    background-color: #e6bf99;
 }

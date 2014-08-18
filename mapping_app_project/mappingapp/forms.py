@@ -38,13 +38,13 @@ class EditCoordinatesForm(forms.ModelForm):
     grid_reference = forms.CharField(help_text='Grid Reference', required=False,
                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 15}))
     easting = forms.IntegerField(help_text='Easting', required=False,
-                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                 widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
     northing = forms.IntegerField(help_text='Northing', required=False,
-                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                  widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
     latitude = forms.FloatField(help_text='Latitude', required=False,
-                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
     longitude = forms.FloatField(help_text='Longitude', required=False,
-                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                 widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
     elevation = forms.CharField(help_text='Elevation', required=False,
                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 7}))
 
