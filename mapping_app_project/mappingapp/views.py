@@ -94,7 +94,8 @@ def markers(request):
                     if type is not None:
                         sample_type = 'c14'
 
-                data = {'latitude': sample.sample_coordinates.latitude, 'longitude': sample.sample_coordinates.longitude, 'code': sample.sample_code,
+                data = {'latitude': sample.sample_coordinates.latitude,
+                        'longitude': sample.sample_coordinates.longitude, 'code': sample.sample_code,
                         'type':sample_type, 'age':sample.calendar_age, 'site':site_name}
 
                 samples_with_coordinates.append(data)
@@ -574,9 +575,9 @@ def index(request):
         request.session.modified = True
 
     if 'new_markers' in request.session:
+
         new_markers = request.session['new_markers']
-        del request.session['new_markers']
-        request.session.modified = True
+
 
     if request.method == 'POST':
         form = MarkersForm(request.POST)
@@ -661,7 +662,7 @@ def upload(request):
     context = RequestContext(request)
 
     for k in request.session.keys():
-        if k != u'_auth_user_backend' and k != u'_auth_user_id' and k !=u'files_saved':
+        if k != u'_auth_user_backend' and k != u'_auth_user_id' and k !=u'files_saved' and k != u'new_markers':
             del request.session[k]
 
     files = None
@@ -796,13 +797,10 @@ def validatesample(request):
 
     num_samples = request.session['sample_count']
 
-    sample_list = []
-
     num_bearings = None
     if request.session['counter'] > num_samples:
         del request.session['counter']
         del request.session['sample_count']
-        request.session['new_markers'] = sample_list
         return index(request)
 
     # retrieve objects to populate form fields
@@ -951,7 +949,7 @@ def validatesample(request):
         # foreign key values where required
         if sampForm.is_valid():
 
-            # and tcnForm.is_valid() and samplecoordForm.is_valid() and\
+            # and samplecoordForm.is_valid() and\
             # siteForm.is_valid() and     tranForm.is_valid() and retForm.is_valid():
 
             sample = None
@@ -968,8 +966,6 @@ def validatesample(request):
             if existing is not None:
                 pass
             else:
-                sample_list.append(sample.sample_code)
-
                 sample_coords = samplecoordForm.save()
 
                 transect = tranForm.save()
@@ -989,10 +985,16 @@ def validatesample(request):
                 sample.sample_site = sample_site
                 sample.save()
 
+                marker_list = None
                 if 'new_markers' in request.session:
-                    request.session['new_markers'] = request.session['new_markers'].append(sample.sample_code)
+                    marker_list = request.session['new_markers']
+                    if marker_list is not None:
+                        request.session['new_markers'] = marker_list + ',' + sample.sample_code
+                    else:
+                        request.session['new_markers'] = sample.sample_code
                 else:
-                    request.session['new_markers'] = [sample.sample_code]
+                    request.session['new_markers'] = sample.sample_code
+
 
                 if sample_type == 'OSL' or sample_type == 'C14':
                     core = coreForm.save()
@@ -1013,6 +1015,7 @@ def validatesample(request):
                     tcn = tcnForm.save(commit=False)
                     tcn.tcn_sample = sample
                     tcn.save()
+
 
                     for form in bearingsFormSet.forms:
                         bear_inc = form.save()

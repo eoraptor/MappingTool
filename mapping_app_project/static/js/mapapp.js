@@ -13,8 +13,102 @@ var $table;
 var error_count = 0;
 var form_errors = [];
 
+// check numerical fields in Edit and Validate pages match expected type
+// prevent saving if non-numerical
+function check_number(field, value) {
+
+    if (!jQuery.isNumeric(value) && value != '') {
+        var found = false;
+        for (var i = 0; i < form_errors.length; i++){
+            if (field == form_errors[i]){
+                found = true;
+            }
+        }if (!found){
+            form_errors.push(field);
+        }
+        $('#'+field).css("background-color", "#E6760C");
+        $('#validatebutton').attr("disabled", true);
+        $('#editbutton').attr("disabled", true);
+        if (field.indexOf('site') != -1){
+            $('#savebutton').attr("disabled", true);
+        }
+
+
+    }else if(jQuery.isNumeric(value) || value == ''){
+        for (var i = 0; i < form_errors.length; i++) {
+            if (field === form_errors[i]) {
+                removed = form_errors.splice(i, 1);
+            }
+        }
+        $('#'+field).css("background", "white");
+        if (form_errors.length == 0) {
+            $('#editbutton').attr("disabled", false);
+            $('#validatebutton').attr("disabled", false);
+            $('#savebutton').attr("disabled", false);
+        }else {
+            var site_errors = false;
+            for (var i = 0; i < form_errors.length; i++) {
+                var field = form_errors[i];
+                if (field.indexOf('site') != -1) {
+                    site_errors = true;
+            }
+        }
+            if (site_errors == false){
+                $('#savebutton').attr("disabled", false);
+            }
+    }}}
+
+
+// Populate and open the field error dialogue on Validate and Edit sample pages
+function openerrordialogue() {
+        var insert = '<ul>';
+        for (var i=0; i<form_errors.length; i++){
+            var field = form_errors[i];
+            if (field.indexOf('sample-latitude') != -1){
+                field = 'Sample Latitude';
+            }else if (field.indexOf('sample-longitude') != -1){
+                field = 'Sample Longitude';
+            }else if (field.indexOf('sample-easting') != -1){
+                field = 'Sample Easting';
+            }else if (field.indexOf('sample-northing') != -1){
+                field = 'Sample Northing';
+            }else if (field.indexOf('calendar_age') != -1){
+                field = 'Calendar Age';
+            }else if (field.indexOf('calendar_error') != -1){
+                field = 'Calendar Error';
+            }else if (field.indexOf('age_error') != -1){
+                field = 'Sample Age Error';
+            }else if (field.indexOf('age') != -1) {
+                field = 'Sample Age';
+            }else if (field.indexOf('site-latitude') != -1){
+                field = 'Site Latitude';
+            }else if (field.indexOf('site-longitude') != -1){
+                field = 'Site Longitude';
+            }else if (field.indexOf('site-easting') != -1){
+                field = 'Site Easting';
+            }else if (field.indexOf('site-northing') != -1) {
+                field = 'Site Northing';
+            }
+            insert = insert + '<li>'+ field + '</li>'
+        }
+        if (insert != '<ul>'){
+        insert = insert + '</ul>These fields must contain numerical values';
+        }else{
+            insert = insert + 'None' + '</ul>'
+        }
+
+        $('#errorfields').html(insert);
+        $("#errordialog").dialog("open");
+        }
+
 $(document).ready(function(){
     $('#savebutton').hide();
+
+    $("#errordialog").dialog({
+               autoOpen: false
+            });
+
+    $('#errorbutton').click(openerrordialogue);
 
     var site_name = $('#site_option').text();
 
@@ -94,25 +188,7 @@ $(document).ready(function(){
     $('#id_sample_code').text($(this).val());
     });
 
-    // check numerical fields in Edit and Validate pages match expected type
-    // prevent saving if non-numerical
-    function check_number(field, value) {
 
-    if (!jQuery.isNumeric(value) && value != '') {
-        error_count ++;
-        form_errors.push(field);
-        alert(form_errors);
-        $('#'+field).css("background-color", "#E6760C");
-        $('#validatebutton').attr("disabled", true);
-        $('#editbutton').attr("disabled", true);
-    }else{
-        error_count --;
-        form_errors.pop(field);
-        $('#'+field).css("background", "white");
-        if (error_count == 0) {
-        $('#editbutton').attr("disabled", false);
-        $('#validatebutton').attr("disabled", false);
-    }}}
 
     $('textarea[class=noresizenumber]').keyup(function(){
         var field = this.id;

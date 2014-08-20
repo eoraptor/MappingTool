@@ -33,15 +33,18 @@ var newShape;
         var marker;
         var new_markers = $('#new_markers').text();
         new_markers = new_markers.split(",");
-
+        marker_code_list = [];
         for (var i=0 ; i < markers.length; i++){
             marker = markers[i];
             marker.setMap(null);
             }
         for (var i=0 ; i < new_markers.length; i++){
+            compare_code = new_markers[i].replace(/\s+/g, '');
             for (var j=0 ; j < markers.length; j++){
             marker = markers[j];
-            if (marker.title === new_markers[i]){
+            marker_code = marker.code.replace(/\s+/g, '');
+            marker_code_list.push(marker_code);
+            if (marker_code === compare_code){
             marker.setMap(map);
             }
             }
@@ -261,7 +264,6 @@ function initialize() {
                     'age':val.age, 'site':val.site};
                 marker_data.push(sample_data);
             });
-
         var marker;
         for (var i = 0; i < marker_data.length; i++) {
             sample_data = marker_data[i];
@@ -270,6 +272,7 @@ function initialize() {
                 map: map,
                 type: sample_data['type'].toUpperCase(),
                 age: sample_data['age'],
+                code: sample_data['code'],
                 site: sample_data['site'],
                 icon: mapicons[sample_data['type']],
                 title: sample_data['code']
@@ -295,6 +298,7 @@ function initialize() {
 
             })(i, marker);
         }
+
 
     })();
 
@@ -412,7 +416,6 @@ function MarkerFilterButton(controlDiv, map) {
 
     google.maps.event.addDomListener(markerfilter, 'click', opendialogue);
 }
-
 
 function NewMarkerButton(controlDiv, map) {
 
