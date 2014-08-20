@@ -92,12 +92,26 @@ function getCoordinates() {
                     in_bounds.push(markers[i].title);
             }
            }
-            $('#id_sample_codes').empty().val(in_bounds);
             if (in_bounds.length > 0) {
+                $('#id_sample_codes').empty().val(in_bounds);
                 $('#submit_markers').click();
             }
         }
 
+
+function view_as_table(){
+    var visible_markers = [];
+    for (var i=0; i < markers.length ; i++) {
+        var marker = markers[i];
+        if (marker.getMap() != null){
+            visible_markers.push(marker.title);
+        }
+    }
+    if (visible_markers.length > 0) {
+        $('#id_sample_codes').empty().val(visible_markers);
+        $('#submit_markers').click();
+    }
+}
 
 var icons = {
     osl: {
@@ -313,6 +327,13 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 var filterbutton = document.getElementById("filterbutton");
 filterbutton.addEventListener("click", markeragefilter, false);
+
+var resetbutton = document.getElementById("resetbutton");
+resetbutton.addEventListener("click", view_all_samples, false);
+
+var tablebutton = document.getElementById("viewastable");
+tablebutton.addEventListener("click", view_as_table, false);
+
 
 var make_icons = function() {
     mapicons['tcn'] = new google.maps.MarkerImage(

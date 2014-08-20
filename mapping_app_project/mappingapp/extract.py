@@ -149,18 +149,30 @@ def get_site_info(site_sheet, type):
                 site_date = convert_date(date)
 
     if site_northing is not None:
-        site_northing = int(site_northing)
+        try:
+            site_northing = int(site_northing)
+        except:
+            site_northing = None
 
     if site_easting is not None:
-        site_easting = int(site_easting)
+        try:
+            site_easting = int(site_easting)
+        except:
+            site_easting = None
 
     if site_latitude is not None and not isinstance(site_latitude, float):
             site_latitude = convert_lat_long(site_latitude)
+            if not isinstance(site_longitude, float):
+                site_longitude = None
 
     if site_longitude is not None and not isinstance(site_longitude, float):
             site_longitude = convert_lat_long(site_longitude)
             if isinstance(site_longitude, float):
                 site_longitude = -1 * site_longitude
+            else:
+                site_longitude = None
+
+
 
     site_coordinates = None
     site = None

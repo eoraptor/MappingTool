@@ -159,9 +159,9 @@ legend.fieldsets.top {
 }
 
 button.btn-xl {
-    padding: 18px 38px;
     width: 110px;
-    font-size: 22px;
+    height: 60px;
+    font-size: 18px;
     border-radius: 8px;
     margin-bottom: 10px;
 }

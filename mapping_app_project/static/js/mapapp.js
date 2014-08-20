@@ -13,10 +13,11 @@ var $table;
 var error_count = 0;
 var form_errors = [];
 
+
 // check numerical fields in Edit and Validate pages match expected type
 // prevent saving if non-numerical
 function check_number(field, value) {
-
+    var background = $('#id_dating_priority').attr('color');
     if (!jQuery.isNumeric(value) && value != '') {
         var found = false;
         for (var i = 0; i < form_errors.length; i++){
@@ -40,7 +41,7 @@ function check_number(field, value) {
                 removed = form_errors.splice(i, 1);
             }
         }
-        $('#'+field).css("background", "white");
+        $('#'+field).css("background-color", "");
         if (form_errors.length == 0) {
             $('#editbutton').attr("disabled", false);
             $('#validatebutton').attr("disabled", false);
@@ -48,8 +49,7 @@ function check_number(field, value) {
         }else {
             var site_errors = false;
             for (var i = 0; i < form_errors.length; i++) {
-                var field = form_errors[i];
-                if (field.indexOf('site') != -1) {
+                if (form_errors[i].indexOf('site') != -1) {
                     site_errors = true;
             }
         }
@@ -65,38 +65,37 @@ function openerrordialogue() {
         for (var i=0; i<form_errors.length; i++){
             var field = form_errors[i];
             if (field.indexOf('sample-latitude') != -1){
-                field = 'Sample Latitude';
+                field = 'Sample Latitude - field must be numerical';
             }else if (field.indexOf('sample-longitude') != -1){
-                field = 'Sample Longitude';
+                field = 'Sample Longitude - field must be numerical';
             }else if (field.indexOf('sample-easting') != -1){
-                field = 'Sample Easting';
+                field = 'Sample Easting - field must be numerical';
             }else if (field.indexOf('sample-northing') != -1){
-                field = 'Sample Northing';
+                field = 'Sample Northing - field must be numerical';
             }else if (field.indexOf('calendar_age') != -1){
-                field = 'Calendar Age';
+                field = 'Calendar Age - field must be numerical';
             }else if (field.indexOf('calendar_error') != -1){
-                field = 'Calendar Error';
+                field = 'Calendar Error - field must be numerical';
             }else if (field.indexOf('age_error') != -1){
-                field = 'Sample Age Error';
+                field = 'Sample Age Error - field must be numerical';
             }else if (field.indexOf('age') != -1) {
-                field = 'Sample Age';
+                field = 'Sample Age - field must be numerical';
             }else if (field.indexOf('site-latitude') != -1){
-                field = 'Site Latitude';
+                field = 'Site Latitude - field must be numerical';
             }else if (field.indexOf('site-longitude') != -1){
-                field = 'Site Longitude';
+                field = 'Site Longitude - field must be numerical';
             }else if (field.indexOf('site-easting') != -1){
-                field = 'Site Easting';
+                field = 'Site Easting - field must be numerical';
             }else if (field.indexOf('site-northing') != -1) {
-                field = 'Site Northing';
+                field = 'Site Northing - field must be numerical';
+            }else{
+                field = 'Sample Code - field must be unique';
             }
             insert = insert + '<li>'+ field + '</li>'
         }
-        if (insert != '<ul>'){
-        insert = insert + '</ul>These fields must contain numerical values';
-        }else{
-            insert = insert + 'None' + '</ul>'
-        }
-
+        if (insert == '<ul>'){
+            insert = insert + 'None</ul>'
+            }
         $('#errorfields').html(insert);
         $("#errordialog").dialog("open");
         }
@@ -107,6 +106,24 @@ $(document).ready(function(){
     $("#errordialog").dialog({
                autoOpen: false
             });
+
+    $('textarea[class=noresizenumber]').each(function(){
+        var field = this.id;
+        var value = this.value;
+        check_number(field, value);
+    });
+
+    $('#id_file').change(function(){
+    var filename = $('#id_file').val();
+    var fileparts = filename.split('.');
+    var filetype = fileparts[fileparts.length - 1];
+    if (filetype != 'xlsx'){
+        $('#uploadbutton').attr('disabled', true);
+        alert('Files must be of type .xlsx');
+    }else{
+        $('#uploadbutton').attr('disabled', false)
+    }
+    });
 
     $('#errorbutton').click(openerrordialogue);
 
@@ -227,12 +244,15 @@ $(document).ready(function(){
                 if (response == true) {
                     $('#id_sample_code').css("background", '#FF7F50');
                     $('#validatebutton').attr("disabled", true);
-                    alert('Sample Code already exists.');
+                    form_errors.push(sample);
                 }
-
-            });
+           });
         });
+    }else{
+        $('#id_sample_code').attr('disabled', true);
     }
+
+
     if ($('#marker_codes').text() != 'None') {
         var sample_codes = $('#marker_codes').text().slice(0,-1);
         $('#searchcode').val(sample_codes);
