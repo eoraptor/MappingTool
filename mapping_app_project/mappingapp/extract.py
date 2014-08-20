@@ -154,13 +154,13 @@ def get_site_info(site_sheet, type):
     if site_easting is not None:
         site_easting = int(site_easting)
 
-    if site_latitude is not None:
-        if not isinstance(site_latitude, float):
+    if site_latitude is not None and not isinstance(site_latitude, float):
             site_latitude = convert_lat_long(site_latitude)
 
-    if site_longitude is not None:
-        if not isinstance(site_longitude, float):
-            site_longitude = -1 * convert_lat_long(site_longitude)
+    if site_longitude is not None and not isinstance(site_longitude, float):
+            site_longitude = convert_lat_long(site_longitude)
+            if isinstance(site_longitude, float):
+                site_longitude = -1 * site_longitude
 
     site_coordinates = None
     site = None

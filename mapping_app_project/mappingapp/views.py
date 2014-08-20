@@ -567,8 +567,15 @@ def index(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
+    new_markers = None
+
     if 'markers' in request.session:
         del request.session['markers']
+        request.session.modified = True
+
+    if 'new_markers' in request.session:
+        new_markers = request.session['new_markers']
+        del request.session['new_markers']
         request.session.modified = True
 
     if request.method == 'POST':
@@ -584,7 +591,8 @@ def index(request):
     else:
         form = MarkersForm()
 
-    return render_to_response('mappingapp/index.html', {'form':form, 'is_member':is_member}, context)
+    return render_to_response('mappingapp/index.html', {'form':form, 'is_member':is_member, 'new_markers':new_markers},
+                              context)
 
 
 # helper function - remove from views and import!
@@ -788,10 +796,13 @@ def validatesample(request):
 
     num_samples = request.session['sample_count']
 
+    sample_list = []
+
     num_bearings = None
     if request.session['counter'] > num_samples:
         del request.session['counter']
         del request.session['sample_count']
+        request.session['new_markers'] = sample_list
         return index(request)
 
     # retrieve objects to populate form fields
@@ -957,6 +968,7 @@ def validatesample(request):
             if existing is not None:
                 pass
             else:
+                sample_list.append(sample.sample_code)
 
                 sample_coords = samplecoordForm.save()
 
@@ -976,6 +988,11 @@ def validatesample(request):
                 sample.sample_coordinates = sample_coords
                 sample.sample_site = sample_site
                 sample.save()
+
+                if 'new_markers' in request.session:
+                    request.session['new_markers'] = request.session['new_markers'].append(sample.sample_code)
+                else:
+                    request.session['new_markers'] = [sample.sample_code]
 
                 if sample_type == 'OSL' or sample_type == 'C14':
                     core = coreForm.save()

@@ -87,7 +87,7 @@ class EditSampleForm(forms.ModelForm):
                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 24}))
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False,
                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 56}))
-    collection_date = forms.DateField(help_text='Collection Date', input_formats=['%m/%d/%Y', '%d/%m/%Y'], required=False,
+    collection_date = forms.DateField(help_text='Collection Date', input_formats=['%d/%m/%Y'], required=False,
                                       widget=forms.DateInput(format='%d/%m/%Y', attrs={'size':10}))
     collector = forms.CharField(help_text='Collector(s)', required=False,
                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 32}))
@@ -96,13 +96,13 @@ class EditSampleForm(forms.ModelForm):
     dating_priority = forms.CharField(help_text='Dating Priority', required=False,
                                       widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 6}))
     age = forms.IntegerField(help_text='Sample Age', required=False,
-                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                             widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
     age_error = forms.IntegerField(help_text='Age Error', required=False,
-                                   widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                   widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
     calendar_age = forms.IntegerField(help_text='Calendar Age', required=False,
-                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                      widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
     calendar_error = forms.IntegerField(help_text='Calendar Error', required=False,
-                                        widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                        widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
     lab_code = forms.CharField(help_text='Lab Code', required=False,
                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
     sample_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
@@ -145,8 +145,8 @@ class EditSampleSiteForm(forms.ModelForm):
                                     widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
     county = forms.CharField(help_text='County', required=False,
                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
-    site_date = forms.DateField(help_text='Date', required=False,
-                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+    site_date = forms.DateField(help_text='Date', input_formats=['%d/%m/%Y'], required=False,
+                                      widget=forms.DateInput(format='%d/%m/%Y', attrs={'size':10}))
     operator = forms.CharField(help_text='Operator', required=False,
                                widget=forms.Textarea(attrs={'rows': 2, 'cols': 20}))
     geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False,

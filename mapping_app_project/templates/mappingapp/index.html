@@ -2,7 +2,9 @@
 {% load static %}
 {% block home %}<li class="li-active"><a id="activelink" href="/mappingapp/">Home</a></li>{% endblock home %}
 {% block body_block %}
-
+{% if is_member %}
+               <div class="hidden" id="new_markers">{% for marker in new_markers %}{{ marker }}{% endfor %}</div>
+                {% endif %}
     <div id="map-canvas"></div>
     <a href="#"><div id="map-legend" data-toggle="tooltip" data-placement="top"
     title="OSL: Optically Stimulated Luminescence, TCN: Terrestrial Cosmogenic Nucleotide, C14: Carbon 14"></div></a>

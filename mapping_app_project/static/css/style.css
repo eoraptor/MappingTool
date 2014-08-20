@@ -41,7 +41,9 @@ body {
 
 /* end map drawing tools*/
 
-
+#ui-datepicker-div {
+    z-index: 999999 !important;
+}
 
 /* remove resize option on selected text areas */
 .noresize, .noresizenumber {

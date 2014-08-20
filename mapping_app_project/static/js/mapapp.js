@@ -10,6 +10,8 @@ var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_
 '#id_sample-elevation', '#id_sample-bng_ing'];
 
 var $table;
+var error_count = 0;
+var form_errors = [];
 
 $(document).ready(function(){
     $('#savebutton').hide();
@@ -97,20 +99,37 @@ $(document).ready(function(){
     function check_number(field, value) {
 
     if (!jQuery.isNumeric(value) && value != '') {
+        error_count ++;
+        form_errors.push(field);
+        alert(form_errors);
         $('#'+field).css("background-color", "#E6760C");
         $('#validatebutton').attr("disabled", true);
         $('#editbutton').attr("disabled", true);
     }else{
+        error_count --;
+        form_errors.pop(field);
         $('#'+field).css("background", "white");
+        if (error_count == 0) {
         $('#editbutton').attr("disabled", false);
         $('#validatebutton').attr("disabled", false);
-    }}
+    }}}
 
     $('textarea[class=noresizenumber]').keyup(function(){
         var field = this.id;
         var value = this.value;
         check_number(field, value);
     });
+
+
+    // add datepicker to datefield
+     $(function() {
+      $('#id_collection_date').datepicker({dateFormat: 'dd/mm/yy'});
+});
+
+     $(function() {
+    $('#id_site_date').datepicker({dateFormat: 'dd/mm/yy'});
+});
+
 
 
 
@@ -218,6 +237,7 @@ $('#modalbutton2').click(function(){
     $('#id_fill-sites').val('');
     $('.site-info').css('visibility','visible');
     $('.sitech').css('visibility','visible');
+    $("#ui-datepicker-div").css("z-index", "9999 !important");
 
  });
 

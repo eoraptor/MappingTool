@@ -148,13 +148,14 @@ def get_tcn_sample_info(sample_sheet, sample_count):
             sample_date = sample_date.strftime("%d/%m/%Y")
 
     # convert latitude and longitude if format incorrect
-    if latitude is not None:
-        if not isinstance(latitude, float):
-            latitude = convert_lat_long(latitude)
+    if latitude is not None and not isinstance(latitude, float):
+        latitude = convert_lat_long(latitude)
 
-    if longitude is not None:
-        if not isinstance(longitude, float):
-            longitude = -1 * convert_lat_long(longitude)
+    if longitude is not None and not isinstance(longitude, float):
+        longitude = convert_lat_long(longitude)
+        if isinstance(longitude, float):
+            longitude = -1 * longitude
+
 
     counter = str(sample_count)
 
