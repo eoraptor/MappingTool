@@ -11,10 +11,6 @@ body {
     margin-top: 9px;
 }
 
-.x {
-    position: relative;
-}
-
 #map-legend {
     font-family: "Century Schoolbook", sans-serif, 5px;
     background: #ffffff;

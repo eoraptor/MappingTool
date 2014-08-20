@@ -632,7 +632,6 @@ def suggest_code(request):
 
 
 @login_required
-@user_passes_test(is_member)
 def search(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
@@ -1203,12 +1202,13 @@ def editsample(request):
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
-        if sampleForm.is_valid():
+        if siteForm.is_valid():
         # if siteForm.is_valid() and sampleForm.is_valid() and tcnForm.is_valid() and samplecoordForm.is_valid() and\
         #         tranForm.is_valid() and retForm.is_valid():
 
 
             sample = sampleForm.save(commit=False)
+
             sample_coordinates = samplecoordForm.save()
             site_name = hiddensiteForm.save()
             sample_site = None

@@ -2,7 +2,7 @@
 {% load static %}
 {% block home %}<li class="li-active"><a id="activelink" href="/mappingapp/">Home</a></li>{% endblock home %}
 {% block body_block %}
-{% if is_member %}
+                {% if is_member %}
                <div class="hidden" id="new_markers">{% for marker in new_markers %}{{ marker }}{% endfor %}</div>
                 {% endif %}
     <div id="map-canvas"></div>
@@ -19,27 +19,26 @@
     </form>
 
     <div id="dialog" title="Age Filter">
-<p>Enter an age range to filter samples</p>
-    <div class="filterages">
-    <div class="col-md-5 col-xs-6">
-            <div class="form-group">
-                <input type="text" class="form-control narrow" id="startagefilter" placeholder="Start" title="Older Limit">
+        <p>Enter an age range to filter samples</p>
+        <div class="filterages">
+            <div class="col-md-5 col-xs-6">
+                <div class="form-group">
+                    <input type="text" class="form-control narrow" id="startagefilter" placeholder="Start" title="Older Limit">
+                </div>
             </div>
-        </div>
-                <div class="col-md-4">
-             <input type="text" class="form-control narrow" id="endagefilter" placeholder="Finish" title="Newer Limit">
+            <div class="col-md-4">
+                <input type="text" class="form-control narrow" id="endagefilter" placeholder="Finish" title="Newer Limit">
             </div>
-</div>
-        <br />
-            <div class="col-md-11 col-xs-11" id="filterbuttoncol">
+        </div><br />
+        <div class="col-md-11 col-xs-11" id="filterbuttoncol">
             <button type="button" class="btn-success btn-sm" id="filterbutton" title="Show samples within inclusive age range">Filter</button>
             <button type="button" class="btn-warning btn-sm" id="resetbutton" title="Show all">Reset</button>
                 {% if user.is_authenticated %}
             <button type="button" class="btn-primary btn-sm" id="viewastable" title="Click to view results as a table">Table</button>
                 {% endif %}
-
-</div>
+        </div>
     </div>
+
 
 {% endblock %}
 

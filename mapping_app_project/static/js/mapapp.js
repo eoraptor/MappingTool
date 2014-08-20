@@ -248,8 +248,6 @@ $(document).ready(function(){
                 }
            });
         });
-    }else{
-        $('#id_sample_code').attr('disabled', true);
     }
 
 

@@ -66,13 +66,15 @@ var newShape;
        // filter markers based on age
         function markeragefilter() {
             var start = $('#startagefilter').val();
+            alert(start);
             var end = $('#endagefilter').val();
-
 
             for (var i = 0; i < markers.length; i++) {
                 var marker = markers[i];
-                if ((marker.age > start && marker.age < end) || marker.age == null) {
+                if ((marker.age > start || marker.age < end) || marker.age == null) {
                     marker.setMap(null);
+                }else{
+                    marker.setMap(map);
                 }
             }
         }
@@ -332,7 +334,10 @@ var resetbutton = document.getElementById("resetbutton");
 resetbutton.addEventListener("click", view_all_samples, false);
 
 var tablebutton = document.getElementById("viewastable");
-tablebutton.addEventListener("click", view_as_table, false);
+if (tablebutton != null) {
+    tablebutton.addEventListener("click", view_as_table, false);
+}
+
 
 
 var make_icons = function() {
