@@ -655,6 +655,14 @@ th.tablesorter-header.resizable-false {
   background-color: #e6bf99;
 }
 
-#colortester {
-    background-color: #e6bf99;
+#errorfields, #fileerrors {
+    background-color: white;
+}
+
+#sample_counter {
+    color: red;
+}
+
+#total_counter {
+    color: #000000;
 }

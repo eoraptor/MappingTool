@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from openpyxl import load_workbook
 from mappingapp.conversion import convert_date, convert_lat_long
+import datetime
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
             'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -40,6 +41,7 @@ def get_C14_cell_positions(ws):
 # extract the data from a tcn sample sheet
 def get_C14_sample_info(sample_sheet, sample_count):
     positions = get_C14_cell_positions(sample_sheet)
+    errors = []
 
     sample_date = sample_sheet[positions['Date: ']].value
     sample_location_name = sample_sheet[positions['Location:']].value
@@ -71,17 +73,50 @@ def get_C14_sample_info(sample_sheet, sample_count):
     # convert date if format incorrect
     if sample_date is not None:
         date = str(sample_date)
+        if ' 00:00:00' in date:
+             date = date.replace(' 00:00:00', '')
         if '.' in date:
             sample_date = convert_date(date)
+            if sample_date == 'Error':
+                sample_date = None
+                errors.append('Sample Date')
+                pass
+        else:
+             try:
+                date = datetime.datetime.strptime(date, '%Y-%m-%d')
+                sample_date = date.strftime('%d/%m/%Y')
+             except:
+                sample_date = None
+                errors.append('Sample Date')
 
     # convert latitude and longitude if format incorrect
     if latitude is not None and not isinstance(latitude, float):
-            latitude = convert_lat_long(latitude)
+        latitude = convert_lat_long(latitude)
+        if latitude == 'Error':
+            errors.append('Sample latitude')
+            latitude = None
 
     if longitude is not None and not isinstance(longitude, float):
-            longitude = convert_lat_long(longitude)
-            if isinstance(longitude, float):
-                longitude = -1 * longitude
+        longitude = convert_lat_long(longitude)
+        if longitude == 'Error':
+            errors.append('Sample longitude')
+            longitude = None
+        else:
+            longitude = -1 * longitude
+
+    if sample_easting is not None:
+        try:
+            sample_easting = int(sample_easting)
+        except:
+            errors.append('Sample Easting')
+            sample_easting = None
+
+    if sample_northing is not None:
+        try:
+            sample_northing = int(sample_northing)
+        except:
+            errors.append('Sample Northing')
+            sample_northing = None
 
     # add T to transect if missing
     if transect is not None:
@@ -97,8 +132,8 @@ def get_C14_sample_info(sample_sheet, sample_count):
                       'sample_easting'+counter:sample_easting, 'sample_northing'+counter:sample_northing,
                       'sample_latitude'+counter:latitude, 'sample_longitude'+counter:longitude,
                       'sample_elevation'+counter:elevation, 'grid_reference'+counter:grid,
-                      'sample_code'+counter:sample_code,
-                      'sample_location_name'+counter:sample_location_name, 'sample_date'+counter:None,
+                      'sample_code'+counter:sample_code, 'errors'+counter:errors,
+                      'sample_location_name'+counter:sample_location_name, 'sample_date'+counter:sample_date,
                       'collector'+counter:collector, 'sample_notes'+counter:notes, 'transect'+counter:transect,
                       'exposure_core'+counter:exposure_core, 'core_number'+counter:core_number,
                       'position'+counter:position, 'depth'+counter:depth,

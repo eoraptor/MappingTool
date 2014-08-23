@@ -30,7 +30,7 @@
     <div class="col-md-6" id="agecol">
 
         <div class="panel panel-danger" id="summarypanel">
-            <div class="panel-heading"><h4>Sample Code Conflicts</h4></div>
+            <div class="panel-heading"><h4>File Errors</h4></div>
                 <ul class="list-group">
                     {% if not samples_unique %}
                         <li class="list-group-item"><h4>
@@ -45,6 +45,17 @@
                                 <li>{{ sample }}</li>
                             {% endfor %}
                         </ul>
+                        </li>
+                    {% endif %}
+                    {% if errors %}
+                        <li class="list-group-item"><h4>
+                        <span class="glyphicon glyphicon-warning-sign"></span>  Fields not imported (type errors):<h5>Lat/Long values will be taken from site, other fields are left blank.  These can be entered manually on the next page.</h5></h4>
+                    <ul>
+                    {% for sample, error in errors %}
+
+                    <li><b>Sample: </b>{{ sample }}, <b>Field:</b> {{ error }}</li>
+                    {% endfor %}
+                    </ul>
                         </li>
                     {% endif %}
                     {% if samples_unique and not existing %}

@@ -36,6 +36,7 @@ def get_osl_cell_positions(ws):
 # extract the data from a tcn sample sheet
 def get_osl_sample_info(sample_sheet, sample_count):
     positions = get_osl_cell_positions(sample_sheet)
+    errors = []
 
     sample_date = sample_sheet[positions['Date: ']].value
     sample_location_name = sample_sheet[positions['Location:']].value
@@ -67,30 +68,43 @@ def get_osl_sample_info(sample_sheet, sample_count):
         notes = notes.replace('\n', ' ')
         notes = ' '.join(notes.split())
 
-    # convert date if format incorrect
+   # convert date if format incorrect
     if sample_date is not None:
         date = str(sample_date)
+        if ' 00:00:00' in date:
+             date = date.replace(' 00:00:00', '')
         if '.' in date:
             sample_date = convert_date(date)
+            if sample_date == 'Error':
+                sample_date = None
+                errors.append('Sample Date')
+                pass
+        else:
+             try:
+                date = datetime.datetime.strptime(date, '%Y-%m-%d')
+                sample_date = date.strftime('%d/%m/%Y')
+             except:
+                sample_date = None
+                errors.append('Sample Date')
 
     # convert latitude and longitude if format incorrect
     if latitude is not None and not isinstance(latitude, float):
         latitude = convert_lat_long(latitude)
+        if latitude == 'Error':
+            errors.append('Sample latitude')
+            latitude = None
 
     if longitude is not None and not isinstance(longitude, float):
         longitude = convert_lat_long(longitude)
-        if isinstance(longitude, float):
+        if longitude == 'Error':
+            errors.append('Sample longitude')
+            longitude = None
+        else:
             longitude = -1 * longitude
+
 
     counter = str(sample_count)
 
-    # convert date if format incorrect
-    if sample_date is not None:
-        date = str(sample_date)
-        if '.' in date:
-            sample_date = convert_date(date)
-        else:
-            sample_date = sample_date.strftime("%d/%m/%Y")
 
     # convert sample time to string
     if sample_time is not None and isinstance(sample_time, datetime.time):
@@ -112,6 +126,6 @@ def get_osl_sample_info(sample_sheet, sample_count):
                       'sample_duration'+counter:sample_duration, 'potassium'+counter:potassium,
                       'thorium'+counter:thorium, 'uranium'+counter:uranium, 'sample_bng_ing'+counter:None,
                       'sample_easting'+counter:None, 'sample_northing'+counter:None, 'sample_type'+counter:sample_type,
-                      'transect'+counter:None}
+                      'transect'+counter:None, 'errors'+counter:errors}
 
     return sample_details

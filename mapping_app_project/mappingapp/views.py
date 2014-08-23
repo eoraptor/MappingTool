@@ -70,6 +70,8 @@ def markers(request):
                 if sample.sample_site is not None:
 
                     site_name = sample.sample_site.site_name
+                    if site_name is None:
+                        site_name = ''
 
                 try:
                     type = TCN_Sample.objects.get(tcn_sample=sample)
@@ -94,9 +96,13 @@ def markers(request):
                     if type is not None:
                         sample_type = 'c14'
 
+                sample_age = sample.calendar_age
+                if sample_age is None:
+                    sample_age = ''
+
                 data = {'latitude': sample.sample_coordinates.latitude,
                         'longitude': sample.sample_coordinates.longitude, 'code': sample.sample_code,
-                        'type':sample_type, 'age':sample.calendar_age, 'site':site_name}
+                        'type':sample_type, 'age': sample_age, 'site':site_name}
 
                 samples_with_coordinates.append(data)
 
@@ -661,7 +667,7 @@ def upload(request):
     context = RequestContext(request)
 
     for k in request.session.keys():
-        if k != u'_auth_user_backend' and k != u'_auth_user_id' and k !=u'files_saved' and k != u'new_markers':
+        if k != u'_auth_user_backend' and k != u'_auth_user_id' and k !=u'files_saved':
             del request.session[k]
 
     files = None
@@ -726,7 +732,8 @@ def edit(request):
     else:
        selectsampleform = SelectSampleForm()
 
-    return render_to_response('mappingapp/edit.html', {'sample_codes':samplecodelist, 'is_member':is_member, 'selectsampleform':selectsampleform}, context)
+    return render_to_response('mappingapp/edit.html', {'sample_codes':samplecodelist, 'is_member':is_member,
+                                                       'selectsampleform':selectsampleform}, context)
 
 
 @login_required
@@ -749,9 +756,16 @@ def filesummary(request):
     samples_in_db = []
     exist_in_db = False
     samples_seen = set()
+    errors = []
 
     while counter <= sample_count:
-        samples.append(request.session['sample_code'+str(counter)])
+        sample = request.session['sample_code'+str(counter)]
+        samples.append(sample)
+
+        sample_errors = request.session['errors'+str(counter)]
+        if len(sample_errors) != 0:
+            for error in sample_errors:
+                errors.append((sample, error))
         counter += 1
 
     if len(samples) != 0:
@@ -777,7 +791,7 @@ def filesummary(request):
         exist_in_db = True
 
     return render_to_response('mappingapp/filesummary.html',
-                              {'is_member':is_member, 'file_name':file_name,
+                              {'is_member':is_member, 'file_name':file_name, 'errors':errors,
                               'samples':samples, 'count':sample_count, 'samples_unique':samples_unique,
                               'exist_in_db':samples_in_db, 'existing':exist_in_db}, context)
 
@@ -795,6 +809,13 @@ def validatesample(request):
     counter = str(request.session['counter'])
 
     num_samples = request.session['sample_count']
+
+    errors = []
+    sample_errors = request.session['errors'+str(counter)]
+    if len(sample_errors) != 0:
+        for error in sample_errors:
+            errors.append(error)
+
 
     num_bearings = None
     if request.session['counter'] > num_samples:
@@ -1073,7 +1094,7 @@ def validatesample(request):
                                                                  'siteform': siteForm, 'sitecoordform':sitecoordForm,
                                                                  'sampform':sampForm, 'fillsiteform':fillsiteForm,
                                                                  'is_member':is_member,  'retform': retForm,
-                                                                 'sample_type':sample_type,
+                                                                 'sample_type':sample_type, 'errors':errors,
                                                                  'bearingformset':bearingsFormSet,  'tcnform':tcnForm,
                                                                  'oslform':oslForm, 'count':counter,
                                                                  'num_samples':num_samples}, context)

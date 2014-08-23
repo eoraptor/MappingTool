@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from openpyxl import load_workbook
 from mappingapp.conversion import convert_date, convert_lat_long
+import datetime
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
             'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -72,6 +73,7 @@ def get_tcn_cell_positions(ws):
 # extract the data from a tcn sample sheet
 def get_tcn_sample_info(sample_sheet, sample_count):
     positions = get_tcn_cell_positions(sample_sheet)
+    errors = []
 
     sample_date = sample_sheet[positions['Date: ']].value
     sample_location_name = sample_sheet[positions['Location:']].value
@@ -117,16 +119,12 @@ def get_tcn_sample_info(sample_sheet, sample_count):
     # check easting in correct cell
     sample_easting = None
     if sample_sheet[positions['Easting'][0]].value is not None:
-        sample_easting = int(sample_sheet[positions['Easting'][0]].value)
+        sample_easting = sample_sheet[positions['Easting'][0]].value
     elif sample_sheet[positions['Easting'][1]].value is not None and\
         sample_sheet[positions['Easting'][1]].value != 'Transect:':
-            sample_easting = int(sample_sheet[positions['Easting'][1]].value)
+            sample_easting = sample_sheet[positions['Easting'][1]].value
 
-    # make northing of type int
-    if sample_northing is not None:
-        sample_northing = int(sample_northing)
-
-    # check bng in correct cell
+        # check bng in correct cell
     if sample_sheet[positions['BNG or ING'][0]].value is not None:
         bng_ing = sample_sheet[positions['BNG or ING'][0]].value
     elif sample_sheet[positions['BNG or ING'][1]].value is not None:
@@ -139,23 +137,80 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         notes = notes.replace('\n', ' ')
         notes = ' '.join(notes.split())
 
+    # Remove incorrect formats from Bearing & Inclination and add to Notes
+    if bearing is not None:
+        remove_list = []
+        for value in bearing:
+
+            bear = value[0]
+            inc = value[1]
+
+            if not isinstance(bear, int) or not isinstance(inc, int):
+                remove_list.append(value)
+                if notes is not None:
+                    notes = notes + ' ' + str(bear) + ' ' + str(inc) + '. '
+                else:
+                    notes = str(bear) + ' ' + str(inc) + '. '
+
+        for value in remove_list:
+            bearing.remove(value)
+
+        if len(bearing) == 0:
+            bearing = None
+
+
     # convert date if format incorrect
     if sample_date is not None:
         date = str(sample_date)
+        if ' 00:00:00' in date:
+             date = date.replace(' 00:00:00', '')
         if '.' in date:
             sample_date = convert_date(date)
+            if sample_date == 'Error':
+                sample_date = None
+                errors.append('Sample Date')
+                pass
         else:
-            sample_date = sample_date.strftime("%d/%m/%Y")
+             try:
+                date = datetime.datetime.strptime(date, '%Y-%m-%d')
+                sample_date = date.strftime('%d/%m/%Y')
+             except:
+                sample_date = None
+                errors.append('Sample Date')
 
     # convert latitude and longitude if format incorrect
     if latitude is not None and not isinstance(latitude, float):
         latitude = convert_lat_long(latitude)
+        if latitude == 'Error':
+            errors.append('Sample latitude')
+            latitude = None
 
     if longitude is not None and not isinstance(longitude, float):
         longitude = convert_lat_long(longitude)
-        if isinstance(longitude, float):
+        if longitude == 'Error':
+            errors.append('Sample longitude')
+            longitude = None
+        else:
             longitude = -1 * longitude
 
+    if sample_easting is not None:
+        try:
+            sample_easting = int(sample_easting)
+        except:
+            errors.append('Sample Easting')
+            sample_easting = None
+
+    if sample_northing is not None:
+        try:
+            sample_northing = int(sample_northing)
+        except:
+            errors.append('Sample Northing')
+            sample_northing = None
+
+    # add T to transect if missing
+    if transect is not None:
+        if isinstance(transect, (int, float)):
+            transect = 'T'+ str(int(transect))
 
     counter = str(sample_count)
 
@@ -172,7 +227,7 @@ def get_tcn_sample_info(sample_sheet, sample_count):
                       'sampled_material'+counter:material, 'boulder_dimensions'+counter:boulder_dim,
                       'sample_surface_strike_dip'+counter:surface_strike, 'sample_thickness'+counter:thickness,
                       'grain_size'+counter:grain_size, 'lithology'+counter:lithology, 'bearings'+counter:bearing,
-                      'sample_type'+counter:sample_type}
+                      'sample_type'+counter:sample_type, 'errors'+counter: errors}
 
 
     return sample_details
@@ -184,19 +239,22 @@ def get_bearing(sample_sheet, start_cell):
     start = int(start_cell[1:])
 
     bearing = ''
+    counter = 0
+    end = 'Please complete one sample sheet for each sample'
 
-    while bearing != 'Please complete one sample sheet for each sample':
+    while bearing != end and counter < 40:
 
         start_str = str(start)
         bearing = sample_sheet['A' + start_str].value
         inclination = sample_sheet['B' + start_str].value
 
-        if bearing is not None or inclination is not None:
-            if (type(bearing) is str and type(inclination) is str and bearing.isdigit() and inclination.isdigit())\
-                or (type(bearing) is float and type(inclination) is float):
-                    data.append((int(bearing), int(inclination)))
-
+        if bearing is not None and bearing is not end and inclination is not None:
+            if isinstance(bearing, float) and isinstance(inclination, float):
+                bearing = int(bearing)
+                inclination = int(inclination)
+            data.append((bearing, inclination))
         start += 1
+        counter += 1
 
     if len(data) == 0:
         return None

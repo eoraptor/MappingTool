@@ -19,7 +19,9 @@
             {{ hidden }}
         {% endfor %}
 
-        {% block validate %} <div class="hidden" id="validate"></div> {% endblock validate %}
+        {% block validate %}
+            <div class="hidden" id="validate"></div>
+        {% endblock validate %}
 
         <div class="bs-example bs-example-tabs">
             <ul id="tcntab" class="nav nav-tabs" role="tablist">
@@ -294,19 +296,50 @@
                     {% block samplecounter %}
                     <button class="btn btn-primary" type="button" id="sample_count">
                             Sample
-                        <span class="badge">{{ count }}</span>
+                        <span class="badge" id="sample_counter">{{ count }}</span>
                             of
-                        <span class="badge">{{ num_samples }}</span>
+                        <span class="badge" id="total_counter">{{ num_samples }}</span>
                     </button>
                         {% endblock %}
 </div>
             </div>
 
                <div id="errordialog" title="Fields With Errors">
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse"  id="dialoguetext" data-parent="#accordion" href="#collapseFour">
+                                    Form Errors
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse in">
+                                <div class="panel-body" id="errorfields">
+                                </div>
+                           </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" id="dialoguetext" data-parent="#accordion" href="#collapseFive">
+                                    Import Errors
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse">
+                                <div class="panel-body" id="fileerrors">
+                                    <ul>
+                                    {% for error in errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </div></div>
 
-                    <div id="errorfields"></div>
-                </div>
-        </div>
         <div class="tab-pane fade" id="photo-tab"><br />
             <div class="container-fluid">
                 photos go here....

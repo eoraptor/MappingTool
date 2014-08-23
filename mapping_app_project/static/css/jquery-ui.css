@@ -844,16 +844,16 @@ body .ui-tooltip {
 	font-size: 1em;
 }
 .ui-widget-content {
-	border: 1px solid #dddddd;
-	background: #fbffe7 url("images/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;
+	border: 2px solid #2d3b60;
+	background: rgb(255, 252, 243) url("images/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;
 	color: #333333;
 }
 .ui-widget-content a {
-	color: #333333;
+	color: #ffffff;
 }
 .ui-widget-header {
-	border: 1px solid #77b684;
-	background: #67b660 url("images/ui-bg_gloss-wave_35_f6a828_500x100.png") 50% 50% repeat-x;
+	border: 1px solid #2f3f80;
+	background: #526eaf url("images/ui-bg_gloss-wave_35_f6a828_500x100.png") 50% 50% repeat-x;
 	color: #ffffff;
 	font-weight: bold;
 }
