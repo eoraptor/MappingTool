@@ -32,14 +32,15 @@ var newShape;
     function view_new_samples() {
         var marker;
         var new_markers = $('#new_markers').text();
-        if (new_markers.length > 0){
-            new_markers = new_markers.split(",");
-            var marker_code_list = [];
 
-            for (var i=0 ; i < markers.length; i++){
+        for (var i=0 ; i < markers.length; i++){
                 marker = markers[i];
                 marker.setMap(null);
                 }
+
+        if (new_markers.length > 0){
+            new_markers = new_markers.split(",");
+            var marker_code_list = [];
             for (var i=0 ; i < new_markers.length; i++){
                 compare_code = new_markers[i].replace(/\s+/g, '');
                 for (var j=0 ; j < markers.length; j++){
@@ -50,8 +51,11 @@ var newShape;
                 marker.setMap(map);
                 }
                 }
-            }
-        }}
+
+        }
+
+        }
+    }
 
 
         function view_all_samples() {

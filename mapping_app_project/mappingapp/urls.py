@@ -1,26 +1,29 @@
 from django.conf.urls import patterns, url
-from mappingapp import views
+from mappingapp import view_home, view_markers, view_contact, view_about, view_check_code, view_query\
+    , view_create_site, view_get_site, view_suggest_code, view_error, view_search, view_upload, view_edit_select\
+    , view_file_summary, view_validate_sample, view_increment_counter, view_edit_sample, view_login, view_logout
+
 
 urlpatterns = patterns('',
-                       url(r'^$', views.index, name='index'),
-                       url(r'^search/', views.search, name='search'),
-                       url(r'^upload/', views.upload, name='upload'),
-                       url(r'^edit/', views.edit, name='edit'),
-                       url(r'^validatesample/', views.validatesample, name='validatesample'),
-                       url(r'^login/$', views.userlogin, name='userlogin'),
-                       url(r'^logout/$', views.user_logout, name='logout'),
-                       url(r'^sites/$', views.sites, name='sites'),
-                       url(r'^markers/$', views.markers, name='markers'),
-                       url(r'^create_site/$', views.create_site, name='create_site'),
-                       url(r'^check_sample/$', views.check_sample, name='check_sample'),
-                       url(r'^editsample/$', views.editsample, name='editsample'),
-                       url(r'^filesummary/$', views.filesummary, name='filesummary'),
-                       url(r'^incrementcounter/$', views.incrementcounter, name='incrementcounter'),
-                       url(r'^query/$', views.query, name='query'),
-                       url(r'^suggest_code/$', views.suggest_code, name='suggest_code'),
-                       url(r'^contact/$', views.contact, name='contact'),
-                       url(r'^about/$', views.about, name='about'),
-                       url(r'^error/$', views.error, name='error'),
+                       url(r'^$', view_home.index, name='index'),
+                       url(r'^search/', view_search.search, name='search'),
+                       url(r'^upload/', view_upload.upload, name='upload'),
+                       url(r'^edit/', view_edit_select.edit, name='edit'),
+                       url(r'^validatesample/', view_validate_sample.validatesample, name='validatesample'),
+                       url(r'^login/$', view_login.userlogin, name='userlogin'),
+                       url(r'^logout/$', view_logout.user_logout, name='logout'),
+                       url(r'^sites/$', view_get_site.sites, name='sites'),
+                       url(r'^markers/$', view_markers.markers, name='markers'),
+                       url(r'^create_site/$', view_create_site.create_site, name='create_site'),
+                       url(r'^check_sample/$', view_check_code.check_sample, name='check_sample'),
+                       url(r'^editsample/$', view_edit_sample.editsample, name='editsample'),
+                       url(r'^filesummary/$', view_file_summary.filesummary, name='filesummary'),
+                       url(r'^incrementcounter/$', view_increment_counter.incrementcounter, name='incrementcounter'),
+                       url(r'^query/$', view_query.query, name='query'),
+                       url(r'^suggest_code/$', view_suggest_code.suggest_code, name='suggest_code'),
+                       url(r'^contact/$', view_contact.contact, name='contact'),
+                       url(r'^about/$', view_about.about, name='about'),
+                       url(r'^error/$', view_error.error, name='error'),
                        )
 
 
