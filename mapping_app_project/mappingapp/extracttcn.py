@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from openpyxl import load_workbook
-from mappingapp.conversion import convert_date, convert_lat_long
+from mappingapp.conversion import convert_date, convert_lat_long, missing_keys
 import datetime
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -35,7 +35,7 @@ def get_tcn_cell_positions(ws):
     if positions['sample thickness'] == '':
         positions['sample thickness'] = positions['Sample Thickness :']
 
-    if positions['Boulder dimensions [cm] (LxWxH)'] == '':
+    if positions['Boulder dimensions [cm] (LxWxH)'] == '' and positions['Boulder dimensions [cm] (LxBxH)'] != '':
         cellA = positions['Boulder dimensions [cm] (LxBxH)']
         row = cellA[1:]
         col = columns.index(cellA[0])
@@ -73,6 +73,11 @@ def get_tcn_cell_positions(ws):
 # extract the data from a tcn sample sheet
 def get_tcn_sample_info(sample_sheet, sample_count):
     positions = get_tcn_cell_positions(sample_sheet)
+
+    missing_key_list = missing_keys(positions)
+    missing_key_list.remove('Boulder dimensions [cm] (LxBxH)')
+    missing_key_list.remove('Sample Thickness :')
+
     errors = []
 
     sample_date = sample_sheet[positions['Date: ']].value
@@ -97,6 +102,7 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         boulder_dim = str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][0]].value)) + ' x ' +\
             str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][1]].value)) + ' x ' +\
             str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][2]].value))
+
     else:
         boulder_dim = sample_sheet[positions['Boulder dimensions [cm] (LxWxH)']].value
 
@@ -227,7 +233,8 @@ def get_tcn_sample_info(sample_sheet, sample_count):
                       'sampled_material'+counter:material, 'boulder_dimensions'+counter:boulder_dim,
                       'sample_surface_strike_dip'+counter:surface_strike, 'sample_thickness'+counter:thickness,
                       'grain_size'+counter:grain_size, 'lithology'+counter:lithology, 'bearings'+counter:bearing,
-                      'sample_type'+counter:sample_type, 'errors'+counter: errors}
+                      'sample_type'+counter:sample_type, 'errors'+counter: errors,
+                      'missing_keys'+counter:missing_key_list}
 
 
     return sample_details

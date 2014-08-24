@@ -32,26 +32,31 @@ var newShape;
     function view_new_samples() {
         var marker;
         var new_markers = $('#new_markers').text();
-        new_markers = new_markers.split(",");
-        marker_code_list = [];
-        for (var i=0 ; i < markers.length; i++){
-            marker = markers[i];
-            marker.setMap(null);
+        if (new_markers.length > 0){
+            new_markers = new_markers.split(",");
+            var marker_code_list = [];
+
+            for (var i=0 ; i < markers.length; i++){
+                marker = markers[i];
+                marker.setMap(null);
+                }
+            for (var i=0 ; i < new_markers.length; i++){
+                compare_code = new_markers[i].replace(/\s+/g, '');
+                for (var j=0 ; j < markers.length; j++){
+                marker = markers[j];
+                marker_code = marker.code.replace(/\s+/g, '');
+                marker_code_list.push(marker_code);
+                if (marker_code === compare_code){
+                marker.setMap(map);
+                }
+                }
             }
-        for (var i=0 ; i < new_markers.length; i++){
-            compare_code = new_markers[i].replace(/\s+/g, '');
-            for (var j=0 ; j < markers.length; j++){
-            marker = markers[j];
-            marker_code = marker.code.replace(/\s+/g, '');
-            marker_code_list.push(marker_code);
-            if (marker_code === compare_code){
-            marker.setMap(map);
-            }
-            }
-        }};
+        }}
 
 
         function view_all_samples() {
+        $('#startagefilter').val('');
+        $('#endagefilter').val('');
         var marker;
         for (var i=0 ; i < markers.length; i++){
             marker = markers[i];
@@ -60,21 +65,45 @@ var newShape;
 
         function opendialogue() {
         $("#dialog").dialog("open");
-        };
+        }
 
 
        // filter markers based on age
         function markeragefilter() {
             var start = $('#startagefilter').val();
-            alert(start);
             var end = $('#endagefilter').val();
 
-            for (var i = 0; i < markers.length; i++) {
-                var marker = markers[i];
-                if ((marker.age > start || marker.age < end) || marker.age == null) {
-                    marker.setMap(null);
-                }else{
-                    marker.setMap(map);
+            if (start == '' && end == ''){
+                view_all_samples();
+                return
+            }
+            if (start.toLowerCase().indexOf('bp') != -1){
+                start = start.substring(0, start.length-2);
+            }else if (start.toLowerCase().indexOf('ka') != -1) {
+                start = start.substring(0, start.length - 2);
+                start = start * 1000;
+            }
+
+            if (end.toLowerCase().indexOf('bp') != -1){
+                end = end.substring(0, end.length-2);
+            }else if (end.toLowerCase().indexOf('ka') != -1) {
+                end = end.substring(0, end.length - 2);
+                end = end * 1000;
+            }
+
+            if (!isNaN(start) && !isNaN(end)){
+                if (start < end) {
+                    var start_copy = start;
+                    start = end;
+                    end = start_copy;
+                }
+                for (var i = 0; i < markers.length; i++) {
+                    var marker = markers[i];
+                    if ((marker.age > start || marker.age < end) || marker.age == null) {
+                        marker.setMap(null);
+                    }else{
+                        marker.setMap(map);
+                    }
                 }
             }
         }
@@ -180,7 +209,13 @@ function initialize() {
         var markerfilterDiv = document.createElement('div');
         var markerfilter = new MarkerFilterButton(markerfilterDiv, map);
         markerfilterDiv.index = 1;
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(markerfilterDiv);
+        map.controls[google.maps.ControlPosition.RIGHT_TOP].push(markerfilterDiv);
+
+        var allMarkersDiv = document.createElement('div');
+        var allMarkersControl = new AllMarkersButton(allMarkersDiv, map);
+        allMarkersDiv.index = 1;
+        map.controls[google.maps.ControlPosition.RIGHT_TOP].push(allMarkersDiv);
+
 
         if ($('#viewastable').length > 0) {
              drawingManager.setMap(map);
@@ -199,16 +234,10 @@ function initialize() {
         if ($('#new_markers').length > 0) {
             var newMarkersDiv = document.createElement('div');
             var newMarkersControl = new NewMarkerButton(newMarkersDiv, map);
-            newMarkersDiv.index = 1;
-            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(newMarkersDiv);
+            newMarkersDiv.index = 2;
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(newMarkersDiv);
 
-            var allMarkersDiv = document.createElement('div');
-            var allMarkersControl = new AllMarkersButton(allMarkersDiv, map);
-            allMarkersDiv.index = 2;
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(allMarkersDiv);
         }
-
-
 
         google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
             coordinates = (polygon.getPath().getArray());
@@ -301,7 +330,7 @@ function initialize() {
                 google.maps.event.addListener(marker, 'click', function () {
                     if (!infowindow) {
                         infowindow = new google.maps.InfoWindow({
-                            width: 120
+                            width: 150
                         });
                     }
                     var latitude = Math.round(marker.position.lat() * Math.pow(10, 5)) / Math.pow(10, 5);
@@ -428,16 +457,18 @@ function MarkerFilterButton(controlDiv, map) {
     // Set CSS styles for the DIV containing the control
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
-    controlDiv.style.paddingTop = '6px';
+    controlDiv.style.paddingTop = '7px';
+    controlDiv.style.paddingRight = '7px';
 
     // Set CSS for the control border.
     var markerfilter = document.createElement('button');
     markerfilter.className = 'btn-info';
     markerfilter.style.height = '35px';
+    markerfilter.style.width = '90px';
     markerfilter.style.verticalAlign = 'middle';
     markerfilter.title = 'Click to filter markers by age range';
     markerfilter.innerHTML = 'Age Filter';
-    markerfilter.style.fontSize = '18px';
+    markerfilter.style.fontSize = '16px';
     controlDiv.appendChild(markerfilter);
 
     google.maps.event.addDomListener(markerfilter, 'click', opendialogue);
@@ -448,8 +479,7 @@ function NewMarkerButton(controlDiv, map) {
     // Set CSS styles for the DIV containing the control
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
-    controlDiv.style.paddingTop = '6px';
-    controlDiv.style.paddingRight = '6px';
+    controlDiv.style.paddingRight = '7px';
 
     // Set CSS for the control border.
     var newmarker = document.createElement('button');
@@ -471,7 +501,7 @@ function AllMarkersButton(controlDiv, map) {
     // Set CSS styles for the DIV containing the control
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
-    controlDiv.style.paddingRight = '6px';
+    controlDiv.style.paddingRight = '7px';
 
     // Set CSS for the control border.
     var allmarkers = document.createElement('button');
@@ -481,7 +511,7 @@ function AllMarkersButton(controlDiv, map) {
     allmarkers.style.width = '90px';
     allmarkers.style.verticalAlign = 'middle';
     allmarkers.title = 'Click to view all samples';
-    allmarkers.innerHTML = 'Show All';
+    allmarkers.innerHTML = 'Reset';
     allmarkers.style.fontSize = '14px';
     controlDiv.appendChild(allmarkers);
 

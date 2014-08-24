@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from openpyxl import load_workbook
-from mappingapp.conversion import convert_date, convert_lat_long
+from mappingapp.conversion import convert_date, convert_lat_long, missing_keys
 import datetime
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -36,6 +36,9 @@ def get_osl_cell_positions(ws):
 # extract the data from a tcn sample sheet
 def get_osl_sample_info(sample_sheet, sample_count):
     positions = get_osl_cell_positions(sample_sheet)
+
+    missing_key_list = missing_keys(positions)
+
     errors = []
 
     sample_date = sample_sheet[positions['Date: ']].value
@@ -126,6 +129,6 @@ def get_osl_sample_info(sample_sheet, sample_count):
                       'sample_duration'+counter:sample_duration, 'potassium'+counter:potassium,
                       'thorium'+counter:thorium, 'uranium'+counter:uranium, 'sample_bng_ing'+counter:None,
                       'sample_easting'+counter:None, 'sample_northing'+counter:None, 'sample_type'+counter:sample_type,
-                      'transect'+counter:None, 'errors'+counter:errors}
+                      'transect'+counter:None, 'errors'+counter:errors, 'missing_keys'+counter:missing_key_list}
 
     return sample_details

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from openpyxl import load_workbook
-from mappingapp.conversion import convert_date, convert_lat_long
+from mappingapp.conversion import convert_date, convert_lat_long, missing_keys
 import datetime
 
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -41,6 +41,9 @@ def get_C14_cell_positions(ws):
 # extract the data from a tcn sample sheet
 def get_C14_sample_info(sample_sheet, sample_count):
     positions = get_C14_cell_positions(sample_sheet)
+
+    missing_key_list = missing_keys(positions)
+
     errors = []
 
     sample_date = sample_sheet[positions['Date: ']].value
@@ -138,7 +141,8 @@ def get_C14_sample_info(sample_sheet, sample_count):
                       'exposure_core'+counter:exposure_core, 'core_number'+counter:core_number,
                       'position'+counter:position, 'depth'+counter:depth,
                       'material'+counter:material, 'setting'+counter:setting, 'weight'+counter:weight,
-                      'contamination'+counter:contamination, 'sample_type'+counter:sample_type}
+                      'contamination'+counter:contamination, 'sample_type'+counter:sample_type,
+                      'missing_keys'+counter:missing_key_list}
 
     return sample_details
 

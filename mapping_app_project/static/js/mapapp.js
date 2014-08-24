@@ -107,12 +107,6 @@ $(document).ready(function(){
                autoOpen: false
             });
 
-    $('textarea[class=noresizenumber]').each(function(){
-        var field = this.id;
-        var value = this.value;
-        check_number(field, value);
-    });
-
     $('#id_file').change(function(){
     var filename = $('#id_file').val();
     var fileparts = filename.split('.');
@@ -223,13 +217,10 @@ $(document).ready(function(){
     $('#id_site_date').datepicker({dateFormat: 'dd/mm/yy'});
 });
 
-
-
-
-
-    // check if TCN spreadsheet has incorrect field names.  Will need similar checks for OSL and C14
+    // Test for missing keys - A1 cell contents
     for (var i = 0 ; i < sample_fields.length ; i++) {
-        if ($(sample_fields[i]).val() == "TCN Sample Sheet") {
+        if ($(sample_fields[i]).val() == "TCN Sample Sheet" || $(sample_fields[i]).val() == "14C Sample Sheet" ||
+            $(sample_fields[i]).val() == "Section B: OSL Sample Sheet") {
             $(sample_fields[i]).val('');
             $(sample_fields[i]).css("border-color", 'red');
         }

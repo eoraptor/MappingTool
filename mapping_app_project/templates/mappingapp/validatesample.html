@@ -314,7 +314,7 @@
                                     </a>
                                 </h4>
                             </div>
-                            <div id="collapseFour" class="panel-collapse collapse in">
+                            <div id="collapseFour" class="panel-collapse collapse">
                                 <div class="panel-body" id="errorfields">
                                 </div>
                            </div>
@@ -323,7 +323,7 @@
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" id="dialoguetext" data-parent="#accordion" href="#collapseFive">
-                                    Import Errors
+                                    Import Errors - Type
                                     </a>
                                 </h4>
                             </div>
@@ -337,6 +337,24 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" id="dialoguetext" data-parent="#accordion" href="#collapseSix">
+                                        Import Errors - Keys Not Found
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseSix" class="panel-collapse collapse">
+                                    <div class="panel-body" id="fileerrors">
+                                        <ul>
+                                        {% for key in missing_keys %}
+                                            <li>{{ key }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                </div></div>
 

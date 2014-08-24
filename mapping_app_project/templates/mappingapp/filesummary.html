@@ -49,7 +49,7 @@
                     {% endif %}
                     {% if errors %}
                         <li class="list-group-item"><h4>
-                        <span class="glyphicon glyphicon-warning-sign"></span>  Fields not imported (type errors):<h5>Lat/Long values will be taken from site, other fields are left blank.  These can be entered manually on the next page.</h5></h4>
+                        <span class="glyphicon glyphicon-warning-sign"></span>  Fields not imported - type errors:<h5>Lat/Long values will be taken from site, other fields are left blank.  These can be entered manually on the next page.</h5></h4>
                     <ul>
                     {% for sample, error in errors %}
 
@@ -58,7 +58,19 @@
                     </ul>
                         </li>
                     {% endif %}
-                    {% if samples_unique and not existing %}
+                    {% if missing_keys %}
+                        <li class="list-group-item"><h4>
+                        <span class="glyphicon glyphicon-warning-sign"></span>  Fields not imported - keys not found</h4>
+                    <ul>
+                    {% for sample, key in missing_keys %}
+
+                    <li><b>Sample: </b>{{ sample }}, <b>Field:</b> {{ key }}</li>
+                    {% endfor %}
+                    </ul>
+                        </li>
+                    {% endif %}
+
+                    {% if samples_unique and not existing and not errors and not missing_keys %}
                         <li class="list-group-item"><h4>None</h4></li>
                     {% endif %}
                 </ul>

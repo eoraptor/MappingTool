@@ -75,3 +75,12 @@ def get_transect(site_name):
                 transect = Transect.objects.get_or_create(transect_number='T8')[0]
 
     return transect
+
+
+# create list of missing keys
+def missing_keys(positions):
+    missing_keys = []
+    for key, value in positions.iteritems():
+        if value == '':
+            missing_keys.append(key)
+    return missing_keys

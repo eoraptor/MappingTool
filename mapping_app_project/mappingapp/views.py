@@ -68,10 +68,7 @@ def markers(request):
                 longitude = None
 
                 if sample.sample_site is not None:
-
                     site_name = sample.sample_site.site_name
-                    if site_name is None:
-                        site_name = ''
 
                 try:
                     type = TCN_Sample.objects.get(tcn_sample=sample)
@@ -99,6 +96,9 @@ def markers(request):
                 sample_age = sample.calendar_age
                 if sample_age is None:
                     sample_age = ''
+
+                if site_name is None:
+                    site_name = ''
 
                 data = {'latitude': sample.sample_coordinates.latitude,
                         'longitude': sample.sample_coordinates.longitude, 'code': sample.sample_code,
@@ -638,6 +638,17 @@ def suggest_code(request):
 
 
 @login_required
+@user_passes_test(is_member)
+def error(request):
+
+    context = RequestContext(request)
+
+    is_member = request.user.groups.filter(name='Consortium Super User')
+
+    return render_to_response('mappingapp/error.html', {'is_member':is_member}, context)
+
+
+@login_required
 def search(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
@@ -680,16 +691,16 @@ def upload(request):
         form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            # try:
-            sample_data = process_file(request.FILES['file'])
+            try:
+                sample_data = process_file(request.FILES['file'])
 
-            # except:
-            #     return HttpResponseRedirect(reverse('index'))
+            except:
+                 return HttpResponseRedirect(reverse('error'))
 
             request.session['file_name'] = request.FILES['file'].name
 
             if sample_data is None:
-                return HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('error'))
 
             else:
                 for k, v in sample_data.iteritems():
@@ -757,6 +768,7 @@ def filesummary(request):
     exist_in_db = False
     samples_seen = set()
     errors = []
+    missing_key_list = []
 
     while counter <= sample_count:
         sample = request.session['sample_code'+str(counter)]
@@ -766,6 +778,14 @@ def filesummary(request):
         if len(sample_errors) != 0:
             for error in sample_errors:
                 errors.append((sample, error))
+
+        missing_keys = request.session['missing_keys'+str(counter)]
+
+        if len(missing_keys) != 0:
+            for key in missing_keys:
+                missing_key_list.append((sample, key))
+
+
         counter += 1
 
     if len(samples) != 0:
@@ -793,7 +813,8 @@ def filesummary(request):
     return render_to_response('mappingapp/filesummary.html',
                               {'is_member':is_member, 'file_name':file_name, 'errors':errors,
                               'samples':samples, 'count':sample_count, 'samples_unique':samples_unique,
-                              'exist_in_db':samples_in_db, 'existing':exist_in_db}, context)
+                              'exist_in_db':samples_in_db, 'existing':exist_in_db,
+                              'missing_keys':missing_key_list}, context)
 
 
 
@@ -810,12 +831,9 @@ def validatesample(request):
 
     num_samples = request.session['sample_count']
 
-    errors = []
-    sample_errors = request.session['errors'+str(counter)]
-    if len(sample_errors) != 0:
-        for error in sample_errors:
-            errors.append(error)
+    errors = request.session['errors'+str(counter)]
 
+    missing_keys = request.session['missing_keys'+str(counter)]
 
     num_bearings = None
     if request.session['counter'] > num_samples:
@@ -1087,7 +1105,7 @@ def validatesample(request):
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
     return render_to_response('mappingapp/validatesample.html', {'num_bearings':num_bearings, 'c14form':c14Form,
-                                                                 'coreform':coreForm,
+                                                                 'coreform':coreForm, 'missing_keys':missing_keys,
                                                                  'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
                                                                  'site_name':site_name, 'sitechoices':sitechoicesForm,
                                                                  'samplecoordform':samplecoordForm,

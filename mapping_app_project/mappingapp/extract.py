@@ -63,6 +63,8 @@ def get_osl_site_cell_positions(ws):
                         osl_positions[val] = val_col + str(cell.row)
 
     # BNG or ING data?
+    northing_cell = None
+    easting_cell = None
     if ws[osl_positions['BNG (Easting)']].value is not None:
         easting_cell = osl_positions['BNG (Easting)']
         northing_cell = columns[easting_cell.column+3] + str(easting_cell.row)
@@ -145,8 +147,20 @@ def get_site_info(site_sheet, type):
                 site_notes = site_date
         else:
             date = str(site_date)
+            if ' 00:00:00' in date:
+                 date = date.replace(' 00:00:00', '')
             if '.' in date:
                 site_date = convert_date(date)
+                if site_date == 'Error':
+                    site_date = None
+                    pass
+            else:
+                 try:
+                    datetime.datetime.strptime(date, '%Y-%m-%d')
+                    site_date = date
+                 except:
+                    site_date = None
+
 
     if site_northing is not None:
         try:
@@ -213,7 +227,6 @@ def get_sample_code(sheet):
         for cell in row:
             if cell.value is not None and isinstance(cell.value, basestring):
                 if 'Unique Sample Identifier' in cell.value:
-                    print 'here'
                     col = columns.index(cell.column)
                     val_col = columns[col+1]
                     id = sheet[val_col + str(cell.row)].value

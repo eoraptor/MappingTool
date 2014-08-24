@@ -20,6 +20,7 @@ urlpatterns = patterns('',
                        url(r'^suggest_code/$', views.suggest_code, name='suggest_code'),
                        url(r'^contact/$', views.contact, name='contact'),
                        url(r'^about/$', views.about, name='about'),
+                       url(r'^error/$', views.error, name='error'),
                        )
 
 

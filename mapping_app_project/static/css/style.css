@@ -92,8 +92,8 @@ fieldset.standard {
 
 
 .gm-style-iw {
-    width: 165px;
-    height: 165px;
+    width: 185px;
+    height: 185px;
     color: #4c62ad;
 }
 
@@ -665,4 +665,11 @@ th.tablesorter-header.resizable-false {
 
 #total_counter {
     color: #000000;
+}
+
+#errorpage {
+    width: 450px;
+    height: 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
