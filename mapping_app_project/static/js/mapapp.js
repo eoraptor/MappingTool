@@ -17,7 +17,6 @@ var form_errors = [];
 // check numerical fields in Edit and Validate pages match expected type
 // prevent saving if non-numerical
 function check_number(field, value) {
-    var background = $('#id_dating_priority').attr('color');
     if (!jQuery.isNumeric(value) && value != '') {
         var found = false;
         for (var i = 0; i < form_errors.length; i++){
@@ -89,7 +88,7 @@ function openerrordialogue() {
             }else if (field.indexOf('site-northing') != -1) {
                 field = 'Site Northing - field must be numerical';
             }else{
-                field = 'Sample Code - field must be unique';
+                field = 'Sample Code - value required (must be unique)';
             }
             insert = insert + '<li>'+ field + '</li>'
         }
@@ -101,6 +100,17 @@ function openerrordialogue() {
         }
 
 $(document).ready(function(){
+
+    $('#slider').popover({ html : true});
+
+    $("#ex2").slider();
+        $(this).on('slide', function(slideEvt) {
+	    var range = slideEvt.value;
+        $('#startagefilter').val(range[0])
+        $('#endagefilter').val(range[1])
+});
+
+
     $('#savebutton').hide();
 
     $("#errordialog").dialog({
@@ -228,17 +238,23 @@ $(document).ready(function(){
 
     if ($('#validate').length > 0) {
         var sample = $('#id_sample_code').text();
-
-        $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function (data) {
-            $.each(data, function (key, val) {
-                var response = val.exists;
-                if (response == true) {
-                    $('#id_sample_code').css("background", '#FF7F50');
+        if (sample === '') {
+            $('#id_sample_code').css("background-color", "#E6760C");
                     $('#validatebutton').attr("disabled", true);
-                    form_errors.push(sample);
-                }
-           });
-        });
+                    form_errors.push('sample_code');
+        }else {
+
+            $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function (data) {
+                $.each(data, function (key, val) {
+                    var response = val.exists;
+                    if (response == true) {
+                        $('#id_sample_code').css("background-color", "#E6760C");
+                        $('#validatebutton').attr("disabled", true);
+                        form_errors.push('sample_code');
+                    }
+                });
+            });
+        }
     }
 
 
@@ -342,18 +358,33 @@ $(document).ready(function() {
             $.each(data, function (key, val) {
                 var response = val.exists;
                 if (response == true) {
-                    $('#id_sample_code').css("background", '#FF7F50');
+                    $('#id_sample_code').css("background-color", '#FF7F50');
                     $('#validatebutton').attr("disabled", true);
                 }
                 else {
-                    $('#id_sample_code').css("background", 'white');
-                    $('#validatebutton').attr("disabled", false);
+                    $('#id_sample_code').css("background-color", "");
+                    for (var i = 0; i < form_errors.length; i++) {
+                            if (form_errors[i] = 'sample_code') {
+                                removed = form_errors.splice(i, 1);
+                            }
+                        }
+                    if (form_errors.length == 0) {
+                            $('#validatebutton').attr("disabled", false);
+                        }
                 }
             });
         });
         }
     });
 });
+
+
+
+
+
+
+
+
 
 
 var enable = function() {

@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, url
 from mappingapp import view_home, view_markers, view_contact, view_about, view_check_code, view_query\
     , view_create_site, view_get_site, view_suggest_code, view_error, view_search, view_upload, view_edit_select\
-    , view_file_summary, view_validate_sample, view_increment_counter, view_edit_sample, view_login, view_logout
+    , view_file_summary, view_validate_sample, view_increment_counter, view_edit_sample, view_login, view_logout\
+    , view_create_new
 
 
 urlpatterns = patterns('',
@@ -24,6 +25,7 @@ urlpatterns = patterns('',
                        url(r'^contact/$', view_contact.contact, name='contact'),
                        url(r'^about/$', view_about.about, name='about'),
                        url(r'^error/$', view_error.error, name='error'),
+                       url(r'^createnew/(?P<sample_type_url>\w+)/$', view_create_new.create_new, name='create_new'),
                        )
 
 

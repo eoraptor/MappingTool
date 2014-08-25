@@ -410,7 +410,7 @@ html {
 }
 
 #endageinput {
-    margin-left: -80px;
+    margin-left: -45px;
     margin-top: 25px;
     margin-right: -55px;
 }
@@ -672,4 +672,13 @@ th.tablesorter-header.resizable-false {
     height: 400px;
     margin-left: auto;
     margin-right: auto;
+}
+
+#ex1Slider .slider-selection {
+	background: #BABABA;
+}
+
+
+#startage {
+    width: 85px;
 }

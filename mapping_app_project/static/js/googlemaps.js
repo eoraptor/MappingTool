@@ -319,6 +319,8 @@ function initialize() {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(sample_data['lat'], sample_data['long']),
                 map: map,
+                lat: sample_data['lat'],
+                lng: sample_data['long'],
                 type: sample_data['type'].toUpperCase(),
                 age: sample_data['age'],
                 code: sample_data['code'],
@@ -337,8 +339,8 @@ function initialize() {
                             width: 150
                         });
                     }
-                    var latitude = Math.round(marker.position.lat() * Math.pow(10, 5)) / Math.pow(10, 5);
-                    var longitude = Math.round(marker.position.lng() * Math.pow(10, 5)) / Math.pow(10, 5);
+                    var latitude = Math.round(marker.lat * Math.pow(10, 5)) / Math.pow(10, 5);
+                    var longitude = Math.round(marker.lng * Math.pow(10, 5)) / Math.pow(10, 5);
                     infowindow.setContent('<h5>' + marker.title + '</h5>' + '<hr>' + '<b>Lat: </b>' + latitude + '<br />' +
                         '<b>Lng: </b>' + longitude + '<br /><b>Calendar Age: </b>' + marker.age +
                         '<br /><b>Type: </b>' + marker.type + '<br /><b>Site: </b>' + marker.site);

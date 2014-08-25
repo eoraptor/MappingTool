@@ -275,7 +275,7 @@ def validatesample(request):
                 return HttpResponseRedirect(reverse('index'))
         else:
             # The supplied form contained errors
-            print sample.errors
+            print sampForm.errors
     else:
         sampForm = SampleForm(instance=sample)
         samplecoordForm = CoordinatesForm(prefix='sample', instance=sample_coords)
@@ -285,7 +285,7 @@ def validatesample(request):
         retForm = RetreatForm(instance=retreat)
         sitechoicesForm = ExistingSitesForm(prefix='main')
         hiddensiteForm = HiddenSiteForm(prefix='hidden')
-        fillsiteForm = ExistingSitesForm(request.POST, prefix='fill')
+        fillsiteForm = ExistingSitesForm(prefix='fill')
 
         if sample_type == 'TCN':
             tcnForm = TCNForm(instance=tcn)

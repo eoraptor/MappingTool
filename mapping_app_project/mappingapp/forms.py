@@ -56,8 +56,9 @@ class EditCoordinatesForm(forms.ModelForm):
 
 class TransectForm(forms.ModelForm):
 
-    TRANSECT_CHOICES = ((None, ''), ('T1', 'T1'), ('T2', 'T2'), ('T3', 'T3'), ('T4', 'T4'), ('T5', 'T5'), ('T6', 'T6'),
+    TRANSECT_CHOICES = (('', ''), ('T1', 'T1'), ('T2', 'T2'), ('T3', 'T3'), ('T4', 'T4'), ('T5', 'T5'), ('T6', 'T6'),
                         ('T7', 'T7'), ('T8', 'T8'))
+
     transect_number = forms.ChoiceField(help_text='Transect', required=False, choices=TRANSECT_CHOICES)
 
     class Meta:
@@ -65,7 +66,7 @@ class TransectForm(forms.ModelForm):
 
     def save(self, commit=True):
         transect = super(TransectForm, self).save(commit=False)
-        if transect.transect_number != '':
+        if transect.transect_number is not None:
             return Transect.objects.get_or_create(transect_number=transect.transect_number)[0]
 
 

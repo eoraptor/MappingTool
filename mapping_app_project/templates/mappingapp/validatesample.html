@@ -1,7 +1,18 @@
 {% extends 'mappingapp/base.html' %}
 
 {% block title %}Validate Sample Data{% endblock %}
-{% block upload %}<li class="li-active"><a id="activelink" href="/mappingapp/upload">Upload Files</a></li>{% endblock upload %}
+{% block upload %}
+<li class="li-active dropdown">
+    <a href='#' id="activelink" class="dropdown-toggle" data-toggle="dropdown">Add New <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/mappingapp/upload/">Upload File</a></li>
+        <li class="divider"></li>
+        <li><a href="/mappingapp/createnew/c14">Create C14 Sample</a></li>
+        <li><a href="/mappingapp/createnew/osl">Create OSL Sample</a></li>
+        <li><a href="/mappingapp/createnew/tcn">Create TCN Sample</a></li>
+    </ul>
+</li>
+{% endblock upload %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
@@ -319,6 +330,7 @@
                                 </div>
                            </div>
                         </div>
+                    {% block import_errors %}
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -355,6 +367,7 @@
                                     </div>
                                 </div>
                             </div>
+                        {% endblock import_errors %}
                     </div>
                </div></div>
 

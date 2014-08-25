@@ -20,6 +20,7 @@
     <link href="{% static 'css/theme.default.css' %}" rel="stylesheet">
     <link href="{% static 'css/theme.green.css' %}" rel="stylesheet">
     <link href="{% static 'css/jquery.tablesorter.pager.css' %}" rel="stylesheet">
+    <link href="{% static 'css/slider.css' %}" rel="stylesheet">
 
 
     <title>Mapping App - {% block title %}Home{% endblock %}</title>
@@ -54,11 +55,21 @@
 
                 {% if is_member %}
                     {% block upload %}
-                    <li id="nv"><a href="/mappingapp/upload/">Upload Files</a></li>
+                    <li id="nv" class="dropdown">
+                        <a href='#' class="dropdown-toggle" data-toggle="dropdown">Add New <span class="caret"></span></a>
+
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/mappingapp/upload/">Upload File</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/mappingapp/createnew/c14">Create C14 Sample</a></li>
+                            <li><a href="/mappingapp/createnew/osl">Create OSL Sample</a></li>
+                            <li><a href="/mappingapp/createnew/tcn">Create TCN Sample</a></li>
+                          </ul>
+                        </li>
                     {% endblock upload %}
 
                     {% block edit %}
-                    <li id="nv"><a href="/mappingapp/edit">Edit Records</a></li>
+                    <li  class="dropdown" id="nv"><a href="/mappingapp/edit">Edit Sample</a></li>
                     {% endblock edit %}
                 {% endif %}
                 {%  endif %}
@@ -124,6 +135,7 @@
     <script src="{% static 'js/jquery.tablesorter.widgets-filter-formatter.js' %}"></script>
      <script src="{% static 'js/widget-columnSelector.js' %}"></script>
     <script src="{% static 'js/spiderfier.js' %}"></script>
+    <script src="{% static 'js/bootstrap-slider.js' %}"></script>
 
     </body>
 </html>
