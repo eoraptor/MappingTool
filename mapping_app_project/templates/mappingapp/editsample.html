@@ -2,19 +2,19 @@
 
 
 {% block title %}Edit Records{% endblock %}
-{% block edit %}<li class="li-active"><a id="activelink" href="/mappingapp/edit">Edit Records</a></li>{% endblock edit %}
-{% block upload %}<li id="nv"><a href="/mappingapp/upload/">Upload Files</a></li>{% endblock upload %}
+{% block edit %}<li class="li-active"><a id="activelink" href="/briticechrono/edit">Edit Records</a></li>{% endblock edit %}
+{% block upload %}<li id="nv"><a href="/briticechrono/upload/">Upload Files</a></li>{% endblock upload %}
 {% block login %}{% endblock login %}
 
 
 {% block formblock %}
-    <form id="edit_form" method="post" action="/mappingapp/editsample/">
+    <form id="edit_form" method="post" action="/briticechrono/editsample/">
 {% endblock %}
 
 {% block buttonblock %}
     <button type="submit" class="btn-success btn-xl" name="save-button" id="editbutton">Save</button>
     <button type="button" class="btn-warning btn-xl" name="error-button" id="errorbutton">Errors</button>
-    <a href="/mappingapp/"><button type="button" class="btn-danger btn-xl" name="save-button" id="skip">Skip</button></a>
+    <a href="/briticechrono/"><button type="button" class="btn-danger btn-xl" name="save-button" id="skip">Skip</button></a>
 {% endblock buttonblock %}
 {% block validate %}{% endblock validate %}
 {% block samplecounter %}{% endblock samplecounter %}

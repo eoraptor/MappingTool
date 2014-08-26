@@ -9,7 +9,7 @@ def user_logout(request):
 
     logout(request)
 
-    return HttpResponseRedirect('/mappingapp/')
+    return HttpResponseRedirect('/briticechrono/')
 
 
 

@@ -256,7 +256,7 @@ def validatesample(request):
                     for form in bearingsFormSet.forms:
                         bear_inc = form.save()
                         if bear_inc is not None:
-                            sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
+                            sample_bearing = Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn,
                                                                                          bear_inc=bear_inc)
             if 'files_saved' in request.session:
                 if request.session['file_name'] not in request.session['files_saved']:

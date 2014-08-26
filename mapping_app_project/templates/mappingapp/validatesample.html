@@ -7,9 +7,9 @@
     <ul class="dropdown-menu" role="menu">
         <li><a href="/mappingapp/upload/">Upload File</a></li>
         <li class="divider"></li>
-        <li><a href="/mappingapp/createnew/c14">Create C14 Sample</a></li>
-        <li><a href="/mappingapp/createnew/osl">Create OSL Sample</a></li>
-        <li><a href="/mappingapp/createnew/tcn">Create TCN Sample</a></li>
+        <li><a href="/briticechrono/createnew/c14">Create C14 Sample</a></li>
+        <li><a href="/briticechrono/createnew/osl">Create OSL Sample</a></li>
+        <li><a href="/briticechrono/createnew/tcn">Create TCN Sample</a></li>
     </ul>
 </li>
 {% endblock upload %}
@@ -19,7 +19,7 @@
 
 <div class="jumbotron edit" id="editjumbo">
 {% block formblock %}
-    <form id="validate_form" method="post" action="/mappingapp/validatesample/">
+    <form id="validate_form" method="post" action="/briticechrono/validatesample/">
 {% endblock %}
         {% csrf_token %}
 

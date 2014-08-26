@@ -88,7 +88,7 @@ function openerrordialogue() {
             }else if (field.indexOf('site-northing') != -1) {
                 field = 'Site Northing - field must be numerical';
             }else{
-                field = 'Sample Code - value required (must be unique)';
+                field = 'Sample Code - must be non null and unique';
             }
             insert = insert + '<li>'+ field + '</li>'
         }
@@ -100,8 +100,6 @@ function openerrordialogue() {
         }
 
 $(document).ready(function(){
-
-    $('#slider').popover({ html : true});
 
     $("#ex2").slider();
         $(this).on('slide', function(slideEvt) {
@@ -232,7 +230,7 @@ $(document).ready(function(){
         if ($(sample_fields[i]).val() == "TCN Sample Sheet" || $(sample_fields[i]).val() == "14C Sample Sheet" ||
             $(sample_fields[i]).val() == "Section B: OSL Sample Sheet") {
             $(sample_fields[i]).val('');
-            $(sample_fields[i]).css("border-color", 'red');
+            $(sample_fields[i]).css("background-color", '#fff8b3');
         }
     }
 
@@ -244,7 +242,7 @@ $(document).ready(function(){
                     form_errors.push('sample_code');
         }else {
 
-            $.getJSON('/mappingapp/check_sample/', {sample_code: sample}, function (data) {
+            $.getJSON('/briticechrono/check_sample/', {sample_code: sample}, function (data) {
                 $.each(data, function (key, val) {
                     var response = val.exists;
                     if (response == true) {
@@ -312,7 +310,7 @@ $('#savebutton').click(function(){
     var grid = $("#id_site-grid_reference").val();
     var bng = $("#id_site-bng_ing").val();
 
-    $.getJSON('/mappingapp/create_site/', {site_name: site, site_county:county, site_location:location,
+    $.getJSON('/briticechrono/create_site/', {site_name: site, site_county:county, site_location:location,
         geomorph:geomorph, type:sample_type, photographs:photographs, notes:site_notes, site_operator:operator,
         photos_taken:photos_taken, collected_by:collected_by, date:stringdate, latitude:latitude,
          northing:northing, easting:easting, longitude:longitude, elevation:elevation, grid:grid, bng:bng}, function(data){
@@ -350,11 +348,11 @@ $('[data-toggle="tooltip"]').tooltip({
 
 $(document).ready(function() {
     $('#id_sample_code').keyup(function () {
-        var sample1 = $('#id_sample_code').text();
+
     if ($('#validate').length > 0) {
         var sample = $('#id_sample_code').text();
 
-        $.getJSON('/mappingapp/check_sample/', {sample_code: sample1}, function (data) {
+        $.getJSON('/briticechrono/check_sample/', {sample_code: sample1}, function (data) {
             $.each(data, function (key, val) {
                 var response = val.exists;
                 if (response == true) {
@@ -405,7 +403,7 @@ var disable = function() {
 var getsites = function(element) {
     var site = $(element + ' option:selected' ).val();
 
-   $.getJSON('/mappingapp/sites/', {site_name: site}, function(data){
+   $.getJSON('/briticechrono/sites/', {site_name: site}, function(data){
         var items = [];
         $.each(data, function( key, val) {
 
@@ -457,7 +455,7 @@ $( "#modalbutton1" ).click(function () {
 $( "#skipbutton" ).click(function () {
     var sample = $('#id_sample_code').text();
 
-    $.getJSON('/mappingapp/incrementcounter/', {sample_code: sample}, function (data) {
+    $.getJSON('/briticechrono/incrementcounter/', {sample_code: sample}, function (data) {
         $.each(data, function (key, val) {
             var response = val.done;
             if (response == false) {
@@ -465,7 +463,7 @@ $( "#skipbutton" ).click(function () {
                 $('#validatebutton').attr("disabled", false);
             }else{
 //          !!!!      This must be changed when not on local machine !!!
-                window.location.replace("http://127.0.0.1:8000/mappingapp/");
+                window.location.replace("http://127.0.0.1:8000/briticechrono/");
             }
         });
     });
@@ -481,7 +479,7 @@ $( "#searchbutton" ).click(function () {
     var end = $('#endage').val();
     var keyword = $('#searchkeyword').val();
 
-    $.getJSON('/mappingapp/query/', {keyword:keyword, start:start, end:end, code:code, transect: transect, type:type},
+    $.getJSON('/briticechrono/query/', {keyword:keyword, start:start, end:end, code:code, transect: transect, type:type},
         function (data) {
         $.each(data, function (key, val) {
 
@@ -508,7 +506,7 @@ $( "#searchbutton" ).click(function () {
 $('#id_samp_code').keyup(function(){
         var query;
         query = $(this).val();
-        $.get('/mappingapp/suggest_code/', {suggestion: query}, function(data) {
+        $.get('/briticechrono/suggest_code/', {suggestion: query}, function(data) {
                 $('#suggestion').html(data);
         });
 });

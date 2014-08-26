@@ -75,8 +75,14 @@ def get_tcn_sample_info(sample_sheet, sample_count):
     positions = get_tcn_cell_positions(sample_sheet)
 
     missing_key_list = missing_keys(positions)
-    missing_key_list.remove('Boulder dimensions [cm] (LxBxH)')
-    missing_key_list.remove('Sample Thickness :')
+    try:
+        missing_key_list.remove('Boulder dimensions [cm] (LxBxH)')
+    except:
+        pass
+    try:
+        missing_key_list.remove('Sample Thickness :')
+    except:
+        pass
 
     errors = []
 

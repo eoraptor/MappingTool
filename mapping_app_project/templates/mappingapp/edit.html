@@ -1,14 +1,14 @@
 {% extends 'mappingapp/base.html' %}
 
 {% block title %}Edit Records{% endblock %}
-{% block edit %}<li class="li-active"><a id="activelink" href="/mappingapp/edit">Edit Records</a></li>{% endblock edit %}
+{% block edit %}<li class="li-active"><a id="activelink" href="/briticechrono/edit">Edit Records</a></li>{% endblock edit %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
 <div class="jumbotron" id="standardjumbo">
     <div class="container-fluid">
         <div class="col-md-6" id="editleftcol">
-            <form id="edit_form" method="post" action="/mappingapp/edit/">
+            <form id="edit_form" method="post" action="/briticechrono/edit/">
                 <div class="editinput">
                 {% csrf_token %}
 

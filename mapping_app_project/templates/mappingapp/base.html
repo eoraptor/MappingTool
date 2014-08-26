@@ -4,7 +4,6 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,7 +22,7 @@
     <link href="{% static 'css/slider.css' %}" rel="stylesheet">
 
 
-    <title>Mapping App - {% block title %}Home{% endblock %}</title>
+    <title>BRITICE-CHRONO - {% block title %}Home{% endblock %}</title>
 </head>
 
 <body role="document">
@@ -38,19 +37,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/mappingapp" class="logo-nav" ><img id="logo" src="{% static 'imgs/briticelogo.png' %}" alt="BRITICE logo" /></a>
+                <a href="/briticechrono/" class="logo-nav" ><img id="logo" src="{% static 'imgs/briticelogo.png' %}" alt="BRITICE logo" /></a>
 
             </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                         {% block home %}
-                        <li id="nv"><a href="/mappingapp/">Home</a></li>
+                        <li id="nv"><a href="/briticechrono/">Home</a></li>
                         {% endblock home %}
 
                 {% if user.is_authenticated %}
 
                     {% block search %}
-                        <li id="nv"><a href="/mappingapp/search/">Search</a></li>
+                        <li id="nv"><a href="/briticechrono/search/">Search</a></li>
                     {% endblock search %}
 
                 {% if is_member %}
@@ -59,24 +58,24 @@
                         <a href='#' class="dropdown-toggle" data-toggle="dropdown">Add New <span class="caret"></span></a>
 
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="/mappingapp/upload/">Upload File</a></li>
+                            <li><a href="/briticechrono/upload/">Upload File</a></li>
                             <li class="divider"></li>
-                            <li><a href="/mappingapp/createnew/c14">Create C14 Sample</a></li>
-                            <li><a href="/mappingapp/createnew/osl">Create OSL Sample</a></li>
-                            <li><a href="/mappingapp/createnew/tcn">Create TCN Sample</a></li>
+                            <li><a href="/briticechrono/createnew/c14">Create C14 Sample</a></li>
+                            <li><a href="/briticechrono/createnew/osl">Create OSL Sample</a></li>
+                            <li><a href="/briticechrono/createnew/tcn">Create TCN Sample</a></li>
                           </ul>
                         </li>
                     {% endblock upload %}
 
                     {% block edit %}
-                    <li  class="dropdown" id="nv"><a href="/mappingapp/edit">Edit Sample</a></li>
+                    <li  class="dropdown" id="nv"><a href="/briticechrono/edit">Edit Sample</a></li>
                     {% endblock edit %}
                 {% endif %}
                 {%  endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                {% block about %}<li id="nv"><a href="/mappingapp/about">About</a></li>{% endblock about %}
-                {% block contact %}<li id="nv"><a href="/mappingapp/contact">Contact</a></li>{% endblock contact %}
+                {% block about %}<li id="nv"><a href="/briticechrono/about">About</a></li>{% endblock about %}
+                {% block contact %}<li id="nv"><a href="/briticechrono/contact">Contact</a></li>{% endblock contact %}
             </ul>
 
 
@@ -103,7 +102,7 @@
             {% else %}
 
                 <div class="navbar-header navbar-right">
-                    <a href="/mappingapp/logout/"><button type="submit" class="btn btn-success navbar-btn" id="logoutbutton">Logout</button></a>
+                    <a href="/briticechrono/logout/"><button type="submit" class="btn btn-success navbar-btn" id="logoutbutton">Logout</button></a>
                 </div>
             {% endif %}
     </div>
@@ -112,7 +111,7 @@
                 </div>
         </div><!--/.nav-collapse -->
     </div>
-</div>
+
 
     {% block body_block %}{% endblock %}
 

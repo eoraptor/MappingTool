@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from mappingapp.forms import UploadFileForm
-from mappingapp.extract import process_file
+from mappingapp.process_file import process_file
 from mappingapp.is_member import is_member
 
 
@@ -35,7 +35,7 @@ def upload(request):
 
         if form.is_valid():
             try:
-                sample_data = process_file(request.FILES['file'])
+               sample_data = process_file(request.FILES['file'])
 
             # handle exceptions ----> show error page
             except:

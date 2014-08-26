@@ -22,7 +22,7 @@ def userlogin(request):
             # Is the account active?
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/mappingapp/')
+                return HttpResponseRedirect('/briticechrono/')
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your BRITICE CHRONO account is disabled.")

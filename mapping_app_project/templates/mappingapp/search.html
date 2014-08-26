@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}Search{% endblock %}
-{% block search %}<li class="li-active"><a id="activelink" href="/mappingapp/search/">Search</a></li>{% endblock search %}
+{% block search %}<li class="li-active"><a id="activelink" href="/briticechrono/search/">Search</a></li>{% endblock search %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
@@ -17,7 +17,8 @@
   </div>
   <div class="panel-body"  id="searchfieldpanel">
 
-
+        <div class="container-fluid">
+            <div class="row">
             <div class="col-md-1 col-xs-2" id="choice">
                 <div class="form-group">
                     <label class="control-label" for="searchtransect">Transect</label>
@@ -47,20 +48,15 @@
             </div>
         <div class="col-md-2 col-xs-4" id="start">
             <div class="form-group">
-                <label class="control-label" for="startage">Calendar Age Range </label>
-                <div class="input-group">
-                <span class="input-group-addon"><a href="#"><span id="slider" class="glyphicon glyphicon-plus-sign" data-toggle="popover" title="Age Range Slider" data-content="&lt;div&gt;This is your div content&lt;/div&gt;"></span></a></span>
+                <label class="control-label" id="startagelabel" for="startage">Calendar Age Range (10000 - 30000)</label>
                 <input type="text" class="form-control narrow" id="startage" placeholder="Start">
             </div>
-                </div>
         </div>
+
       <div class="col-md-2 col-xs-4" id="endageinput">
             <div class="form-group">
-
-
-             <input type="text" class="form-control narrow" id="endage" placeholder="Finish">
-
-                </div>
+                 <input type="text" class="form-control narrow" id="endage" placeholder="Finish">
+            </div>
         </div>
         <div class="col-md-2 col-xs-4" id="searchcodechoice">
             <div class="form-group">
@@ -75,14 +71,16 @@
             </div>
         </div>
         <div class="col-md-1 col-xs-2" id="buttongroup">
-            <button type="button" class="btn-success btn-sm" id="searchbutton">Search</button>
+            <button type="button" class="btn btn-success btn-sm" id="searchbutton">Search</button>
         </div>
-        <div class="col-md-1 col-xs-2" id="buttongroup2">
-            <button type="button" class="btn-primary btn-sm" id="getcsv">Get CSV</button>
         </div>
-</div>
+
+
+
 </div>
 
+</div>
+</div>
 
 <!-- This selector markup is completely customizable -->
 <div class="columnSelectorWrapper">
@@ -91,8 +89,10 @@
             <div id="columnSelector" class="columnSelector">
 <!-- this div is where the column selector is added -->
             </div>
+            <button type="button" class="btn btn-primary btn-sm" id="getcsv">Download Results</button>
+
 </div>
-<div class="container-fluid tablescroll">
+<div class="container-fluid tablescroll" id="tablesorterdiv">
     <table class="tablesorter custom-popup"  style="width:auto">
         <thead>
             <tr>

@@ -80,13 +80,21 @@ def query(request):
     elif samples is None and code_samples is not None:
         samples = code_samples
 
-    #search using sample age
-    if start_age is not None and start_age != '':
+    #search using sample age: check integers, reverse values if wrong way round
+    if start_age is not None and start_age != '' and end_age is not None and end_age != '':
+        try:
+            start_age = int(start_age)
+            end_age = int(end_age)
+        except:
+            pass
 
-        if end_age is None or end_age == '':
-            end_age = 0
+        if isinstance(start_age, int) and isinstance(end_age, int):
+            if start_age > end_age:
+                start = end_age
+                end_age = start_age
+                start_age = start
 
-        age_samples = Sample.objects.filter(calendar_age__lte=start_age, calendar_age__gte=end_age)
+            age_samples = Sample.objects.filter(calendar_age__gte=start_age, calendar_age__lte=end_age)
 
     if samples is not None and age_samples is not None:
         samples = set(samples).intersection(age_samples)

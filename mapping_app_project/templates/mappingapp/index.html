@@ -1,6 +1,6 @@
 {% extends 'mappingapp/base.html' %}
 {% load static %}
-{% block home %}<li class="li-active"><a id="activelink" href="/mappingapp/">Home</a></li>{% endblock home %}
+{% block home %}<li class="li-active"><a id="activelink" href="/briticechrono/">Home</a></li>{% endblock home %}
 {% block body_block %}
                 {% if is_member %}
                <div class="hidden" id="new_markers">{% for marker in new_markers %}{{ marker }}{% endfor %}</div>
@@ -20,7 +20,7 @@
 
     <div id="dialog" title="Age Filter">
             <p>Enter an inclusive age range to filter samples:</p>
-       <div> <b>10000</b>  <input id="ex2" type="text" class="span2" value="" data-slider-min="10000" data-slider-max="30000" data-slider-step="5" data-slider-value="[10000,30000]" data-slider-tooltip="hide"/> <b>30000</b></div><br/>
+       <div><b>10000</b><input id="ex2" type="text" class="span2" value="" data-slider-min="10000" data-slider-max="30000" data-slider-step="5" data-slider-value="[10000,30000]" data-slider-tooltip="hide"/> <b>30000</b></div><br/>
 
         <div class="filterages">
             <div class="col-md-5 col-xs-6">

@@ -306,7 +306,7 @@ function initialize() {
 
         var marker_data = [];
 
-        $.getJSON('/mappingapp/markers/', function (data) {
+        $.getJSON('/briticechrono/markers/', function (data) {
 
             $.each(data, function (key, val) {
                 sample_data = {'lat': val.latitude, 'long': val.longitude, 'type': val.type, 'code': val.code,
