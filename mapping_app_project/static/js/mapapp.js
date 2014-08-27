@@ -352,7 +352,7 @@ $(document).ready(function() {
     if ($('#validate').length > 0) {
         var sample = $('#id_sample_code').text();
 
-        $.getJSON('/briticechrono/check_sample/', {sample_code: sample1}, function (data) {
+        $.getJSON('/briticechrono/check_sample/', {sample_code: sample}, function (data) {
             $.each(data, function (key, val) {
                 var response = val.exists;
                 if (response == true) {

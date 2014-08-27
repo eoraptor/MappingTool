@@ -177,13 +177,13 @@ function initialize() {
             center: new google.maps.LatLng(56, -4.2921),
             zoom: 5,
             mapTypeId: google.maps.MapTypeId.SATELLITE,
-            panControl: false,
-            mapTypeControl: false,
-            streetViewControl: false,
             zoomControl: true,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle.SMALL
-            }
+            },
+            panControl: false,
+            mapTypeControl: false,
+            streetViewControl: false
         };
 
 
@@ -412,7 +412,7 @@ function MarkerSelectControl(controlDiv, map) {
   // Set CSS for the control border.
   var clearbutton = document.createElement('button');
   clearbutton.className = 'btn-warning';
-  clearbutton.style.height = '25px';
+  clearbutton.style.Height = '25px !important';
   clearbutton.style.verticalAlign = 'middle';
   clearbutton.title = 'Click to delete the shape';
   clearbutton.innerHTML = 'Clear';
@@ -424,7 +424,7 @@ function MarkerSelectControl(controlDiv, map) {
   var viewbutton = document.createElement('button');
   viewbutton.className = 'btn-success';
   viewbutton.id = 'viewbutton';
-  viewbutton.style.height = '25px';
+  viewbutton.style.height = '25px !important';
   viewbutton.style.verticalAlign = 'middle';
   viewbutton.title = 'Click to view selected sample data in a table';
   viewbutton.innerHTML = 'View Samples';
@@ -445,9 +445,10 @@ function MarkerSelectHelp(controlDiv, map) {
   // Set CSS for the control border.
   var help = document.createElement('div');
   help.id = 'helplabel';
-  help.style.height = '25px';
   help.style.backgroundColor = '#d7e9c6';
   help.style.border = '1px solid';
+  help.style.paddingTop = '2px';
+  help.style.paddingBottom = '1px';
   help.style.paddingLeft = '4px';
   help.style.paddingRight = '4px';
   help.style.borderColor = 'black';
@@ -464,7 +465,7 @@ function MarkerFilterButton(controlDiv, map) {
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
     controlDiv.style.paddingTop = '7px';
-    controlDiv.style.paddingRight = '7px';
+    controlDiv.style.paddingRight = '8px';
 
     // Set CSS for the control border.
     var markerfilter = document.createElement('button');
@@ -485,7 +486,7 @@ function NewMarkerButton(controlDiv, map) {
     // Set CSS styles for the DIV containing the control
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
-    controlDiv.style.paddingRight = '7px';
+    controlDiv.style.paddingRight = '8px';
 
     // Set CSS for the control border.
     var newmarker = document.createElement('button');
@@ -507,7 +508,7 @@ function AllMarkersButton(controlDiv, map) {
     // Set CSS styles for the DIV containing the control
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
-    controlDiv.style.paddingRight = '7px';
+    controlDiv.style.paddingRight = '8px';
 
     // Set CSS for the control border.
     var allmarkers = document.createElement('button');

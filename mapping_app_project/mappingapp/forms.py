@@ -16,9 +16,9 @@ class UploadFileForm(forms.Form):
 
 class CoreDetailsForm(forms.ModelForm):
     exposure_core = forms.CharField(help_text='Exposure/Core', required=False,
-                              widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
+                              widget=forms.Textarea())
     core_number = forms.CharField(help_text='Core Number', required=False,
-                              widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
+                              widget=forms.Textarea())
 
     class Meta:
         model = Core_Details
@@ -34,19 +34,19 @@ class PhotographForm(forms.ModelForm):
 
 class EditCoordinatesForm(forms.ModelForm):
     bng_ing = forms.CharField(help_text='BNG/ING', required=False,
-                              widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+                              widget=forms.Textarea(attrs={'class':'noresize'}))
     grid_reference = forms.CharField(help_text='Grid Reference', required=False,
-                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 15}))
+                                     widget=forms.Textarea(attrs={'class':'noresize'}))
     easting = forms.IntegerField(help_text='Easting', required=False,
-                                 widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
+                                 widget=forms.Textarea(attrs={'class':'noresizenumber'}))
     northing = forms.IntegerField(help_text='Northing', required=False,
-                                  widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
+                                  widget=forms.Textarea(attrs={'class':'noresizenumber'}))
     latitude = forms.FloatField(help_text='Latitude', required=False,
-                                widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
+                                widget=forms.Textarea(attrs={'class':'noresizenumber'}))
     longitude = forms.FloatField(help_text='Longitude', required=False,
-                                 widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
+                                 widget=forms.Textarea(attrs={'class':'noresizenumber'}))
     elevation = forms.CharField(help_text='Elevation', required=False,
-                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 7}))
+                                widget=forms.Textarea(attrs={'class':'noresize'}))
 
     class Meta:
         model = Coordinates
@@ -85,27 +85,27 @@ class RetreatForm(forms.ModelForm):
 
 class EditSampleForm(forms.ModelForm):
     sample_code = forms.CharField(help_text='Sample Code', required=True,
-                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 24}))
+                                  widget=forms.Textarea(attrs={'class':'noresize'}))
     sample_location_name = forms.CharField(help_text='Sample Location Name', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 56}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     collection_date = forms.DateField(help_text='Collection Date', input_formats=['%d/%m/%Y'], required=False,
-                                      widget=forms.DateInput(format='%d/%m/%Y', attrs={'size':10}))
+                                      widget=forms.DateInput(format='%d/%m/%Y'))
     collector = forms.CharField(help_text='Collector(s)', required=False,
-                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 32}))
+                                widget=forms.Textarea(attrs={'class':'noresize'}))
     sample_notes = forms.CharField(help_text='Notes', required=False,
-                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
+                                   widget=forms.Textarea())
     dating_priority = forms.CharField(help_text='Dating Priority', required=False,
-                                      widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 6}))
+                                      widget=forms.Textarea(attrs={'class':'noresize'}))
     age = forms.IntegerField(help_text='Sample Age', required=False,
-                             widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
+                             widget=forms.Textarea(attrs={'class':'noresizenumber'}))
     age_error = forms.IntegerField(help_text='Age Error', required=False,
-                                   widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
+                                   widget=forms.Textarea(attrs={'class':'noresizenumber'}))
     calendar_age = forms.IntegerField(help_text='Calendar Age', required=False,
-                                      widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
+                                      widget=forms.Textarea(attrs={'class':'noresizenumber'}))
     calendar_error = forms.IntegerField(help_text='Calendar Error', required=False,
-                                        widget=forms.Textarea(attrs={'class':'noresizenumber', 'rows': 1, 'cols': 8}))
+                                        widget=forms.Textarea(attrs={'class':'noresizenumber'}))
     lab_code = forms.CharField(help_text='Lab Code', required=False,
-                               widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                               widget=forms.Textarea(attrs={'class':'noresize'}))
     sample_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
                                                 widget=forms.HiddenInput(), required=False)
     samp_site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput(), required=False)
@@ -117,19 +117,19 @@ class EditSampleForm(forms.ModelForm):
 
 class EditRadiocarbonForm(forms.ModelForm):
     depth_below_SL = forms.CharField(help_text='Depth', required=False,
-                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 2}))
+                                     widget=forms.Textarea(attrs={'class':'noresize'}))
     material = forms.CharField(help_text='Material', required=False,
-                               widget=forms.Textarea(attrs={'rows': 2, 'cols': 86}))
+                               widget=forms.Textarea())
     geological_setting = forms.CharField(help_text='Geological Setting', required=False,
-                                         widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
+                                         widget=forms.Textarea())
     stratigraphic_position_depth = forms.CharField(help_text='Stratigraphic Position Depth', required=False,
-                                                   widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
+                                                   widget=forms.Textarea())
     sample_weight = forms.CharField(help_text='Weight (g)', required=False,
-                                    widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                    widget=forms.Textarea(attrs={'class':'noresize'}))
     pot_contamination = forms.CharField(help_text='Potential Contamination', required=False,
-                                        widget=forms.Textarea(attrs={'rows': 3, 'cols': 98}))
+                                        widget=forms.Textarea())
     calibration_curve = forms.CharField(help_text='Calibration Curve', required=False,
-                                        widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                        widget=forms.Textarea(attrs={'class':'noresize'}))
     c14_core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput(), required=False)
     c14_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
 
@@ -139,26 +139,26 @@ class EditRadiocarbonForm(forms.ModelForm):
 
 class EditSampleSiteForm(forms.ModelForm):
     collected_by = forms.CharField(help_text='Collector(s)', required=False,
-                                   widget=forms.Textarea(attrs={'rows':2, 'cols':39}))
+                                   widget=forms.Textarea())
     site_name = forms.CharField(help_text='Name', required=False,
-                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 35}))
+                                widget=forms.Textarea(attrs={'class':'noresize'}))
     site_location = forms.CharField(help_text='Location', required=False,
-                                    widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
+                                    widget=forms.Textarea())
     county = forms.CharField(help_text='County', required=False,
-                             widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+                             widget=forms.Textarea(attrs={'class':'noresize'}))
     site_date = forms.DateField(help_text='Date', input_formats=['%d/%m/%Y'], required=False,
-                                      widget=forms.DateInput(format='%d/%m/%Y', attrs={'size':10}))
+                                      widget=forms.DateInput(format='%d/%m/%Y'))
     operator = forms.CharField(help_text='Operator', required=False,
-                               widget=forms.Textarea(attrs={'rows': 2, 'cols': 20}))
+                               widget=forms.Textarea())
     geomorph_setting = forms.CharField(help_text='Geomorph Setting', required=False,
-                                       widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}))
+                                       widget=forms.Textarea())
     sample_type_collected = forms.CharField(help_text='Sample Type', required=False,
-                                            widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 20}))
+                                            widget=forms.Textarea(attrs={'class':'noresize'}))
     photos_taken = forms.NullBooleanField(help_text='Photos Taken', required=False)
     photographs = forms.CharField(help_text='Photograph Labels/Time Stamps', required=False,
-                                  widget=forms.Textarea(attrs={'rows': 2, 'cols': 44}))
+                                  widget=forms.Textarea())
     site_notes = forms.CharField(help_text='Notes', required=False,
-                                 widget=forms.Textarea(attrs={'rows': 2, 'cols': 100}))
+                                 widget=forms.Textarea())
     site_coordinates = forms.ModelChoiceField(queryset=Coordinates.objects.all(),
                                               widget=forms.HiddenInput(), required=False)
 
@@ -168,31 +168,31 @@ class EditSampleSiteForm(forms.ModelForm):
 
 class EditOSLSampleForm(forms.ModelForm):
     stratigraphic_position = forms.CharField(help_text='Stratigraphic Position', required=False,
-                                             widget=forms.Textarea(attrs={'rows': 2, 'cols': 26}))
+                                             widget=forms.Textarea())
     lithofacies = forms.CharField(help_text='Lithofacies', required=False,
-                                  widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 28}))
+                                  widget=forms.Textarea(attrs={'class':'noresize'}))
     burial_depth = forms.CharField(help_text='Burial Depth', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 3}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     lithology = forms.CharField(help_text='Lithology', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 44}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     gamma_spec = forms.CharField(help_text='Gamma Spec Model', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 25}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     equipment_number = forms.CharField(help_text='Equip No.', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 1}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     probe_serial_no = forms.CharField(help_text='Probe Serial Number', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 52}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     filename = forms.CharField(help_text='Filename', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 18}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     sample_time = forms.CharField(help_text='Time', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 3}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     sample_duration = forms.CharField(help_text='Duration', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     potassium = forms.CharField(help_text='Potassium', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     thorium = forms.CharField(help_text='Thorium', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     uranium = forms.CharField(help_text='Uranium', required=False,
-                                           widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                           widget=forms.Textarea(attrs={'class':'noresize'}))
     osl_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
     osl_core = forms.ModelChoiceField(queryset=Core_Details.objects.all(), widget=forms.HiddenInput(), required=False)
 
@@ -202,21 +202,21 @@ class EditOSLSampleForm(forms.ModelForm):
 
 class EditTCNForm(forms.ModelForm):
     quartz_content = forms.CharField(help_text='Quartz Content', required=False,
-                                     widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                     widget=forms.Textarea(attrs={'class':'noresize'}))
     sample_setting = forms.CharField(help_text='Sample Setting', required=False,
-                                     widget=forms.Textarea(attrs={'rows':3, 'cols':98}))
+                                     widget=forms.Textarea())
     sampled_material = forms.CharField(help_text='Sampled Material', required=False,
-                                       widget=forms.Textarea(attrs={'rows':3, 'cols':44}))
+                                       widget=forms.Textarea())
     boulder_dimensions = forms.CharField(help_text='Boulder Dimensions', required=False,
-                                         widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 14}))
+                                         widget=forms.Textarea(attrs={'class':'noresize'}))
     sample_surface_strike_dip = forms.CharField(help_text='Surface Strike/Dip', required=False,
-                                                widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 8}))
+                                                widget=forms.Textarea(attrs={'class':'noresize'}))
     sample_thickness = forms.CharField(help_text='Thickness', required=False,
-                                       widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 5}))
+                                       widget=forms.Textarea(attrs={'class':'noresize'}))
     grain_size = forms.CharField(help_text='Grain Size', required=False,
-                                 widget=forms.Textarea(attrs={'class':'noresize', 'rows': 1, 'cols': 10}))
+                                 widget=forms.Textarea(attrs={'class':'noresize'}))
     lithology = forms.CharField(help_text='Lithology', required=False,
-                                widget=forms.Textarea(attrs={'rows':3, 'cols':44}))
+                                widget=forms.Textarea())
     tcn_sample = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
 
     class Meta:
@@ -228,12 +228,9 @@ class EditTCNForm(forms.ModelForm):
 
 class EditBIForm(forms.ModelForm):
     bearing = forms.IntegerField(help_text='Bearing', required=False,
-                                 widget=forms.Textarea(attrs={'class':'noresize',
-                                                              'rows': 1, 'cols': 1, 'resize':'none'}))
+                                 widget=forms.Textarea(attrs={'class':'bearinc', 'resize':'none'}))
     inclination = forms.IntegerField(help_text='Inclination',
-                                     required=False, widget=forms.Textarea(attrs={'class':'noresize',
-                                                                                  'rows': 1,
-                                                                                  'cols': 1, 'resize':'none'}))
+                                     required=False, widget=forms.Textarea(attrs={'class':'bearinc', 'resize':'none'}))
 
     class Meta:
         model = Bearing_Inclination

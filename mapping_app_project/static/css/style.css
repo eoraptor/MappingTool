@@ -20,6 +20,14 @@ body {
     box-shadow:0 0 5px #555;
 }
 
+/* info windows*/
+.gm-style-iw {
+    width: 185px;
+    height: 185px;
+    color: #4c62ad;
+}
+
+
 /* map drawing tools*/
 .filterages {
     width: 250px;
@@ -44,7 +52,7 @@ body {
 /* remove resize option on selected text areas */
 .noresize, .noresizenumber {
     resize: none;
-    height: 23px;
+    height: 23px !important;
     vertical-align: middle;
 }
 
@@ -65,14 +73,9 @@ body {
 }
 
 .formspan.left.search {
-
     margin-bottom: 30px;
 }
 
-.formspan.left.search {
-
-    margin-bottom: 30px;
-}
 
 fieldset.standard {
     padding-top:20px;
@@ -91,12 +94,120 @@ fieldset.standard {
 }
 
 
-.gm-style-iw {
-    width: 185px;
-    height: 185px;
-    color: #4c62ad;
+#id_sample_notes, #id_sample_setting, #id_geomorph_setting {
+    height: 70px;
+    width: 540px;
 }
 
+#id_geological_setting, #id_pot_contamination, #id_site_notes {
+    height: 50px;
+    width: 540px;
+}
+
+#id_sampled_material, #id_lithology {
+    height: 70px;
+    width: 265px;
+}
+
+#id_site_location, #id_photographs {
+    height: 50px;
+    width: 265px;
+}
+
+#id_depth_below_SL {
+    width: 50px;
+}
+
+#id_sample_location_name, #id_probe_serial_no {
+    width: 320px;
+}
+
+#id_material {
+    height: 50px;
+    width: 480px;
+}
+
+#id_collector, #id_lithofacies {
+    width: 200px;
+}
+
+#id_lithology {
+    width: 260px;
+}
+
+#id_burial_depth {
+    width: 60px;
+}
+
+#id_filename {
+    width: 125px;
+}
+
+#id_equipment_number {
+    width: 50px;
+}
+
+#id_gamma_spec {
+    width: 180px;
+}
+
+#id_sample_time, #id_uranium, #id_potassium, #id_thorium {
+    width: 60px;
+}
+
+#id_sample_duration, #id_sample-latitude, #id_sample-longitude, #id_sample-northing, #id_sample-easting,
+#id_sample-elevation, #id_age, #id_age_error, #id_calendar_age, #id_calendar_error, #id_lab_code, #id_calibration_curve,
+#id_site-latitude, #id_site-longitude, #id_site-easting, #id_site-northing, #id_site-elevation{
+    width: 83px;
+}
+
+#id_collection_date, #id_dating_priority, #id_sample_weight, #id_quartz_content, #id_sample_surface_strike_dip,
+#id_sample_thickness, #id_grain_size, #id_site_date {
+    width: 80px;
+    height: 23px;
+}
+
+#id_transect_number, #id_zone_number {
+    height: 23px;
+    width: 45px;
+}
+
+#id_sample-grid_reference, #id_boulder_dimensions, #id_site-grid_reference {
+    width: 120px;
+}
+
+#id_sample-bng_ing, #id_sample_code, #id_county, #id_site-bng_ing {
+    width: 150px;
+}
+
+.bearinc {
+    resize: none;
+    width:40px;
+    height: 27px;
+}
+
+#id_exposure_core, #id_core_number, #id_stratigraphic_position, #id_stratigraphic_position_depth {
+    width: 175px;
+    height: 70px;
+}
+
+#id_site_name {
+    width: 190px;
+}
+
+#id_operator {
+    width: 150px;
+    height: 50px;
+}
+
+#id_collected_by {
+    width: 225px;
+    height: 50px;
+}
+
+#id_sample_type_collected {
+    width: 145px;
+}
 
 fieldset#site {
     width:560px;

@@ -5,7 +5,7 @@
 <li class="li-active dropdown">
     <a href='#' id="activelink" class="dropdown-toggle" data-toggle="dropdown">Add New <span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="/mappingapp/upload/">Upload File</a></li>
+        <li><a href="/briticechrono/upload/">Upload File</a></li>
         <li class="divider"></li>
         <li><a href="/briticechrono/createnew/c14">Create C14 Sample</a></li>
         <li><a href="/briticechrono/createnew/osl">Create OSL Sample</a></li>
@@ -270,14 +270,14 @@
                                                     {{ sitecoordform.northing }}
                                                 </div>
                                                 <div class="formspan">
-                                                    {{ sitecoordform.grid_reference.errors }}
-                                                    <label class="formlabel">{{ sitecoordform.grid_reference.help_text }}</label>
-                                                    {{ sitecoordform.grid_reference }}
-                                                </div>
-                                                <div class="formspan">
                                                     {{ sitecoordform.elevation.errors }}
                                                     <label class="formlabel">{{ sitecoordform.elevation.help_text }}</label>
                                                     {{ sitecoordform.elevation }}
+                                                </div>
+                                                <div class="formspan">
+                                                    {{ sitecoordform.grid_reference.errors }}
+                                                    <label class="formlabel">{{ sitecoordform.grid_reference.help_text }}</label>
+                                                    {{ sitecoordform.grid_reference }}
                                                 </div>
                                                 <div class="formspan">
                                                     {{ sitecoordform.bng_ing.errors }}
