@@ -7,13 +7,16 @@ var selectedShape;
 var iconBase = "/static/imgs/";
 var coordinates;
 var newShape;
+var marker_data = [];
+var center;
 
-     function clearSelection() {
-        if (selectedShape) {
-          selectedShape.setEditable(false);
-          selectedShape = null;
-        }
-      }
+
+function clearSelection() {
+    if (selectedShape) {
+        selectedShape.setEditable(false);
+        selectedShape = null;
+    }
+}
 
       function setSelection(shape) {
         clearSelection();
@@ -115,7 +118,7 @@ var newShape;
 
 function getCoordinates() {
 
-           coordinates = (selectedShape.getPath().getArray());
+            coordinates = (selectedShape.getPath().getArray());
 
             var poly = new google.maps.Polygon ({
                 paths: coordinates
@@ -262,16 +265,13 @@ function initialize() {
             var icon = type.icon;
             var div = document.createElement("row");
             div.innerHTML = name + '<img src="' + icon + '" height="20px">';
+            div.style.marginLeft = '4px';
             legend.appendChild(div);
         }
 
         map.controls[google.maps.ControlPosition.BOTTOM].push(legend);
 
-        var center;
 
-        function calculateCenter() {
-            center = map.getCenter();
-        }
 
         google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
 
@@ -294,17 +294,15 @@ function initialize() {
         google.maps.event.addListener(map, 'click', clearSelection);
         });
 
-        google.maps.event.addDomListener(map, 'idle', function () {
-            calculateCenter();
-        });
-
-        google.maps.event.addDomListener(window, 'resize', function () {
+        google.maps.event.addDomListener(window, "resize", function() {
+             var center = map.getCenter();
+            google.maps.event.trigger(map, "resize");
             map.setCenter(center);
         });
 
         var infowindow;
 
-        var marker_data = [];
+
 
         $.getJSON('/briticechrono/markers/', function (data) {
 
@@ -465,7 +463,7 @@ function MarkerFilterButton(controlDiv, map) {
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
     controlDiv.style.paddingTop = '7px';
-    controlDiv.style.paddingRight = '8px';
+    controlDiv.style.paddingRight = '20px';
 
     // Set CSS for the control border.
     var markerfilter = document.createElement('button');
@@ -486,7 +484,7 @@ function NewMarkerButton(controlDiv, map) {
     // Set CSS styles for the DIV containing the control
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
-    controlDiv.style.paddingRight = '8px';
+    controlDiv.style.paddingRight = '20px';
 
     // Set CSS for the control border.
     var newmarker = document.createElement('button');
@@ -508,7 +506,7 @@ function AllMarkersButton(controlDiv, map) {
     // Set CSS styles for the DIV containing the control
     // Setting padding to 5 px will offset the control
     // from the edge of the map.
-    controlDiv.style.paddingRight = '8px';
+    controlDiv.style.paddingRight = '20px';
 
     // Set CSS for the control border.
     var allmarkers = document.createElement('button');

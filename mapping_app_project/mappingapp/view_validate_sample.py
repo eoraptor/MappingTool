@@ -209,16 +209,11 @@ def validatesample(request):
                 retreat = retForm.save()
 
                 site_selected = hiddensiteForm.save()
-                sample_site = None
-                try:
-                     sample_site = Sample_Site.objects.get(site_name=site_selected)
-                except:
-                     pass
 
                 sample.transect = transect
                 sample.retreat = retreat
                 sample.sample_coordinates = sample_coords
-                sample.sample_site = sample_site
+                sample.sample_site = site_selected
                 sample.save()
 
                 marker_list = None

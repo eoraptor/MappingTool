@@ -25,7 +25,7 @@ class PhotographManager(models.Manager):
 
 class Photograph(models.Model):
     photo_time_stamp = models.DateTimeField(null=True, blank=True)
-    photo_label = models.CharField(max_length=128, null=True, blank=True)
+    photo_label = models.TextField(null=True, blank=True)
 
     objects = PhotographManager()
 
@@ -53,9 +53,6 @@ class Coordinates(models.Model):
 
     def __unicode__(self):
         return self.grid_reference
-
-    def as_json(self):
-        return dict(input_lat=self.latitude, input_long=self.longitude)
 
 
 class TransectManager(models.Manager):
@@ -104,7 +101,7 @@ class SampleManager(models.Manager):
         return sample
 
 class Sample(models.Model):
-    sample_code = models.CharField(max_length=100, null=True, blank=True)
+    sample_code = models.CharField(max_length=255, null=True, blank=True)
     sample_location_name = models.CharField(max_length=255, null=True, blank=True)
     collection_date = models.DateField(null=True, blank=True)
     collector = models.CharField(max_length=255, null=True, blank=True)
@@ -158,11 +155,11 @@ class RadiocarbonManager(models.Manager):
 
 class Radiocarbon_Sample(models.Model):
     depth_below_SL = models.CharField(max_length=255, null=True, blank=True)
-    material = models.CharField(max_length=1000, null=True, blank=True)
-    geological_setting = models.CharField(max_length=1500, null=True, blank=True)
+    material = models.TextField(null=True, blank=True)
+    geological_setting = models.TextField(null=True, blank=True)
     stratigraphic_position_depth = models.CharField(max_length=255, null=True, blank=True)
     sample_weight = models.CharField(max_length=255, null=True, blank=True)
-    pot_contamination = models.CharField(max_length=1500, null=True, blank=True)
+    pot_contamination = models.TextField(null=True, blank=True)
     calibration_curve = models.CharField(max_length=255, null=True, blank=True)
     c14_core = models.ForeignKey(Core_Details, null=True, blank=True)
     c14_sample = models.ForeignKey(Sample, null=True, blank=True)
@@ -264,13 +261,13 @@ class TCNManager(models.Manager):
 
 class TCN_Sample(models.Model):
     quartz_content = models.CharField(max_length=255, null=True, blank=True)
-    sample_setting = models.CharField(max_length=255, null=True, blank=True)
+    sample_setting = models.TextField(null=True, blank=True)
     sampled_material = models.CharField(max_length=255, null=True, blank=True)
     boulder_dimensions = models.CharField(max_length=255, null=True, blank=True)
     sample_surface_strike_dip = models.CharField(max_length=255, null=True, blank=True)
     sample_thickness = models.CharField(max_length=255, null=True, blank=True)
     grain_size = models.CharField(max_length=255, null=True, blank=True)
-    lithology = models.CharField(max_length=255, null=True, blank=True)
+    lithology = models.TextField(null=True, blank=True)
     tcn_sample = models.ForeignKey(Sample, null=True, blank=True)
 
     objects = TCNManager()

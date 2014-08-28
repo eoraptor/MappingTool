@@ -265,6 +265,7 @@ $(document).ready(function(){
 });
 
 
+// set the hidden site form value - used to assign site to sample on saving
 $('#id_main-sites').change(function() {
     var selected = $('#id_main-sites option:selected').val();
     $('#id_hidden-site_name').val(selected);
@@ -319,12 +320,13 @@ $('#savebutton').click(function(){
             if ((val.created) == true) {
             $('#id_main-sites').append(new Option(site));
             $('#id_fill-sites').append(new Option(site));
+            $("#id_main-sites").val(site);
+            $('#id_hidden-site_name').val(site);
             alert('Site Saved')
             }else if ((val.created) == false) {
                 alert('Site Already Exists')
             }
         });
-    $("#id_main-sites").val(site);
   });
     $('#myModal').hide()
 });
@@ -462,8 +464,7 @@ $( "#skipbutton" ).click(function () {
                 location.reload();
                 $('#validatebutton').attr("disabled", false);
             }else{
-//          !!!!      This must be changed when not on local machine !!!
-                window.location.replace("http://127.0.0.1:8000/briticechrono/");
+                $('#linktohome').click()
             }
         });
     });

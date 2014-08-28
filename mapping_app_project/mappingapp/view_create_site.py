@@ -52,10 +52,10 @@ def create_site(request):
                                                  geomorph_setting=geomorph, sample_type_collected=type,
                                                  site_date=date)
 
-        # new site created ---> create set of coordinates.  Being by setting empty number fields to None
+        # if new site created ---> create set of coordinates.  Begin by setting empty number fields to None
         if site[1] is True:
             if easting == '':
-                 easting = None
+                easting = None
             if northing == '':
                 northing = None
             if latitude == '':
@@ -63,13 +63,20 @@ def create_site(request):
             if longitude == '':
                 longitude = None
 
-            coordinates = Coordinates.objects.create(elevation=elevation, latitude=latitude, longitude=longitude,
-                                                 grid_reference=grid, bng_ing=bng, easting=easting, northing=northing,)
+            # if all fields null or None don't create a coordinates instance
+            if bng == '' and grid == '' and easting is None and northing is None and latitude is None and\
+                longitude is None and elevation == '':
+                coordinates = None
+            else:
+                coordinates = Coordinates.objects.create(elevation=elevation, latitude=latitude, longitude=longitude,
+                                                     grid_reference=grid, bng_ing=bng, easting=easting, northing=northing,)
 
             sample_site = site[0]
+            # add coordinates to site
             sample_site.site_coordinates = coordinates
             sample_site.save()
 
+        # return boolean to show if site created or not
         reply = json.dumps([{'created':site[1]}])
 
         return HttpResponse(reply, content_type='application/json')

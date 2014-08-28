@@ -88,16 +88,11 @@ def create_new(request, sample_type_url):
                 retreat = retForm.save()
 
                 site_selected = hiddensiteForm.save()
-                sample_site = None
-                try:
-                     sample_site = Sample_Site.objects.get(site_name=site_selected)
-                except:
-                     pass
 
                 sample.transect = transect
                 sample.retreat = retreat
                 sample.sample_coordinates = sample_coords
-                sample.sample_site = sample_site
+                sample.sample_site = site_selected
                 sample.save()
 
                 core = None
@@ -128,8 +123,9 @@ def create_new(request, sample_type_url):
                         for form in bearingsFormSet.forms:
                             bear_inc = form.save()
                             if bear_inc is not None:
-                                sample_bearing = Sample_Bearing_Inclination.objects.get_or_create(sample_with_bearing=tcn,
+                                sample_bearing = Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn,
                                                                                          bear_inc=bear_inc)
+
                 if sample is not None:
                     request.session['new_markers'] = sample.sample_code
 

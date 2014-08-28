@@ -34,6 +34,9 @@
             <div class="hidden" id="validate"></div>
         {% endblock validate %}
 
+        <div class="hidden" id="site_option">{{ site_name }}</div>
+        {{ hiddensiteform.site_name }}
+
         <div class="bs-example bs-example-tabs">
             <ul id="tcntab" class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>
@@ -143,8 +146,7 @@
                     {{ sitechoices.sites }}
                         </div>
 
-                    <div class="hidden" id="site_option">{{ site_name }}</div>
-                    {{ hiddensiteform.site_name }}
+
 
                     <!-- Button trigger modal -->
                     <button type="button" class="btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
