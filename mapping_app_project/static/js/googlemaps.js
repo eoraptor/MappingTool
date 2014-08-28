@@ -339,6 +339,7 @@ function initialize() {
                     }
                     var latitude = Math.round(marker.lat * Math.pow(10, 5)) / Math.pow(10, 5);
                     var longitude = Math.round(marker.lng * Math.pow(10, 5)) / Math.pow(10, 5);
+
                     infowindow.setContent('<h5>' + marker.title + '</h5>' + '<hr>' + '<b>Lat: </b>' + latitude + '<br />' +
                         '<b>Lng: </b>' + longitude + '<br /><b>Calendar Age: </b>' + marker.age +
                         '<br /><b>Type: </b>' + marker.type + '<br /><b>Site: </b>' + marker.site);
@@ -452,6 +453,8 @@ function MarkerSelectHelp(controlDiv, map) {
   help.style.borderColor = 'black';
   help.style.verticalAlign = 'middle';
   help.innerHTML = 'Drawing Controls';
+  help.title = 'Click the polygon icon to draw on the map.  ' +
+      'Use the View Samples button to view the selected samples in tabular format.';
   help.style.fontSize = '15px';
   controlDiv.appendChild(help);
 }

@@ -101,20 +101,26 @@ function openerrordialogue() {
 
 $(document).ready(function(){
 
+    // slider plugin for Age Filter
     $("#ex2").slider();
         $(this).on('slide', function(slideEvt) {
 	    var range = slideEvt.value;
-        $('#startagefilter').val(range[0])
-        $('#endagefilter').val(range[1])
+        $('#startagefilter').val(range[0]);
+        $('#endagefilter').val(range[1]);
 });
 
-
+    // hide Site modal save button on page launch (shown if Create New Site option selected)
     $('#savebutton').hide();
 
+    // initialise and hide error dialogue on Edit, Validate & Create New pages
     $("#errordialog").dialog({
                autoOpen: false
             });
 
+    // open error dialogue on error button click
+    $('#errorbutton').click(openerrordialogue);
+
+    // check file is of correct type
     $('#id_file').change(function(){
     var filename = $('#id_file').val();
     var fileparts = filename.split('.');
@@ -127,24 +133,35 @@ $(document).ready(function(){
     }
     });
 
-    $('#errorbutton').click(openerrordialogue);
 
+    // check if site name was loaded with sample in Edit, Validate & Create New pages
     var site_name = $('#site_option').text();
 
-    if (site_name == 'None') {
+    // if no site, disable show details button in site panel - stop empty modal launching
+    if (site_name == 'None' || site_name == '') {
         $('#modalbutton1').attr("disabled", true);
     }else{
         $('#id_main-sites').val(site_name);
     }
-
+    // add selected site to hidden site form - will be used to set sample site when sample is saved
     $('#site_selected').text(site_name);
     $('#id_hidden-site_name').val(site_name);
 
+    //
     $('.td').click(function() {
     var text = $(this).text();
     $('#id_samp_code').val(text);
     });
 
+    // round the Lat/Long values in the sample form
+    var lat = $('#id_sample-latitude').val();
+    var long = $('#id_sample-longitude').val();
+    var latitude = Math.round(lat * Math.pow(10, 5)) / Math.pow(10, 5);
+    var longitude = Math.round(long * Math.pow(10, 5)) / Math.pow(10, 5);
+    $('#id_sample-latitude').val(latitude);
+    $('#id_sample-longitude').val(longitude);
+
+    // setup for tablesorter plugin on Search page
     $(function(){
 
     $table = $('table');
@@ -202,13 +219,12 @@ $(document).ready(function(){
     });
 
 
-
+    // register changes to sample code input box in Edit, Validate & Create New pages - used to check against database
     $('textarea[name=sample_code]').keyup(function() {
     $('#id_sample_code').text($(this).val());
     });
 
-
-
+    // respond to typing in number fields in Edit, Validate & Create New pages - checks if numerical type
     $('textarea[class=noresizenumber]').keyup(function(){
         var field = this.id;
         var value = this.value;
@@ -216,7 +232,7 @@ $(document).ready(function(){
     });
 
 
-    // add datepicker to datefield
+    // add datepicker to datefields in sample and site forms
      $(function() {
       $('#id_collection_date').datepicker({dateFormat: 'dd/mm/yy'});
 });
@@ -225,7 +241,7 @@ $(document).ready(function(){
     $('#id_site_date').datepicker({dateFormat: 'dd/mm/yy'});
 });
 
-    // Test for missing keys - A1 cell contents
+    // Test for missing keys - if key missing A1 cell contents appear
     for (var i = 0 ; i < sample_fields.length ; i++) {
         if ($(sample_fields[i]).val() == "TCN Sample Sheet" || $(sample_fields[i]).val() == "14C Sample Sheet" ||
             $(sample_fields[i]).val() == "Section B: OSL Sample Sheet") {
@@ -234,6 +250,7 @@ $(document).ready(function(){
         }
     }
 
+    // stop saving of empty or duplicate sample code fields
     if ($('#validate').length > 0) {
         var sample = $('#id_sample_code').text();
         if (sample === '') {
@@ -255,14 +272,26 @@ $(document).ready(function(){
         }
     }
 
-
+    // trigger a sample code search using the codes from the markers selected on the map page either from drawing
+    // or the age filter
     if ($('#marker_codes').text() != 'None') {
         var sample_codes = $('#marker_codes').text().slice(0,-1);
         $('#searchcode').val(sample_codes);
         $('#searchbutton').trigger( "click" );
+        $('#searchcode').val('');
     }
 
 });
+
+    // reset the search fields
+    $('#clearsearchfields').click(function(){
+        $('#searchcode').val('');
+        $('#searchkeyword').val('');
+        $('#endage').val('');
+        $('#startage').val('');
+        $('#sampletype').val('');
+        $('#transectsearch').val('');
+    });
 
 
 // set the hidden site form value - used to assign site to sample on saving
@@ -277,6 +306,7 @@ $('#id_main-sites').change(function() {
 });
 
 
+// clear site modal fields on close
 $('#myModal').on('hidden.bs.modal', function (e) {
     for (var i = 0; i < fields.length ; i++) {
         $(fields[i]).val('');
@@ -286,7 +316,7 @@ $('#myModal').on('hidden.bs.modal', function (e) {
 });
 
 
-
+// Action for save button in Site Modal - creates new site if it doesn't exist
 $('#savebutton').click(function(){
     var site = $('#id_site_name').val();
 
@@ -331,7 +361,7 @@ $('#savebutton').click(function(){
     $('#myModal').hide()
 });
 
-
+// open the Create New Site modal
 $('#modalbutton2').click(function(){
     enable();
     $( "#savebutton" ).show();
@@ -343,6 +373,7 @@ $('#modalbutton2').click(function(){
  });
 
 
+// initialise the tooltips
 $('[data-toggle="tooltip"]').tooltip({
     'placement': 'top'
 });
@@ -379,14 +410,7 @@ $(document).ready(function() {
 });
 
 
-
-
-
-
-
-
-
-
+// enable input fields in site Modal in Edit, Validate & Create New pages
 var enable = function() {
     for (var i = 0 ; i < fields.length ; i++) {
     $(fields[i]).prop( "disabled", false );
@@ -394,6 +418,7 @@ var enable = function() {
     }
 };
 
+// disable input fields in site Modal in Edit, Validate & Create New pages
 var disable = function() {
     for (var i = 0 ; i < fields.length ; i++) {
     $(fields[i]).prop( "disabled", true );
@@ -402,6 +427,7 @@ var disable = function() {
 };
 
 
+// get site data for Site Modal in Edit, Validate & Create New pages
 var getsites = function(element) {
     var site = $(element + ' option:selected' ).val();
 
@@ -454,17 +480,20 @@ $( "#modalbutton1" ).click(function () {
 });
 
 
+
+// action to take when the skip button is pressed - increments counter and checks if all samples processed.
 $( "#skipbutton" ).click(function () {
     var sample = $('#id_sample_code').text();
 
     $.getJSON('/briticechrono/incrementcounter/', {sample_code: sample}, function (data) {
         $.each(data, function (key, val) {
             var response = val.done;
+
             if (response == false) {
                 location.reload();
                 $('#validatebutton').attr("disabled", false);
             }else{
-                $('#linktohome').click()
+                window.location.href = "../";
             }
         });
     });

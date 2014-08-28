@@ -22,6 +22,7 @@ def userlogin(request):
             # Is the account active?
             if user.is_active:
                 login(request, user)
+                request.session.set_expiry(0)
                 return HttpResponseRedirect('/briticechrono/')
             else:
                 # An inactive account was used - no logging in!

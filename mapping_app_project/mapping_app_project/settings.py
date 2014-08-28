@@ -49,6 +49,10 @@ LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
+SOCIAL_AUTH_SESSION_EXPIRATION=False
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
