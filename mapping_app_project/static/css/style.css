@@ -105,7 +105,7 @@ fieldset.standard {
 }
 
 #id_geological_setting, #id_pot_contamination, #id_site_notes {
-    height: 50px;
+    height: 60px;
     width: 540px;
 }
 
@@ -128,7 +128,7 @@ fieldset.standard {
 }
 
 #id_material {
-    height: 50px;
+    height: 60px;
     width: 480px;
 }
 
@@ -213,6 +213,9 @@ fieldset.standard {
 #id_sample_type_collected {
     width: 145px;
 }
+
+
+
 
 fieldset#site {
     width:560px;
@@ -822,6 +825,14 @@ th.tablesorter-header.resizable-false {
 
 #ex1Slider .slider-selection {
 	background: #BABABA;
+}
+
+/* registers if previous sample was saved */
+#saveAlert {
+    position: absolute;
+    top: 73px;
+    right: 600px;
+    z-index: 99999;
 }
 
 

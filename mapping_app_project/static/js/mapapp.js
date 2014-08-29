@@ -101,7 +101,7 @@ function openerrordialogue() {
 
 $(document).ready(function(){
 
-    // slider plugin for Age Filter
+       // slider plugin for Age Filter
     $("#ex2").slider();
         $(this).on('slide', function(slideEvt) {
 	    var range = slideEvt.value;
@@ -116,6 +116,15 @@ $(document).ready(function(){
     $("#errordialog").dialog({
                autoOpen: false
             });
+
+    // has sample been saved?
+    var sample_saved = $('#sample_saved').text();
+    if (sample_saved == 'True') {
+        $("#samp_saved").css('visibility', 'visible');
+        $("#saveAlert").fadeOut(6000);
+    }else{
+        $("#saveAlert").hide();
+    }
 
     // open error dialogue on error button click
     $('#errorbutton').click(openerrordialogue);
@@ -156,10 +165,15 @@ $(document).ready(function(){
     // round the Lat/Long values in the sample form
     var lat = $('#id_sample-latitude').val();
     var long = $('#id_sample-longitude').val();
-    var latitude = Math.round(lat * Math.pow(10, 5)) / Math.pow(10, 5);
+    if (lat != '') {
+        var latitude = Math.round(lat * Math.pow(10, 5)) / Math.pow(10, 5);
+        $('#id_sample-latitude').val(latitude);
+        }
+    if (long != '') {
     var longitude = Math.round(long * Math.pow(10, 5)) / Math.pow(10, 5);
-    $('#id_sample-latitude').val(latitude);
     $('#id_sample-longitude').val(longitude);
+    }
+
 
     // setup for tablesorter plugin on Search page
     $(function(){
@@ -217,6 +231,8 @@ $(document).ready(function(){
             })
         .tablesorterPager({container: $("#pager")});
     });
+
+
 
 
     // register changes to sample code input box in Edit, Validate & Create New pages - used to check against database
@@ -292,6 +308,7 @@ $(document).ready(function(){
         $('#sampletype').val('');
         $('#transectsearch').val('');
     });
+
 
 
 // set the hidden site form value - used to assign site to sample on saving

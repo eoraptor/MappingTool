@@ -33,6 +33,11 @@ def validatesample(request):
 
     missing_keys = request.session['missing_keys'+str(counter)]
 
+    if 'sample_saved' in request.session:
+        sample_saved = request.session['sample_saved']
+    else:
+        sample_saved = False
+
     num_bearings = None
     if request.session['counter'] > num_samples:
         del request.session['counter']
@@ -200,7 +205,9 @@ def validatesample(request):
                     pass
 
             if existing is not None:
+                request.session['sample_saved'] = False
                 pass
+
             else:
                 sample_coords = samplecoordForm.save()
 
@@ -259,6 +266,8 @@ def validatesample(request):
             else:
                 request.session['files_saved'] = request.session['file_name']
 
+            request.session['sample_saved'] = True
+
             # Process remaining samples
             if request.session['counter'] < num_samples:
                 counter = request.session['counter']
@@ -306,5 +315,6 @@ def validatesample(request):
                                                                  'sample_type':sample_type, 'errors':errors,
                                                                  'bearingformset':bearingsFormSet,  'tcnform':tcnForm,
                                                                  'oslform':oslForm, 'count':counter,
-                                                                 'num_samples':num_samples}, context)
+                                                                 'num_samples':num_samples,
+                                                                 'sample_saved':sample_saved}, context)
 

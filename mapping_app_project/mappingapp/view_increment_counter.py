@@ -14,6 +14,7 @@ def incrementcounter(request):
         counter = request.session['counter'] + 1
         request.session['counter'] = counter
         num_samples = request.session['sample_count']
+        request.session['sample_saved'] = False
         if counter <= num_samples:
             done = False
 
