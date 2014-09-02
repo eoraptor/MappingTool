@@ -74,19 +74,29 @@ def get_osl_sample_info(sample_sheet, sample_count):
    # convert date if format incorrect
     if sample_date is not None:
         date = str(sample_date)
+
         if ' 00:00:00' in date:
-             date = date.replace(' 00:00:00', '')
+            date = date.replace(' 00:00:00', '')
+
         if '.' in date:
             sample_date = convert_date(date)
             if sample_date == 'Error':
+                if notes is not None:
+                    notes = notes + ' ' + sample_date + '. '
+                else:
+                    notes = sample_date + '. '
                 sample_date = None
                 errors.append('Sample Date')
-                pass
         else:
-             try:
+            try:
                 date = datetime.datetime.strptime(date, '%Y-%m-%d')
                 sample_date = date.strftime('%d/%m/%Y')
-             except:
+
+            except:
+                if notes is not None:
+                    notes = notes + ' ' + date + '. '
+                else:
+                    notes = date + '. '
                 sample_date = None
                 errors.append('Sample Date')
 

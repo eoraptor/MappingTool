@@ -104,45 +104,61 @@ def get_tcn_sample_info(sample_sheet, sample_count):
     bearing = get_bearing(sample_sheet, positions['Bearing'])
 
     # check boulder dimension value - use three columns where appropriate
+    boulder_dim = None
     if isinstance(positions['Boulder dimensions [cm] (LxWxH)'], list):
-        boulder_dim = str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][0]].value)) + ' x ' +\
-            str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][1]].value)) + ' x ' +\
-            str(int(sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][2]].value))
+        value1 = sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][0]].value
+        value2 = sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][1]].value
+        value3 = sample_sheet[positions['Boulder dimensions [cm] (LxWxH)'][2]].value
 
-    else:
+        if isinstance(value1, float) and value1 is not None:
+            value1 = int(value1)
+
+        if isinstance(value2, float) and value2 is not None:
+            value1 = int(value2)
+
+        if isinstance(value3, float) and value3 is not None:
+            value1 = int(value3)
+
+        boulder_dim = str(value1) + ' x ' + str(value2) + ' x ' + str(value3)
+
+    elif positions['Boulder dimensions [cm] (LxWxH)'] is not None and\
+        positions['Boulder dimensions [cm] (LxWxH)'] != '':
         boulder_dim = sample_sheet[positions['Boulder dimensions [cm] (LxWxH)']].value
 
     # check to see if sample surface strike dip cell has been split
-    if sample_sheet[positions['Sample surface strike/dip '][1]] is not None:
-        surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value + ' / ' +\
-            sample_sheet[positions['Sample surface strike/dip '][1]].value
-    else:
-        surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value
+    surface_strike = None
+    if positions['Sample surface strike/dip '] is not None and positions['Sample surface strike/dip '] != '':
+        if sample_sheet[positions['Sample surface strike/dip '][1]] is not None:
+            surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value + ' / ' +\
+                sample_sheet[positions['Sample surface strike/dip '][1]].value
+        else:
+            surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value
 
     # check longitude in correct cell
-    if sample_sheet[positions['Longtitude'][0]].value is not None:
-        longitude = sample_sheet[positions['Longtitude'][0]].value
-    elif sample_sheet[positions['Longtitude'][1]].value is not None and\
-        sample_sheet[positions['Longtitude'][1]].value != 'Elevation':
-            longitude = sample_sheet[positions['Longtitude'][1]].value
-    else:
-        longitude = None
+    longitude = None
+    if positions['Longtitude'] is not None and positions['Longtitude'] != '':
+        if sample_sheet[positions['Longtitude'][0]].value is not None:
+            longitude = sample_sheet[positions['Longtitude'][0]].value
+        elif sample_sheet[positions['Longtitude'][1]].value is not None and\
+            sample_sheet[positions['Longtitude'][1]].value != 'Elevation':
+                longitude = sample_sheet[positions['Longtitude'][1]].value
 
     # check easting in correct cell
     sample_easting = None
-    if sample_sheet[positions['Easting'][0]].value is not None:
-        sample_easting = sample_sheet[positions['Easting'][0]].value
-    elif sample_sheet[positions['Easting'][1]].value is not None and\
-        sample_sheet[positions['Easting'][1]].value != 'Transect:':
-            sample_easting = sample_sheet[positions['Easting'][1]].value
+    if positions['Easting'] is not None and positions['Easting'] != '':
+        if sample_sheet[positions['Easting'][0]].value is not None:
+            sample_easting = sample_sheet[positions['Easting'][0]].value
+        elif sample_sheet[positions['Easting'][1]].value is not None and\
+            sample_sheet[positions['Easting'][1]].value != 'Transect:':
+                sample_easting = sample_sheet[positions['Easting'][1]].value
 
-        # check bng in correct cell
-    if sample_sheet[positions['BNG or ING'][0]].value is not None:
-        bng_ing = sample_sheet[positions['BNG or ING'][0]].value
-    elif sample_sheet[positions['BNG or ING'][1]].value is not None:
-            bng_ing = sample_sheet[positions['BNG or ING'][1]].value
-    else:
-        bng_ing = None
+    # check bng in correct cell
+    bng_ing = None
+    if positions['BNG or ING'] is not None and positions['BNG or ING'] != '':
+        if sample_sheet[positions['BNG or ING'][0]].value is not None:
+            bng_ing = sample_sheet[positions['BNG or ING'][0]].value
+        elif sample_sheet[positions['BNG or ING'][1]].value is not None:
+                bng_ing = sample_sheet[positions['BNG or ING'][1]].value
 
     # remove newlines from notes
     if notes is not None:
@@ -170,23 +186,33 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         if len(bearing) == 0:
             bearing = None
 
-
     # convert date if format incorrect
     if sample_date is not None:
         date = str(sample_date)
+
         if ' 00:00:00' in date:
              date = date.replace(' 00:00:00', '')
+
         if '.' in date:
             sample_date = convert_date(date)
             if sample_date == 'Error':
+                if notes is not None:
+                    notes = notes + ' ' + sample_date + '. '
+                else:
+                    notes = sample_date + '. '
                 sample_date = None
                 errors.append('Sample Date')
-                pass
         else:
-             try:
+            try:
                 date = datetime.datetime.strptime(date, '%Y-%m-%d')
                 sample_date = date.strftime('%d/%m/%Y')
-             except:
+
+            except:
+
+                if notes is not None:
+                    notes = notes + ' ' + date + '. '
+                else:
+                    notes = date + '. '
                 sample_date = None
                 errors.append('Sample Date')
 

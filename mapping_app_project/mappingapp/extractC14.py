@@ -76,19 +76,30 @@ def get_C14_sample_info(sample_sheet, sample_count):
     # convert date if format incorrect
     if sample_date is not None:
         date = str(sample_date)
+
         if ' 00:00:00' in date:
              date = date.replace(' 00:00:00', '')
+
         if '.' in date:
             sample_date = convert_date(date)
             if sample_date == 'Error':
+                if notes is not None:
+                    notes = notes + ' ' + sample_date + '. '
+                else:
+                    notes = sample_date + '. '
                 sample_date = None
                 errors.append('Sample Date')
-                pass
         else:
-             try:
+            try:
                 date = datetime.datetime.strptime(date, '%Y-%m-%d')
                 sample_date = date.strftime('%d/%m/%Y')
-             except:
+
+            except:
+
+                if notes is not None:
+                    notes = notes + ' ' + date + '. '
+                else:
+                    notes = date + '. '
                 sample_date = None
                 errors.append('Sample Date')
 
@@ -131,10 +142,10 @@ def get_C14_sample_info(sample_sheet, sample_count):
     # set sample type
     sample_type = 'C14'
 
-    sample_details = {'sample_bng_ing'+counter:bng_ing, 'sample_grid_reference'+counter:None,
+    sample_details = {'sample_bng_ing'+counter:bng_ing, 'sample_grid_reference'+counter:grid,
                       'sample_easting'+counter:sample_easting, 'sample_northing'+counter:sample_northing,
                       'sample_latitude'+counter:latitude, 'sample_longitude'+counter:longitude,
-                      'sample_elevation'+counter:elevation, 'grid_reference'+counter:grid,
+                      'sample_elevation'+counter:elevation,
                       'sample_code'+counter:sample_code, 'errors'+counter:errors,
                       'sample_location_name'+counter:sample_location_name, 'sample_date'+counter:sample_date,
                       'collector'+counter:collector, 'sample_notes'+counter:notes, 'transect'+counter:transect,

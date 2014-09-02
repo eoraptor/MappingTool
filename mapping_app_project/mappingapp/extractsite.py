@@ -63,11 +63,11 @@ def get_osl_site_cell_positions(ws):
                         osl_positions[val] = val_col + str(cell.row)
 
     # BNG or ING data?
-    northing_cell = None
-    easting_cell = None
+    northing_cell = ''
+    easting_cell = ''
     if ws[osl_positions['BNG (Easting)']].value is not None:
         easting_cell = osl_positions['BNG (Easting)']
-        northing_cell = columns[easting_cell.column+3] + str(easting_cell.row)
+        northing_cell = columns[columns.index(easting_cell[0])+3] + easting_cell[1]
         osl_positions['BNG/ING?'] = 'BNG'
     elif ws[osl_positions['ING (Easting)']].value is not None:
         easting_cell = osl_positions['ING (Easting)']
@@ -127,6 +127,7 @@ def get_site_info(site_sheet, type):
         if len(photographs) > 3:
             if site_notes is not None:
                 site_notes = site_notes + photographs + '. '
+                photographs = None
             else:
                 site_notes = photographs + '. '
                 photographs = None
@@ -138,27 +139,29 @@ def get_site_info(site_sheet, type):
                 photographs = False
 
     # convert date to correct format.  If notes add to site notes.
-    if site_date is not None and not isinstance(site_date, datetime.date):
-        if len(site_date) > 10:
-            if site_notes is not None:
-                site_notes = site_notes + site_date
+    if site_date is not None:
+        date = str(site_date)
+
+        if ' 00:00:00' in date:
+             date = date.replace(' 00:00:00', '')
+
+        if '.' in date:
+            site_date = convert_date(date)
+            if site_date == 'Error':
+                if site_notes is not None:
+                    site_notes = site_notes + ' ' + site_date + '. '
+                else:
+                    site_notes = site_date
                 site_date = None
-            else:
-                site_notes = site_date
         else:
-            date = str(site_date)
-            if ' 00:00:00' in date:
-                 date = date.replace(' 00:00:00', '')
-            if '.' in date:
-                site_date = convert_date(date)
-                if site_date == 'Error':
-                    site_date = None
-                    pass
-            else:
-                 try:
-                    datetime.datetime.strptime(date, '%Y-%m-%d')
-                    site_date = date
-                 except:
+             try:
+                datetime.datetime.strptime(date, '%Y-%m-%d')
+                site_date = date
+             except:
+                if site_notes is not None:
+                    site_notes = site_notes + ' ' + site_date + '. '
+                else:
+                    site_notes = site_date
                     site_date = None
 
 
@@ -176,8 +179,8 @@ def get_site_info(site_sheet, type):
 
     if site_latitude is not None and not isinstance(site_latitude, float):
             site_latitude = convert_lat_long(site_latitude)
-            if not isinstance(site_longitude, float):
-                site_longitude = None
+            if not isinstance(site_latitude, float):
+                site_latitude = None
 
     if site_longitude is not None and not isinstance(site_longitude, float):
             site_longitude = convert_lat_long(site_longitude)
@@ -214,7 +217,7 @@ def get_site_info(site_sheet, type):
                                                                      longitude=site_longitude, elevation=site_elevation)
 
             Sample_Site.objects.create(site_name=site_name, site_location=site_location, county=None,
-                                                 site_date=None, operator=None, geomorph_setting=geomorph,
+                                                 site_date=site_date, operator=None, geomorph_setting=geomorph,
                                                  sample_type_collected=type, photos_taken=photographs,
                                                  photographs=photo_labels, site_notes=site_notes,
                                                  site_coordinates=site_coordinates, collected_by=collector)

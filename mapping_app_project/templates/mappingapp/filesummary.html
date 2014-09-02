@@ -2,7 +2,18 @@
 {% load static %}
 
 {% block title %}File Summary{% endblock %}
-{% block upload %}<li class="li-active"><a id="activelink" href="/briticechrono/upload">Upload Files</a></li>{% endblock upload %}
+{% block upload %}
+<li class="li-active dropdown">
+    <a href='#' id="activelink" class="dropdown-toggle" data-toggle="dropdown">Add New <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/briticechrono/upload/">Upload File</a></li>
+        <li class="divider"></li>
+        <li><a href="/briticechrono/createnew/c14">Create C14 Sample</a></li>
+        <li><a href="/briticechrono/createnew/osl">Create OSL Sample</a></li>
+        <li><a href="/briticechrono/createnew/tcn">Create TCN Sample</a></li>
+    </ul>
+</li>
+{% endblock upload %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
