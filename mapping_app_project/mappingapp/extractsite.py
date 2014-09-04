@@ -160,6 +160,9 @@ def get_site_info(site_sheet, type):
                     elif site_date == 'Error' and site_notes is None:
                         site_notes = date + '. '
                         site_date = None
+                    else:
+                        date = datetime.datetime.strptime(site_date, '%d/%m/%Y')
+                        site_date = str(date.strftime('%Y-%m-%d'))
                 except:
                     if site_notes is not None:
                         site_notes = site_notes + ' ' + date + '. '

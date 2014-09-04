@@ -13,7 +13,10 @@ def convert_date(date):
     month = date[first_point+1:last_point].strip(' ')
     year = date[last_point+1:].strip(' ')
 
-    if isinstance(day, int) and isinstance(month, int) and isinstance(year, int):
+    try:
+        int(day)
+        int(month)
+        int(year)
 
         if len(day) == 1:
             day = '0' + day
@@ -26,7 +29,7 @@ def convert_date(date):
 
         return day + '/' + month + '/' + year
 
-    else:
+    except:
         return 'Error'
 
 
