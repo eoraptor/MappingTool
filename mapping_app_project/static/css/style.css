@@ -5,6 +5,7 @@ body {
 }
 
 
+/* Index page styling */
 #map-canvas {
     width: 100%;
     height: 102%;
@@ -21,8 +22,13 @@ body {
     box-shadow:0 0 5px #555;
 }
 
+/* Age filter slider */
 #ex2 {
     width: 160px;
+}
+
+#ex1Slider .slider-selection {
+	background: #BABABA;
 }
 
 /* info windows*/
@@ -47,9 +53,10 @@ body {
     margin-top: 0px;
 
 }
-
 /* end map drawing tools*/
 
+
+/* Datepicker in Sample form pages */
 #ui-datepicker-div {
     z-index: 999999 !important;
 }
@@ -63,13 +70,14 @@ body {
 
 
 
-
+/* Label for Sample form fields */
 .formlabel {
 	display: block;						/* Force label onto its own line. */
 	font-weight: normal;
     margin-bottom: 0px;
 }
 
+/* Containers for Sample form fields */
 .formspan {
     display:inline-block;
     margin:2px 2px 2px 3px;
@@ -84,6 +92,7 @@ body {
 }
 
 
+/* Fieldset containers for groups of sample form fields */
 fieldset.standard {
     padding-top:20px;
     padding-left:0px;
@@ -98,9 +107,68 @@ fieldset.standard {
     background: #d7e9c6;
     margin-left: auto;
     margin-right: auto;
+ }
+
+fieldset#site {
+    width:560px;
 }
 
+fieldset#coordinates {
+    width:470px;
+    align-self: center;
+}
 
+fieldset#search {
+    width:220px;
+    align-self: center;
+    padding-bottom: 0px;
+
+}
+
+fieldset#age {
+    width:470px;
+    align-self: center;
+}
+
+legend.fieldsets {
+    float:left;
+    margin-top:-20px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    padding-left: 7px;
+    background: #424242;
+    color: #ffffff;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+legend.fieldsets + * {
+    clear:both;
+}
+
+legend.fieldsets.middle {
+    text-align: center;
+    padding-left: 0px;
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+legend.fieldsets.top {
+    text-align: center;
+    padding-left: 0px;
+}
+/* end fieldsets*/
+
+
+
+/* Sizing for all sample form fields */
 #id_sample_notes, #id_sample_setting, #id_geomorph_setting {
     height: 70px;
     width: 540px;
@@ -227,31 +295,21 @@ fieldset.standard {
     width: 145px;
 }
 
-/* file name field in upload page*/
-#id_file {
-    width:370px;
+#id_sites {
+    width: 250px;
+    font-size: 13px;
 }
 
-fieldset#site {
-    width:560px;
+#id_main-sites, #id_main-sites option {
+    width: 240px !important;
 }
 
-fieldset#coordinates {
-    width:470px;
-    align-self: center;
+#id_fill-sites, #id_fill-sites option {
+    width: 210px !important;
 }
+/* End sample form field sizing */
 
-fieldset#search {
-    width:220px;
-    align-self: center;
-    padding-bottom: 0px;
 
-}
-
-fieldset#age {
-    width:470px;
-    align-self: center;
-}
 
 #clearsearchfields {
     float: right;
@@ -260,41 +318,8 @@ fieldset#age {
     margin-top: -3px;
 }
 
-legend.fieldsets {
-    float:left;
-    margin-top:-20px;
-    margin-bottom: 5px;
-    font-size: 16px;
-    padding-left: 7px;
-    background: #424242;
-    color: #ffffff;
-    -webkit-border-top-left-radius: 3px;
-    -webkit-border-top-right-radius: 3px;
-    -moz-border-radius-topleft: 3px;
-    -moz-border-radius-topright: 3px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-legend.fieldsets + * {
-    clear:both;
-}
 
-legend.fieldsets.middle {
-    text-align: center;
-    padding-left: 0px;
-    -webkit-border-top-left-radius: 0px;
-    -webkit-border-top-right-radius: 0px;
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-topright: 0px;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-}
-
-legend.fieldsets.top {
-    text-align: center;
-    padding-left: 0px;
-}
-
+/* Large button formatting */
 button.btn-xl {
     width: 110px;
     height: 60px;
@@ -303,7 +328,7 @@ button.btn-xl {
     margin-bottom: 10px;
 }
 
-
+/* Sample counter on Validate page */
 #sample_count {
     margin-left: 200px;
     margin-bottom: 30px;
@@ -313,6 +338,17 @@ button.btn-xl {
     cursor: default;
 }
 
+#sample_counter {
+    color: red;
+}
+
+#total_counter {
+    color: #000000;
+}
+
+
+
+/* Modal styling */
 #fieldsmodal-header {
     height: 45px;
     background: #424242;
@@ -322,74 +358,6 @@ button.btn-xl {
     color: #ffffff;
     line-height: 1;
 }
-
-
-.logo-nav {
-    vertical-align: middle;
-    padding-left: 15px;
-    padding-right: 5px;
-    padding-top: 5px;
-}
-
-img#logo {
-    height: 58px;
-}
-
-.loginform {
-    padding-top: 5px;
-    margin-top: 4px;
-}
-
-#loginbutton, #logoutbutton {
-    height: 27px;
-    margin-top: 9px;
-    padding-top: 2px;
-    padding-bottom: 3px;
-    padding-left: 7px;
-    padding-right: 7px;
-    border-radius: 2px;
-}
-
-#logoutbutton {
-    margin-top: 16px;
-}
-
-
-
-
-#editjumbo {
-    margin-top: -25px;
-    max-width: 1180px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    float: none;
-    box-shadow:0 0 10px #999;
-}
-
-#standardjumbo {
-    max-width: 1180px;
-    margin-top: -10px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    float: none;
-    box-shadow:0 0 10px #999;
-}
-
-#agecol {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#tcntabContent {
-    background: #f9f9f9;
-}
-
 
 #mod-foot {
     background: #424242;
@@ -424,7 +392,6 @@ img#logo {
     color: #ffffff;
 }
 
-
 #mod-bod {
     font-size: 12px;
     vertical-align: middle;
@@ -443,20 +410,89 @@ img#logo {
 .panel-body {
     background: #FFFEDC;
 }
+/* End modal styling */
 
-#id_sites {
-    width: 250px;
-    font-size: 13px;
+
+/* Home page styling */
+.logo-nav {
+    vertical-align: middle;
+    padding-left: 15px;
+    padding-right: 5px;
+    padding-top: 5px;
 }
 
-#id_main-sites, #id_main-sites option {
-    width: 240px !important;
+img#logo {
+    height: 58px;
 }
 
-#id_fill-sites, #id_fill-sites option {
-    width: 210px !important;
+.loginform {
+    padding-top: 5px;
+    margin-top: 4px;
 }
 
+#loginbutton, #logoutbutton {
+    height: 27px;
+    margin-top: 9px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 2px;
+}
+
+#logoutbutton {
+    margin-top: 16px;
+}
+/* End home page styling */
+
+
+/* file name field in upload page*/
+#id_file {
+    width:370px;
+}
+
+/* Jumbotron stylings */
+#editjumbo {
+    margin-top: -25px;
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    float: none;
+    box-shadow:0 0 10px #999;
+}
+
+#standardjumbo {
+    max-width: 1180px;
+    margin-top: -10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    float: none;
+    box-shadow:0 0 10px #999;
+}
+/* End Jumbotron Stylings */
+
+
+
+#agecol {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+#tcntabContent {
+    background: #f9f9f9;
+}
+
+
+
+
+/* tooltip styles */
 .tooltip.top .tooltip-inner {
     background-color: #5b74a8;
   }
@@ -464,7 +500,7 @@ img#logo {
     border-top-color: #5b74a8;
 }
 
-
+/* Sizing for bearing and inclination Modal and forms within */
 table.bearing th {
     text-align: center;
 }
@@ -492,6 +528,8 @@ table.bearing {
 #biModBod {
     background: #C5BD99;
 }
+/* End Bearing/Inclination Modal */
+
 
 #mod-content {
     box-shadow: 0 0 0 0px;
@@ -529,6 +567,9 @@ html {
     border-right-color: #d1d1d1;
 }
 
+#startage, #endage {
+    width: 110px;
+}
 
 .form-control.narrow {
     width: 100px;
@@ -557,8 +598,6 @@ html {
     margin-right: -30px;
 }
 
-
-
 #searchbutton {
     width: 110px;
     height: 45px;
@@ -570,26 +609,6 @@ html {
 
 #startagelabel {
     width: 250px;
-}
-
-
-.tablescroll {
-    overflow-x:scroll;
-
-}
-
-th.tablesorter-header.resizable-false {
-  background-color: #e6bf99;
-}
-
-#tablesorterdiv {
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-
-#startage, #endage {
-    width: 110px;
 }
 
 #getcsv {
@@ -627,12 +646,26 @@ th.tablesorter-header.resizable-false {
 #searchheader {
     background: #a7d196;
 }
-
-
 /* end Search Page*/
 
 
 
+/* tablesorter styling */
+.tablescroll {
+    overflow-x:scroll;
+}
+
+th.tablesorter-header.resizable-false {
+  background-color: #e6bf99;
+}
+
+#tablesorterdiv {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+
+/* Navbar styling */
 #nv {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
@@ -658,9 +691,6 @@ th.tablesorter-header.resizable-false {
     border-color: rgba(42, 42, 45, 1);
 }
 
-
-
-
 .li-active {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
@@ -676,6 +706,7 @@ th.tablesorter-header.resizable-false {
 #activelink {
     color: rgba(240, 240, 240, 1);
 }
+/* End navbar styling */
 
 
 /* file summary page*/
@@ -753,7 +784,6 @@ th.tablesorter-header.resizable-false {
     cursor: pointer;
     width: 300px;
 }
-
 /* end edit sample sample code selection page*/
 
 
@@ -818,19 +848,12 @@ th.tablesorter-header.resizable-false {
 
 
 
-
+/* Error dialogue */
 #errorfields, #fileerrors {
     background-color: white;
 }
 
-#sample_counter {
-    color: red;
-}
-
-#total_counter {
-    color: #000000;
-}
-
+/* Error page */
 #errorpage {
     width: 450px;
     height: 400px;
@@ -838,9 +861,7 @@ th.tablesorter-header.resizable-false {
     margin-right: auto;
 }
 
-#ex1Slider .slider-selection {
-	background: #BABABA;
-}
+
 
 /* registers if previous sample was saved */
 #saveAlert {

@@ -271,8 +271,6 @@ function initialize() {
 
         map.controls[google.maps.ControlPosition.BOTTOM].push(legend);
 
-
-
         google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
 
         // Switch back to non-drawing mode after drawing a shape.
@@ -363,6 +361,7 @@ function initialize() {
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
 
 var filterbutton = document.getElementById("filterbutton");
 filterbutton.addEventListener("click", markeragefilter, false);
@@ -455,10 +454,11 @@ function MarkerSelectHelp(controlDiv, map) {
   help.style.paddingRight = '4px';
   help.style.borderColor = 'black';
   help.style.verticalAlign = 'middle';
-  help.innerHTML = 'Drawing Controls';
-  help.title = 'Click the polygon icon to draw on the map.  Only one polygon can be present at a time.  ' +
-      'Use the View Samples button to view the selected samples in tabular format.';
+  help.innerHTML = 'Drawing Controls <a href="#"><span class="glyphicon glyphicon-info-sign data-toggle="tooltip"' +
+      ' id="drawhelp" data-placement="bottom" title="Click the polygon icon to draw on the map.  Only one polygon can' +
+      ' be present at a time.  Use the View Samples button to view the selected samples in tabular format."></span></a>';
   help.style.fontSize = '15px';
+
   controlDiv.appendChild(help);
 }
 

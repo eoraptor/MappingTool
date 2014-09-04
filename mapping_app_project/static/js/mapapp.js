@@ -246,7 +246,8 @@ $(document).ready(function(){
                     // breakpoints checkbox initial setting
                     columnSelector_mediaqueryState: false,
                     // responsive table hides columns with priority 1-6 at these breakpoints
-                    // see http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/#Applyingapresetbreakpoint
+                    // see http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/
+                    // #Applyingapresetbreakpoint
                     // *** set to false to disable ***
                     columnSelector_breakpoints : [ '20em', '30em', '40em', '50em', '60em', '70em' ],
                     // data attribute containing column priority
@@ -393,7 +394,8 @@ $('#savebutton').click(function(){
     $.getJSON('/briticechrono/create_site/', {site_name: site, site_county:county, site_location:location,
         geomorph:geomorph, type:sample_type, photographs:photographs, notes:site_notes, site_operator:operator,
         photos_taken:photos_taken, collected_by:collected_by, date:stringdate, latitude:latitude,
-         northing:northing, easting:easting, longitude:longitude, elevation:elevation, grid:grid, bng:bng}, function(data){
+         northing:northing, easting:easting, longitude:longitude, elevation:elevation, grid:grid, bng:bng},
+        function(data){
 
         $.each(data, function( key, val) {
             if ((val.created) == true) {
