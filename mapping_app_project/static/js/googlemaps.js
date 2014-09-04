@@ -281,6 +281,9 @@ function initialize() {
 
         // Add an event listener that selects the newly-drawn shape when the user
         // mouses down on it.
+        if (newShape != null) {
+            deleteSelectedShape(newShape)
+        }
         newShape = e.overlay;
         newShape.type = e.type;
         google.maps.event.addListener(newShape, 'click', function() {
@@ -453,7 +456,7 @@ function MarkerSelectHelp(controlDiv, map) {
   help.style.borderColor = 'black';
   help.style.verticalAlign = 'middle';
   help.innerHTML = 'Drawing Controls';
-  help.title = 'Click the polygon icon to draw on the map.  ' +
+  help.title = 'Click the polygon icon to draw on the map.  Only one polygon can be present at a time.  ' +
       'Use the View Samples button to view the selected samples in tabular format.';
   help.style.fontSize = '15px';
   controlDiv.appendChild(help);

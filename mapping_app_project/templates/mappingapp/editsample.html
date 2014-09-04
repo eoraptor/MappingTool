@@ -1,23 +1,24 @@
+<!-- Sample Editing template - extends Validate template which contains the closing form tag -->
+
 {% extends 'mappingapp/validatesample.html' %}
-
-
 {% block title %}Edit Records{% endblock %}
-{% block edit %}<li class="li-active"><a id="activelink" href="/briticechrono/edit">Edit Records</a></li>{% endblock edit %}
+{% block edit %}
+    <li class="li-active"><a id="activelink" href="/briticechrono/edit">Edit Records</a></li>
+{% endblock edit %}
 {% block upload %}
-                    <li id="nv" class="dropdown">
-                        <a href='#' class="dropdown-toggle" data-toggle="dropdown">Add New <span class="caret"></span></a>
+    <li id="nv" class="dropdown">
+        <a href='#' class="dropdown-toggle" data-toggle="dropdown">Add New <span class="caret"></span></a>
 
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/briticechrono/upload/">Upload File</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/briticechrono/createnew/c14">Create C14 Sample</a></li>
-                            <li><a href="/briticechrono/createnew/osl">Create OSL Sample</a></li>
-                            <li><a href="/briticechrono/createnew/tcn">Create TCN Sample</a></li>
-                          </ul>
-                        </li>
-                    {% endblock upload %}
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="/briticechrono/upload/">Upload File</a></li>
+            <li class="divider"></li>
+            <li><a href="/briticechrono/createnew/c14">Create C14 Sample</a></li>
+            <li><a href="/briticechrono/createnew/osl">Create OSL Sample</a></li>
+            <li><a href="/briticechrono/createnew/tcn">Create TCN Sample</a></li>
+        </ul>
+    </li>
+{% endblock upload %}
 {% block login %}{% endblock login %}
-
 
 {% block formblock %}
     <form id="edit_form" method="post" action="/briticechrono/editsample/">
@@ -26,7 +27,8 @@
 {% block buttonblock %}
     <button type="submit" class="btn-success btn-xl" name="save-button" id="editbutton">Save</button>
     <button type="button" class="btn-warning btn-xl" name="error-button" id="errorbutton">Errors</button>
-    <a href="/briticechrono/"><button type="button" class="btn-danger btn-xl" name="save-button" id="skip">Skip</button></a>
+    <a href="/briticechrono/"><button type="button" class="btn-danger btn-xl" name="save-button"
+                                      id="skip">Skip</button></a>
 {% endblock buttonblock %}
 {% block validate %}{% endblock validate %}
 {% block import_errors %}{% endblock import_errors %}

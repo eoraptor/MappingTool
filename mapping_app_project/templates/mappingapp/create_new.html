@@ -1,11 +1,15 @@
+<!-- Create New page template for blank forms.  Inherits from Validate template, hides content using blocks.
+  Form closing tag appears in validate template  -->
+
 {% extends 'mappingapp/validatesample.html' %}
 
 {% block formblock %}
     <form id="create_new_form" method="post" action="/briticechrono/createnew/{{ sample_type }}/">
 {% endblock %}
+
 {% block buttonblock %}
     <button type="submit" class="btn-success btn-xl" name="save-button" id="validatebutton">Save</button>
-<button type="button" class="btn-warning btn-xl" name="error-button" id="errorbutton">Errors</button>
+    <button type="button" class="btn-warning btn-xl" name="error-button" id="errorbutton">Errors</button>
 {% endblock buttonblock %}
 
 {% block samplecounter %}{% endblock samplecounter %}

@@ -1,48 +1,43 @@
+<!-- This template is inherited by all templates displaying sample forms; Edit and the three Create New pages -->
+
 {% extends 'mappingapp/base.html' %}
 
 {% block title %}Validate Sample Data{% endblock %}
 {% block upload %}
 <li class="li-active dropdown">
     <a href='#' id="activelink" class="dropdown-toggle" data-toggle="dropdown">Add New <span class="caret"></span></a>
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="/briticechrono/upload/">Upload File</a></li>
-        <li class="divider"></li>
-        <li><a href="/briticechrono/createnew/c14">Create C14 Sample</a></li>
-        <li><a href="/briticechrono/createnew/osl">Create OSL Sample</a></li>
-        <li><a href="/briticechrono/createnew/tcn">Create TCN Sample</a></li>
-    </ul>
-</li>
 {% endblock upload %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
 
 <div class="jumbotron edit" id="editjumbo">
-{% block formblock %}
-    <form id="validate_form" method="post" action="/briticechrono/validatesample/">
-{% endblock %}
-        {% csrf_token %}
+    {% block formblock %}
+        <form id="validate_form" method="post" action="/briticechrono/validatesample/">
+    {% endblock %}
+    {% csrf_token %}
 
-        {% for hidden in siteform.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-        {% for hidden in sampform.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
+    {% for hidden in siteform.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+    {% for hidden in sampform.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
 
-        {% block validate %}
-            <div class="hidden" id="validate"></div>
-            <div class="hidden" id="sample_saved">{{ sample_saved }}</div>
-            <div id="saveAlert">
-            <button class="btn btn-success" type="button" id="samp_saved" style="visibility: hidden">Sample Saved <span class="glyphicon glyphicon-ok"></span></button>
-            </div>
-        {% endblock validate %}
+    {% block validate %}
+        <div class="hidden" id="validate"></div>
+        <div class="hidden" id="sample_saved">{{ sample_saved }}</div>
+        <div id="saveAlert">
+        <button class="btn btn-success" type="button" id="samp_saved" style="visibility: hidden">
+            Sample Saved <span class="glyphicon glyphicon-ok"></span></button>
+        </div>
+    {% endblock validate %}
 
-        <div class="hidden" id="site_option">{{ site_name }}</div>
-        {{ hiddensiteform.site_name }}
+    <!-- hidden site form and div used to pass sample site values to and from the view -->
+    <div class="hidden" id="site_option">{{ site_name }}</div>
+    {{ hiddensiteform.site_name }}
 
-
-
+        <!-- start of tab for sample form -->
         <div class="bs-example bs-example-tabs">
             <ul id="tcntab" class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#samp-tab" role="tab" data-toggle="tab">Sample Details</a></li>
@@ -54,6 +49,7 @@
                     <div class="container-fluid">
                         <div class="col-md-6" id="leftcol">
 
+                            <!-- import specific forms depending on sample type -->
                             {% if sample_type == 'C14' %}
                                 {% include "mappingapp/c14form.html" %}
                             {% elif sample_type == 'OSL' %}
@@ -64,339 +60,205 @@
 
                         </div>
 
+                        <!-- Sample Coordinates Details -->
                         <div class="col-md-6" id="agecol">
-                    <fieldset class="standard" id="coordinates">
-                        <legend class="fieldsets">Sample Coordinates</legend>
-                        <div class="formspan left">
-                            {{ samplecoordform.latitude.errors }}
-                            <label class="formlabel">{{ samplecoordform.latitude.help_text }}</label>
-                            {{ samplecoordform.latitude }}
-                        </div>
-                        <div class="formspan">
-                            {{ samplecoordform.longitude.errors }}
-                            <label class="formlabel">{{ samplecoordform.longitude.help_text }}</label>
-                            {{ samplecoordform.longitude }}
-                        </div>
-                        <div class="formspan">
-                            {{ samplecoordform.easting.errors }}
-                            <label class="formlabel">{{ samplecoordform.easting.help_text }}</label>
-                            {{ samplecoordform.easting }}
-                        </div>
-                        <div class="formspan">
-                             {{ samplecoordform.northing.errors }}
-                            <label class="formlabel">{{ samplecoordform.northing.help_text }}</label>
-                            {{ samplecoordform.northing }}
-                        </div>
-                        <div class="formspan">
-                            {{ samplecoordform.elevation.errors }}
-                            <label class="formlabel">{{ samplecoordform.elevation.help_text }}</label>
-                            {{ samplecoordform.elevation }}
-                        </div>
-                        <div class="formspan left">
-                            {{ samplecoordform.grid_reference.errors }}
-                            <label class="formlabel">{{ samplecoordform.grid_reference.help_text }}</label>
-                            {{ samplecoordform.grid_reference }}
-                        </div>
-                        <div class="formspan">
-                            {{ samplecoordform.bng_ing.errors }}
-                            <label class="formlabel">{{ samplecoordform.bng_ing.help_text }}</label>
-                            {{ samplecoordform.bng_ing }}
-                        </div>
-                    </fieldset>
+                            <fieldset class="standard" id="coordinates">
+                                <legend class="fieldsets">Sample Coordinates</legend>
+                                <div class="formspan left">
+                                    {{ samplecoordform.latitude.errors }}
+                                    <label class="formlabel">{{ samplecoordform.latitude.help_text }}</label>
+                                    {{ samplecoordform.latitude }}
+                                </div>
+                                <div class="formspan">
+                                    {{ samplecoordform.longitude.errors }}
+                                    <label class="formlabel">{{ samplecoordform.longitude.help_text }}</label>
+                                    {{ samplecoordform.longitude }}
+                                </div>
+                                <div class="formspan">
+                                    {{ samplecoordform.easting.errors }}
+                                    <label class="formlabel">{{ samplecoordform.easting.help_text }}</label>
+                                    {{ samplecoordform.easting }}
+                                </div>
+                                <div class="formspan">
+                                     {{ samplecoordform.northing.errors }}
+                                    <label class="formlabel">{{ samplecoordform.northing.help_text }}</label>
+                                    {{ samplecoordform.northing }}
+                                </div>
+                                <div class="formspan">
+                                    {{ samplecoordform.elevation.errors }}
+                                    <label class="formlabel">{{ samplecoordform.elevation.help_text }}</label>
+                                    {{ samplecoordform.elevation }}
+                                </div>
+                                <div class="formspan left">
+                                    {{ samplecoordform.grid_reference.errors }}
+                                    <label class="formlabel">{{ samplecoordform.grid_reference.help_text }}</label>
+                                    {{ samplecoordform.grid_reference }}
+                                </div>
+                                <div class="formspan">
+                                    {{ samplecoordform.bng_ing.errors }}
+                                    <label class="formlabel">{{ samplecoordform.bng_ing.help_text }}</label>
+                                    {{ samplecoordform.bng_ing }}
+                                </div>
+                            </fieldset>
 
-                    <fieldset class="standard" id="age">
-                        <legend class="fieldsets">Sample Age</legend>
-                        <div class="formspan left">
-                            {{ sampform.age.errors }}
-                            <label class="formlabel">{{ sampform.age.help_text }}</label>
-                            {{ sampform.age }}
-                        </div>
-                        <div class="formspan">
-                            {{ sampform.age_error.errors }}
-                            <label class="formlabel">{{ sampform.age_error.help_text }}</label>
-                            {{ sampform.age_error }}
-                        </div>
-                        <div class="formspan">
-                            {{ sampform.calendar_age.errors }}
-                            <label class="formlabel">{{ sampform.calendar_age.help_text }}</label>
-                            {{ sampform.calendar_age }}
-                        </div>
-                        <div class="formspan">
-                                {{ sampform.calendar_error.errors }}
-                                <label class="formlabel">{{ sampform.calendar_error.help_text }}</label>
-                                {{ sampform.calendar_error }}
-                        </div>
-                        <div class="formspan">
-                            {{ sampform.lab_code.errors }}
-                            <label class="formlabel">{{ sampform.lab_code.help_text }}</label>
-                            {{ sampform.lab_code }}
-                        </div>
-                        <div class="formspan left">
-                            {{ c14form.calibration_curve.errors }}
-                            <label class="formlabel">{{ c14form.calibration_curve.help_text }}</label>
-                            {{ c14form.calibration_curve }}
-                        </div>
-                    </fieldset>
+                            <!-- Sample Age details -->
+                            <fieldset class="standard" id="age">
+                                <legend class="fieldsets">Sample Age</legend>
+                                <div class="formspan left">
+                                    {{ sampform.age.errors }}
+                                    <label class="formlabel">{{ sampform.age.help_text }}</label>
+                                    {{ sampform.age }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sampform.age_error.errors }}
+                                    <label class="formlabel">{{ sampform.age_error.help_text }}</label>
+                                    {{ sampform.age_error }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sampform.calendar_age.errors }}
+                                    <label class="formlabel">{{ sampform.calendar_age.help_text }}</label>
+                                    {{ sampform.calendar_age }}
+                                </div>
+                                <div class="formspan">
+                                        {{ sampform.calendar_error.errors }}
+                                        <label class="formlabel">{{ sampform.calendar_error.help_text }}</label>
+                                        {{ sampform.calendar_error }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sampform.lab_code.errors }}
+                                    <label class="formlabel">{{ sampform.lab_code.help_text }}</label>
+                                    {{ sampform.lab_code }}
+                                </div>
+                                <div class="formspan left">
+                                    {{ c14form.calibration_curve.errors }}
+                                    <label class="formlabel">{{ c14form.calibration_curve.help_text }}</label>
+                                    {{ c14form.calibration_curve }}
+                                </div>
+                            </fieldset>
+
+                            <!-- Sample Site details -->
+                            <fieldset class="standard" id="coordinates">
+                                <legend class="fieldsets">Sample Site
+                                              <a href="#"><span class="glyphicon glyphicon-info-sign"
+                                  style="display: inline-block;" id="helpicon" data-toggle="tooltip"
+                                  data-placement="top" title="Sample Site details can be added by selecting from an
+                                   existing site or by entering new details.  To leave the site blank select the empty
+                                    option."></span></a>
+                                </legend>
+                                <div class="formspan left">
+                                {{ sitechoices.sites.errors }}
+                                <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
+                                {{ sitechoices.sites }}
+                                </div>
+
+                                <!-- Buttons to trigger modal -->
+                                <button type="button" class="btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#myModal" id="modalbutton1">
+                                View Details</button>
+
+                                <button type="button" class="btn-warning btn-sm" data-toggle="modal"
+                                        data-target="#myModal" id="modalbutton2">
+                                Enter New Site</button>
+                            </fieldset>
+
+                         <!-- import the site modal -->
+                {% include "mappingapp/sitemodal.html" %}
 
 
-                <fieldset class="standard" id="coordinates">
-                    <legend class="fieldsets">Sample Site
-
-                      <a href="#"><span class="glyphicon glyphicon-info-sign"
-                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
-                      title="Sample Site details can be added by selecting from an existing site or by entering
-                       new details.  To leave the site blank select the empty option."></span></a></legend>
-                    <div class="formspan left">
-                    {{ sitechoices.sites.errors }}
-                    <label class="formlabel">{{ sitechoices.sites.help_text }}</label>
-                    {{ sitechoices.sites }}
-                        </div>
-
-
-
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn-primary btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton1">
-                    View Details</button>
-
-                    <button type="button" class="btn-warning btn-sm" data-toggle="modal" data-target="#myModal" id="modalbutton2">
-                    Enter New Site</button>
-                </fieldset>
-
-                        <!-- Modal -->
-                <div class="modal fade myModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" id="modo">
-                        <div class="modal-content" id="mod-content">
-                            <div class="modal-header" id="mod-header">
-                                <button type="button"  id="modaltop" class="close" data-dismiss="modal">
-                                    <span aria-hidden="true">&times;</span>
-                                    <span class="sr-only">Close</span>
+                            <div class="span2 text-center">
+                                {% block buttonblock %}
+                                <button type="submit" class="btn-success btn-xl" name="save-button" id="validatebutton"
+                                        title="Save sample">Save</button>
+                                <button type="button" class="btn-warning btn-xl" name="error-button" id="errorbutton"
+                                        title="Show errors">Errors</button>
+                                <button type="button" class="btn-danger btn-xl" name="skip-button" id="skipbutton"
+                                        title="Continue without saving">Skip</button>
+                                {% endblock buttonblock %}
+                            </div>
+                            {% block samplecounter %}
+                                <button class="btn btn-primary" type="button" id="sample_count">
+                                        Sample
+                                    <span class="badge" id="sample_counter">{{ count }}</span>
+                                        of
+                                    <span class="badge" id="total_counter">{{ num_samples }}</span>
                                 </button>
-                                <div class="site-head">
-                                <h4 class="modal-title" id="siteDetailsLabel">Site Details</h4>
-                                    <div class="site-info">Fill from existing:</div>
-                                    <div class="sitech">{{ fillsiteform.sites }}</div>
-                                </div>
-                            </div>
-                            <div class="modal-body" id="mod-bod">
-
-                                <div class="panel-group" id="accordion">
-                                    <div class="panel panel-success" id="paneltop">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                                Site Information
-                                                </a>
-                                            </h4>
-                                         </div>
-                                        <div id="collapseOne" class="panel-collapse collapse in">
-                                            <div class="panel-body">
-                                                <div class="formspan">
-                                                    {{ siteform.site_name.errors }}
-                                                    <label class="formlabel">{{ siteform.site_name.help_text }}</label>
-                                                    {{ siteform.site_name }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ siteform.county.errors }}
-                                                    <label class="formlabel">{{ siteform.county.help_text }}</label>
-                                                    {{ siteform.county }}
-                                                </div>
-                                                <div class="formspan">
-                                                     {{ siteform.site_date.errors }}
-                                                    <label class="formlabel">{{ siteform.site_date.help_text }}</label>
-                                                    {{ siteform.site_date }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ siteform.photos_taken.errors }}
-                                                    <label class="formlabel">{{ siteform.photos_taken.help_text }}</label>
-                                                    {{ siteform.photos_taken }}
-                                                </div><br />
-                                                <div class="formspan">
-                                                    {{ siteform.site_location.errors }}
-                                                    <label class="formlabel">{{ siteform.site_location.help_text }}</label>
-                                                    {{ siteform.site_location }}
-                                                </div>
-                                                 <div class="formspan">
-                                                    {{ siteform.photographs.errors }}
-                                                    <label class="formlabel">{{ siteform.photographs.help_text }}</label>
-                                                    {{ siteform.photographs }}
-                                                </div><br />
-                                                <div class="formspan" style="vertical-align: top">
-                                                    {{ siteform.sample_type_collected.errors }}
-                                                    <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
-                                                    {{ siteform.sample_type_collected }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ siteform.operator.errors }}
-                                                    <label class="formlabel">{{ siteform.operator.help_text }}</label>
-                                                    {{ siteform.operator }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ siteform.collected_by.errors }}
-                                                    <label class="formlabel">{{ siteform.collected_by.help_text }}</label>
-                                                    {{ siteform.collected_by }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ siteform.geomorph_setting.errors }}
-                                                    <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>
-                                                    {{ siteform.geomorph_setting }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ siteform.site_notes.errors }}
-                                                    <label class="formlabel">{{ siteform.site_notes.help_text }}</label>
-                                                    {{ siteform.site_notes }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-success">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                                    Site Coordinates
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapseTwo" class="panel-collapse collapse">
-                                            <div class="panel-body">
-                                                <div class="formspan">
-                                                    {{ sitecoordform.latitude.errors }}
-                                                    <label class="formlabel">{{ sitecoordform.latitude.help_text }}</label>
-                                                    {{ sitecoordform.latitude }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ sitecoordform.longitude.errors }}
-                                                    <label class="formlabel">{{ sitecoordform.longitude.help_text }}</label>
-                                                    {{ sitecoordform.longitude }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ sitecoordform.easting.errors }}
-                                                    <label class="formlabel">{{ sitecoordform.easting.help_text }}</label>
-                                                    {{ sitecoordform.easting }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ sitecoordform.northing.errors }}
-                                                    <label class="formlabel">{{ sitecoordform.northing.help_text }}</label>
-                                                    {{ sitecoordform.northing }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ sitecoordform.elevation.errors }}
-                                                    <label class="formlabel">{{ sitecoordform.elevation.help_text }}</label>
-                                                    {{ sitecoordform.elevation }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ sitecoordform.grid_reference.errors }}
-                                                    <label class="formlabel">{{ sitecoordform.grid_reference.help_text }}</label>
-                                                    {{ sitecoordform.grid_reference }}
-                                                </div>
-                                                <div class="formspan">
-                                                    {{ sitecoordform.bng_ing.errors }}
-                                                    <label class="formlabel">{{ sitecoordform.bng_ing.help_text }}</label>
-                                                    {{ sitecoordform.bng_ing }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer" id="mod-foot">
-                                <button type="button" id="savebutton" class="btn btn-danger" data-dismiss="modal">Save</button>
-                                <button type="button" class="btn btn-primary" id="close" data-dismiss="modal">Close</button>
-                            </div>
+                            {% endblock %}
                         </div>
                     </div>
-                </div>
 
-                <div class="span2 text-center">
-                    {% block buttonblock %}
-                    <button type="submit" class="btn-success btn-xl" name="save-button" id="validatebutton" title="Save sample">Save</button>
-                    <button type="button" class="btn-warning btn-xl" name="error-button" id="errorbutton" title="Show errors">Errors</button>
-                    <button type="button" class="btn-danger btn-xl" name="skip-button" id="skipbutton" title="Continue without saving">Skip</button>
-                    {% endblock buttonblock %}
-                </div>
-                    {% block samplecounter %}
-                    <button class="btn btn-primary" type="button" id="sample_count">
-                            Sample
-                        <span class="badge" id="sample_counter">{{ count }}</span>
-                            of
-                        <span class="badge" id="total_counter">{{ num_samples }}</span>
-                    </button>
-                        {% endblock %}
-                </div>
-            </div>
-
-               <div id="errordialog" title="Fields With Errors">
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse"  id="dialoguetext" data-parent="#accordion" href="#collapseFour">
-                                    Form Errors
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseFour" class="panel-collapse collapse">
-                                <div class="panel-body" id="errorfields">
-                                </div>
-                           </div>
-                        </div>
-                    {% block import_errors %}
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" id="dialoguetext" data-parent="#accordion" href="#collapseFive">
-                                    Import Errors - Type
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseFive" class="panel-collapse collapse">
-                                <div class="panel-body" id="fileerrors">
-                                    <ul>
-                                    {% for error in errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-primary">
+                <!-- Error dialogue - cannot be removed from the template as Django blocks will not work properly -->
+                   <div id="errordialog" title="Fields With Errors">
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a data-toggle="collapse" id="dialoguetext" data-parent="#accordion" href="#collapseSix">
-                                        Import Errors - Keys Not Found
+                                        <a data-toggle="collapse"  id="dialoguetext" data-parent="#accordion"
+                                           href="#collapseFour">
+                                        Form Errors
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseSix" class="panel-collapse collapse">
+                                <div id="collapseFour" class="panel-collapse collapse">
+                                    <div class="panel-body" id="errorfields">
+                                    </div>
+                               </div>
+                            </div>
+                        {% block import_errors %}
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" id="dialoguetext" data-parent="#accordion"
+                                           href="#collapseFive">
+                                        Import Errors - Type
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFive" class="panel-collapse collapse">
                                     <div class="panel-body" id="fileerrors">
                                         <ul>
-                                        {% for key in missing_keys %}
-                                            <li>{{ key }}</li>
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
                                         {% endfor %}
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                        {% endblock import_errors %}
-                    </div>
-               </div></div>
+                            <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" id="dialoguetext" data-parent="#accordion"
+                                               href="#collapseSix">
+                                            Import Errors - Keys Not Found
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseSix" class="panel-collapse collapse">
+                                        <div class="panel-body" id="fileerrors">
+                                            <ul>
+                                            {% for key in missing_keys %}
+                                                <li>{{ key }}</li>
+                                            {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endblock import_errors %}
+                        </div>
+                   </div></div>
 
-        <div class="tab-pane fade" id="photo-tab"><br />
-            <div class="container-fluid">
-                photos go here....
-
-
-                <br />
-                <br />
-                <br />
-                    </div>
-
-                <br />
-                <br />
+            <!-- tab for photographs -->
+            <div class="tab-pane fade" id="photo-tab"><br />
+                <div class="container-fluid">
+                    photos go here....
+                    <br />
+                    <br />
+                    <br />
+                </div>
+                    <br />
+                    <br />
             </div>
         </div>
     </div>
-
     </form>
 </div>
 {% endblock %}

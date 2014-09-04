@@ -1,0 +1,146 @@
+<!-- Sample Site Modal for Validate, Edit and Create New Pages -->
+
+<div class="modal fade myModal" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="modo">
+        <div class="modal-content" id="mod-content">
+            <div class="modal-header" id="mod-header">
+                <button type="button"  id="modaltop" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <div class="site-head">
+                    <h4 class="modal-title" id="siteDetailsLabel">Site Details</h4>
+                    <div class="site-info">Fill from existing:</div>
+                    <div class="sitech">{{ fillsiteform.sites }}</div>
+                </div>
+            </div>
+
+            <div class="modal-body" id="mod-bod">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-success" id="paneltop">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                Site Information
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div class="formspan">
+                                    {{ siteform.site_name.errors }}
+                                    <label class="formlabel">{{ siteform.site_name.help_text }}</label>
+                                    {{ siteform.site_name }}
+                                </div>
+                                <div class="formspan">
+                                    {{ siteform.county.errors }}
+                                    <label class="formlabel">{{ siteform.county.help_text }}</label>
+                                    {{ siteform.county }}
+                                </div>
+                                <div class="formspan">
+                                     {{ siteform.site_date.errors }}
+                                    <label class="formlabel">{{ siteform.site_date.help_text }}</label>
+                                    {{ siteform.site_date }}
+                                </div>
+                                <div class="formspan">
+                                    {{ siteform.photos_taken.errors }}
+                                    <label class="formlabel">{{ siteform.photos_taken.help_text }}</label>
+                                    {{ siteform.photos_taken }}
+                                </div><br />
+                                <div class="formspan">
+                                    {{ siteform.site_location.errors }}
+                                    <label class="formlabel">{{ siteform.site_location.help_text }}</label>
+                                    {{ siteform.site_location }}
+                                </div>
+                                 <div class="formspan">
+                                    {{ siteform.photographs.errors }}
+                                    <label class="formlabel">{{ siteform.photographs.help_text }}</label>
+                                    {{ siteform.photographs }}
+                                </div><br />
+                                <div class="formspan" style="vertical-align: top">
+                                    {{ siteform.sample_type_collected.errors }}
+                                    <label class="formlabel">{{ siteform.sample_type_collected.help_text }}</label>
+                                    {{ siteform.sample_type_collected }}
+                                </div>
+                                <div class="formspan">
+                                    {{ siteform.operator.errors }}
+                                    <label class="formlabel">{{ siteform.operator.help_text }}</label>
+                                    {{ siteform.operator }}
+                                </div>
+                                <div class="formspan">
+                                    {{ siteform.collected_by.errors }}
+                                    <label class="formlabel">{{ siteform.collected_by.help_text }}</label>
+                                    {{ siteform.collected_by }}
+                                </div>
+                                <div class="formspan">
+                                    {{ siteform.geomorph_setting.errors }}
+                                    <label class="formlabel">{{ siteform.geomorph_setting.help_text }}</label>
+                                    {{ siteform.geomorph_setting }}
+                                </div>
+                                <div class="formspan">
+                                    {{ siteform.site_notes.errors }}
+                                    <label class="formlabel">{{ siteform.site_notes.help_text }}</label>
+                                    {{ siteform.site_notes }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                    Site Coordinates
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="formspan">
+                                    {{ sitecoordform.latitude.errors }}
+                                    <label class="formlabel">{{ sitecoordform.latitude.help_text }}</label>
+                                    {{ sitecoordform.latitude }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sitecoordform.longitude.errors }}
+                                    <label class="formlabel">{{ sitecoordform.longitude.help_text }}</label>
+                                    {{ sitecoordform.longitude }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sitecoordform.easting.errors }}
+                                    <label class="formlabel">{{ sitecoordform.easting.help_text }}</label>
+                                    {{ sitecoordform.easting }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sitecoordform.northing.errors }}
+                                    <label class="formlabel">{{ sitecoordform.northing.help_text }}</label>
+                                    {{ sitecoordform.northing }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sitecoordform.elevation.errors }}
+                                    <label class="formlabel">{{ sitecoordform.elevation.help_text }}</label>
+                                    {{ sitecoordform.elevation }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sitecoordform.grid_reference.errors }}
+                                    <label class="formlabel">{{ sitecoordform.grid_reference.help_text }}</label>
+                                    {{ sitecoordform.grid_reference }}
+                                </div>
+                                <div class="formspan">
+                                    {{ sitecoordform.bng_ing.errors }}
+                                    <label class="formlabel">{{ sitecoordform.bng_ing.help_text }}</label>
+                                    {{ sitecoordform.bng_ing }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="mod-foot">
+                <button type="button" id="savebutton" class="btn btn-danger" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-primary" id="close" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

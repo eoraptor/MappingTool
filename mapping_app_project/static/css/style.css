@@ -62,6 +62,8 @@ body {
 }
 
 
+
+
 .formlabel {
 	display: block;						/* Force label onto its own line. */
 	font-weight: normal;
@@ -102,21 +104,25 @@ fieldset.standard {
 #id_sample_notes, #id_sample_setting, #id_geomorph_setting {
     height: 70px;
     width: 540px;
+    resize: none;
 }
 
 #id_geological_setting, #id_pot_contamination, #id_site_notes {
     height: 60px;
     width: 540px;
+    resize: none;
 }
 
 #id_sampled_material, #id_lithology {
     height: 70px;
     width: 265px;
+    resize: none;
 }
 
 #id_site_location, #id_photographs {
     height: 50px;
     width: 265px;
+    resize: none;
 }
 
 #id_depth_below_SL {
@@ -125,11 +131,13 @@ fieldset.standard {
 
 #id_sample_location_name, #id_probe_serial_no {
     width: 320px;
+
 }
 
 #id_material {
     height: 60px;
     width: 480px;
+    resize: none;
 }
 
 #id_collector, #id_lithofacies {
@@ -170,11 +178,13 @@ fieldset.standard {
 #id_sample_thickness, #id_grain_size, #id_site_date {
     width: 80px;
     height: 23px;
+    resize: none;
 }
 
 #id_transect_number, #id_zone_number {
     height: 23px;
     width: 45px;
+    resize: none;
 }
 
 #id_sample-grid_reference, #id_boulder_dimensions, #id_site-grid_reference {
@@ -194,6 +204,7 @@ fieldset.standard {
 #id_exposure_core, #id_core_number, #id_stratigraphic_position, #id_stratigraphic_position_depth {
     width: 175px;
     height: 70px;
+    resize: none;
 }
 
 #id_site_name {
@@ -203,19 +214,23 @@ fieldset.standard {
 #id_operator {
     width: 150px;
     height: 50px;
+    resize: none;
 }
 
 #id_collected_by {
     width: 225px;
     height: 50px;
+    resize: none;
 }
 
 #id_sample_type_collected {
     width: 145px;
 }
 
-
-
+/* file name field in upload page*/
+#id_file {
+    width:370px;
+}
 
 fieldset#site {
     width:560px;

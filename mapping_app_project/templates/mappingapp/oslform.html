@@ -1,3 +1,5 @@
+<!-- OSL specific forms for Validate, Edit and Create New pages -->
+
 {% for hidden in oslform.hidden_fields %}
     {{ hidden }}
 {% endfor %}
@@ -6,77 +8,79 @@
 <fieldset class="standard">
     <legend class="fieldsets">OSL Sample Details <a href="#"><span class="glyphicon glyphicon-info-sign"
                       style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
-                      title="Fields with orange backgrounds contain errors.  Click on the Errors button for details.  Fields with yellow backgrounds have failed to import correctly from the spreadsheet"></span></a></legend>
-        <div class="formspan left">
-            {{ sampform.sample_code.errors }}
-            <label class="formlabel">{{ sampform.sample_code.help_text }}</label>
-            {{ sampform.sample_code }}
-        </div>
-        <div class="formspan" id="transect">
-            {{ tranform.transect_number.errors }}
-            <label class="formlabel">{{ tranform.transect_number.help_text }}</label>
-            {{ tranform.transect_number }}
-        </div>
-        <div class="formspan" id="retreat">
-            {{ retform.zone_number.errors }}
-            <label class="formlabel">{{ retform.zone_number.help_text }}</label>
-            {{ retform.zone_number }}
-        </div>
-        <div class="formspan">
-            {{ sampform.dating_priority.errors }}
-             <label class="formlabel">{{ sampform.dating_priority.help_text }}</label>
-            {{ sampform.dating_priority }}
-        </div>
-         <div class="formspan">
-            {{ sampform.collection_date.errors }}
-            <label class="formlabel">{{ sampform.collection_date.help_text }}</label>
-            {{ sampform.collection_date }}
-        </div>
-        <div class="formspan left">
-            {{ sampform.collector.errors }}
-            <label class="formlabel">{{ sampform.collector.help_text }}</label>
-            {{ sampform.collector }}
-        </div>
-        <div class="formspan">
-            {{ sampform.sample_location_name.errors }}
-            <label class="formlabel">{{ sampform.sample_location_name.help_text }}</label>
-            {{ sampform.sample_location_name }}
-        </div>
-        <div class="formspan left">
-            {{ coreform.exposure_core.errors }}
-            <label class="formlabel">{{ coreform.exposure_core.help_text }}</label>
-            {{ coreform.exposure_core }}
-        </div>
-        <div class="formspan">
-            {{ coreform.core_number.errors }}
-            <label class="formlabel">{{ coreform.core_number.help_text }}</label>
-            {{ coreform.core_number }}
-        </div>
-        <div class="formspan">
-            {{ oslform.stratigraphic_position.errors }}
-            <label class="formlabel">{{ oslform.stratigraphic_position.help_text }}</label>
-            {{ oslform.stratigraphic_position }}
-        </div>
-       <div class="formspan left">
-            {{ oslform.lithology.errors }}
-            <label class="formlabel">{{ oslform.lithology.help_text }}</label>
-            {{ oslform.lithology }}
-        </div>
-        <div class="formspan">
-            {{ oslform.lithofacies.errors }}
-            <label class="formlabel">{{ oslform.lithofacies.help_text }}</label>
-            {{ oslform.lithofacies }}
-        </div>
-        <div class="formspan">
-            {{ oslform.burial_depth.errors }}
-            <label class="formlabel">{{ oslform.burial_depth.help_text }}</label>
-            {{ oslform.burial_depth }}
-        </div>
-        <div class="formspan left">
-            {{ sampform.sample_notes.errors }}
-            <label class="formlabel">{{ sampform.sample_notes.help_text }}</label>
-            {{ sampform.sample_notes }}
-        </div>
+                      title="Fields with orange backgrounds contain errors.  Click on the Errors button for details.
+                      Fields with yellow backgrounds have failed to import correctly from the spreadsheet"></span></a>
+    </legend>
+    <div class="formspan left">
+        {{ sampform.sample_code.errors }}
+        <label class="formlabel">{{ sampform.sample_code.help_text }}</label>
+        {{ sampform.sample_code }}
+    </div>
+    <div class="formspan" id="transect">
+        {{ tranform.transect_number.errors }}
+        <label class="formlabel">{{ tranform.transect_number.help_text }}</label>
+        {{ tranform.transect_number }}
+    </div>
+    <div class="formspan" id="retreat">
+        {{ retform.zone_number.errors }}
+        <label class="formlabel">{{ retform.zone_number.help_text }}</label>
+        {{ retform.zone_number }}
+    </div>
+    <div class="formspan">
+        {{ sampform.dating_priority.errors }}
+         <label class="formlabel">{{ sampform.dating_priority.help_text }}</label>
+        {{ sampform.dating_priority }}
+    </div>
+     <div class="formspan">
+        {{ sampform.collection_date.errors }}
+        <label class="formlabel">{{ sampform.collection_date.help_text }}</label>
+        {{ sampform.collection_date }}
+    </div>
+    <div class="formspan left">
+        {{ sampform.collector.errors }}
+        <label class="formlabel">{{ sampform.collector.help_text }}</label>
+        {{ sampform.collector }}
+    </div>
+    <div class="formspan">
+        {{ sampform.sample_location_name.errors }}
+        <label class="formlabel">{{ sampform.sample_location_name.help_text }}</label>
+        {{ sampform.sample_location_name }}
+    </div>
+    <div class="formspan left">
+        {{ coreform.exposure_core.errors }}
+        <label class="formlabel">{{ coreform.exposure_core.help_text }}</label>
+        {{ coreform.exposure_core }}
+    </div>
+    <div class="formspan">
+        {{ coreform.core_number.errors }}
+        <label class="formlabel">{{ coreform.core_number.help_text }}</label>
+        {{ coreform.core_number }}
+    </div>
+    <div class="formspan">
+        {{ oslform.stratigraphic_position.errors }}
+        <label class="formlabel">{{ oslform.stratigraphic_position.help_text }}</label>
+        {{ oslform.stratigraphic_position }}
+    </div>
+    <div class="formspan left">
+        {{ oslform.lithology.errors }}
+        <label class="formlabel">{{ oslform.lithology.help_text }}</label>
+        {{ oslform.lithology }}
+    </div>
+    <div class="formspan">
+        {{ oslform.lithofacies.errors }}
+        <label class="formlabel">{{ oslform.lithofacies.help_text }}</label>
+        {{ oslform.lithofacies }}
+    </div>
+    <div class="formspan">
+        {{ oslform.burial_depth.errors }}
+        <label class="formlabel">{{ oslform.burial_depth.help_text }}</label>
+        {{ oslform.burial_depth }}
+    </div>
+    <div class="formspan left">
+        {{ sampform.sample_notes.errors }}
+        <label class="formlabel">{{ sampform.sample_notes.help_text }}</label>
+        {{ sampform.sample_notes }}
+    </div>
 </fieldset>
 
 <fieldset class="standard">
@@ -111,9 +115,6 @@
             <label class="formlabel">{{ oslform.probe_serial_no.help_text }}</label>
             {{ oslform.probe_serial_no }}
         </div>
-
-
-
         <div class="formspan">
             {{ oslform.potassium.errors }}
             <label class="formlabel">{{ oslform.potassium.help_text }}</label>

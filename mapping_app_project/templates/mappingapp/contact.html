@@ -1,32 +1,31 @@
+<!-- Contact page template -->
+
 {% extends 'mappingapp/base.html' %}
 {% load static %}
 
 {% block title %}Contact{% endblock %}
-{% block contact %}<li class="li-active"><a id="activelink" href="/briticechrono/contact">Contact</a></li>{% endblock contact %}
+{% block contact %}
+    <li class="li-active"><a id="activelink" href="/briticechrono/contact">Contact</a></li>
+{% endblock contact %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
 <div class="jumbotron" id="standardjumbo">
-<div class="container-fluid" id="errorpage">
-<h3>Contact Information</h3><hr>
-    <h4>Email:</h4>
-    <ul>
-    {% for user in user_data %}
-        <li><a href="mailto:{{ user.email }}" target="_top">{{ user.first_name }} {{ user.last_name }}</a></li>
-    {% endfor %}
-    </ul>
-<br />
-<br />
-<h4>Postal Address:</h4>
-<br />
-<br />
-<br />
-<br />
-
-
-
-
+    <div class="container-fluid" id="errorpage">
+        <h3>Contact Information</h3><hr>
+        <h4>Email:</h4>
+        <ul>
+            {% for user in user_data %}
+                <li><a href="mailto:{{ user.email }}" target="_top">{{ user.first_name }} {{ user.last_name }}</a></li>
+            {% endfor %}
+        </ul>
+        <br />
+        <br />
+        <h4>Postal Address:</h4>
+        <br />
+        <br />
+        <br />
+        <br />
+    </div>
 </div>
-</div>
-
 {% endblock %}

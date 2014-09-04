@@ -10,8 +10,10 @@ var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_
 '#id_sample-elevation', '#id_sample-bng_ing', "#id_exposure_core", "#id_core_number"];
 
 var $table;
-var error_count = 0;
+var bear_inc_errors = false;
+var bearing_errors = [];
 var form_errors = [];
+
 
 
 // check numerical fields in Edit and Validate pages match expected type
@@ -24,8 +26,17 @@ function check_number(field, value) {
                 found = true;
             }
         }if (!found){
-            form_errors.push(field);
+            if (field.indexOf('form') != -1 && bearing_errors.indexOf(field) === -1) {
+                bearing_errors.push(field);
+                if (bear_inc_errors === false) {
+                    bear_inc_errors = true;
+                    form_errors.push(field);
+                }
+            }else if (field.indexOf('form') === -1) {
+                form_errors.push(field);
+            }
         }
+
         $('#'+field).css("background-color", "#E6760C");
         $('#validatebutton').attr("disabled", true);
         $('#editbutton').attr("disabled", true);
@@ -35,11 +46,24 @@ function check_number(field, value) {
 
 
     }else if(jQuery.isNumeric(value) || value == ''){
-        for (var i = 0; i < form_errors.length; i++) {
-            if (field === form_errors[i]) {
-                removed = form_errors.splice(i, 1);
+
+        if (bearing_errors.indexOf(field) != -1) {
+            var index1 = bearing_errors.indexOf(field);
+            removed = bearing_errors.splice(index1, 1);
+            if (bearing_errors.length === 0) {
+                bear_inc_errors = false;
+                for (var i = 0; i < form_errors.length; i++) {
+                    if (form_errors[i].indexOf('form') != -1) {
+                        removed = form_errors.splice(i, 1);
+                    }
+                }
             }
-        }
+        }else{
+            for (var i = 0; i < form_errors.length; i++) {
+                if (field === form_errors[i]) {
+                removed = form_errors.splice(i, 1);
+        }}}
+
         $('#'+field).css("background-color", "");
         if (form_errors.length == 0) {
             $('#editbutton').attr("disabled", false);
@@ -87,6 +111,8 @@ function openerrordialogue() {
                 field = 'Site Easting - field must be numerical';
             }else if (field.indexOf('site-northing') != -1) {
                 field = 'Site Northing - field must be numerical';
+            }else if (field.indexOf('form') != -1) {
+                field = 'Bearing and Inclination - all fields must be numerical';
             }else{
                 field = 'Sample Code - must be non null and unique';
             }
@@ -242,6 +268,12 @@ $(document).ready(function(){
 
     // respond to typing in number fields in Edit, Validate & Create New pages - checks if numerical type
     $('textarea[class=noresizenumber]').keyup(function(){
+        var field = this.id;
+        var value = this.value;
+        check_number(field, value);
+    });
+
+    $('textarea[class=bearinc]').keyup(function(){
         var field = this.id;
         var value = this.value;
         check_number(field, value);

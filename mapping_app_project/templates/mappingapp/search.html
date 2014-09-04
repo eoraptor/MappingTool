@@ -1,178 +1,189 @@
+<!-- Template for Search Page -->
+
 {% extends 'mappingapp/base.html' %}
 {% load static %}
 
 {% block title %}Search{% endblock %}
-{% block search %}<li class="li-active"><a id="activelink" href="/briticechrono/search/">Search</a></li>{% endblock search %}
+{% block search %}
+    <li class="li-active"><a id="activelink" href="/briticechrono/search/">Search</a></li>
+{% endblock search %}
 {% block login %}{% endblock login %}
 
 {% block body_block %}
 
-<div class="hidden" id="marker_codes">{% for sample in samples %}{{ sample }},{% endfor %}</div>
+    <div class="hidden" id="marker_codes">
+        {% for sample in samples %}
+            {{ sample }},
+        {% endfor %}
+    </div>
 
     <div class="jumbotron search" id="standardjumbo">
         <div class="container-fluid">
-<div class="panel panel-success" id="searchpanel">
-    <div class="panel-heading" id="searchheader">
-    <h3 class="panel-title">Search Fields<button class="btn btn-sm-primary" id="clearsearchfields"
+            <div class="panel panel-success" id="searchpanel">
+                <div class="panel-heading" id="searchheader">
+                    <h3 class="panel-title">Search Fields<button class="btn btn-sm-primary" id="clearsearchfields"
                                                  title="Clear All Input Fields">Clear</button></h3>
-  </div>
-  <div class="panel-body"  id="searchfieldpanel">
+                </div>
 
-        <div class="container-fluid">
-            <div class="row">
-            <div class="col-md-1 col-xs-2" id="choice">
-                <div class="form-group">
-                    <label class="control-label" for="searchtransect">Transect</label>
-                        <select name="searchtransect" id="transectsearch" class="form-control narrow">
-                            <option></option>
-                            <option>T1</option>
-                            <option>T2</option>
-                            <option>T3</option>
-                            <option>T4</option>
-                            <option>T5</option>
-                            <option>T6</option>
-                            <option>T7</option>
-                            <option>T8</option>
-                        </select>
+            <div class="panel-body"  id="searchfieldpanel">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-1 col-xs-2" id="choice">
+                            <div class="form-group">
+                                <label class="control-label" for="searchtransect">Transect</label>
+                                <select name="searchtransect" id="transectsearch" class="form-control narrow">
+                                    <option></option>
+                                    <option>T1</option>
+                                    <option>T2</option>
+                                    <option>T3</option>
+                                    <option>T4</option>
+                                    <option>T5</option>
+                                    <option>T6</option>
+                                    <option>T7</option>
+                                    <option>T8</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-xs-2" id="choice">
+                            <div class="form-group choice">
+                                <label class="control-label" for="sampletype">Type</label>
+                                    <select name="sampletype" id="sampletype" class="form-control narrow">
+                                        <option></option>
+                                        <option>TCN</option>
+                                        <option>OSL</option>
+                                        <option>C14</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-4" id="start">
+                                <div class="form-group">
+                                    <label class="control-label" id="startagelabel" for="startage">
+                                        Calendar Age Range (10000 - 30000)
+                                    </label>
+                                    <input type="text" class="form-control narrow" id="startage" placeholder="Start">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-4" id="endageinput">
+                                <div class="form-group">
+                                     <input type="text" class="form-control narrow" id="endage" placeholder="Finish">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-4" id="searchcodechoice">
+                                <div class="form-group">
+                                    <label for="searchcode">Sample Code(s)</label>
+                                    <input type="text" class="form-control wide" id="searchcode"
+                                           placeholder="Sample Code(s)">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-4">
+                                <div class="form-group">
+                                    <label class="formspan" for="searchkeyword">Keyword(s)</label>
+                                    <input type="text" class="form-control wide" id="searchkeyword"
+                                           placeholder="Keyword(s)">
+                                </div>
+                            </div>
+                            <div class="col-md-1 col-xs-2" id="buttongroup">
+                                <button type="button" class="btn btn-success btn-sm" id="searchbutton">Search</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            <div class="col-md-1 col-xs-2" id="choice">
-                <div class="form-group choice">
-                    <label class="control-label" for="sampletype">Type</label>
-                    <select name="sampletype" id="sampletype" class="form-control narrow">
-                        <option></option>
-                        <option>TCN</option>
-                        <option>OSL</option>
-                        <option>C14</option>
+            </div>
+
+            <!-- Begin table sorter -->
+            <div class="columnSelectorWrapper">
+                <input id="colSelect1" type="checkbox" class="hidden">
+                    <label class="columnSelectorButton" for="colSelect1"
+                           title="Click to open or close the column selector">Toggle Column Selector</label>
+                    <div id="columnSelector" class="columnSelector">
+                    <!-- this div is where the column selector is added -->
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm" id="getcsv"
+                            title="Download results as csv file">Download Results</button>
+            </div>
+            <div class="container-fluid tablescroll" id="tablesorterdiv">
+                <table class="tablesorter custom-popup"  style="width:auto">
+                    <thead>
+                    <tr>
+                        <!----- Common sample fields - shown as default ------->
+                        <th data-priority="critical">Sample Code</th>
+                        <th data-priority="1">Type</th>
+                        <th data-priority="2">Latitude</th>
+                        <th data-priority="3">Longitude</th>
+                        <th data-priority="4">Elevation</th>
+                        <th data-priority="5">Site</th>
+                        <th data-priority="6">Notes</th>
+                        <th data-priority="7">Cal Age</th>
+                        <th data-priority="8">Cal Error</th>
+
+                        <!-- All fields below hidden on page load -->
+                        <th data-priority="9"  class="columnSelector-false">Age</th>
+                        <th data-priority="10"  class="columnSelector-false">Age Error</th>
+                        <th data-priority="11"  class="columnSelector-false">Lab Code</th>
+                        <th data-priority="12"  class="columnSelector-false">Transect</th>
+                        <th data-priority="13"  class="columnSelector-false">Retreat</th>
+
+                        <!------ C14 fields ---------->
+                        <th data-priority="14"  class="columnSelector-false">C14 Depth below SL</th>
+                        <th data-priority="15"  class="columnSelector-false">C14 Material</th>
+                        <th data-priority="16"  class="columnSelector-false">C14 Setting</th>
+                        <th data-priority="17"  class="columnSelector-false">C14 Strat Pos Depth</th>
+                        <th data-priority="17"  class="columnSelector-false">C14 Weight</th>
+                        <th data-priority="18"  class="columnSelector-false">C14 Contamination</th>
+                        <th data-priority="19"  class="columnSelector-false">C14 Calib. Curve</th>
+
+                        <!------ OSL fields ---------->
+                        <th data-priority="20"  class="columnSelector-false">OSL Position</th>
+                        <th data-priority="21"  class="columnSelector-false">OSL Lithofacies</th>
+                        <th data-priority="22"  class="columnSelector-false">OSL Depth</th>
+                        <th data-priority="23"  class="columnSelector-false">OSL Lithology</th>
+                        <th data-priority="24"  class="columnSelector-false">OSL Gamma Spec</th>
+                        <th data-priority="25"  class="columnSelector-false">OSL Equip No.</th>
+                        <th data-priority="26"  class="columnSelector-false">OSL Probe No.</th>
+                        <th data-priority="27"  class="columnSelector-false">OSL Filename</th>
+                        <th data-priority="28"  class="columnSelector-false">OSL Time</th>
+                        <th data-priority="29"  class="columnSelector-false">OSL Duration</th>
+                        <th data-priority="30"  class="columnSelector-false">OSL Potassium</th>
+                        <th data-priority="31"  class="columnSelector-false">OSL Thorium</th>
+                        <th data-priority="32"  class="columnSelector-false">OSL Uranium</th>
+
+                        <!------ Joint OSL & C14 fields ---------->
+                        <th data-priority="33"  class="columnSelector-false">OSL/C14 Exp/Core</th>
+                        <th data-priority="34"  class="columnSelector-false">OSL Core No.</th>
+
+                        <!------ TCN fields ---------->
+                        <th data-priority="35"  class="columnSelector-false">TCN Quartz</th>
+                        <th data-priority="36"  class="columnSelector-false">TCN Setting</th>
+                        <th data-priority="37"  class="columnSelector-false">TCN Material</th>
+                        <th data-priority="38"  class="columnSelector-false">TCN Boulder Dim</th>
+                        <th data-priority="39"  class="columnSelector-false">TCN Strike/Dip</th>
+                        <th data-priority="40"  class="columnSelector-false">TCN Thickness</th>
+                        <th data-priority="41"  class="columnSelector-false">TCN Grain Size</th>
+                        <th data-priority="42"  class="columnSelector-false">TCN Lithology</th>
+                        <th data-priority="42"  class="columnSelector-false">TCN Bear/Inc</th>
+                    </tr>
+                    </thead>
+                    <tbody id="resultstable">
+                    <!--empty div - target for search result content -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- pager for tablesorter -->
+            <div id="pager" class="pager">
+                <form>
+                    <img src={% static 'imgs/first.png' %} class="first"/>
+                    <img src={% static 'imgs/prev.png' %} class="prev"/>
+                    <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+                    <img src={% static 'imgs/next.png' %} class="next"/>
+                    <img src={% static 'imgs/last.png' %} class="last"/>
+                    <select class="pagesize">
+                        <option selected="selected" value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
                     </select>
-                </div>
+                </form>
             </div>
-        <div class="col-md-2 col-xs-4" id="start">
-            <div class="form-group">
-                <label class="control-label" id="startagelabel" for="startage">Calendar Age Range (10000 - 30000)</label>
-                <input type="text" class="form-control narrow" id="startage" placeholder="Start">
-            </div>
-        </div>
-
-      <div class="col-md-2 col-xs-4" id="endageinput">
-            <div class="form-group">
-                 <input type="text" class="form-control narrow" id="endage" placeholder="Finish">
-            </div>
-        </div>
-        <div class="col-md-2 col-xs-4" id="searchcodechoice">
-            <div class="form-group">
-                <label for="searchcode">Sample Code(s)</label>
-                <input type="text" class="form-control wide" id="searchcode" placeholder="Sample Code(s)">
-            </div>
-        </div>
-        <div class="col-md-2 col-xs-4">
-            <div class="form-group">
-                <label class="formspan" for="searchkeyword">Keyword(s)</label>
-                <input type="text" class="form-control wide" id="searchkeyword" placeholder="Keyword(s)">
-            </div>
-        </div>
-        <div class="col-md-1 col-xs-2" id="buttongroup">
-            <button type="button" class="btn btn-success btn-sm" id="searchbutton">Search</button>
-        </div>
-        </div>
-
-
-
-</div>
-
-</div>
-</div>
-
-<!-- This selector markup is completely customizable -->
-<div class="columnSelectorWrapper">
-    <input id="colSelect1" type="checkbox" class="hidden">
-        <label class="columnSelectorButton" for="colSelect1" title="Click to open or close the column selector">Toggle Column Selector</label>
-            <div id="columnSelector" class="columnSelector">
-<!-- this div is where the column selector is added -->
-            </div>
-            <button type="button" class="btn btn-primary btn-sm" id="getcsv" title="Download results as csv file">Download Results</button>
-
-</div>
-<div class="container-fluid tablescroll" id="tablesorterdiv">
-    <table class="tablesorter custom-popup"  style="width:auto">
-        <thead>
-            <tr>
-                <!----- Common sample fields ------->
-                <th data-priority="critical">Sample Code</th>
-                <th data-priority="1">Type</th>
-                <th data-priority="2">Latitude</th>
-                <th data-priority="3">Longitude</th>
-                <th data-priority="4">Elevation</th>
-                <th data-priority="5">Site</th>
-                <th data-priority="6">Notes</th>
-                <th data-priority="7">Cal Age</th>
-                <th data-priority="8">Cal Error</th>
-                <th data-priority="9"  class="columnSelector-false">Age</th>
-                <th data-priority="10"  class="columnSelector-false">Age Error</th>
-                <th data-priority="11"  class="columnSelector-false">Lab Code</th>
-                <th data-priority="12"  class="columnSelector-false">Transect</th>
-                <th data-priority="13"  class="columnSelector-false">Retreat</th>
-                <!------ C14 fields ---------->
-                <th data-priority="14"  class="columnSelector-false">C14 Depth below SL</th>
-                <th data-priority="15"  class="columnSelector-false">C14 Material</th>
-                <th data-priority="16"  class="columnSelector-false">C14 Setting</th>
-                <th data-priority="17"  class="columnSelector-false">C14 Strat Pos Depth</th>
-                <th data-priority="17"  class="columnSelector-false">C14 Weight</th>
-                <th data-priority="18"  class="columnSelector-false">C14 Contamination</th>
-                <th data-priority="19"  class="columnSelector-false">C14 Calib. Curve</th>
-                <!------ OSL fields ---------->
-                <th data-priority="20"  class="columnSelector-false">OSL Position</th>
-                <th data-priority="21"  class="columnSelector-false">OSL Lithofacies</th>
-                <th data-priority="22"  class="columnSelector-false">OSL Depth</th>
-                <th data-priority="23"  class="columnSelector-false">OSL Lithology</th>
-                <th data-priority="24"  class="columnSelector-false">OSL Gamma Spec</th>
-                <th data-priority="25"  class="columnSelector-false">OSL Equip No.</th>
-                <th data-priority="26"  class="columnSelector-false">OSL Probe No.</th>
-                <th data-priority="27"  class="columnSelector-false">OSL Filename</th>
-                <th data-priority="28"  class="columnSelector-false">OSL Time</th>
-                <th data-priority="29"  class="columnSelector-false">OSL Duration</th>
-                <th data-priority="30"  class="columnSelector-false">OSL Potassium</th>
-                <th data-priority="31"  class="columnSelector-false">OSL Thorium</th>
-                <th data-priority="32"  class="columnSelector-false">OSL Uranium</th>
-                <!------ Joint OSL & C14 fields ---------->
-                <th data-priority="33"  class="columnSelector-false">OSL/C14 Exp/Core</th>
-                <th data-priority="34"  class="columnSelector-false">OSL Core No.</th>
-                <!------ TCN fields ---------->
-                <th data-priority="35"  class="columnSelector-false">TCN Quartz</th>
-                <th data-priority="36"  class="columnSelector-false">TCN Setting</th>
-                <th data-priority="37"  class="columnSelector-false">TCN Material</th>
-                <th data-priority="38"  class="columnSelector-false">TCN Boulder Dim</th>
-                <th data-priority="39"  class="columnSelector-false">TCN Strike/Dip</th>
-                <th data-priority="40"  class="columnSelector-false">TCN Thickness</th>
-                <th data-priority="41"  class="columnSelector-false">TCN Grain Size</th>
-                <th data-priority="42"  class="columnSelector-false">TCN Lithology</th>
-                <th data-priority="42"  class="columnSelector-false">TCN Bear/Inc</th>
-            </tr>
-        </thead>
-    <tbody id="resultstable">
-    </tbody>
-</table>
-</div>
-            <!-- pager -->
-        <div id="pager" class="pager">
-            <form>
-                <img src={% static 'imgs/first.png' %} class="first"/>
-                <img src={% static 'imgs/prev.png' %} class="prev"/>
-                <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
-                <img src={% static 'imgs/next.png' %} class="next"/>
-                <img src={% static 'imgs/last.png' %} class="last"/>
-                <select class="pagesize">
-                  <option selected="selected" value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                  <option value="40">40</option>
-                </select>
-            </form>
         </div>
     </div>
-</div>
-
-
-
-
 {% endblock %}
