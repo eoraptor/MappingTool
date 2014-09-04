@@ -138,31 +138,40 @@ def get_site_info(site_sheet, type):
             elif photographs.startswith('n'):
                 photographs = False
 
-    # convert date to correct format.  If notes add to site notes.
+
+    # convert date if format incorrect
     if site_date is not None:
+
         date = str(site_date)
 
         if ' 00:00:00' in date:
-             date = date.replace(' 00:00:00', '')
+            date = date.replace(' 00:00:00', '')
 
-        if '.' in date:
-            site_date = convert_date(date)
-            if site_date == 'Error':
-                if site_notes is not None:
-                    site_notes = site_notes + ' ' + site_date + '. '
-                else:
-                    site_notes = site_date
-                site_date = None
-        else:
-             try:
-                datetime.datetime.strptime(date, '%Y-%m-%d')
-                site_date = date
-             except:
-                if site_notes is not None:
-                    site_notes = site_notes + ' ' + site_date + '. '
-                else:
-                    site_notes = site_date
+        try:
+            site_date = datetime.datetime.strptime(date, '%Y-%m-%d')
+
+        except:
+            if '.' in date:
+                try:
+                    site_date = convert_date(date)
+                    if site_date == 'Error' and site_notes is not None:
+                        site_notes = site_notes + ' ' + date + '. '
+                        site_date = None
+                    elif site_date == 'Error' and site_notes is None:
+                        site_notes = date + '. '
+                        site_date = None
+                except:
+                    if site_notes is not None:
+                        site_notes = site_notes + ' ' + date + '. '
+                    else:
+                        site_notes = date + '. '
                     site_date = None
+            else:
+                if site_notes is not None:
+                    site_notes = site_notes + ' ' + date + '. '
+                else:
+                    site_notes = date + '. '
+                site_date = None
 
 
     if site_northing is not None:
@@ -177,12 +186,12 @@ def get_site_info(site_sheet, type):
         except:
             site_easting = None
 
-    if site_latitude is not None and not isinstance(site_latitude, float):
+    if site_latitude is not None and not isinstance(site_latitude, (float, int)):
             site_latitude = convert_lat_long(site_latitude)
             if not isinstance(site_latitude, float):
                 site_latitude = None
 
-    if site_longitude is not None and not isinstance(site_longitude, float):
+    if site_longitude is not None and not isinstance(site_longitude, (float, int)):
             site_longitude = convert_lat_long(site_longitude)
             if isinstance(site_longitude, float):
                 site_longitude = -1 * site_longitude
@@ -206,7 +215,6 @@ def get_site_info(site_sheet, type):
             pass
 
         if site is None:
-
             if bng_ing is None and site_easting is None and site_northing is None and site_latitude is None and\
                     site_longitude is None and site_elevation is None:
                 pass

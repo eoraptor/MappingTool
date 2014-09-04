@@ -80,22 +80,29 @@ def get_C14_sample_info(sample_sheet, sample_count):
         if ' 00:00:00' in date:
              date = date.replace(' 00:00:00', '')
 
-        if '.' in date:
-            sample_date = convert_date(date)
-            if sample_date == 'Error':
-                if notes is not None:
-                    notes = notes + ' ' + sample_date + '. '
-                else:
-                    notes = sample_date + '. '
-                sample_date = None
-                errors.append('Sample Date')
-        else:
-            try:
-                date = datetime.datetime.strptime(date, '%Y-%m-%d')
-                sample_date = date.strftime('%d/%m/%Y')
-
-            except:
-
+        try:
+            date = datetime.datetime.strptime(date, '%Y-%m-%d')
+            sample_date = date.strftime('%d/%m/%Y')
+        except:
+            if '.' in date:
+                try:
+                    sample_date = convert_date(date)
+                    if sample_date == 'Error' and notes is not None:
+                        notes = notes + ' ' + date + '. '
+                        sample_date = None
+                        errors.append('Sample Date')
+                    elif sample_date == 'Error' and notes is None:
+                        notes = date + '. '
+                        sample_date = None
+                        errors.append('Sample Date')
+                except:
+                    if notes is not None:
+                        notes = notes + ' ' + date + '. '
+                    else:
+                        notes = date + '. '
+                    sample_date = None
+                    errors.append('Sample Date')
+            else:
                 if notes is not None:
                     notes = notes + ' ' + date + '. '
                 else:
@@ -103,14 +110,16 @@ def get_C14_sample_info(sample_sheet, sample_count):
                 sample_date = None
                 errors.append('Sample Date')
 
+
+
     # convert latitude and longitude if format incorrect
-    if latitude is not None and not isinstance(latitude, float):
+    if latitude is not None and not isinstance(latitude, (float,int)):
         latitude = convert_lat_long(latitude)
         if latitude == 'Error':
             errors.append('Sample latitude')
             latitude = None
 
-    if longitude is not None and not isinstance(longitude, float):
+    if longitude is not None and not isinstance(longitude, (float, int)):
         longitude = convert_lat_long(longitude)
         if longitude == 'Error':
             errors.append('Sample longitude')

@@ -24,7 +24,7 @@ class PhotographManager(models.Manager):
         return photo
 
 class Photograph(models.Model):
-    photo_time_stamp = models.DateTimeField(null=True, blank=True)
+    photo_filename = models.ImageField(upload_to='photographs', null=True, blank=True)
     photo_label = models.TextField(null=True, blank=True)
 
     objects = PhotographManager()

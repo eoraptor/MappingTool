@@ -7,7 +7,7 @@ var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_
 '#id_sample_location_name', '#id_sampled_material', '#id_lithology', '#id_quartz_content',
 '#id_sample_surface_strike_dip', '#id_boulder_dimensions', '#id_grain_size', '#id_sample_setting',
 '#id_sample_notes', '#id_sample-latitude', '#id_sample-longitude', '#id_sample-easting', '#id_sample-northing',
-'#id_sample-elevation', '#id_sample-bng_ing'];
+'#id_sample-elevation', '#id_sample-bng_ing', "#id_exposure_core", "#id_core_number"];
 
 var $table;
 var error_count = 0;

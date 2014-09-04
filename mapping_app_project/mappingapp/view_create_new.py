@@ -49,23 +49,21 @@ def create_new(request, sample_type_url):
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
 
         if sample_type == 'TCN':
-            tcnForm = TCNForm(request.POST)
+            tcnForm = EditTCNForm(request.POST)
             bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
 
         elif sample_type == 'OSL':
-            oslForm = OSLSampleForm(request.POST)
+            oslForm = EditOSLSampleForm(request.POST)
             coreForm = CoreDetailsForm(request.POST)
 
         elif sample_type == 'C14':
             coreForm = CoreDetailsForm(request.POST)
-            c14Form = RadiocarbonForm(request.POST)
+            c14Form = EditRadiocarbonForm(request.POST)
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
-        if sampForm.is_valid():
-
-            # and samplecoordForm.is_valid() and\
-            # siteForm.is_valid() and     tranForm.is_valid() and retForm.is_valid():
+        if sampForm.is_valid and samplecoordForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
+                hiddensiteForm.is_valid():
 
             sample = None
             sample = sampForm.save(commit=False)
@@ -121,10 +119,10 @@ def create_new(request, sample_type_url):
                         tcn.save()
 
                         for form in bearingsFormSet.forms:
-                            bear_inc = form.save()
-                            if bear_inc is not None:
-                                sample_bearing = Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn,
-                                                                                         bear_inc=bear_inc)
+                                bear_inc = form.save()
+                                if bear_inc is not None:
+                                    sample_bearing = Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn,
+                                                                                             bear_inc=bear_inc)
 
                 if sample is not None:
                     request.session['new_markers'] = sample.sample_code
@@ -147,16 +145,16 @@ def create_new(request, sample_type_url):
         fillsiteForm = ExistingSitesForm(prefix='fill')
 
         if sample_type == 'TCN':
-            tcnForm = TCNForm()
+            tcnForm = EditTCNForm()
             bearingsFormSet = BearingsFormSet()
 
         elif sample_type == 'OSL':
-            oslForm = OSLSampleForm()
+            oslForm = EditOSLSampleForm()
             coreForm = CoreDetailsForm()
 
         elif sample_type == 'C14':
             coreForm = CoreDetailsForm()
-            c14Form = RadiocarbonForm()
+            c14Form = EditRadiocarbonForm()
 
 
     return render_to_response('mappingapp/create_new.html', {'c14form':c14Form,

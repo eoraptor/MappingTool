@@ -175,23 +175,21 @@ def validatesample(request):
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
 
         if sample_type == 'TCN':
-            tcnForm = TCNForm(request.POST, instance=tcn)
+            tcnForm = EditTCNForm(request.POST, instance=tcn)
             bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
 
         elif sample_type == 'OSL':
-            oslForm = OSLSampleForm(request.POST, instance=osl)
+            oslForm = EditOSLSampleForm(request.POST, instance=osl)
             coreForm = CoreDetailsForm(request.POST, instance=core)
 
         elif sample_type == 'C14':
             coreForm = CoreDetailsForm(request.POST, instance=core)
-            c14Form = RadiocarbonForm(request.POST, instance=radiocarbon)
+            c14Form = EditRadiocarbonForm(request.POST, instance=radiocarbon)
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
-        if sampForm.is_valid():
-
-            # and samplecoordForm.is_valid() and\
-            # siteForm.is_valid() and     tranForm.is_valid() and retForm.is_valid():
+        if sampForm.is_valid and samplecoordForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
+                hiddensiteForm.is_valid():
 
             sample = None
             sample = sampForm.save(commit=False)
@@ -259,7 +257,10 @@ def validatesample(request):
                         bear_inc = form.save()
                         if bear_inc is not None:
                             sample_bearing = Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn,
-                                                                                         bear_inc=bear_inc)
+                                                                                     bear_inc=bear_inc)
+
+
+
             if 'files_saved' in request.session:
                 if request.session['file_name'] not in request.session['files_saved']:
                     request.session['files_saved'] = request.session['files_saved'] + ', ' + request.session['file_name']
@@ -292,16 +293,16 @@ def validatesample(request):
         fillsiteForm = ExistingSitesForm(prefix='fill')
 
         if sample_type == 'TCN':
-            tcnForm = TCNForm(instance=tcn)
+            tcnForm = EditTCNForm(instance=tcn)
             bearingsFormSet = BearingsFormSet(initial=data)
 
         elif sample_type == 'OSL':
-            oslForm = OSLSampleForm(instance=osl)
+            oslForm = EditOSLSampleForm(instance=osl)
             coreForm = CoreDetailsForm(instance=core)
 
         elif sample_type == 'C14':
             coreForm = CoreDetailsForm(instance=core)
-            c14Form = RadiocarbonForm(instance=radiocarbon)
+            c14Form = EditRadiocarbonForm(instance=radiocarbon)
 
 
     return render_to_response('mappingapp/validatesample.html', {'num_bearings':num_bearings, 'c14form':c14Form,

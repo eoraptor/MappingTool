@@ -5,13 +5,15 @@ from mappingapp.models import Transect, Sample_Site
 
 # take date format with full stops and replace
 def convert_date(date):
-    try:
-        first_point = date.find('.')
-        last_point = date.rfind('.')
 
-        day = date[:first_point].strip(' ')
-        month = date[first_point+1:last_point].strip(' ')
-        year = date[last_point+1:].strip(' ')
+    first_point = date.find('.')
+    last_point = date.rfind('.')
+
+    day = date[:first_point].strip(' ')
+    month = date[first_point+1:last_point].strip(' ')
+    year = date[last_point+1:].strip(' ')
+
+    if isinstance(day, int) and isinstance(month, int) and isinstance(year, int):
 
         if len(day) == 1:
             day = '0' + day
@@ -24,8 +26,9 @@ def convert_date(date):
 
         return day + '/' + month + '/' + year
 
-    except:
+    else:
         return 'Error'
+
 
 
 # convert lat/long in degrees, minutes to decimal format

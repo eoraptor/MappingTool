@@ -31,6 +31,7 @@ def get_tcn_cell_positions(ws):
                         val_col = columns[col+1]
                         positions[val] = val_col + str(cell.row)
 
+
     # fix cell locations for alternate spreadsheet format
     if positions['sample thickness'] == '':
         positions['sample thickness'] = positions['Sample Thickness :']
@@ -186,6 +187,7 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         if len(bearing) == 0:
             bearing = None
 
+
     # convert date if format incorrect
     if sample_date is not None:
         date = str(sample_date)
@@ -193,22 +195,29 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         if ' 00:00:00' in date:
              date = date.replace(' 00:00:00', '')
 
-        if '.' in date:
-            sample_date = convert_date(date)
-            if sample_date == 'Error':
-                if notes is not None:
-                    notes = notes + ' ' + sample_date + '. '
-                else:
-                    notes = sample_date + '. '
-                sample_date = None
-                errors.append('Sample Date')
-        else:
-            try:
-                date = datetime.datetime.strptime(date, '%Y-%m-%d')
-                sample_date = date.strftime('%d/%m/%Y')
-
-            except:
-
+        try:
+            date = datetime.datetime.strptime(date, '%Y-%m-%d')
+            sample_date = date.strftime('%d/%m/%Y')
+        except:
+            if '.' in date:
+                try:
+                    sample_date = convert_date(date)
+                    if sample_date == 'Error' and notes is not None:
+                        notes = notes + ' ' + date + '. '
+                        sample_date = None
+                        errors.append('Sample Date')
+                    elif sample_date == 'Error' and notes is None:
+                        notes = date + '. '
+                        sample_date = None
+                        errors.append('Sample Date')
+                except:
+                    if notes is not None:
+                        notes = notes + ' ' + date + '. '
+                    else:
+                        notes = date + '. '
+                    sample_date = None
+                    errors.append('Sample Date')
+            else:
                 if notes is not None:
                     notes = notes + ' ' + date + '. '
                 else:

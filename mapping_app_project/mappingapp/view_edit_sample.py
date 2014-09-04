@@ -121,9 +121,8 @@ def editsample(request):
 
         # Have we been provided with a complete set of valid forms?  If yes save forms sequentially in order to supply
         # foreign key values where required
-        if siteForm.is_valid():
-        # if siteForm.is_valid() and sampleForm.is_valid() and tcnForm.is_valid() and samplecoordForm.is_valid() and\
-        #         tranForm.is_valid() and retForm.is_valid():
+        if sampleForm.is_valid and samplecoordForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
+                hiddensiteForm.is_valid():
 
 
             sample = sampleForm.save(commit=False)

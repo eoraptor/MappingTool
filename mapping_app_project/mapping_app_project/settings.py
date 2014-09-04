@@ -178,4 +178,4 @@ LOGGING = {
     }
 }
 
-LOGIN_URL = '/mappingapp/'
+LOGIN_URL = '/briticechrono/'

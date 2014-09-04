@@ -39,6 +39,7 @@ def upload(request):
 
             # handle exceptions ----> show error page
             except:
+
                  return HttpResponseRedirect(reverse('error'))
 
             request.session['file_name'] = request.FILES['file'].name
