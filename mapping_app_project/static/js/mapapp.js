@@ -326,7 +326,7 @@ $(document).ready(function(){
     // trigger a sample code search using the codes from the markers selected on the map page either from drawing
     // or the age filter
     if ($('#marker_codes').text() != 'None') {
-        var sample_codes = $('#marker_codes').text().slice(0,-1);
+        var sample_codes = $('#marker_codes').text().trim().slice(0,-1);
         $('#searchcode').val(sample_codes);
         $('#searchbutton').trigger( "click" );
         $('#searchcode').val('');

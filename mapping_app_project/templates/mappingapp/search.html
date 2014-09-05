@@ -12,9 +12,7 @@
 {% block body_block %}
 
     <div class="hidden" id="marker_codes">
-        {% for sample in samples %}
-            {{ sample }},
-        {% endfor %}
+        {% for sample in samples %}{{ sample }},{% endfor %}
     </div>
 
     <div class="jumbotron search" id="standardjumbo">
