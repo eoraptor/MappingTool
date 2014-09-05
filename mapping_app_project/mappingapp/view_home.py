@@ -12,13 +12,14 @@ def index(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
-    # get newly saved markers
     new_markers = None
 
+    # clear session dictionary of previous marker selection
     if 'markers' in request.session:
         del request.session['markers']
         request.session.modified = True
 
+    # get newly saved markers from session dictionary
     if 'new_markers' in request.session:
        new_markers = request.session['new_markers']
 
@@ -34,8 +35,9 @@ def index(request):
             # Redirect to search page with marker data
             return HttpResponseRedirect(reverse('search'))
     else:
+        # blank form
         form = MarkersForm()
 
-    return render_to_response('mappingapp/index.html', {'form':form, 'is_member':is_member, 'new_markers':new_markers},
-                              context)
+    return render_to_response('mappingapp/index.html', {'form': form, 'is_member': is_member,
+                                                        'new_markers': new_markers}, context)
 

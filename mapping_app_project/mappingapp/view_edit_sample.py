@@ -24,17 +24,16 @@ def editsample(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
-    # retrieve objects to populate form fields
     sample = None
 
-    num_bearings = None
-
+    # get sample code from the session dictionary and retrieve sample object
     sample_code = request.session['sample']
     try:
         sample = Sample.objects.get(sample_code=sample_code)
     except:
         pass
 
+    # variables
     site_name = None
     transect = None
     retreat_zone = None
@@ -43,8 +42,10 @@ def editsample(request):
     c14_data = None
     tcn_data = None
     bearings = None
+    num_bearings = None
     sample_type = None
 
+    # determine sample type
     if sample is not None:
         try:
             tcn_data = TCN_Sample.objects.get(tcn_sample=sample)
@@ -61,6 +62,7 @@ def editsample(request):
         except:
             pass
 
+    # retrieve coordinates, transect and retreat zone instances
     if sample is not None:
         if sample.sample_site is not None:
             site_name = sample.sample_site.site_name
@@ -68,6 +70,7 @@ def editsample(request):
         transect = sample.transect
         retreat_zone = sample.retreat
 
+    # for tcn samples retrieve bearings and inclination data and set sample type
     if tcn_data is not None:
         bearings = Sample_Bearing_Inclination.objects.filter(sample_with_bearing=tcn_data)
         sample_type = 'TCN'
@@ -81,14 +84,17 @@ def editsample(request):
         num_bearings = len(data)
         BearingsFormSet = formset_factory(EditBIForm, extra=40-num_bearings)
 
+    # if OSL sample get core data and set type to OSL
     if osl_data is not None:
         core = osl_data.osl_core
         sample_type = 'OSL'
 
+    # if C14 sample get core data and set type to C14
     if c14_data is not None:
         core = c14_data.c14_core
         sample_type = 'C14'
 
+    # form variable names
     oslForm = None
     c14Form = None
     tcnForm = None
@@ -107,6 +113,7 @@ def editsample(request):
         sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
 
+        # branch depending on sample type
         if tcn_data is not None:
             bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
             tcnForm = EditTCNForm(request.POST, instance=tcn_data)
@@ -124,10 +131,10 @@ def editsample(request):
         if sampleForm.is_valid and samplecoordForm.is_valid() and tranForm.is_valid() and retForm.is_valid() and\
                 hiddensiteForm.is_valid():
 
-
             sample = sampleForm.save(commit=False)
 
             sample_coordinates = samplecoordForm.save()
+
             site_name = hiddensiteForm.save()
             sample_site = None
             try:
@@ -139,12 +146,14 @@ def editsample(request):
 
             retreat = retForm.save()
 
+            # add the foreign keys to sample and write to database
             sample.transect = transect
             sample.retreat = retreat
             sample.sample_coordinates = sample_coordinates
             sample.sample_site = sample_site
             sample.save()
 
+            # TCN specific actions, including updating the bearing and inclination values.
             if sample_type == 'TCN':
                 tcn = tcnForm.save(commit=False)
                 tcn.tcn_sample = sample
@@ -164,7 +173,7 @@ def editsample(request):
                                 bear_inc.save()
                                 Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn_data,
                                                                           bear_inc=bear_inc)
-
+            # C14 sample type specific actions
             elif sample_type == 'C14':
                 core = coreForm.save()
                 c14 = c14Form.save(commit=False)
@@ -172,6 +181,7 @@ def editsample(request):
                 c14.c14_core = core
                 c14.save()
 
+            # OSL sample type specific actions
             elif sample_type == 'OSL':
                 core = coreForm.save()
                 osl = oslForm.save(commit=False)
@@ -183,8 +193,10 @@ def editsample(request):
             return HttpResponseRedirect(reverse('index'))
         else:
             # The supplied form contained errors - just print them to the terminal.
-            print sample.errors
+            print sampleForm.errors
+
     else:
+        # create forms filled with instance data
         sampleForm = EditSampleForm(instance=sample)
         samplecoordForm = EditCoordinatesForm(prefix='sample', instance=sample_coordinates)
         siteForm = EditSampleSiteForm()
@@ -210,13 +222,14 @@ def editsample(request):
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).
-    return render_to_response('mappingapp/editsample.html', {'num_bearings':num_bearings, 'sitecoordform':sitecoordForm,'siteform': siteForm,
-                                                            'samplecoordform':samplecoordForm,'sampform':sampleForm,
-                                                            'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
-                                                            'sitechoices':sitechoicesForm, 'retform': retForm,
-                                                            'fillsiteform':fillsiteForm,'is_member':is_member,
-                                                            'bearingformset':bearingsFormSet, 'tcnform':tcnForm,
-                                                            'site_name':site_name, 'oslform':oslForm,
-                                                            'c14form':c14Form, 'coreform':coreForm,
-                                                            'sample_type':sample_type}, context)
+    return render_to_response('mappingapp/editsample.html', {'num_bearings': num_bearings,
+                                                             'sitecoordform': sitecoordForm, 'siteform': siteForm,
+                                                            'samplecoordform': samplecoordForm,'sampform': sampleForm,
+                                                            'tranform': tranForm, 'hiddensiteform': hiddensiteForm,
+                                                            'sitechoices': sitechoicesForm, 'retform': retForm,
+                                                            'fillsiteform': fillsiteForm,'is_member': is_member,
+                                                            'bearingformset': bearingsFormSet, 'tcnform': tcnForm,
+                                                            'site_name': site_name, 'oslform': oslForm,
+                                                            'c14form': c14Form, 'coreform': coreForm,
+                                                            'sample_type': sample_type}, context)
 

@@ -21,6 +21,7 @@ def get_sample_code_list(starts_with=''):
             code_list.append(sample.sample_code)
             code_list.sort()
 
+    # return the first fifty from the list
     if len(code_list) > 50:
         code_list = code_list[:50]
 

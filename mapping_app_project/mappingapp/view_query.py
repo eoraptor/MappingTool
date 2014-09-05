@@ -12,6 +12,7 @@ def query(request):
 
     context = RequestContext(request)
 
+    # variables
     results = []
     transect = ''
     transect_object = None
@@ -26,7 +27,7 @@ def query(request):
     keyword_samples = None
     samples = None
 
-
+    # retrieve the search criteria
     if request.method == 'GET':
         transect = request.GET['transect']
         type = request.GET['type']
@@ -60,6 +61,7 @@ def query(request):
             for pk in sample_list:
                 type_samples.append(Sample.objects.get(pk=pk))
 
+    # reduce search results to include only those matching all search criteria at this stage
     if samples is not None and type_samples is not None:
         samples = set(samples).intersection(type_samples)
     elif samples is None and type_samples is not None:
@@ -75,6 +77,7 @@ def query(request):
         else:
             code_samples = Sample.objects.filter(Q(sample_code__startswith=sample_code))
 
+    # reduce search results to include only those matching all search criteria at this stage
     if samples is not None and code_samples is not None:
         samples = set(samples).intersection(code_samples)
     elif samples is None and code_samples is not None:
@@ -96,6 +99,7 @@ def query(request):
 
             age_samples = Sample.objects.filter(calendar_age__gte=start_age, calendar_age__lte=end_age)
 
+    # reduce search results to include only those matching all search criteria at this stage
     if samples is not None and age_samples is not None:
         samples = set(samples).intersection(age_samples)
     elif samples is None and age_samples is not None:
@@ -111,6 +115,7 @@ def query(request):
         else:
             keyword_samples = Sample.objects.filter(Q(sample_notes__icontains=keyword))
 
+    # reduce search results to include only those matching all search criteria at this stage
     if samples is not None and keyword_samples is not None:
         samples = set(samples).intersection(keyword_samples)
     elif samples is None and keyword_samples is not None:
@@ -152,21 +157,25 @@ def query(request):
                 if type_found is not None:
                     type = 'C14'
 
+            # get sample site
             if sample.sample_site is not None:
                 site = sample.sample_site.site_name
 
+            # get location details
             if sample.sample_coordinates is not None:
                 latitude = sample.sample_coordinates.latitude
                 longitude = sample.sample_coordinates.longitude
                 elevation = sample.sample_coordinates.elevation
 
+            # get transect
             if sample.transect is not None:
                 transect = sample.transect.transect_number
 
+            # get retreat zone
             if sample.retreat is not None:
                 retreat = sample.retreat.zone_number
 
-
+            # get data specific to type - for other samples set to N/A
             if type == 'C14':
                 c14_data = None
                 try:
@@ -186,7 +195,6 @@ def query(request):
                     if core is not None:
                         expcore = core.exposure_core
                         core = core.core_number
-
 
                 else:
                     c14Depth = None
@@ -338,7 +346,6 @@ def query(request):
             'core':core, 'tcnQuartz':tcnQuartz, 'tcnSetting':tcnSetting, 'tcnMaterial':tcnMaterial,
             'tcnBoulder':tcnBoulder, 'tcnStrike':tcnStrike, 'tcnThickness':tcnThickness, 'tcnGrain':tcnGrain,
             'tcnLithology':tcnLithology, 'tcnBearInc':tcnBearInc}
-
 
             results.append(data)
 

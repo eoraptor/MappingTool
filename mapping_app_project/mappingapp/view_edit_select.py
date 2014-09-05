@@ -20,12 +20,13 @@ def edit(request):
     # get complete list of sample codes to display
     samplecodelist = Sample.objects.values_list('sample_code', flat=True).order_by('sample_code')
 
-
+    # get sample code from form
     if request.method == 'POST':
         sample_code = request.POST['samp_code']
 
         if sample_code is not None:
 
+            # add sample code to session dictionary
             request.session['sample'] = sample_code
 
             # does sample exist?
@@ -37,9 +38,10 @@ def edit(request):
                 return HttpResponseRedirect(reverse('error'))
 
     else:
+        # an empty form
        selectsampleform = SelectSampleForm()
 
-    return render_to_response('mappingapp/edit.html', {'sample_codes':samplecodelist, 'is_member':is_member,
-                                                       'selectsampleform':selectsampleform}, context)
+    return render_to_response('mappingapp/edit.html', {'sample_codes': samplecodelist, 'is_member': is_member,
+                                                       'selectsampleform': selectsampleform}, context)
 
 

@@ -25,18 +25,21 @@ def create_new(request, sample_type_url):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
+    # convert type to uppercase
     sample_type = sample_type_url.upper()
 
+    # if TCN create formset for Bearing & Inclination data
     if sample_type == 'TCN':
         BearingsFormSet = formset_factory(BearingInclinationForm, extra=40)
 
+    # set form variables to None
     tcnForm = None
     oslForm = None
     coreForm = None
     bearingsFormSet = None
     c14Form = None
 
-    # A HTTP POST?
+    # An HTTP POST?
     if request.method == 'POST':
 
         sampForm = SampleForm(request.POST)
@@ -48,6 +51,7 @@ def create_new(request, sample_type_url):
         sitechoicesForm = ExistingSitesForm(request.POST, prefix='main')
         hiddensiteForm = HiddenSiteForm(request.POST, prefix='hidden')
 
+        # Different forms depending on sample type
         if sample_type == 'TCN':
             tcnForm = EditTCNForm(request.POST)
             bearingsFormSet = BearingsFormSet(request.POST, request.FILES)
@@ -76,8 +80,11 @@ def create_new(request, sample_type_url):
                 except:
                     pass
 
+            # sample already saved - do not save again
             if existing is not None:
                 pass
+
+            # sample not saved - save forms in correct order to establish foreign key relationships
             else:
                 sample_coords = samplecoordForm.save()
 
@@ -95,6 +102,7 @@ def create_new(request, sample_type_url):
 
                 core = None
 
+                # branch depending on Sample Type
                 if sample_type == 'OSL' or sample_type == 'C14':
                     core = coreForm.save()
 
@@ -124,15 +132,17 @@ def create_new(request, sample_type_url):
                                     sample_bearing = Sample_Bearing_Inclination.objects.create(sample_with_bearing=tcn,
                                                                                              bear_inc=bear_inc)
 
+                # Add sample to newly created samples in session
                 if sample is not None:
                     request.session['new_markers'] = sample.sample_code
 
-                # all samples checked, return to home page
+                # Return to home page
                 return HttpResponseRedirect(reverse('index'))
         else:
             # The supplied form contained errors
             print sampForm.errors
 
+    # Create blank forms for page
     else:
         sampForm = SampleForm()
         samplecoordForm = CoordinatesForm(prefix='sample')
@@ -156,17 +166,16 @@ def create_new(request, sample_type_url):
             coreForm = CoreDetailsForm()
             c14Form = EditRadiocarbonForm()
 
-
-    return render_to_response('mappingapp/create_new.html', {'c14form':c14Form,
-                                                                 'coreform':coreForm,
-                                                                 'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
+    return render_to_response('mappingapp/create_new.html', {'c14form': c14Form,
+                                                                 'coreform': coreForm,
+                                                                 'tranform': tranForm, 'hiddensiteform': hiddensiteForm,
                                                                  'sitechoices':sitechoicesForm,
                                                                  'samplecoordform':samplecoordForm,
                                                                  'siteform': siteForm, 'sitecoordform':sitecoordForm,
-                                                                 'sampform':sampForm, 'fillsiteform':fillsiteForm,
-                                                                 'is_member':is_member,  'retform': retForm,
-                                                                 'sample_type':sample_type,
-                                                                 'bearingformset':bearingsFormSet,  'tcnform':tcnForm,
-                                                                 'oslform':oslForm}, context)
+                                                                 'sampform': sampForm, 'fillsiteform': fillsiteForm,
+                                                                 'is_member': is_member,  'retform': retForm,
+                                                                 'sample_type': sample_type,
+                                                                 'bearingformset': bearingsFormSet,  'tcnform': tcnForm,
+                                                                 'oslform': oslForm}, context)
 
 

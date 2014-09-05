@@ -36,7 +36,7 @@ function check_number(field, value) {
                 form_errors.push(field);
             }
         }
-
+        // change field background colour and disable save buttons
         $('#'+field).css("background-color", "#E6760C");
         $('#validatebutton').attr("disabled", true);
         $('#editbutton').attr("disabled", true);
@@ -63,7 +63,7 @@ function check_number(field, value) {
                 if (field === form_errors[i]) {
                 removed = form_errors.splice(i, 1);
         }}}
-
+        // revert background colour to white and enable saving if all errors fixed
         $('#'+field).css("background-color", "");
         if (form_errors.length == 0) {
             $('#editbutton').attr("disabled", false);
@@ -77,6 +77,7 @@ function check_number(field, value) {
             }
         }
             if (site_errors == false){
+                // if site errors fixed - enable site saving again
                 $('#savebutton').attr("disabled", false);
             }
     }}}
@@ -127,7 +128,7 @@ function openerrordialogue() {
 
 $(document).ready(function(){
 
-       // slider plugin for Age Filter
+       // slider plugin for Age Filter on map page
     $("#ex2").slider();
         $(this).on('slide', function(slideEvt) {
 	    var range = slideEvt.value;
@@ -143,7 +144,7 @@ $(document).ready(function(){
                autoOpen: false
             });
 
-    // has sample been saved?
+    // has sample been saved on Validate page?
     var sample_saved = $('#sample_saved').text();
     if (sample_saved == 'True') {
         $("#samp_saved").css('visibility', 'visible');
@@ -182,7 +183,7 @@ $(document).ready(function(){
     $('#site_selected').text(site_name);
     $('#id_hidden-site_name').val(site_name);
 
-    //
+    // transfer selected sample code to code input in Edit Sample code selection page
     $('.td').click(function() {
     var text = $(this).text();
     $('#id_samp_code').val(text);
@@ -274,6 +275,7 @@ $(document).ready(function(){
         check_number(field, value);
     });
 
+    // respond to typing in numerical Bearing and Inclination fields in Edit, Validate & Create New pages - check type
     $('textarea[class=bearinc]').keyup(function(){
         var field = this.id;
         var value = this.value;
@@ -290,7 +292,7 @@ $(document).ready(function(){
     $('#id_site_date').datepicker({dateFormat: 'dd/mm/yy'});
 });
 
-    // Test for missing keys - if key missing A1 cell contents appear
+    // Test for missing keys - if key missing A1 cell contents appear - Validate Sample page
     for (var i = 0 ; i < sample_fields.length ; i++) {
         if ($(sample_fields[i]).val() == "TCN Sample Sheet" || $(sample_fields[i]).val() == "14C Sample Sheet" ||
             $(sample_fields[i]).val() == "Section B: OSL Sample Sheet") {
@@ -299,7 +301,7 @@ $(document).ready(function(){
         }
     }
 
-    // stop saving of empty or duplicate sample code fields
+    // stop saving of empty or duplicate sample code fields - Validate, Edit and Create New pages
     if ($('#validate').length > 0) {
         var sample = $('#id_sample_code').text();
         if (sample === '') {
@@ -332,7 +334,7 @@ $(document).ready(function(){
 
 });
 
-    // reset the search fields
+    // reset the search fields - Search Page
     $('#clearsearchfields').click(function(){
         $('#searchcode').val('');
         $('#searchkeyword').val('');
@@ -405,7 +407,7 @@ $('#savebutton').click(function(){
             $('#id_hidden-site_name').val(site);
             alert('Site Saved')
             }else if ((val.created) == false) {
-                alert('Site Already Exists')
+                alert('Site not saved: site name must be unique and non-null')
             }
         });
   });
@@ -431,6 +433,7 @@ $('[data-toggle="tooltip"]').tooltip({
 
 
 $(document).ready(function() {
+    // check sample codes are unique and non null on page load - Edit, Validate and Create New pages
     $('#id_sample_code').keyup(function () {
 
     if ($('#validate').length > 0) {
@@ -517,12 +520,13 @@ var getsites = function(element) {
 };
 
 
-
+// action when fill sites dropdown is altered - Site Modal in Validate, Edit and Create New pages
 $( "#id_fill-sites" ).change(function () {
     getsites("#id_fill-sites");
 });
 
 
+// Open site modal showing existing site and disable fields to prevent editing
 $( "#modalbutton1" ).click(function () {
     getsites("#id_main-sites");
     disable();
@@ -533,6 +537,7 @@ $( "#modalbutton1" ).click(function () {
 
 
 // action to take when the skip button is pressed - increments counter and checks if all samples processed.
+// Create New, Edit and Validate pages
 $( "#skipbutton" ).click(function () {
     var sample = $('#id_sample_code').text();
 
@@ -551,6 +556,7 @@ $( "#skipbutton" ).click(function () {
 });
 
 
+// action to perfom when search button pressed in Search page.  Retrieves search criteria and performs Ajax request.
 $( "#searchbutton" ).click(function () {
     $('#resultstable').empty();
     var transect = $('#transectsearch option:selected').text();
@@ -563,7 +569,7 @@ $( "#searchbutton" ).click(function () {
     $.getJSON('/briticechrono/query/', {keyword:keyword, start:start, end:end, code:code, transect: transect, type:type},
         function (data) {
         $.each(data, function (key, val) {
-
+             // Use returned data to populate the tabelsorter table
             $('#resultstable').append("<tr><td>"+val.code+"</td><td>"+val.sampletype+"</td>"+
                 "<td>"+val.latitude+"</td><td>"+val.longitude+"</td>" +
             "<td>"+val.elevation+"</td>" + "<td>"+val.site+"</td>" + "<td>"+val.notes+"</td>" +
@@ -579,6 +585,7 @@ $( "#searchbutton" ).click(function () {
                 "</td><td>"+val.tcnStrike+"</td><td>"+val.tcnThickness+"</td><td>"+val.tcnGrain+"</td><td>"+
                 val.tcnLithology+"</td><td>"+val.tcnBearInc+"</td></tr>")
         });
+     // update the table for changes to be effected
     $("table").trigger('update').trigger("appendCache");
     });
 });

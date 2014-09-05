@@ -43,20 +43,28 @@ def get_sheet_type(site_sheet):
                     return sheet
     return None
 
+
 # process a complete file
 def process_file(filename):
 
-    site_name = None
-
+    # dictionary for the data from all samples
     samples = {}
 
+    # counter to track the number of samples
     counter = 0
 
+    # create workbook from file using Openpyxl
     wb = load_workbook(filename, use_iterators=True)
 
+    # get list of the names of the sheets
     sheet_names = wb.get_sheet_names()
+
+    # set site name to None
     site_name = None
 
+    # determine type of sheet and process accordingly.  For sample sheets check that a sample code has been entered
+    # Ignore those without sample codes.
+    #  Add returning dictionary elements to combined samples dict and increment counter if processed
     for sheet in sheet_names:
         site_sheet = wb[sheet]
         type = get_sheet_type(site_sheet)
@@ -89,6 +97,7 @@ def process_file(filename):
                 for k, v in results.iteritems():
                     samples[k] = v
 
+    # add the total sample count and site name to the dictionary for return
     samples['sample_count'] = counter
     samples['site_name'] = site_name
 

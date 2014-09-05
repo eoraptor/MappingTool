@@ -3,10 +3,13 @@ from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 
 
+# Create the database tables
+
 class CoreDetailsManager(models.Manager):
     def create_core_details(self, exposure, number):
         core_details = self.create(exposure_core=exposure, core_number=number)
         return core_details
+
 
 class Core_Details(models.Model):
     exposure_core = models.CharField(max_length=255, null=True, blank=True)
@@ -23,6 +26,7 @@ class PhotographManager(models.Manager):
         photo = self.create(photo_time_stamp=time,photo_label=label)
         return photo
 
+
 class Photograph(models.Model):
     photo_filename = models.ImageField(upload_to='photographs', null=True, blank=True)
     photo_label = models.TextField(null=True, blank=True)
@@ -33,12 +37,12 @@ class Photograph(models.Model):
         return self.photo_label
 
 
-
 class CoordinatesManager(models.Manager):
     def create_coordinates(self, bng_ing, grid_ref, east, north, lat, long, ele):
         coordinates = self.create(bng_ing=bng_ing, grid_reference=grid_ref, easting=east,
                                   northing=north, latitude=lat, longitude=long, elevation=ele)
         return coordinates
+
 
 class Coordinates(models.Model):
     bng_ing = models.CharField(max_length=255, null=True, blank=True)
@@ -75,11 +79,11 @@ class Transect(models.Model):
         return self.transect_number
 
 
-
 class RetreatZoneManager(models.Manager):
     def create_retreat_zone(self, zone_number):
         retreat = self.create(zone_number=zone_number)
         return retreat
+
 
 class Retreat_Zone(models.Model):
     zone_number = models.CharField(max_length=3, null=True, blank=True)
@@ -90,7 +94,6 @@ class Retreat_Zone(models.Model):
         return self.zone_number
 
 
-
 class SampleManager(models.Manager):
     def create_sample(self, code, location, date, collector, notes, priority, age, age_error,
                       cal_age, cal_error, lab_code, coords, site, transect, retreat):
@@ -99,6 +102,7 @@ class SampleManager(models.Manager):
                              calendar_age=cal_age, calendar_error=cal_error, lab_code=lab_code,
                              sample_coordinates=coords, sample_site=site, transect=transect, retreat=retreat)
         return sample
+
 
 class Sample(models.Model):
     sample_code = models.CharField(max_length=255, null=True, blank=True)
@@ -122,9 +126,6 @@ class Sample(models.Model):
 
     def __unicode__(self):
         return self.sample_code
-
-
-
 
 
 class PhotoOfManager(models.Manager):
@@ -170,7 +171,6 @@ class Radiocarbon_Sample(models.Model):
         return Sample.sample_code
 
 
-
 class SiteManager(models.Manager):
     def create_site(self, collected, name, location, county, date, operator, setting, type, photos_taken, photographs, notes,
                     coords):
@@ -206,6 +206,7 @@ class LocationPhotoManager(models.Manager):
 
         return loc_photo
 
+
 class Location_Photo(models.Model):
     photo_site = models.ForeignKey(Sample_Site, null=True, blank=True)
     photo_ident = models.ForeignKey(Photograph, null=True, blank=True)
@@ -214,7 +215,6 @@ class Location_Photo(models.Model):
 
     def __unicode__(self):
         return self.photo_ident
-
 
 
 class OSLManager(models.Manager):
@@ -308,8 +308,6 @@ class Sample_Bearing_Inclination(models.Model):
 
     def __unicode__(self):
         return self.bear_inc
-
-
 
 
 class UserProfile(models.Model):

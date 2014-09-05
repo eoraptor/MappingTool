@@ -25,30 +25,36 @@ def validatesample(request):
 
     is_member = request.user.groups.filter(name='Consortium Super User')
 
+    sample = None
+
+    # retrieve the counter from the session dictionary
     counter = str(request.session['counter'])
 
+    # retrieve the total number of samples from the session dictionary
     num_samples = request.session['sample_count']
 
+    # retrieve sample's errors from session dictionary
     errors = request.session['errors'+str(counter)]
 
+    # retrieve sample's missing fields from session dictionary
     missing_keys = request.session['missing_keys'+str(counter)]
 
+    # set sample save boolean to false in session dictionary
     if 'sample_saved' in request.session:
         sample_saved = request.session['sample_saved']
     else:
         sample_saved = False
 
-    num_bearings = None
+    # have all samples been saved or skipped?  If yes return to index page
     if request.session['counter'] > num_samples:
         del request.session['counter']
         del request.session['sample_count']
         return index(request)
 
-    # retrieve objects to populate form fields
-    sample = None
-
+    #  variable for TCN sample bearing and inclination data handling
     num_bearings = None
 
+    # retrieve objects to populate form fields
     site_name = request.session['site_name']
 
     latitude = request.session['sample_latitude'+counter]
@@ -76,6 +82,7 @@ def validatesample(request):
             if longitude is None:
                 longitude = site_coordinates.longitude
 
+    # create sample coordinates object
     sample_coords = Coordinates(bng_ing=request.session['sample_bng_ing'+counter],
                                 grid_reference=request.session['sample_grid_reference'+counter],
                                 easting=request.session['sample_easting'+counter],
@@ -83,23 +90,28 @@ def validatesample(request):
                                 latitude=latitude, longitude=longitude,
                                 elevation=request.session['sample_elevation'+counter])
 
+    # create sample object
     sample = Sample(sample_code=request.session['sample_code'+counter],
                     sample_location_name=request.session['sample_location_name'+counter],
                     collection_date=request.session['sample_date'+counter],
                     collector=request.session['collector'+counter],
                     sample_notes=request.session['sample_notes'+counter])
 
+    # retrieve sample type
     sample_type = request.session['sample_type'+counter]
 
     transect = None
+    # get transect
     if request.session['transect'+counter] is not None:
         transect = Transect(transect_number=request.session['transect'+counter])
 
     if transect is None and site_name is not None:
         transect = get_transect(site_name)
 
+    # always None from file upload
     retreat = None
 
+    # create object instances specific to sample type
     if sample_type == 'C14':
         radiocarbon = Radiocarbon_Sample(depth_below_SL=request.session['depth'+counter],
                                  material=request.session['material'+counter],
@@ -156,6 +168,7 @@ def validatesample(request):
         num_bearings = len(data)
         BearingsFormSet = formset_factory(BearingInclinationForm, extra=40-num_bearings)
 
+    # form variables
     tcnForm = None
     oslForm = None
     coreForm = None
@@ -203,6 +216,7 @@ def validatesample(request):
                     pass
 
             if existing is not None:
+                # sample exists - do not save
                 request.session['sample_saved'] = False
                 pass
 
@@ -215,12 +229,14 @@ def validatesample(request):
 
                 site_selected = hiddensiteForm.save()
 
+                # set sample foreign keys
                 sample.transect = transect
                 sample.retreat = retreat
                 sample.sample_coordinates = sample_coords
                 sample.sample_site = site_selected
                 sample.save()
 
+                # add saved samples to new marker list in session dictionary - used to show newly added samples on map
                 marker_list = None
                 if 'new_markers' in request.session:
                     marker_list = request.session['new_markers']
@@ -231,7 +247,7 @@ def validatesample(request):
                 else:
                     request.session['new_markers'] = sample.sample_code
 
-
+                # save sample type specific instances
                 if sample_type == 'OSL' or sample_type == 'C14':
                     core = coreForm.save()
 
@@ -260,7 +276,7 @@ def validatesample(request):
                                                                                      bear_inc=bear_inc)
 
 
-
+            # add file to files saved list in session dictionary
             if 'files_saved' in request.session:
                 if request.session['file_name'] not in request.session['files_saved']:
                     request.session['files_saved'] = request.session['files_saved'] + ', ' + request.session['file_name']
@@ -292,6 +308,7 @@ def validatesample(request):
         hiddensiteForm = HiddenSiteForm(prefix='hidden')
         fillsiteForm = ExistingSitesForm(prefix='fill')
 
+        # sample type specific branching
         if sample_type == 'TCN':
             tcnForm = EditTCNForm(instance=tcn)
             bearingsFormSet = BearingsFormSet(initial=data)
@@ -305,17 +322,17 @@ def validatesample(request):
             c14Form = EditRadiocarbonForm(instance=radiocarbon)
 
 
-    return render_to_response('mappingapp/validatesample.html', {'num_bearings':num_bearings, 'c14form':c14Form,
-                                                                 'coreform':coreForm, 'missing_keys':missing_keys,
-                                                                 'tranform': tranForm, 'hiddensiteform':hiddensiteForm,
-                                                                 'site_name':site_name, 'sitechoices':sitechoicesForm,
-                                                                 'samplecoordform':samplecoordForm,
-                                                                 'siteform': siteForm, 'sitecoordform':sitecoordForm,
-                                                                 'sampform':sampForm, 'fillsiteform':fillsiteForm,
-                                                                 'is_member':is_member,  'retform': retForm,
-                                                                 'sample_type':sample_type, 'errors':errors,
-                                                                 'bearingformset':bearingsFormSet,  'tcnform':tcnForm,
-                                                                 'oslform':oslForm, 'count':counter,
-                                                                 'num_samples':num_samples,
-                                                                 'sample_saved':sample_saved}, context)
+    return render_to_response('mappingapp/validatesample.html', {'num_bearings': num_bearings, 'c14form': c14Form,
+                                                                 'coreform': coreForm, 'missing_keys': missing_keys,
+                                                                 'tranform': tranForm, 'hiddensiteform': hiddensiteForm,
+                                                                 'site_name': site_name, 'sitechoices': sitechoicesForm,
+                                                                 'samplecoordform': samplecoordForm,
+                                                                 'siteform': siteForm, 'sitecoordform': sitecoordForm,
+                                                                 'sampform': sampForm, 'fillsiteform': fillsiteForm,
+                                                                 'is_member': is_member,  'retform': retForm,
+                                                                 'sample_type': sample_type, 'errors': errors,
+                                                                 'bearingformset': bearingsFormSet,  'tcnform': tcnForm,
+                                                                 'oslform': oslForm, 'count': counter,
+                                                                 'num_samples': num_samples,
+                                                                 'sample_saved': sample_saved}, context)
 

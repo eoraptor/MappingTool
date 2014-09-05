@@ -10,6 +10,7 @@ def sites(request):
 
     context = RequestContext(request)
 
+    # variables
     site_details = None
     site_name = None
     site = None
@@ -21,11 +22,13 @@ def sites(request):
         site_name = request.GET['site_name']
 
     try:
+        # does site exist?  If yes, get coordinates
         site = Sample_Site.objects.get(site_name=site_name)
         coordinates = site.site_coordinates
     except:
         pass
 
+    # retrieve site date and Photos Taken field and reformat
     if site is not None:
         date = site.site_date
         if date is not None:
@@ -36,6 +39,7 @@ def sites(request):
         elif site.photos_taken is False:
              photos_taken = 3
 
+    # create JSON dictionary for return
     if coordinates is not None and site is not None:
         site_details = json.dumps([{'name':site.site_name, 'loc':site.site_location, 'county':site.county,
                                     'operator':site.operator, 'type':site.sample_type_collected,

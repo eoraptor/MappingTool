@@ -2,17 +2,21 @@ from mappingapp.models import Transect, Sample_Site
 
 # functions for converting date and lat/long fields if incorrect and to get
 # transect number from site location
+# Also contains function to return a list of missing keys
 
 # take date format with full stops and replace
 def convert_date(date):
 
+    # find the first and last full stops
     first_point = date.find('.')
     last_point = date.rfind('.')
 
+    # remove white space
     day = date[:first_point].strip(' ')
     month = date[first_point+1:last_point].strip(' ')
     year = date[last_point+1:].strip(' ')
 
+    # if day, month and year numerical, add zeros if required and return date
     try:
         int(day)
         int(month)
@@ -29,6 +33,7 @@ def convert_date(date):
 
         return day + '/' + month + '/' + year
 
+    # if not numerical, return error
     except:
         return 'Error'
 
@@ -36,6 +41,7 @@ def convert_date(date):
 
 # convert lat/long in degrees, minutes to decimal format
 def convert_lat_long(coord):
+    # remove non ASCII characters and convert
     try:
         result = "".join(i for i in coord if ord(i)<128)
 

@@ -3,12 +3,14 @@ from openpyxl import load_workbook
 from mappingapp.conversion import convert_date, convert_lat_long, missing_keys
 import datetime
 
+# list of column headings
 columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
             'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 
 def get_C14_cell_positions(ws):
 
+    # the cell field names
     positions = {'Date: ': '', 'Location:': '', 'Latitude (if different from site info)': '',
                  'Unique Sample Identifier': '', 'BNG or ING': '', 'Northing:': '', 'Easting:': '',
                  'Elevation:': '', 'Longtitude:': '', 'Depth below SL:': '', 'Transect:': '', 'Exposure/Core:': '',
@@ -16,21 +18,27 @@ def get_C14_cell_positions(ws):
                  'Stratigraphic position (depth):': '', 'Sample weight (g):': '', 'Collector: ': '', 'Notes': '',
                  'Potential contamination sources:': '', '8/6 Figure ref.':''}
 
+    # fields in which the cell is a merged cell
     merged_cells = {'BNG or ING': '', 'Easting:': '', 'Longtitude:': '', 'Core number:': ''}
 
+    # get positions of cells containing the corresponding values
     for row in ws.iter_rows():
         for cell in row:
             val = cell.value
+
+            # remove newlines from strings
             if val is not None and isinstance(val, basestring):
                 val = val.replace('\n', '')
 
                 if val in positions:
+                    # if not a merged cell, get cell coordinates of adjacent cell
                     if val not in merged_cells:
                         col = columns.index(cell.column)
                         val_col = columns[col+1]
                         positions[val] = val_col + str(cell.row)
 
                     else:
+                        # for merged cells, move column across by 2
                         col = columns.index(cell.column)
                         val_col = columns[col+2]
                         positions[val] = val_col + str(cell.row)
@@ -40,12 +48,17 @@ def get_C14_cell_positions(ws):
 
 # extract the data from a tcn sample sheet
 def get_C14_sample_info(sample_sheet, sample_count):
+
+    # get dictionary of field name, value cell positions
     positions = get_C14_cell_positions(sample_sheet)
 
+    # populate list with keys which were not found
     missing_key_list = missing_keys(positions)
 
+    # list to contain fields for which type errors were found
     errors = []
 
+    # create variables from the spreadsheet values
     sample_date = sample_sheet[positions['Date: ']].value
     sample_location_name = sample_sheet[positions['Location:']].value
     sample_code = sample_sheet[positions['Unique Sample Identifier']].value
@@ -75,14 +88,19 @@ def get_C14_sample_info(sample_sheet, sample_count):
 
     # convert date if format incorrect
     if sample_date is not None:
+        # convert to string
         date = str(sample_date)
 
+        # remove time
         if ' 00:00:00' in date:
              date = date.replace(' 00:00:00', '')
 
+        # is it a date object, if yes reformat to desired output
         try:
             date = datetime.datetime.strptime(date, '%Y-%m-%d')
             sample_date = date.strftime('%d/%m/%Y')
+
+        # if not a date object try to convert or add to notes if conversion fails
         except:
             if '.' in date:
                 try:
@@ -127,6 +145,7 @@ def get_C14_sample_info(sample_sheet, sample_count):
         else:
             longitude = -1 * longitude
 
+    # convert easting and northing to integers if possible
     if sample_easting is not None:
         try:
             sample_easting = int(sample_easting)
@@ -146,11 +165,13 @@ def get_C14_sample_info(sample_sheet, sample_count):
         if isinstance(transect, (int, float)):
             transect = 'T'+ str(int(transect))
 
+    # counter passed to function which is used to uniquely identify multiple sample values from same file
     counter = str(sample_count)
 
     # set sample type
     sample_type = 'C14'
 
+    # create dictionary of field name keys concatenated with the counter and with their associated values
     sample_details = {'sample_bng_ing'+counter:bng_ing, 'sample_grid_reference'+counter:grid,
                       'sample_easting'+counter:sample_easting, 'sample_northing'+counter:sample_northing,
                       'sample_latitude'+counter:latitude, 'sample_longitude'+counter:longitude,

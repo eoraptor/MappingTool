@@ -10,147 +10,7 @@ var newShape;
 var marker_data = [];
 var center;
 
-
-function clearSelection() {
-    if (selectedShape) {
-        selectedShape.setEditable(false);
-        selectedShape = null;
-    }
-}
-
-      function setSelection(shape) {
-        clearSelection();
-        selectedShape = shape;
-        shape.setEditable(true);
-      }
-
-      function deleteSelectedShape() {
-        if (newShape) {
-          newShape.setMap(null);
-          $('#id_sample_codes').empty();
-
-        }
-      }
-
-    function view_new_samples() {
-        var marker;
-        var new_markers = $('#new_markers').text();
-
-        for (var i=0 ; i < markers.length; i++){
-                marker = markers[i];
-                marker.setMap(null);
-                }
-
-        if (new_markers.length > 0){
-            new_markers = new_markers.split(",");
-            var marker_code_list = [];
-            for (var i=0 ; i < new_markers.length; i++){
-                compare_code = new_markers[i].replace(/\s+/g, '');
-                for (var j=0 ; j < markers.length; j++){
-                marker = markers[j];
-                marker_code = marker.code.replace(/\s+/g, '');
-                marker_code_list.push(marker_code);
-                if (marker_code === compare_code){
-                marker.setMap(map);
-                }
-                }
-
-        }
-
-        }
-    }
-
-
-        function view_all_samples() {
-        $('#startagefilter').val('');
-        $('#endagefilter').val('');
-        var marker;
-        for (var i=0 ; i < markers.length; i++){
-            marker = markers[i];
-            marker.setMap(map);
-            }}
-
-        function opendialogue() {
-        $("#dialog").dialog("open");
-        }
-
-
-       // filter markers based on age
-        function markeragefilter() {
-            var start = $('#startagefilter').val();
-            var end = $('#endagefilter').val();
-
-            if (start == '' && end == ''){
-                view_all_samples();
-                return
-            }
-            if (start.toLowerCase().indexOf('bp') != -1){
-                start = start.substring(0, start.length-2);
-            }else if (start.toLowerCase().indexOf('ka') != -1) {
-                start = start.substring(0, start.length - 2);
-                start = start * 1000;
-            }
-
-            if (end.toLowerCase().indexOf('bp') != -1){
-                end = end.substring(0, end.length-2);
-            }else if (end.toLowerCase().indexOf('ka') != -1) {
-                end = end.substring(0, end.length - 2);
-                end = end * 1000;
-            }
-
-            if (!isNaN(start) && !isNaN(end)){
-                if (start < end) {
-                    var start_copy = start;
-                    start = end;
-                    end = start_copy;
-                }
-                for (var i = 0; i < markers.length; i++) {
-                    var marker = markers[i];
-                    if ((marker.age > start || marker.age < end) || marker.age == null) {
-                        marker.setMap(null);
-                    }else{
-                        marker.setMap(map);
-                    }
-                }
-            }
-        }
-
-
-function getCoordinates() {
-
-            coordinates = (selectedShape.getPath().getArray());
-
-            var poly = new google.maps.Polygon ({
-                paths: coordinates
-            });
-            var in_bounds = [];
-
-            for (var i = 0; i < markers.length; i++) {
-                if (google.maps.geometry.poly.containsLocation(markers[i].position, poly)) {
-                    in_bounds.push(markers[i].title);
-            }
-           }
-            if (in_bounds.length > 0) {
-                $('#id_sample_codes').empty().val(in_bounds);
-                $('#submit_markers').click();
-            }
-        }
-
-
-function view_as_table(){
-    var visible_markers = [];
-    for (var i=0; i < markers.length ; i++) {
-        var marker = markers[i];
-        if (marker.getMap() != null){
-            visible_markers.push(marker.title);
-        }
-    }
-    if (visible_markers.length > 0) {
-        $('#id_sample_codes').empty().val(visible_markers);
-        $('#submit_markers').click();
-    }
-}
-
+// icons for the markers
 var icons = {
     osl: {
         name: 'OSL  ',
@@ -166,16 +26,174 @@ var icons = {
     }
 };
 
+
+// remove selection of shape - points around edges disappear
+function clearSelection() {
+    if (selectedShape) {
+        selectedShape.setEditable(false);
+        selectedShape = null;
+    }
+}
+
+// set selected shape variable
+function setSelection(shape) {
+    clearSelection();
+    selectedShape = shape;
+    shape.setEditable(true);
+}
+
+// delete selected shape and empty list of selected markers
+function deleteSelectedShape() {
+    if (newShape) {
+        newShape.setMap(null);
+        $('#id_sample_codes').empty();
+    }
+}
+
+// action to perform when View New button is pressed
+function view_new_samples() {
+    var marker;
+    var new_markers = $('#new_markers').text();
+
+    for (var i=0 ; i < markers.length; i++){
+        marker = markers[i];
+        marker.setMap(null);
+    }
+
+    if (new_markers.length > 0){
+        // get sample codes
+        new_markers = new_markers.split(",");
+        var marker_code_list = [];
+
+        // for codes in list, show markers, hide all others
+        for (var i=0 ; i < new_markers.length; i++){
+            compare_code = new_markers[i].replace(/\s+/g, '');
+            for (var j=0 ; j < markers.length; j++){
+                marker = markers[j];
+                marker_code = marker.code.replace(/\s+/g, '');
+                marker_code_list.push(marker_code);
+                if (marker_code === compare_code){
+                    marker.setMap(map);
+                }
+            }
+        }
+    }
+}
+
+// return all markers to the map
+function view_all_samples() {
+    $('#startagefilter').val('');
+    $('#endagefilter').val('');
+    var marker;
+    for (var i=0 ; i < markers.length; i++){
+        marker = markers[i];
+        marker.setMap(map);
+    }
+}
+
+// open the Age Filter dialogue
+function opendialogue() {
+    $("#dialog").dialog("open");
+}
+
+
+// filter markers based on age
+function markeragefilter() {
+    var start = $('#startagefilter').val();
+    var end = $('#endagefilter').val();
+
+    if (start == '' && end == ''){
+        view_all_samples();
+        return
+    }
+    // if BP or ka included, remove and correct value if needed
+    if (start.toLowerCase().indexOf('bp') != -1){
+        start = start.substring(0, start.length-2);
+    }else if (start.toLowerCase().indexOf('ka') != -1) {
+        start = start.substring(0, start.length - 2);
+        start = start * 1000;
+    }
+
+    if (end.toLowerCase().indexOf('bp') != -1){
+        end = end.substring(0, end.length-2);
+    }else if (end.toLowerCase().indexOf('ka') != -1) {
+        end = end.substring(0, end.length - 2);
+        end = end * 1000;
+    }
+
+    // if numerical, check right way round
+    if (!isNaN(start) && !isNaN(end)){
+        if (start < end) {
+            var start_copy = start;
+            start = end;
+            end = start_copy;
+        }
+        // show/hide markers based on whether they lie within the range
+        for (var i = 0; i < markers.length; i++) {
+            var marker = markers[i];
+            if ((marker.age > start || marker.age < end) || marker.age == null) {
+                marker.setMap(null);
+            }else{
+                marker.setMap(map);
+            }
+        }
+    }
+}
+
+
+// determine which markers lie within the polygon
+function getCoordinates() {
+
+    coordinates = (selectedShape.getPath().getArray());
+
+    var poly = new google.maps.Polygon ({
+        paths: coordinates
+    });
+    var in_bounds = [];
+
+    for (var i = 0; i < markers.length; i++) {
+        if (google.maps.geometry.poly.containsLocation(markers[i].position, poly)) {
+            in_bounds.push(markers[i].title);
+        }
+   }
+    // submit sample codes to form
+    if (in_bounds.length > 0) {
+        $('#id_sample_codes').empty().val(in_bounds);
+        $('#submit_markers').click();
+    }
+}
+
+// action to perform if Table button pressed in Age Filter
+function view_as_table(){
+    var visible_markers = [];
+    for (var i=0; i < markers.length ; i++) {
+        var marker = markers[i];
+        if (marker.getMap() != null){
+            visible_markers.push(marker.title);
+        }
+    }
+    if (visible_markers.length > 0) {
+        $('#id_sample_codes').empty().val(visible_markers);
+        $('#submit_markers').click();
+    }
+}
+
+
+// Map load
 function initialize() {
 
+        // create the marker icons
         make_icons();
 
+        // create the Age Filter and hide
         $("#dialog").dialog({
                autoOpen: false
             });
 
+        // get the map canvas div
         var mapDiv = document.getElementById('map-canvas');
 
+        // set the map options
         var map_options = {
             center: new google.maps.LatLng(56, -4.2921),
             zoom: 5,
@@ -189,11 +207,13 @@ function initialize() {
             streetViewControl: false
         };
 
-
+        // create the map using the map options and map div
         map = new google.maps.Map(mapDiv, map_options);
 
+        // marker spiderfier variable
         var oms = new OverlappingMarkerSpiderfier(map);
 
+        // create the Drawing Manager
         drawingManager = new google.maps.drawing.DrawingManager({
             drawingControl: true,
             drawingControlOptions: {
@@ -213,31 +233,36 @@ function initialize() {
         }
         });
 
+        // add the Age Filter button
         var markerfilterDiv = document.createElement('div');
         var markerfilter = new MarkerFilterButton(markerfilterDiv, map);
         markerfilterDiv.index = 1;
         map.controls[google.maps.ControlPosition.RIGHT_TOP].push(markerfilterDiv);
 
+        // add the Rest button to the map
         var allMarkersDiv = document.createElement('div');
         var allMarkersControl = new AllMarkersButton(allMarkersDiv, map);
         allMarkersDiv.index = 1;
         map.controls[google.maps.ControlPosition.RIGHT_TOP].push(allMarkersDiv);
 
-
+        // if user logged in, show the drawing controls (viewastable div only present for logged in users)
         if ($('#viewastable').length > 0) {
              drawingManager.setMap(map);
 
+            // add the drawing control buttons
              var drawingControlDiv = document.createElement('div');
              var drawingControl = new MarkerSelectControl(drawingControlDiv, map);
              drawingControlDiv.index = 1;
              map.controls[google.maps.ControlPosition.TOP_CENTER].push(drawingControlDiv);
 
+            // add the drawing controls label
              var helpDiv = document.createElement('div');
              var help = new MarkerSelectHelp(helpDiv, map);
              helpDiv.index = -1;
              map.controls[google.maps.ControlPosition.TOP_CENTER].push(helpDiv);
         }
 
+        // if user member of Super User group add the Show New button
         if ($('#new_markers').length > 0) {
             var newMarkersDiv = document.createElement('div');
             var newMarkersControl = new NewMarkerButton(newMarkersDiv, map);
@@ -245,20 +270,19 @@ function initialize() {
             map.controls[google.maps.ControlPosition.RIGHT_TOP].push(newMarkersDiv);
 
         }
-
+        // add event listener for when a polygon is completed
         google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
             coordinates = (polygon.getPath().getArray());
-//            console.log(coordinates);
             var poly = new google.maps.Polygon ({
                 paths: coordinates
             });
         });
 
-
-
-
+        // create the map legend
+        // Retrieve legend div
         var legend = document.getElementById('map-legend');
 
+        // add the content
         for (var key in icons) {
             var type = icons[key];
             var name = type.name;
@@ -269,8 +293,10 @@ function initialize() {
             legend.appendChild(div);
         }
 
+        // add to map
         map.controls[google.maps.ControlPosition.BOTTOM].push(legend);
 
+        // listener for when drawing complete
         google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
 
         // Switch back to non-drawing mode after drawing a shape.
@@ -295,16 +321,17 @@ function initialize() {
         google.maps.event.addListener(map, 'click', clearSelection);
         });
 
+        // recenter the map on browser resize
         google.maps.event.addDomListener(window, "resize", function() {
              var center = map.getCenter();
             google.maps.event.trigger(map, "resize");
             map.setCenter(center);
         });
 
+        // information window variable
         var infowindow;
 
-
-
+        // retrieve the marker data and use to create the markers and set info window content
         $.getJSON('/briticechrono/markers/', function (data) {
 
             $.each(data, function (key, val) {
@@ -328,9 +355,11 @@ function initialize() {
                 title: sample_data['code']
             });
 
+            // add markers to the marker array and spiderfier object
             markers.push(marker);
             oms.addMarker(marker);
 
+            // create info window content
             (function (i, marker) {
                 google.maps.event.addListener(marker, 'click', function () {
                     if (!infowindow) {
@@ -341,8 +370,8 @@ function initialize() {
                     var latitude = Math.round(marker.lat * Math.pow(10, 5)) / Math.pow(10, 5);
                     var longitude = Math.round(marker.lng * Math.pow(10, 5)) / Math.pow(10, 5);
 
-                    infowindow.setContent('<h5>' + marker.title + '</h5>' + '<hr>' + '<b>Lat: </b>' + latitude + '<br />' +
-                        '<b>Lng: </b>' + longitude + '<br /><b>Calendar Age: </b>' + marker.age +
+                    infowindow.setContent('<h5>' + marker.title + '</h5>' + '<hr>' + '<b>Lat: </b>' + latitude +
+                        '<br />' + '<b>Lng: </b>' + longitude + '<br /><b>Calendar Age: </b>' + marker.age +
                         '<br /><b>Type: </b>' + marker.type + '<br /><b>Site: </b>' + marker.site);
                     infowindow.open(map, marker);
                 });
@@ -359,10 +388,10 @@ function initialize() {
 
 
 
-
+// load the map
 google.maps.event.addDomListener(window, 'load', initialize);
 
-
+// add listeners to the buttons
 var filterbutton = document.getElementById("filterbutton");
 filterbutton.addEventListener("click", markeragefilter, false);
 
@@ -375,7 +404,7 @@ if (tablebutton != null) {
 }
 
 
-
+// function to create map markers based on sample type
 var make_icons = function() {
     mapicons['tcn'] = new google.maps.MarkerImage(
         '/static/imgs/ylw-circle.png',
@@ -403,11 +432,9 @@ var make_icons = function() {
 };
 
 
+// create the custom map controls
 function MarkerSelectControl(controlDiv, map) {
 
-  // Set CSS styles for the DIV containing the control
-  // Setting padding to 5 px will offset the control
-  // from the edge of the map.
   controlDiv.style.paddingTop = '6px';
 
   // Set CSS for the control border.
@@ -438,9 +465,6 @@ function MarkerSelectControl(controlDiv, map) {
 
 function MarkerSelectHelp(controlDiv, map) {
 
-  // Set CSS styles for the DIV containing the control
-  // Setting padding to 5 px will offset the control
-  // from the edge of the map.
   controlDiv.style.paddingTop = '6px';
 
   // Set CSS for the control border.
@@ -455,8 +479,8 @@ function MarkerSelectHelp(controlDiv, map) {
   help.style.borderColor = 'black';
   help.style.verticalAlign = 'middle';
   help.innerHTML = 'Drawing Controls <a href="#"><span class="glyphicon glyphicon-info-sign data-toggle="tooltip"' +
-      ' id="drawhelp" data-placement="bottom" title="Click the polygon icon to draw on the map.  Only one polygon can' +
-      ' be present at a time.  Use the View Samples button to view the selected samples in tabular format."></span></a>';
+     ' id="drawhelp" data-placement="bottom" title="Click the polygon icon to draw on the map.  Only one polygon can' +
+     ' be present at a time.  Use the View Samples button to view the selected samples in tabular format."></span></a>';
   help.style.fontSize = '15px';
 
   controlDiv.appendChild(help);
@@ -465,9 +489,6 @@ function MarkerSelectHelp(controlDiv, map) {
 
 function MarkerFilterButton(controlDiv, map) {
 
-    // Set CSS styles for the DIV containing the control
-    // Setting padding to 5 px will offset the control
-    // from the edge of the map.
     controlDiv.style.paddingTop = '7px';
     controlDiv.style.paddingRight = '20px';
 
@@ -487,9 +508,6 @@ function MarkerFilterButton(controlDiv, map) {
 
 function NewMarkerButton(controlDiv, map) {
 
-    // Set CSS styles for the DIV containing the control
-    // Setting padding to 5 px will offset the control
-    // from the edge of the map.
     controlDiv.style.paddingRight = '20px';
 
     // Set CSS for the control border.
@@ -509,9 +527,6 @@ function NewMarkerButton(controlDiv, map) {
 
 function AllMarkersButton(controlDiv, map) {
 
-    // Set CSS styles for the DIV containing the control
-    // Setting padding to 5 px will offset the control
-    // from the edge of the map.
     controlDiv.style.paddingRight = '20px';
 
     // Set CSS for the control border.

@@ -15,8 +15,11 @@ def check_sample(request):
         sample_code = request.GET['sample_code']
 
     sample = None
+
+    # variable to return
     existing = False
 
+    # does the sample exist?
     try:
         sample = Sample.objects.get(sample_code=sample_code)
     except:

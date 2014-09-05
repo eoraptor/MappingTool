@@ -6,7 +6,7 @@ from mappingapp.is_member import is_member
 
 @login_required
 @user_passes_test(is_member)
-# File upload failure page
+# File upload & sample edit code selection failure page
 def error(request):
 
     context = RequestContext(request)

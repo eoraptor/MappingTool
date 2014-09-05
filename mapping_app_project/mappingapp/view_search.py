@@ -12,12 +12,14 @@ def search(request):
 
     samples = None
 
+    # if directed from map page with a marker selection
     if 'markers' in request.session:
         sample_codes = request.session['markers']
         samples = [code.strip() for code in sample_codes.split(',')]
 
+        # clear session dictionary of markers after retrieval
         del request.session['markers']
         request.session.modified = True
 
-    return render_to_response('mappingapp/search.html', {'samples':samples, 'is_member':is_member}, context)
+    return render_to_response('mappingapp/search.html', {'samples': samples, 'is_member': is_member}, context)
 

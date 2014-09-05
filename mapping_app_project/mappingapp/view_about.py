@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response
 
 # view for the About page
 def about(request):

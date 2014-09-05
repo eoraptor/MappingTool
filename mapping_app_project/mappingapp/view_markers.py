@@ -12,8 +12,10 @@ def markers(request):
     samples_with_coordinates = []
 
     if request.method == 'GET':
+        # get all samples
         samples = Sample.objects.all()
 
+        # get sample data for those which have coordinates
         for sample in samples:
             if sample.sample_coordinates is not None:
 
@@ -53,7 +55,6 @@ def markers(request):
                 sample_age = sample.calendar_age
                 if sample_age is None:
                     sample_age = ''
-
 
                 data = {'latitude': sample.sample_coordinates.latitude,
                         'longitude': sample.sample_coordinates.longitude, 'code': sample.sample_code,

@@ -2,6 +2,7 @@ from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 
+
 # view for the Contact page
 def contact(request):
     context = RequestContext(request)
