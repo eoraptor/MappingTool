@@ -52,31 +52,43 @@ def get_tcn_cell_positions(ws):
 
     # alternative Surface strike cell split in two - return list of positions
     surface_strike_cell = positions['Sample surface strike/dip ']
-    row = surface_strike_cell[1:]
-    col = columns.index(surface_strike_cell[0])
-    cellB = columns[col+1] + row
-    positions['Sample surface strike/dip '] = [surface_strike_cell, cellB]
+    if surface_strike_cell is not None and surface_strike_cell != '':
+        row = surface_strike_cell[1:]
+        col = columns.index(surface_strike_cell[0])
+        cellB = columns[col+1] + row
+        positions['Sample surface strike/dip '] = [surface_strike_cell, cellB]
 
     # Cover for potential cell merging - retrieve cell past expected value cell
     longitude_cell = positions['Longtitude']
-    row = longitude_cell[1:]
-    col = columns.index(longitude_cell[0])
-    cellB = columns[col+1] + row
-    positions['Longtitude'] = [longitude_cell, cellB]
+    if longitude_cell is not None and longitude_cell != '':
+        row = longitude_cell[1:]
+        col = columns.index(longitude_cell[0])
+        cellB = columns[col+1] + row
+        positions['Longtitude'] = [longitude_cell, cellB]
 
     # Cover for potential cell merging - retrieve cell past expected value cell
     easting_cell = positions['Easting']
-    row = easting_cell[1:]
-    col = columns.index(easting_cell[0])
-    cellB = columns[col+1] + row
-    positions['Easting'] = [easting_cell, cellB]
+    if easting_cell is not None and easting_cell != '':
+        row = easting_cell[1:]
+        col = columns.index(easting_cell[0])
+        cellB = columns[col+1] + row
+        positions['Easting'] = [easting_cell, cellB]
+
+    # check if northing cell has been merged
+    northing_cell = positions['Northing']
+    if northing_cell is not None and northing_cell != '':
+        row = northing_cell[1:]
+        col = columns.index(northing_cell[0])
+        cellB = columns[col+1] + row
+        positions['Northing'] = [northing_cell, cellB]
 
     # Cover for potential cell merging - retrieve cell past expected value cell
     bng_cell = positions['BNG or ING']
-    row = bng_cell[1:]
-    col = columns.index(bng_cell[0])
-    cellB = columns[col+1] + row
-    positions['BNG or ING'] = [bng_cell, cellB]
+    if bng_cell is not None and bng_cell != '':
+        row = bng_cell[1:]
+        col = columns.index(bng_cell[0])
+        cellB = columns[col+1] + row
+        positions['BNG or ING'] = [bng_cell, cellB]
 
     return positions
 
@@ -107,7 +119,6 @@ def get_tcn_sample_info(sample_sheet, sample_count):
     sample_date = sample_sheet[positions['Date: ']].value
     sample_location_name = sample_sheet[positions['Location:']].value
     sample_code = sample_sheet[positions['Unique Sample Identifier']].value
-    sample_northing = sample_sheet[positions['Northing']].value
     transect = sample_sheet[positions['Transect:']].value
     latitude = sample_sheet[positions['Latitude (if different from site info)']].value
     elevation = sample_sheet[positions['Elevation']].value
@@ -134,13 +145,14 @@ def get_tcn_sample_info(sample_sheet, sample_count):
             value1 = int(value1)
 
         if isinstance(value2, float) and value2 is not None:
-            value1 = int(value2)
+            value2 = int(value2)
 
         if isinstance(value3, float) and value3 is not None:
-            value1 = int(value3)
+            value3 = int(value3)
 
         # create single value by concatenating the three separate ones
-        boulder_dim = str(value1) + ' x ' + str(value2) + ' x ' + str(value3)
+        if value1 is not None and value2 is not None and value3 is not None:
+            boulder_dim = str(value1) + ' x ' + str(value2) + ' x ' + str(value3)
 
     # cell not split - use single cell
     elif positions['Boulder dimensions [cm] (LxWxH)'] is not None and\
@@ -151,8 +163,12 @@ def get_tcn_sample_info(sample_sheet, sample_count):
     surface_strike = None
     if positions['Sample surface strike/dip '] is not None and positions['Sample surface strike/dip '] != '':
         if sample_sheet[positions['Sample surface strike/dip '][1]] is not None:
-            surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value + ' / ' +\
-                sample_sheet[positions['Sample surface strike/dip '][1]].value
+            value1 = sample_sheet[positions['Sample surface strike/dip '][0]].value
+            value2 = sample_sheet[positions['Sample surface strike/dip '][1]].value
+            if value1 is not None and value2 is not None:
+                surface_strike = value1 + ' / ' + value2
+            else:
+                surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value
         else:
             surface_strike = sample_sheet[positions['Sample surface strike/dip '][0]].value
 
@@ -171,8 +187,20 @@ def get_tcn_sample_info(sample_sheet, sample_count):
         if sample_sheet[positions['Easting'][0]].value is not None:
             sample_easting = sample_sheet[positions['Easting'][0]].value
         elif sample_sheet[positions['Easting'][1]].value is not None and\
-            sample_sheet[positions['Easting'][1]].value != 'Transect:':
+            sample_sheet[positions['Easting'][1]].value != 'Transect:'\
+                and sample_sheet[positions['Easting'][1]].value != 'Northing':
                 sample_easting = sample_sheet[positions['Easting'][1]].value
+
+    # check northing in correct cell
+    sample_northing = None
+    if positions['Northing'] is not None and positions['Northing'] != '':
+        if sample_sheet[positions['Northing'][0]].value is not None:
+            sample_northing = sample_sheet[positions['Northing'][0]].value
+        elif sample_sheet[positions['Northing'][1]].value is not None and\
+            sample_sheet[positions['Northing'][1]].value != 'Transect:'\
+                and sample_sheet[positions['Northing'][1]].value != 'Easting':
+                sample_northing = sample_sheet[positions['Northing'][1]].value
+
 
     # check bng in correct cell by looking at value in cell after expected value cell
     bng_ing = None
