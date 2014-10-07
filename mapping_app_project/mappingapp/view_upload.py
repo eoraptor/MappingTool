@@ -21,7 +21,7 @@ def upload(request):
 
     # empty the session dictionary of all keys except two to keep user logged in and one for files uploaded so far
     for k in request.session.keys():
-        if k != u'_auth_user_backend' and k != u'_auth_user_id' and k !=u'files_saved':
+        if k != u'_auth_user_backend' and k != u'_auth_user_id' and k !=u'files_saved' and k !=u'photos_saved':
             del request.session[k]
 
     # get files already uploaded in session to display on page

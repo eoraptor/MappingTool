@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import RequestContext
-from mappingapp.models import Sample, Sample_Site, TCN_Sample, OSL_Sample, Radiocarbon_Sample, Coordinates
+from mappingapp.models import Sample, Sample_Site, TCN_Sample, OSL_Sample, Radiocarbon_Sample, Coordinates, Photo_Of, Photograph
 import json
 
 
@@ -56,9 +56,20 @@ def markers(request):
                 if sample_age is None:
                     sample_age = ''
 
+
+                # get photograph
+                photo_url = None
+                photo_list = None
+                try:
+                    photo_list = Photo_Of.objects.filter(sample_pictured=sample)
+                    if photo_list is not None:
+                        photo_url = '/media/' + photo_list[0].photo_idno.photo_filename.name
+                except:
+                    pass
+
                 data = {'latitude': sample.sample_coordinates.latitude,
                         'longitude': sample.sample_coordinates.longitude, 'code': sample.sample_code,
-                        'type':sample_type, 'age': sample_age, 'site':site_name}
+                        'type':sample_type, 'age': sample_age, 'site':site_name, 'photo':photo_url}
 
                 samples_with_coordinates.append(data)
 

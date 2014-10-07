@@ -1,6 +1,7 @@
 <!-- This template is inherited by all templates displaying sample forms; Edit and the three Create New pages -->
 
 {% extends 'mappingapp/base.html' %}
+{% load static %}
 
 {% block title %}Validate Sample Data{% endblock %}
 {% block upload %}
@@ -14,7 +15,7 @@
 <div class="jumbotron edit" id="editjumbo">
     {% block formblock %}
         <form id="validate_form" method="post" action="/briticechrono/validatesample/">
-    {% endblock %}
+    {% endblock formblock %}
     {% csrf_token %}
 
     {% for hidden in siteform.hidden_fields %}
@@ -182,7 +183,7 @@
                                         of
                                     <span class="badge" id="total_counter">{{ num_samples }}</span>
                                 </button>
-                            {% endblock %}
+                            {% endblock samplecounter %}
                         </div>
                     </div>
 
@@ -249,16 +250,42 @@
             <!-- tab for photographs -->
             <div class="tab-pane fade" id="photo-tab"><br />
                 <div class="container-fluid">
-                    photos go here....
-                    <br />
-                    <br />
-                    <br />
-                </div>
+<br />
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+      {% if photos %}
+        {% for photo in photos %}
+            {% if forloop.counter == 1 %}
+            <div class="item active" id="item">
+                <img src="{{ photo.photo_filename.url }}" title="{{ photo.photo_label }}" alt="{{ photo.photo_label }}">
+            </div>
+
+            {% else %}
+            <div class="item" id="item">
+                <img src="{{ photo.photo_filename.url }}" title="{{ photo.photo_label }}" alt="{{ photo.photo_label }}">
+            </div>
+  {% endif %}
+      {% endfor %}
+  {% endif %}
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
                     <br />
                     <br />
             </div>
         </div>
     </div>
+        </div>
     </form>
 </div>
-{% endblock %}
+{% endblock body_block %}

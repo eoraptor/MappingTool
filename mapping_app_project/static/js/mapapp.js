@@ -128,6 +128,10 @@ function openerrordialogue() {
 
 $(document).ready(function(){
 
+    $('.carousel').carousel({
+        interval: false
+    });
+
        // slider plugin for Age Filter on map page
     $("#ex2").slider();
         $(this).on('slide', function(slideEvt) {
@@ -480,6 +484,31 @@ var disable = function() {
     }
 };
 
+// check filename for photos is unique
+$('#id_photo_filename').change(function() {
+    var filename = $('#id_photo_filename').val().split('\\').pop();
+   $.getJSON('/briticechrono/check_photofile/', {filename: filename}, function(data) {
+       $.each(data, function (key, val) {
+           var response = val.exists;
+           if (response == true) {
+               alert('This filename already exists.  Please rename or select another');
+           }else {
+               $('#uploadphotobutton').attr("disabled", false);
+           }
+       })
+   })
+});
+
+
+// filter samples based on site for photo upload
+$('#id_sample_pictured').change(function() {
+
+    var sample = [];
+    $('#id_sample_pictured option:selected').each(function(){ sample.push($(this).text()); });
+    var result = sample.join(', ');
+    $('[name="samples_in_photo"]').empty().append(result);
+
+});
 
 // get site data for Site Modal in Edit, Validate & Create New pages
 var getsites = function(element) {

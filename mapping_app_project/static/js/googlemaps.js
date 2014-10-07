@@ -336,7 +336,7 @@ function initialize() {
 
             $.each(data, function (key, val) {
                 sample_data = {'lat': val.latitude, 'long': val.longitude, 'type': val.type, 'code': val.code,
-                    'age':val.age, 'site':val.site};
+                    'age':val.age, 'site':val.site, 'photo':val.photo};
                 marker_data.push(sample_data);
             });
         var marker;
@@ -352,7 +352,8 @@ function initialize() {
                 code: sample_data['code'],
                 site: sample_data['site'],
                 icon: mapicons[sample_data['type']],
-                title: sample_data['code']
+                title: sample_data['code'],
+                photo: sample_data['photo']
             });
 
             // add markers to the marker array and spiderfier object
@@ -370,7 +371,8 @@ function initialize() {
                     var latitude = Math.round(marker.lat * Math.pow(10, 5)) / Math.pow(10, 5);
                     var longitude = Math.round(marker.lng * Math.pow(10, 5)) / Math.pow(10, 5);
 
-                    infowindow.setContent('<h5>' + marker.title + '</h5>' + '<hr>' + '<b>Lat: </b>' + latitude +
+                    infowindow.setContent('<img src=' + marker.photo + ' style="height: 130px;"><h5>' + marker.title +
+                        '</h5><b>Lat: </b>' + latitude +
                         '<br />' + '<b>Lng: </b>' + longitude + '<br /><b>Calendar Age: </b>' + marker.age +
                         '<br /><b>Type: </b>' + marker.type + '<br /><b>Site: </b>' + marker.site);
                     infowindow.open(map, marker);

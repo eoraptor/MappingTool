@@ -11,7 +11,7 @@ from mappingapp.forms import SampleSiteForm, OSLSampleForm, TCNForm, BearingIncl
 from mappingapp.forms import Location_PhotoForm, PhotoOfForm, SelectSampleForm, ExistingSitesForm, EditSampleForm,\
     EditBIForm, SampleTypeForm, AgeRangeForm, KeywordForm, CodeForm, MarkersForm, EditOSLSampleForm, EditRadiocarbonForm
 from mappingapp.models import Document, Transect, Coordinates, Sample, Retreat_Zone, Sample_Site, TCN_Sample
-from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination, OSL_Sample, Core_Details, Radiocarbon_Sample
+from mappingapp.models import Bearing_Inclination, Sample_Bearing_Inclination, OSL_Sample, Core_Details, Radiocarbon_Sample, Photo_Of, Photograph
 
 from mappingapp.is_member import is_member
 
@@ -44,6 +44,7 @@ def editsample(request):
     bearings = None
     num_bearings = None
     sample_type = None
+    photos = []
 
     # determine sample type
     if sample is not None:
@@ -93,6 +94,18 @@ def editsample(request):
     if c14_data is not None:
         core = c14_data.c14_core
         sample_type = 'C14'
+
+    # get the photographs
+    if sample is not None:
+
+
+        photo_list = Photo_Of.objects.filter(sample_pictured=sample)
+
+        if len(photo_list) != 0:
+            for photo in photo_list:
+
+                    photos.append(photo.photo_idno)
+
 
     # form variable names
     oslForm = None
@@ -231,5 +244,5 @@ def editsample(request):
                                                             'bearingformset': bearingsFormSet, 'tcnform': tcnForm,
                                                             'site_name': site_name, 'oslform': oslForm,
                                                             'c14form': c14Form, 'coreform': coreForm,
-                                                            'sample_type': sample_type}, context)
+                                                            'sample_type': sample_type, 'photos':photos}, context)
 

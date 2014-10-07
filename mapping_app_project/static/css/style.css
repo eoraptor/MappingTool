@@ -33,8 +33,8 @@ body {
 
 /* info windows*/
 .gm-style-iw {
-    width: 185px;
-    height: 185px;
+    width: 260px;
+    height: 320px;
     color: #4c62ad;
 }
 
@@ -197,11 +197,19 @@ legend.fieldsets.top {
     width: 50px;
 }
 
-#id_sample_location_name, #id_probe_serial_no {
+#id_sample_location_name, #id_probe_serial_no, #id_photo_label,
+#id_photo_site, #id_sample_pictured {
     width: 320px;
-
 }
 
+#photo_upload {
+    width: 400px;
+}
+
+#id_sample_pictured {
+    height: 150px;
+
+}
 #id_material {
     height: 60px;
     width: 480px;
@@ -222,6 +230,10 @@ legend.fieldsets.top {
 
 #id_filename {
     width: 125px;
+}
+
+#id_photo_filename {
+    width: 300px;
 }
 
 #id_equipment_number {
@@ -874,4 +886,29 @@ th.tablesorter-header.resizable-false {
 
 #colortester {
     color: #fff8b3;
+}
+
+
+/* carousel style */
+.carousel {
+    width: 600px;
+    height: 400px;
+    margin: 0 auto;
+    background-color: #000000;
+}
+
+.carousel img {
+    width: auto;
+    max-height: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+}
+
+.carousel-inner {
+    height: 400px;
+}
+
+.photos {
+    height: 180px !important;
 }

@@ -29,8 +29,9 @@ class CoreDetailsForm(forms.ModelForm):
 
 # Model: Photographs
 class PhotographForm(forms.ModelForm):
-    photo_time_stamp = forms.DateTimeField(help_text='Photo Time Stamp', required=False)
-    photo_label = forms.CharField(max_length=128, help_text='Photo Label', required=False)
+    photo_filename = forms.ImageField(required=False)
+    photo_label = forms.CharField(help_text='Photo Label:', required=False,
+                              widget=forms.Textarea(attrs={'class': 'noresize'}))
 
     class Meta:
         model = Photograph
@@ -248,19 +249,23 @@ class Sample_BI_Form(forms.ModelForm):
 
 # Model: Location_Photo
 class Location_PhotoForm(forms.ModelForm):
-    photo_site = forms.ModelChoiceField(queryset=Sample_Site.objects.all(), widget=forms.HiddenInput(), required=False)
-    photo_ident = forms.ModelChoiceField(queryset=Photograph.objects.all(), widget=forms.HiddenInput(), required=False)
+    photo_site = forms.ModelChoiceField(help_text="Select Site:",
+                                        queryset=Sample_Site.objects.all().order_by('site_name'), required=False)
 
     class Meta:
         model = Location_Photo
 
 # Model: Photo_Of
-class PhotoOfForm(forms.ModelForm):
-    sample_pictured = forms.ModelChoiceField(queryset=Sample.objects.all(), widget=forms.HiddenInput(), required=False)
-    photo_idno = forms.ModelChoiceField(queryset=Photograph.objects.all(), widget=forms.HiddenInput(), required=False)
+class PhotoOfForm(forms.Form):
 
-    class Meta:
-        model = Photo_Of
+    choices = []
+
+    for sample in Sample.objects.all().order_by('sample_code'):
+        choices.append((sample.id, sample.sample_code))
+
+        sample_pictured = forms.MultipleChoiceField(help_text='Select Multiple Samples (Hold CTRL or Command) :',
+                                                widget=forms.SelectMultiple(), choices=choices, required=False)
+
 
 
 # Form for Site selection on Validate, Edit & Create New Pages.
