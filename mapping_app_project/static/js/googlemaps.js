@@ -9,6 +9,7 @@ var coordinates;
 var newShape;
 var marker_data = [];
 var center;
+var ib;
 
 // icons for the markers
 var icons = {
@@ -328,9 +329,6 @@ function initialize() {
             map.setCenter(center);
         });
 
-        // information window variable
-        var infowindow;
-
         // retrieve the marker data and use to create the markers and set info window content
         $.getJSON('/briticechrono/markers/', function (data) {
 
@@ -360,31 +358,72 @@ function initialize() {
             markers.push(marker);
             oms.addMarker(marker);
 
-            // create info window content
+            // create info box and set content
             (function (i, marker) {
                 google.maps.event.addListener(marker, 'click', function () {
-                    if (!infowindow) {
-                        infowindow = new google.maps.InfoWindow({
-                            width: 150
-                        });
+                    if (ib != null) {
+                        ib.close();
                     }
+
                     var latitude = Math.round(marker.lat * Math.pow(10, 5)) / Math.pow(10, 5);
                     var longitude = Math.round(marker.lng * Math.pow(10, 5)) / Math.pow(10, 5);
-
-                    infowindow.setContent('<img src=' + marker.photo + ' style="height: 130px;"><h5>' + marker.title +
+                    var content;
+                    if (marker.photo != null) {
+                        content = '<img src=' + marker.photo + ' style="height: 130px;"><h5>' + marker.title +
                         '</h5><b>Lat: </b>' + latitude +
                         '<br />' + '<b>Lng: </b>' + longitude + '<br /><b>Calendar Age: </b>' + marker.age +
-                        '<br /><b>Type: </b>' + marker.type + '<br /><b>Site: </b>' + marker.site);
-                    infowindow.open(map, marker);
+                        '<br /><b>Type: </b>' + marker.type + '<br /><b>Site: </b>' + marker.site +
+                            '<br/><button type="btn" id="photobtn">View Photos</button>'
+
+
+                    }else {
+                        content = '<h5>' + marker.title +
+                        '</h5><b>Lat: </b>' + latitude +
+                        '<br />' + '<b>Lng: </b>' + longitude + '<br /><b>Calendar Age: </b>' + marker.age +
+                        '<br /><b>Type: </b>' + marker.type + '<br /><b>Site: </b>' + marker.site
+                    }
+
+                    var boxText = document.createElement("div");
+                    boxText.style.cssText = "border: 1px solid black; margin-top: 8px; background: white;" +
+                        " padding: 18px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 5px;" +
+                        "-webkit-box-shadow: 0 0  4px #000; box-shadow: 0 0 8px #000;";
+                    boxText.innerHTML = content;
+
+                    var myOptions = {
+                         content: boxText
+                        ,disableAutoPan: false
+                        ,maxWidth: 0
+                        ,pixelOffset: new google.maps.Size(-141, 0)
+                        ,zIndex: null
+                        ,boxStyle: {
+                          background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/" +
+                              "1.1.9/examples/tipbox.gif') no-repeat"
+                          ,opacity: 1
+                          ,width: "300px"
+                         }
+                        ,closeBoxMargin: "18px 10px 10px 10px"
+                        ,closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"
+                        ,infoBoxClearance: new google.maps.Size(1, 1)
+                        ,isHidden: false
+                        ,pane: "floatPane"
+                        ,enableEventPropagation: false
+                    };
+
+                    ib = new InfoBox(myOptions);
+                    google.maps.event.addListener(ib, 'domready', function() {
+                        var photobutton = document.getElementById("photobtn");
+                        if (photobutton != null) {
+                            photobutton.addEventListener("click", function () {
+                                alert('hello')
+                            });
+                        }});
+                    ib.open(map, marker);
+
                 });
 
             })(i, marker);
         }
-
-
     })();
-
-
 //        bottom of function
 }
 

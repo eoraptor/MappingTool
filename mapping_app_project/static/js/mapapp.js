@@ -500,6 +500,9 @@ $('#id_photo_filename').change(function() {
 });
 
 
+
+
+
 // filter samples based on site for photo upload
 $('#id_sample_pictured').change(function() {
 
