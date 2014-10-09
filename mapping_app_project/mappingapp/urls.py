@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 from mappingapp import view_home, view_markers, view_contact, view_about, view_check_code, view_query\
     , view_create_site, view_get_site, view_suggest_code, view_error, view_search, view_upload, view_edit_select\
     , view_file_summary, view_validate_sample, view_increment_counter, view_edit_sample, view_login, view_logout\
-    , view_create_new, view_upload_photograph, view_check_photofile
+    , view_create_new, view_upload_photograph, view_check_photofile, view_sample_photos
 
 
 urlpatterns = patterns('',
@@ -26,6 +26,7 @@ urlpatterns = patterns('',
                        url(r'^about/$', view_about.about, name='about'),
                        url(r'^error/$', view_error.error, name='error'),
                        url(r'^uploadphotograph/$', view_upload_photograph.upload_photograph, name='upload_photograph'),
+                       url(r'^sample_photos/$', view_sample_photos.sample_photos, name='sample_photos'),
                        url(r'^check_photofile/$', view_check_photofile.check_photofile, name='check_photofile'),
                        url(r'^createnew/(?P<sample_type_url>\w+)/$', view_create_new.create_new, name='create_new'),
                        )

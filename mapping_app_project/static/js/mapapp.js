@@ -128,6 +128,7 @@ function openerrordialogue() {
 
 $(document).ready(function(){
 
+        // photo carousels
     $('.carousel').carousel({
         interval: false
     });

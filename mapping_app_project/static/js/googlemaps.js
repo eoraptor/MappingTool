@@ -97,6 +97,32 @@ function opendialogue() {
     $("#dialog").dialog("open");
 }
 
+// open the modal and add the photographs
+function openmodal(code) {
+
+    $('#extraphotos').empty();
+
+    $.getJSON('/briticechrono/sample_photos/', {sample_code: code}, function (data) {
+
+        $.each(data, function (key, val) {
+            if (val.photos != '') {
+
+                var sample_photos = val.photos.split(",");
+                for (var i = 0; i < sample_photos.length; i++) {
+                    if (i == 0 && sample_photos[i] != '') {
+                        $("#photo1").empty().append('<img src="' + sample_photos[i].trim() + '">');
+
+                    }else if (i > 0 && sample_photos[i] != '') {
+                        $('#extraphotos').append('<div class="item"><img src="' + sample_photos[i].trim() +
+                            '"></div>');
+                    }
+                }
+                $("#photomodal").modal('show');
+            }
+        });
+    })
+}
+
 
 // filter markers based on age
 function markeragefilter() {
@@ -373,7 +399,8 @@ function initialize() {
                         '</h5><b>Lat: </b>' + latitude +
                         '<br />' + '<b>Lng: </b>' + longitude + '<br /><b>Calendar Age: </b>' + marker.age +
                         '<br /><b>Type: </b>' + marker.type + '<br /><b>Site: </b>' + marker.site +
-                            '<br/><button type="btn" id="photobtn">View Photos</button>'
+                            '<br/><button type="btn" id="photobtn">' +
+                            'View Photos</button>'
 
 
                     }else {
@@ -393,7 +420,7 @@ function initialize() {
                          content: boxText
                         ,disableAutoPan: false
                         ,maxWidth: 0
-                        ,pixelOffset: new google.maps.Size(-141, 0)
+                        ,pixelOffset: new google.maps.Size(-140, 0)
                         ,zIndex: null
                         ,boxStyle: {
                           background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/" +
@@ -413,9 +440,9 @@ function initialize() {
                     google.maps.event.addListener(ib, 'domready', function() {
                         var photobutton = document.getElementById("photobtn");
                         if (photobutton != null) {
-                            photobutton.addEventListener("click", function () {
-                                alert('hello')
-                            });
+                            photobutton.addEventListener("click", function() {
+                                openmodal(marker.code)
+                            })
                         }});
                     ib.open(map, marker);
 
