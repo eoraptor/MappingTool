@@ -17,7 +17,7 @@ def sample_photos(request):
     sample = None
 
     # variable to return
-    existing = False
+    photos = []
 
     # does the sample exist?
     try:
@@ -25,19 +25,21 @@ def sample_photos(request):
     except:
         pass
 
+
     if sample is not None:
-        photos = ''
-        photo_list = []
         try:
             photo_list = Photo_Of.objects.filter(sample_pictured=sample)
             if len(photo_list) != 0:
                 for photo in photo_list:
                     photo_url = '/media/' + photo.photo_idno.photo_filename.name
-                    photos += photo_url + ', '
+                    photo_label = photo.photo_idno.photo_label
+
+                    data = {'url':photo_url, 'label':photo_label}
+                    photos.append(data)
         except:
             pass
 
-    result = json.dumps([{'photos': photos}])
+    result = json.dumps(photos)
 
     return HttpResponse(result, content_type='application/json')
 

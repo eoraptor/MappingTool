@@ -485,19 +485,29 @@ var disable = function() {
     }
 };
 
-// check filename for photos is unique
+// check filename for photos is unique and a valid file format
 $('#id_photo_filename').change(function() {
     var filename = $('#id_photo_filename').val().split('\\').pop();
-   $.getJSON('/briticechrono/check_photofile/', {filename: filename}, function(data) {
-       $.each(data, function (key, val) {
-           var response = val.exists;
-           if (response == true) {
-               alert('This filename already exists.  Please rename or select another');
-           }else {
-               $('#uploadphotobutton').attr("disabled", false);
-           }
+
+    var extension = filename.split('.').pop();
+
+    if (extension != "gif" && extension != "png" && extension != "bmp"
+                    && extension != "jpeg" && extension != "jpg") {
+        alert("Not a valid image format - please select another file." +
+            "  Supported types are as follows; gif, bmp, jpg, png, jpeg.");
+    }else{
+
+       $.getJSON('/briticechrono/check_photofile/', {filename: filename}, function(data) {
+           $.each(data, function (key, val) {
+               var response = val.exists;
+               if (response == true) {
+                   alert('This filename already exists.  Please rename or select another');
+               }else {
+                   $('#uploadphotobutton').attr("disabled", false);
+               }
+           })
        })
-   })
+    }
 });
 
 

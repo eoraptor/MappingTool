@@ -100,28 +100,39 @@ function opendialogue() {
 // open the modal and add the photographs
 function openmodal(code) {
 
-    $('#extraphotos').empty();
+    $('.photocarouselinner').empty();
+    var photo_data = [];
 
     $.getJSON('/briticechrono/sample_photos/', {sample_code: code}, function (data) {
 
         $.each(data, function (key, val) {
-            if (val.photos != '') {
+                var data = {'url': val.url, 'label':val.label};
+                photo_data.push(data);
+            });
 
-                var sample_photos = val.photos.split(",");
-                for (var i = 0; i < sample_photos.length; i++) {
-                    if (i == 0 && sample_photos[i] != '') {
-                        $("#photo1").empty().append('<img src="' + sample_photos[i].trim() + '">');
 
-                    }else if (i > 0 && sample_photos[i] != '') {
-                        $('#extraphotos').append('<div class="item"><img src="' + sample_photos[i].trim() +
-                            '"></div>');
-                    }
-                }
-                $("#photomodal").modal('show');
+        for (var i = 0; i < photo_data.length; i++) {
+            var data = photo_data[i];
+
+
+            if (i == 0) {
+                $("#photocarouselinner").empty().append('<div class="item active"><img src="' +
+                    data['url'] + '" title="' + data['label'] + '"></div>');
+
+            }else {
+                $('#photocarouselinner').append('<div class="item"><img src="' + data['url'] +
+                    '" title="' + data['label'] + '"></div>');
             }
+        }
+        $('.carousel').carousel({
+            interval: false
         });
-    })
+        $('#photomodallabel').empty().append('Sample ' + code);
+        $("#photomodal").modal('show');
+    });
 }
+
+
 
 
 // filter markers based on age
@@ -421,7 +432,7 @@ function initialize() {
                         ,disableAutoPan: false
                         ,maxWidth: 0
                         ,pixelOffset: new google.maps.Size(-140, 0)
-                        ,zIndex: null
+                        ,zIndex: 999999
                         ,boxStyle: {
                           background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/" +
                               "1.1.9/examples/tipbox.gif') no-repeat"
@@ -470,6 +481,19 @@ var tablebutton = document.getElementById("viewastable");
 if (tablebutton != null) {
     tablebutton.addEventListener("click", view_as_table, false);
 }
+
+
+// carousel buttons
+var next = document.getElementById("next");
+next.addEventListener("click", function() {
+    $('#photocarousel').carousel('next')
+});
+
+var prev = document.getElementById("prev");
+prev.addEventListener("click", function() {
+    $('#photocarousel').carousel('prev')
+});
+
 
 
 // function to create map markers based on sample type

@@ -905,6 +905,13 @@ th.tablesorter-header.resizable-false {
 #photocarousel img {
     max-height: 360px;
     width: auto;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#photocarouselinner {
+    height: 360px;
+    width: 550px;
 }
 
 .carousel img {
