@@ -192,7 +192,12 @@ $(document).ready(function(){
     $('.td').click(function() {
     var text = $(this).text();
     $('#id_samp_code').val(text);
+    $('#photo_selected').val(text);
+    var photo = '/media/photographs/' + $('#photo_selected').val();
+    var image = '<img id="photo_prev" src="' + photo + '">';
+    $('#photo_preview').empty().append(image);
     });
+
 
     // round the Lat/Long values in the sample form
     var lat = $('#id_sample-latitude').val();
@@ -495,6 +500,7 @@ $('#id_photo_filename').change(function() {
                     && extension != "jpeg" && extension != "jpg") {
         alert("Not a valid image format - please select another file." +
             "  Supported types are as follows; gif, bmp, jpg, png, jpeg.");
+        $('#uploadphotobutton').attr("disabled", true);
     }else{
 
        $.getJSON('/briticechrono/check_photofile/', {filename: filename}, function(data) {

@@ -1,0 +1,77 @@
+<!-- Photo upload file selection page template -->
+
+{% extends 'mappingapp/base.html' %}
+{% load static %}
+
+{% block title %}Edit Photograph{% endblock %}
+{% block edit %}
+<li class="li-active dropdown">
+    <a href='#' id="activelink" class="dropdown-toggle" data-toggle="dropdown">Edit <span class="caret"></span></a>
+{% endblock edit %}
+
+{% block login %}{% endblock login %}
+
+{% block body_block %}
+    <div class="jumbotron" id="standardjumbo">
+        <div class="container-fluid">
+            <div class="col-md-6" id="editleftcol">
+            <br />
+                <h4>{{ file }}</h4>
+                <div class="form-group" id="upload_form">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="container-fluid" id="photo_upload">
+
+                            {{ photo_form.photo_label.errors }}
+                            {{ photo_form.photo_label.help_text }}<br/>
+                            {{ photo_form.photo_label }}<br/><br />
+
+                            {{ site_form.photo_site.errors }}
+                            {{ site_form.photo_site.help_text }}<br/>
+                            {{ site_form.photo_site }}<br/><br />
+
+                            {{ sample_form.sample_pictured.errors }}
+                            {{ sample_form.sample_pictured.help_text }}<br/>
+                            {{ sample_form.sample_pictured }}<br/>
+
+                        </div><br />
+
+                        <div class="container-fluid" id="uploadphoto">
+                        <p><button type="submit" disabled id=uploadphotobutton class="btn-success btn-lg">Upload</button></p>
+                        </div>
+                   </form>
+                </div>
+            </div>
+
+        <div class="col-md-6" id="editrightcol">
+            <img id="edit_photo_img" src="{{ photo.photo_filename.url }}" title="{{ photo.photo_label }}" alt="">
+
+            <div class="panel panel-success" id="file_list">
+                <div class="panel-heading" id="sample_list_header">
+                    <h4>Samples associated with this photograph <a href="#">
+                    <span class="glyphicon glyphicon-info-sign"
+                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
+                      title="List of samples visible in photograph"></span></a></h4>
+                </div>
+                <div class="panel-body photos" id="scrollable">
+                    <div id="selectable">
+                        <div id="samples_present">{{ samples }}</div>
+                    </div>
+                </div>
+            <div class="panel-heading" id="sample_list_header">
+                    <h4>Sites associated with this photograph <a href="#">
+                    <span class="glyphicon glyphicon-info-sign"
+                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
+                      title="List of sites visible in photograph"></span></a></h4>
+                </div>
+                <div class="panel-body photos" id="scrollable" name="sites_in_photo">
+                    <div id="selectable">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

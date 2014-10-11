@@ -1,0 +1,47 @@
+<!-- Edit photograph data selection page  -->
+
+{% extends 'mappingapp/base.html' %}
+
+{% block title %}Edit Photos{% endblock %}
+{% block edit %}
+<li class="li-active dropdown">
+    <a href='#' id="activelink" class="dropdown-toggle" data-toggle="dropdown">Edit <span class="caret"></span></a>
+{% endblock edit %}
+{% block login %}{% endblock login %}
+
+{% block body_block %}
+<div class="jumbotron" id="standardjumbo">
+    <div class="container-fluid">
+        <div class="col-md-6" id="editleftcol">
+            <div class="panel panel-success photo_panel" id="sample_list" style="width: 350px;">
+                <div class="panel-heading" id="sample_list_header"><h4>Select Photograph <a href="#">
+                    <span class="glyphicon glyphicon-info-sign"
+                      style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
+                                  title="Click on filename to preview image."></span></a></h4>
+                </div>
+                <div class="panel-body" id="scrollable" style="height: 460px;">
+                    <div id="selectable">
+                        {% for photo in photos %}
+                            <div class="row"><div class="td">{{ photo }}</div></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div><br/><br/>
+        </div>
+        <div class="col-md-6" id="editrightcol">
+            <br />
+            <form id="edit_form" method="post" action="/briticechrono/photo_select/">
+                {% csrf_token %}
+                    <div class="photo_preview" id="photo_preview">
+                    </div><br />
+                    <div class="input-group">
+                        <input type="text" placeholder="File Selected" class="form-control"
+                                       name="photo_selected" id="photo_selected">
+                    </div><br />
+
+                    <button type="submit" class="btn-success btn-lg" id="get_photo_button">Edit Photo Details</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -66,11 +66,16 @@
                                         <li><a href="/briticechrono/createnew/tcn">Create TCN Sample</a></li>
                                     </ul>
                             </li>
-
-
                             {% block edit %}
-                                <li  class="dropdown" id="nv"><a href="/briticechrono/edit">Edit Sample</a></li>
+                                <li id="nv" class="dropdown">
+                                        <a href='#' class="dropdown-toggle" data-toggle="dropdown">Edit
+                                        <span class="caret"></span></a>
                             {% endblock edit %}
+                            <ul class="dropdown-menu" role="menu">
+                                        <li><a href="/briticechrono/edit">Edit Sample</a></li>
+                                        <li><a href="/briticechrono/photo_select">Edit Photograph Details</a></li>
+                        </ul>
+                        </li>
                         {% endif %}
                     {% endif %}
                 </ul>
