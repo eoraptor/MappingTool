@@ -103,8 +103,8 @@ def editsample(request):
 
         if len(photo_list) != 0:
             for photo in photo_list:
-
-                    photos.append(photo.photo_idno)
+                    if photo.photo_idno.photo_filename is not None and photo.photo_idno.photo_filename != '':
+                        photos.append(photo.photo_idno)
 
 
     # form variable names

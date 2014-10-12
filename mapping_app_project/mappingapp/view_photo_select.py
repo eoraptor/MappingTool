@@ -34,7 +34,7 @@ def photo_select(request):
             photograph = Photograph.objects.get(photo_filename=filename)
 
             # Redirect to summary of file contents after upload
-            return manage_photographs(request, photograph.id)
+            return HttpResponseRedirect(reverse('manage_photographs', args=(photograph.id,)))
 
         except:
             pass

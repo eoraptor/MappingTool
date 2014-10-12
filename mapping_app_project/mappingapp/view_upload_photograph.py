@@ -28,19 +28,25 @@ def upload_photograph(request):
         sample_form = PhotoOfForm(data=request.POST)
 
 
-        if photo_form.is_valid() and sample_form.is_valid():
+        if photo_form.is_valid() and sample_form.is_valid() and site_form.is_valid():
 
             photo = photo_form.save(commit=False)
-            site_photo = site_form.save(commit=False)
 
+
+            site = None
+            site = site_form.cleaned_data.get('photo_site')
+
+            sample_list = None
             sample_list = sample_form.cleaned_data.get('sample_pictured')
 
             if 'photo_filename' in request.FILES:
                 photo.photo_filename = request.FILES['photo_filename']
-
             photo.save()
-            site_photo.photo_ident = photo
-            site_photo.save()
+
+            if site is not None:
+                site_photo = site_form.save(commit=False)
+                site_photo.photo_ident = photo
+                site_photo.save()
 
             # add file to files saved list in session dictionary
             photo_file = request.FILES['photo_filename'].name.replace('photographs/', '')
@@ -51,15 +57,16 @@ def upload_photograph(request):
             else:
                 request.session['photos_saved'] = photo_file
 
-            try:
-                for sample in sample_list:
-                    samp = Photo_Of.objects.create(sample_pictured=Sample.objects.get(pk=sample), photo_idno=photo)
-                    samp.save()
+            if sample_list is not None:
+                try:
+                    for sample in sample_list:
+                        samp = Photo_Of.objects.create(sample_pictured=Sample.objects.get(pk=sample), photo_idno=photo)
+                        samp.save()
 
-            # handle exceptions ----> show error page
-            except:
+                # handle exceptions ----> show error page
+                except:
 
-                 return HttpResponseRedirect(reverse('error'))
+                     return HttpResponseRedirect(reverse('error'))
 
 
             # Redirect to summary of file contents after upload

@@ -3,7 +3,8 @@
 {% extends 'mappingapp/validatesample.html' %}
 {% block title %}Edit Records{% endblock %}
 {% block edit %}
-    <li class="li-active"><a id="activelink" href="/briticechrono/edit">Edit Records</a></li>
+<li class="li-active dropdown">
+    <a href='#' id="activelink" class="dropdown-toggle" data-toggle="dropdown">Edit <span class="caret"></span></a>
 {% endblock edit %}
 {% block upload %}
     <li id="nv" class="dropdown">

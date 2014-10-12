@@ -15,30 +15,34 @@
     <div class="jumbotron" id="standardjumbo">
         <div class="container-fluid">
             <div class="col-md-6" id="editleftcol">
-            <br />
-                <h4>{{ file }}</h4>
-                <div class="form-group" id="upload_form">
+                <div style="text-align: center"><h3>{{ file }}</h3></div>
+                <div class="form-group" id="edit_photo_form">
                     <form action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+                      <div class="container-fluid" id="photo_upload">
 
-                        <div class="container-fluid" id="photo_upload">
-
-                            {{ photo_form.photo_label.errors }}
-                            {{ photo_form.photo_label.help_text }}<br/>
+                            <label>Edit Label:</label><br/>
                             {{ photo_form.photo_label }}<br/><br />
 
-                            {{ site_form.photo_site.errors }}
-                            {{ site_form.photo_site.help_text }}<br/>
+                            <label>Add Site:</label>
                             {{ site_form.photo_site }}<br/><br />
 
-                            {{ sample_form.sample_pictured.errors }}
-                            {{ sample_form.sample_pictured.help_text }}<br/>
+                            <label>CTRL/Command to select multiple new samples:</label>
                             {{ sample_form.sample_pictured }}<br/>
 
                         </div><br />
+                            <div class="col-md-5" id="photo_sample_select">
+                            <label>Remove Sample:</label>
+                            <input id="remove_sample" name="remove_sample">
+                            </div>
+                            <div class="col-md-5">
+                            <label>Remove Site:</label>
+                            <input id="remove_site" name="remove_site">
+                            </div>
 
-                        <div class="container-fluid" id="uploadphoto">
-                        <p><button type="submit" disabled id=uploadphotobutton class="btn-success btn-lg">Upload</button></p>
+                        <div class="container-fluid" id="editphoto">
+
+                        <p><button type="submit" id=editphotobutton class="btn-success btn-lg">Save Changes</button></p>
                         </div>
                    </form>
                 </div>
@@ -52,22 +56,28 @@
                     <h4>Samples associated with this photograph <a href="#">
                     <span class="glyphicon glyphicon-info-sign"
                       style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
-                      title="List of samples visible in photograph"></span></a></h4>
+                      title="Click on sample to remove"></span></a></h4>
                 </div>
                 <div class="panel-body photos" id="scrollable">
                     <div id="selectable">
-                        <div id="samples_present">{{ samples }}</div>
+                        <div id="samples_present">
+                            {% for sample in samples %}
+                                <div class="row"><div class="td sample">{{ sample.sample_pictured.sample_code }}</div></div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             <div class="panel-heading" id="sample_list_header">
                     <h4>Sites associated with this photograph <a href="#">
                     <span class="glyphicon glyphicon-info-sign"
                       style="display: inline-block;" id="helpicon" data-toggle="tooltip" data-placement="top"
-                      title="List of sites visible in photograph"></span></a></h4>
+                      title="Click on site to remove"></span></a></h4>
                 </div>
-                <div class="panel-body photos" id="scrollable" name="sites_in_photo">
+                <div class="panel-body photo_sites" id="scrollable" name="sites_in_photo">
                     <div id="selectable">
-
+                            {% for photo in sites %}
+                                <div class="row"><div class="td site" >{{ photo.photo_site.site_name }}</div></div>
+                            {% endfor %}
                     </div>
                 </div>
             </div>

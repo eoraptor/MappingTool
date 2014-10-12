@@ -192,12 +192,28 @@ $(document).ready(function(){
     $('.td').click(function() {
     var text = $(this).text();
     $('#id_samp_code').val(text);
-    $('#photo_selected').val(text);
-    var photo = '/media/photographs/' + $('#photo_selected').val();
-    var image = '<img id="photo_prev" src="' + photo + '">';
-    $('#photo_preview').empty().append(image);
     });
 
+    // show preview image in photo edit file selection page
+    $('.td.photoedit').click(function () {
+        var text = $(this).text();
+        $('#photo_selected').val(text);
+        var photo = '/media/photographs/' + $('#photo_selected').val();
+        var image = '<img id="photo_prev" src="' + photo + '" alt="">';
+        $('#photo_preview').empty().append(image);
+    });
+
+    // photo edit page
+    $('.td.site').click(function () {
+        var text = $(this).text();
+        $('#remove_site').val(text);
+    });
+
+    // photo edit page
+    $('.td.sample').click(function () {
+        var text = $(this).text();
+        $('#remove_sample').val(text);
+    });
 
     // round the Lat/Long values in the sample form
     var lat = $('#id_sample-latitude').val();
@@ -494,7 +510,7 @@ var disable = function() {
 $('#id_photo_filename').change(function() {
     var filename = $('#id_photo_filename').val().split('\\').pop();
 
-    var extension = filename.split('.').pop();
+    var extension = filename.split('.').pop().toLowerCase();
 
     if (extension != "gif" && extension != "png" && extension != "bmp"
                     && extension != "jpeg" && extension != "jpg") {

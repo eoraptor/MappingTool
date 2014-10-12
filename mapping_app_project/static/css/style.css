@@ -927,7 +927,11 @@ th.tablesorter-header.resizable-false {
 }
 
 .photos {
-    height: 120px !important;
+    height: 140px !important;
+}
+
+.photo_sites {
+    height:80px !important;
 }
 
 .infobox-wrapper {
@@ -955,6 +959,7 @@ th.tablesorter-header.resizable-false {
     margin-right: auto;
     display: block;
     height: 300px;
+    max-width: 450px;
 }
 
 #edit_photo_img {
@@ -978,4 +983,25 @@ th.tablesorter-header.resizable-false {
 
 #photo_selected {
     width: 450px;
+}
+
+#edit_photo_form {
+    width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#photo_sample_select {
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+#editphoto {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#errordialog {
+    display: none;
 }
