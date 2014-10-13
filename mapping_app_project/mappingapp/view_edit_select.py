@@ -35,7 +35,7 @@ def edit(request):
                 return HttpResponseRedirect(reverse('editsample'))
             # if not
             except:
-                return HttpResponseRedirect(reverse('error'))
+                return HttpResponseRedirect(reverse('error', args=('sample_error',)))
 
     else:
         # an empty form

@@ -37,7 +37,7 @@ def photo_select(request):
             return HttpResponseRedirect(reverse('manage_photographs', args=(photograph.id,)))
 
         except:
-            pass
+            return HttpResponseRedirect(reverse('error', args=('photo_error',)))
 
         # handle exceptions ----> show error page
 

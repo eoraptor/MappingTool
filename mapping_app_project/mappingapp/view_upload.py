@@ -35,17 +35,16 @@ def upload(request):
 
         if form.is_valid():
             try:
-               sample_data = process_file(request.FILES['file'])
+                sample_data = process_file(request.FILES['file'])
 
             # handle exceptions ----> show error page
             except:
-
-                 return HttpResponseRedirect(reverse('error'))
+                return HttpResponseRedirect(reverse('error', args=('file_error',)))
 
             request.session['file_name'] = request.FILES['file'].name
 
             if sample_data is None:
-                return HttpResponseRedirect(reverse('error'))
+                return HttpResponseRedirect(reverse('error', args=('file_error',)))
 
             else:
                 # extraction ok - add data to session dictionary
