@@ -194,6 +194,7 @@ $(document).ready(function(){
     $('#id_samp_code').val(text);
     });
 
+    // transfer selected photo code to code input in Photo file selection page
     // show preview image in photo edit file selection page
     $('.td.photoedit').click(function () {
         var text = $(this).text();
@@ -214,6 +215,7 @@ $(document).ready(function(){
         var text = $(this).text();
         $('#remove_sample').val(text);
     });
+
 
     // round the Lat/Long values in the sample form
     var lat = $('#id_sample-latitude').val();
@@ -510,12 +512,11 @@ var disable = function() {
 $('#id_photo_filename').change(function() {
     var filename = $('#id_photo_filename').val().split('\\').pop();
 
-    var extension = filename.split('.').pop().toLowerCase();
+    var extension = filename.split('.').pop();
 
-    if (extension != "gif" && extension != "png" && extension != "bmp"
-                    && extension != "jpeg" && extension != "jpg") {
+    if (extension != "gif" && extension != "jpeg" && extension != "jpg") {
         alert("Not a valid image format - please select another file." +
-            "  Supported types are as follows; gif, bmp, jpg, png, jpeg.");
+            "  Supported types are as follows; gif, jpg and jpeg.");
         $('#uploadphotobutton').attr("disabled", true);
     }else{
 

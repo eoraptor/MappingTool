@@ -202,6 +202,10 @@ legend.fieldsets.top {
     width: 320px;
 }
 
+#id_photo_label {
+    height: 25px !important;
+}
+
 #photo_upload {
     width: 400px;
 }
@@ -1004,4 +1008,9 @@ th.tablesorter-header.resizable-false {
 
 #errordialog {
     display: none;
+}
+
+#photo-mod-footer {
+    height: 60px;
+    text-align: left;
 }

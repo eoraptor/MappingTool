@@ -118,6 +118,7 @@ function openmodal(code) {
             if (i == 0) {
                 $("#photocarouselinner").empty().append('<div class="item active"><img src="' +
                     data['url'] + '" title="' + data['label'] + '"></div>');
+                $('#photo-mod-footer').empty().append(data['label']);
 
             }else {
                 $('#photocarouselinner').append('<div class="item"><img src="' + data['url'] +
@@ -432,7 +433,7 @@ function initialize() {
                         ,disableAutoPan: false
                         ,maxWidth: 0
                         ,pixelOffset: new google.maps.Size(-140, 0)
-                        ,zIndex: 999999
+                        ,zIndex: 9999
                         ,boxStyle: {
                           background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/" +
                               "1.1.9/examples/tipbox.gif') no-repeat"
@@ -486,12 +487,14 @@ if (tablebutton != null) {
 // carousel buttons
 var next = document.getElementById("next");
 next.addEventListener("click", function() {
-    $('#photocarousel').carousel('next')
+    $('#photocarousel').carousel('next');
+    $('#photo-mod-footer').empty().append($('.next > img').attr('title'));
 });
 
 var prev = document.getElementById("prev");
 prev.addEventListener("click", function() {
-    $('#photocarousel').carousel('prev')
+    $('#photocarousel').carousel('prev');
+    $('#photo-mod-footer').empty().append($('.prev > img').attr('title'));
 });
 
 
