@@ -60,9 +60,11 @@
                         {% endif %}
                         {% if errors %}
                             <li class="list-group-item"><h4>
+                                {% block warning %}
                                 <span class="glyphicon glyphicon-warning-sign"></span>  Fields not imported -
                                 type errors:<h5>Lat/Long values will be taken from site, other fields are left blank.
                                 These can be entered manually on the next page.</h5></h4>
+                                {% endblock warning %}
                                 <ul>
                                     {% for sample, error in errors %}
                                         <li><b>Sample: </b>{{ sample }}, <b>Field:</b> {{ error }}</li>
@@ -88,12 +90,14 @@
                     <div class="panel-footer"></div>
                 </div>
                 <div class="span2 text-center">
+                    {% block buttons %}
                     <a href="/briticechrono/validatesample">
                         <button type="button" class="btn-success btn-xl" name="Proceed" id="proceedbutton">Proceed
                         </button></a>
                     <a href="/briticechrono/upload"><button type="button" class="btn-warning btn-xl"
                                                             name="Backbutton" id="backbutton">Back</button></a>
-                </div>
+                {% endblock buttons %}
+                        </div>
             </div>
         </div>
     </div>

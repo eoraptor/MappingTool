@@ -3,7 +3,7 @@ from mappingapp import view_home, view_markers, view_contact, view_about, view_c
     , view_create_site, view_get_site, view_suggest_code, view_error, view_search, view_upload, view_edit_select\
     , view_file_summary, view_validate_sample, view_increment_counter, view_edit_sample, view_login, view_logout\
     , view_create_new, view_upload_photograph, view_check_photofile, view_sample_photos, view_manage_photos\
-    , view_photo_select
+    , view_photo_select, view_upload_nerc, view_validate_nerc_samples, view_nerc_file_summary
 
 
 urlpatterns = patterns('',
@@ -12,6 +12,8 @@ urlpatterns = patterns('',
                        url(r'^upload/', view_upload.upload, name='upload'),
                        url(r'^edit/', view_edit_select.edit, name='edit'),
                        url(r'^validatesample/', view_validate_sample.validatesample, name='validatesample'),
+                       url(r'^validate_nerc_samples/', view_validate_nerc_samples.validate_nerc_samples,
+                           name='validate_nerc_samples'),
                        url(r'^login/$', view_login.userlogin, name='userlogin'),
                        url(r'^logout/$', view_logout.user_logout, name='logout'),
                        url(r'^sites/$', view_get_site.sites, name='sites'),
@@ -20,6 +22,7 @@ urlpatterns = patterns('',
                        url(r'^check_sample/$', view_check_code.check_sample, name='check_sample'),
                        url(r'^editsample/$', view_edit_sample.editsample, name='editsample'),
                        url(r'^filesummary/$', view_file_summary.filesummary, name='filesummary'),
+                       url(r'^nercfilesummary/$', view_nerc_file_summary.nercfilesummary, name='nerc_file_summary'),
                        url(r'^incrementcounter/$', view_increment_counter.incrementcounter, name='incrementcounter'),
                        url(r'^query/$', view_query.query, name='query'),
                        url(r'^suggest_code/$', view_suggest_code.suggest_code, name='suggest_code'),
@@ -33,6 +36,7 @@ urlpatterns = patterns('',
                        url(r'^sample_photos/$', view_sample_photos.sample_photos, name='sample_photos'),
                        url(r'^check_photofile/$', view_check_photofile.check_photofile, name='check_photofile'),
                        url(r'^createnew/(?P<sample_type_url>\w+)/$', view_create_new.create_new, name='create_new'),
+                       url(r'^upload_nerc/$', view_upload_nerc.upload_nerc, name='upload_nerc'),
                        )
 
 

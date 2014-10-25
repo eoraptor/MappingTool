@@ -104,7 +104,12 @@ def create_new(request, sample_type_url):
 
                 # branch depending on Sample Type
                 if sample_type == 'OSL' or sample_type == 'C14':
-                    core = coreForm.save()
+                    core = coreForm.save(commit=False)
+                    if core.exposure_core is not None and core.exposure_core != '' and core.core_number is not None and\
+                            core.core_number != '':
+                        core.save()
+                    else:
+                        core = None
 
                 if sample_type == 'C14':
                     c14 = c14Form.save(commit=False)

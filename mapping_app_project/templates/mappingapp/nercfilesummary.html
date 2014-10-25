@@ -1,0 +1,16 @@
+{% extends 'mappingapp/filesummary.html' %}
+
+
+{% block warning %}
+    <span class="glyphicon glyphicon-warning-sign"></span>  Fields not imported -
+    type errors: <h5>These fields are left blank and should be entered manually on the next page.</h5></h4>
+{% endblock warning %}
+
+
+{% block buttons %}
+    <a href="/briticechrono/validate_nerc_samples">
+        <button type="button" class="btn-success btn-xl" name="Proceed" id="proceedbutton">Proceed
+        </button></a>
+    <a href="/briticechrono/upload_nerc"><button type="button" class="btn-warning btn-xl"
+                                        name="Backbutton" id="backbutton">Back</button></a>
+{% endblock buttons %}
