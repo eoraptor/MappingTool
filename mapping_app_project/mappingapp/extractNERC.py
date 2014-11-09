@@ -87,18 +87,55 @@ def process_row(sample_sheet, positions, sample_count):
 
         # convert latitude and longitude if format incorrect
         if latitude is not None and not isinstance(latitude, float):
-            latitude = convert_lat_long(latitude)
+
+            if 'N' in latitude or 'n' in latitude:
+
+                try:
+                    index = latitude.upper().index('N')
+                    latitude = latitude[:index].strip()
+                    latitude = float(latitude)
+
+                except:
+                    # N not in string
+                    pass
+
+            if not isinstance(latitude, float):
+                latitude = convert_lat_long(latitude)
+
             if latitude == 'Error':
                 errors.append('Latitude')
                 latitude = None
 
         if longitude is not None and not isinstance(longitude, float):
-            longitude = convert_lat_long(longitude)
-            if longitude == 'Error':
-                errors.append('Longitude')
-                longitude = None
-            else:
-                longitude = -1 * longitude
+            direction = None
+            if 'W' in longitude or 'w' in longitude:
+                direction = 'W'
+                try:
+                    index = longitude.upper().index('W')
+                    longitude = longitude[:index].strip()
+                    longitude = -1 * float(longitude)
+                except:
+                    # W not in string
+                    pass
+
+            elif 'E' in longitude or 'e' in longitude:
+                direction = 'E'
+                try:
+                    index = longitude.upper().index('E')
+                    longitude = longitude[:index].strip()
+                    longitude = float(longitude)
+
+                except:
+                    # E not in string
+                    pass
+
+            if not isinstance(longitude, float):
+                longitude = convert_lat_long(longitude)
+                if longitude == 'Error':
+                    errors.append('Longitude')
+                    longitude = None
+                elif direction == 'W':
+                    longitude = -1 * longitude
 
         sample_counter = str(sample_count)
 
@@ -188,5 +225,8 @@ def process_nerc_file(filename):
         return results
     else:
         return None
+
+
+
 
 

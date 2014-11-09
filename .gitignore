@@ -14,6 +14,9 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
+# ignore photos
+mapping_app_project/media/photographs/
+
 # =========================
 # Operating System Files
 # =========================
