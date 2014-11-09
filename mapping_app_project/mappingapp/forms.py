@@ -263,8 +263,8 @@ class PhotoOfForm(forms.Form):
     for sample in Sample.objects.all().order_by('sample_code'):
         choices.append((sample.id, sample.sample_code))
 
-        sample_pictured = forms.MultipleChoiceField(help_text='Select Multiple Samples (Hold CTRL or Command) :',
-                                                widget=forms.SelectMultiple(), choices=choices, required=False)
+    sample_pictured = forms.MultipleChoiceField(help_text='Select Multiple Samples (Hold CTRL or Command) :',
+                                         widget=forms.SelectMultiple(), choices=choices, required=False)
 
 
 
