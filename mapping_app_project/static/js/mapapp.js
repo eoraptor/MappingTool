@@ -512,7 +512,7 @@ var disable = function() {
 $('#id_photo_filename').change(function() {
     var filename = $('#id_photo_filename').val().split('\\').pop();
 
-    var extension = filename.split('.').pop();
+    var extension = filename.split('.').pop().toLowerCase();
 
     if (extension != "gif" && extension != "jpeg" && extension != "jpg") {
         alert("Not a valid image format - please select another file." +

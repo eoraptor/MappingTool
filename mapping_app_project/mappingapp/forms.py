@@ -258,13 +258,17 @@ class Location_PhotoForm(forms.ModelForm):
 # Model: Photo_Of
 class PhotoOfForm(forms.Form):
 
-    choices = []
+    def __init__(self):
 
-    for sample in Sample.objects.all().order_by('sample_code'):
-        choices.append((sample.id, sample.sample_code))
+        super(PhotoOfForm, self).__init__()
 
-    sample_pictured = forms.MultipleChoiceField(help_text='Select Multiple Samples (Hold CTRL or Command) :',
-                                         widget=forms.SelectMultiple(), choices=choices, required=False)
+        choices = []
+
+        for sample in Sample.objects.all().order_by('sample_code'):
+            choices.append((sample.id, sample.sample_code))
+
+        self.fields['sample_pictured'] = forms.MultipleChoiceField(help_text='Select Multiple Samples (Hold CTRL or Command) :',
+                                             widget=forms.SelectMultiple(), choices=choices, required=False)
 
 
 
