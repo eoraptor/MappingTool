@@ -258,9 +258,9 @@ class Location_PhotoForm(forms.ModelForm):
 # Model: Photo_Of
 class PhotoOfForm(forms.Form):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
 
-        super(PhotoOfForm, self).__init__()
+        super(PhotoOfForm, self).__init__(*args, **kwargs)
 
         choices = []
 

@@ -24,7 +24,7 @@ def upload_photograph(request):
     # Handle file upload
     if request.method == 'POST':
         photo_form = PhotographForm(data=request.POST)
-        site_form = Location_PhotoForm(data=request.POST)
+        site_form = Location_PhotoForm(request.POST)
         sample_form = PhotoOfForm(data=request.POST)
 
 
