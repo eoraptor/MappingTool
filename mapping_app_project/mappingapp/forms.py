@@ -121,6 +121,23 @@ class EditSampleForm(forms.ModelForm):
         model = Sample
 
 
+class EditSampleAgesForm(EditSampleForm):
+    sample_code = forms.CharField(help_text='Sample Code', required=True,
+                                  widget=forms.Textarea(attrs={'class':'noresize code'}))
+    age = forms.IntegerField(help_text='Sample Age', required=False,
+                             widget=forms.Textarea(attrs={'class':'noresizenumber editage'}))
+    age_error = forms.IntegerField(help_text='Age Error', required=False,
+                                   widget=forms.Textarea(attrs={'class':'noresizenumber editage'}))
+    calendar_age = forms.IntegerField(help_text='Calendar Age', required=False,
+                                      widget=forms.Textarea(attrs={'class':'noresizenumber editage'}))
+    calendar_error = forms.IntegerField(help_text='Calendar Error', required=False,
+                                        widget=forms.Textarea(attrs={'class':'noresizenumber editage'}))
+    lab_code = forms.CharField(help_text='Lab Code', required=False,
+                               widget=forms.Textarea(attrs={'class':'noresize code'}))
+
+
+
+
 # Model: Radiocarbon_Sample - Edit C14 Sample page.
 class EditRadiocarbonForm(forms.ModelForm):
     depth_below_SL = forms.CharField(help_text='Depth', required=False,

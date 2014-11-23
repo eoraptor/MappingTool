@@ -1,0 +1,71 @@
+<!-- Edit sample code selection page.  Includes autofill code_list template -->
+
+{% extends 'mappingapp/base.html' %}
+{% load static %}
+
+{% block title %}Edit Sample Ages{% endblock %}
+{% block edit %}
+<li class="li-active dropdown">
+    <a href='#' id="activelink" class="dropdown-toggle" data-toggle="dropdown">Edit <span class="caret"></span></a>
+{% endblock edit %}
+{% block login %}{% endblock login %}
+
+{% block body_block %}
+<div class="jumbotron" id="standardjumbo">
+    <div class="container-fluid">
+
+            <form id="edit_ages_form" method="post" action="/briticechrono/editages/">
+                {% csrf_token %}
+                        <!-- Begin table sorter -->
+                <table class="tablesorter custom-popup"  style="width:auto" id="editagestable">
+                    <thead>
+                    <tr>
+                        <!----- Common sample fields - shown as default ------->
+                        <th data-priority="critical">Sample Code</th>
+                        <th data-priority="1">Sample Age</th>
+                        <th data-priority="2">Age Error</th>
+                        <th data-priority="3">Calendar Age</th>
+                        <th data-priority="4">Calendar Error</th>
+                        <th data-priority="5">Lab Code</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{ sampleForms.management_form }}
+                            {% for sampform in sampleForms %}
+                                <tr>
+                                    <td>{{ sampform.sample_code }}</td>
+                                    <td>{{ sampform.age }}</td>
+                                    <td>{{ sampform.age_error }}</td>
+                                    <td>{{ sampform.calendar_age }}</td>
+                                    <td>{{ sampform.calendar_error }}</td>
+                                    <td>{{ sampform.lab_code }}</td>
+                                    <div class="hidden">{{ sampform.id }}</div>
+                                </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+
+            <!-- pager for tablesorter -->
+            <div id="pager" class="pager">
+                <img src={% static 'imgs/first.png' %} class="first"/>
+                <img src={% static 'imgs/prev.png' %} class="prev"/>
+                <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+                <img src={% static 'imgs/next.png' %} class="next"/>
+                <img src={% static 'imgs/last.png' %} class="last"/>
+                <select class="pagesize">
+                    <option selected="selected" value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                </select>
+            </div>
+<div class="panel panel-default">
+  <div class="panel-heading" id="notes_panel">NB.  Age and error values must be integers. <button type="submit" class="btn-success btn-lg" id="saves_ages_button"
+                        title="Update ages in all rows before pressing save">Save </button>
+</div>
+</div>
+
+         </form>
+    </div>
+</div>
+{% endblock %}

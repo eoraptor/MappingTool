@@ -1014,3 +1014,18 @@ th.tablesorter-header.resizable-false {
     height: 60px;
     text-align: left;
 }
+
+/* update sample ages page */
+.code, .editage{
+    width:160px;
+}
+
+#saves_ages_button {
+    width: 100px;
+    margin-right: 50px;
+    float: right;
+}
+
+#notes_panel {
+    height: 70px;
+}

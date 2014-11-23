@@ -3,7 +3,7 @@ from mappingapp import view_home, view_markers, view_contact, view_about, view_c
     , view_create_site, view_get_site, view_suggest_code, view_error, view_search, view_upload, view_edit_select\
     , view_file_summary, view_validate_sample, view_increment_counter, view_edit_sample, view_login, view_logout\
     , view_create_new, view_upload_photograph, view_check_photofile, view_sample_photos, view_manage_photos\
-    , view_photo_select, view_upload_nerc, view_validate_nerc_samples, view_nerc_file_summary
+    , view_photo_select, view_upload_nerc, view_validate_nerc_samples, view_nerc_file_summary, view_edit_ages
 
 
 urlpatterns = patterns('',
@@ -21,6 +21,7 @@ urlpatterns = patterns('',
                        url(r'^create_site/$', view_create_site.create_site, name='create_site'),
                        url(r'^check_sample/$', view_check_code.check_sample, name='check_sample'),
                        url(r'^editsample/$', view_edit_sample.editsample, name='editsample'),
+                       url(r'^editages/$', view_edit_ages.edit_ages, name='editages'),
                        url(r'^filesummary/$', view_file_summary.filesummary, name='filesummary'),
                        url(r'^nercfilesummary/$', view_nerc_file_summary.nercfilesummary, name='nerc_file_summary'),
                        url(r'^incrementcounter/$', view_increment_counter.incrementcounter, name='incrementcounter'),

@@ -9,43 +9,50 @@ var sample_fields = ['#id_sample_thickness', '#id_sample_code', '#id_collection_
 '#id_sample_notes', '#id_sample-latitude', '#id_sample-longitude', '#id_sample-easting', '#id_sample-northing',
 '#id_sample-elevation', '#id_sample-bng_ing', "#id_exposure_core", "#id_core_number"];
 
+var integer_only_fields = {"id_age": true, "id_age_error": true, "id_calendar_age": true, "id_calendar_error": true};
+
 var $table;
 var bear_inc_errors = false;
 var bearing_errors = [];
 var form_errors = [];
+var age_form_errors = [];
+
 
 
 
 // check numerical fields in Edit and Validate pages match expected type
 // prevent saving if non-numerical
 function check_number(field, value) {
-    if (!jQuery.isNumeric(value) && value != '') {
+    // non-numerical or an Age field containing a decimal place
+    if ((field in integer_only_fields && value.toString().indexOf('.') !== -1) ||
+        (!jQuery.isNumeric(value) && value != '')) {
         var found = false;
-        for (var i = 0; i < form_errors.length; i++){
-            if (field == form_errors[i]){
+        for (var i = 0; i < form_errors.length; i++) {
+            if (field == form_errors[i]) {
                 found = true;
             }
-        }if (!found){
+        }
+        if (!found) {
             if (field.indexOf('form') != -1 && bearing_errors.indexOf(field) === -1) {
                 bearing_errors.push(field);
                 if (bear_inc_errors === false) {
                     bear_inc_errors = true;
                     form_errors.push(field);
                 }
-            }else if (field.indexOf('form') === -1) {
+            } else if (field.indexOf('form') === -1) {
                 form_errors.push(field);
             }
         }
         // change field background colour and disable save buttons
-        $('#'+field).css("background-color", "#E6760C");
+        $('#' + field).css("background-color", "#E6760C");
         $('#validatebutton').attr("disabled", true);
         $('#editbutton').attr("disabled", true);
-        if (field.indexOf('site') != -1){
+        if (field.indexOf('site') != -1) {
             $('#savebutton').attr("disabled", true);
         }
 
 
-    }else if(jQuery.isNumeric(value) || value == ''){
+    } else if (jQuery.isNumeric(value) || value == '') {
 
         if (bearing_errors.indexOf(field) != -1) {
             var index1 = bearing_errors.indexOf(field);
@@ -58,29 +65,71 @@ function check_number(field, value) {
                     }
                 }
             }
-        }else{
+        } else {
             for (var i = 0; i < form_errors.length; i++) {
                 if (field === form_errors[i]) {
-                removed = form_errors.splice(i, 1);
-        }}}
+                    removed = form_errors.splice(i, 1);
+                }
+            }
+        }
         // revert background colour to white and enable saving if all errors fixed
-        $('#'+field).css("background-color", "");
+        $('#' + field).css("background-color", "");
         if (form_errors.length == 0) {
             $('#editbutton').attr("disabled", false);
             $('#validatebutton').attr("disabled", false);
             $('#savebutton').attr("disabled", false);
-        }else {
+        } else {
             var site_errors = false;
             for (var i = 0; i < form_errors.length; i++) {
                 if (form_errors[i].indexOf('site') != -1) {
                     site_errors = true;
+                }
             }
-        }
-            if (site_errors == false){
+            if (site_errors == false) {
                 // if site errors fixed - enable site saving again
                 $('#savebutton').attr("disabled", false);
             }
-    }}}
+        }
+    }}
+
+
+// similar function to check_number but for the edit ages page
+function check_number_edit_ages(field, value) {
+    // non-numerical or an Age field containing a decimal place
+    if (value.toString().indexOf('.') !== -1 || !jQuery.isNumeric(value) && value != '') {
+        var found = false;
+        for (var i = 0; i < age_form_errors.length; i++) {
+            if (field == age_form_errors[i]) {
+                found = true;
+            }
+        }
+        if (!found) {
+            if (field.indexOf('form') != -1) {
+                    age_form_errors.push(field);
+                }
+        }
+
+        // change field background colour and disable save buttons
+        $('#' + field).css("background-color", "#E6760C");
+        $('#saves_ages_button').attr("disabled", true);
+        $('#saves_ages_button').attr("title", "Age and age error values must be integers.  Text values not permitted.");
+
+    } else if (jQuery.isNumeric(value) || value == '') {
+
+        for (var i = 0; i < age_form_errors.length; i++) {
+            if (field === age_form_errors[i]) {
+                removed = age_form_errors.splice(i, 1);
+            }
+        }
+
+        // revert background colour to white and enable saving if all errors fixed
+        $('#' + field).css("background-color", "");
+        if (age_form_errors.length == 0) {
+            $('#saves_ages_button').attr("disabled", false);
+            $('#saves_ages_button').attr("title", "Update all rows before pressing save.");
+        }
+    }
+}
 
 
 // Populate and open the field error dialogue on Validate and Edit sample pages
@@ -97,13 +146,13 @@ function openerrordialogue() {
             }else if (field.indexOf('sample-northing') != -1){
                 field = 'Sample Northing - field must be numerical';
             }else if (field.indexOf('calendar_age') != -1){
-                field = 'Calendar Age - field must be numerical';
+                field = 'Calendar Age - field must be an integer value';
             }else if (field.indexOf('calendar_error') != -1){
-                field = 'Calendar Error - field must be numerical';
+                field = 'Calendar Error - field must be an integer value';
             }else if (field.indexOf('age_error') != -1){
-                field = 'Sample Age Error - field must be numerical';
+                field = 'Sample Age Error - field must be an integer value';
             }else if (field.indexOf('age') != -1) {
-                field = 'Sample Age - field must be numerical';
+                field = 'Sample Age - field must be an integer value';
             }else if (field.indexOf('site-latitude') != -1){
                 field = 'Site Latitude - field must be numerical';
             }else if (field.indexOf('site-longitude') != -1){
@@ -233,7 +282,7 @@ $(document).ready(function(){
     // setup for tablesorter plugin on Search page
     $(function(){
 
-    $table = $('table');
+    $table = $('#tablesortertable');
 
         $('#getcsv').click(function(){
     // get delivery type
@@ -244,6 +293,65 @@ $(document).ready(function(){
                 theme: 'green',
                 widthFixed: true,
                 widgets: ['zebra', 'filter', 'columnSelector','output', 'resizable'],
+                widgetOptions : {
+
+                    resizable: true,
+
+                    // These are the default column widths which are used when the table is
+                    // initialized or resizing is reset; note that the "Age" column is not
+                    // resizable, but the width can still be set to 40px here
+                    resizable_widths : [ '10%', '10%', '40px', '10%', '100px' ],
+                    // target the column selector markup
+                    columnSelector_container : $('#columnSelector'),
+                    // column status, true = display, false = hide
+                    // disable = do not display on list
+                    columnSelector_columns : {
+                        0: 'disable' /* set to disabled; not allowed to unselect it */
+                    },
+                    // remember selected columns (requires $.tablesorter.storage)
+                    columnSelector_saveColumns: false,
+
+                    // container layout
+                    columnSelector_layout : '<div class="col-md-4"><label><input type="checkbox"> {name}</label></div>',
+                    // data attribute containing column name to use in the selector container
+                    columnSelector_name  : 'data-selector-name',
+
+                    /* Responsive Media Query settings */
+                    // enable/disable mediaquery breakpoints
+                    columnSelector_mediaquery: true,
+                    // toggle checkbox name
+                    columnSelector_mediaqueryName: 'Select All',
+                    // breakpoints checkbox initial setting
+                    columnSelector_mediaqueryState: false,
+                    // responsive table hides columns with priority 1-6 at these breakpoints
+                    // see http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/
+                    // #Applyingapresetbreakpoint
+                    // *** set to false to disable ***
+                    columnSelector_breakpoints : [ '20em', '30em', '40em', '50em', '60em', '70em' ],
+                    // data attribute containing column priority
+                    // duplicates how jQuery mobile uses priorities:
+                    // http://view.jquerymobile.com/1.3.2/dist/demos/widgets/table-column-toggle/
+                    columnSelector_priority : 'data-priority'
+                }
+            })
+        .tablesorterPager({container: $("#pager")});
+    });
+
+
+        // setup for tablesorter plugin on Search page
+    $(function(){
+
+    $table = $('#editagestable');
+
+//        $('#getcsv').click(function(){
+//    // get delivery type
+//        $table.trigger('outputTable');
+//    });
+        $table
+        .tablesorter({
+                theme: 'green',
+                widthFixed: true,
+                widgets: ['zebra', 'resizable'],
                 widgetOptions : {
 
                     resizable: true,
@@ -308,6 +416,13 @@ $(document).ready(function(){
         var field = this.id;
         var value = this.value;
         check_number(field, value);
+    });
+
+    // respond to typing in numerical fields in edit ages page - check type
+    $('.editage').keyup(function(){
+        var field = this.id;
+        var value = this.value;
+        check_number_edit_ages(field, value);
     });
 
 
