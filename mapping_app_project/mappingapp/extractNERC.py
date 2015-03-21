@@ -86,6 +86,16 @@ def process_row(sample_sheet, positions, sample_count):
                     sample_date = None
 
         # convert latitude and longitude if format incorrect
+        try:
+            latitude = float(latitude)
+        except:
+            pass
+
+        try:
+            longitude = float(longitude)
+        except:
+            pass
+
         if latitude is not None and not isinstance(latitude, float):
 
             if 'N' in latitude or 'n' in latitude:
